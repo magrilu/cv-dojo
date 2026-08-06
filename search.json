@@ -1,0 +1,263 @@
+[
+  {
+    "objectID": "notebooks/04-rectification/affine.html",
+    "href": "notebooks/04-rectification/affine.html",
+    "title": "Affine rectification",
+    "section": "",
+    "text": "Open In Colab\nCompanion to Algorithm 1, Section 1.3.\nPerspective destroys parallelism: two rails that never meet in the world do meet on the page. Affine rectification puts it back. It does not recover angles or length ratios — that comes later, in the metric step — but it does recover everything affine: parallelism, midpoints, ratios of lengths along a line.\nThe whole method rests on one observation. Under perspective the line at infinity \\(\\ell_\\infty\\) no longer sits at \\((0:0:1)\\); it lands somewhere in the image as \\(\\ell'_\\infty\\), the vanishing line. Send it back where it belongs and the affine structure returns with it.\nTwo pairs of parallel lines are enough:\n# On Colab, fetch the repository. Locally this is a no-op.\nimport os, sys, subprocess\nif \"COLAB_GPU\" in os.environ or \"COLAB_RELEASE_TAG\" in os.environ:\n    if not os.path.isdir(\"cv-dojo\"):\n        subprocess.run([\"git\", \"clone\", \"-q\",\n                        \"https://github.com/magrilu/cv-dojo.git\"], check=True)\n    os.chdir(\"cv-dojo\")\n\nsys.path.insert(0, os.path.abspath(\"../../src\"))   # local run, from notebooks/04-rectification\nsys.path.insert(0, os.path.abspath(\"src\"))        # Colab run, from the repo root\n\nimport numpy as np\nimport matplotlib.pyplot as plt\nimport cvdojo as cv\n\nplt.rcParams[\"figure.figsize\"] = (7, 5)",
+    "crumbs": [
+      "Home",
+      "Rectification",
+      "Affine rectification"
+    ]
+  },
+  {
+    "objectID": "notebooks/04-rectification/affine.html#the-image",
+    "href": "notebooks/04-rectification/affine.html#the-image",
+    "title": "Affine rectification",
+    "section": "The image",
+    "text": "The image\nload_facade picks up data/facade.jpg if you have put one there, and otherwise synthesises a facade under a known homography. Start with the synthetic one: the ground truth is available, so you can check the answer rather than eyeball it.\n\nimg, H_gt = cv.load_facade()\ncv.show(img, title=\"input image\")\nprint(\"synthetic\" if H_gt is not None else \"photograph\", \"-\", img.shape)\n\nsynthetic - (520, 700, 3)",
+    "crumbs": [
+      "Home",
+      "Rectification",
+      "Affine rectification"
+    ]
+  },
+  {
+    "objectID": "notebooks/04-rectification/affine.html#the-four-segments",
+    "href": "notebooks/04-rectification/affine.html#the-four-segments",
+    "title": "Affine rectification",
+    "section": "The four segments",
+    "text": "The four segments\nHere is the design decision worth flagging. The notebook ships with precomputed endpoints, so it runs top to bottom on any machine, including Colab, with nothing to click. The interactive selection lives in the next cell and is optional — that is the one to use in the lecture room.\nThe naming follows the book: \\(\\{\\mathbf{a}', \\mathbf{c}'\\}\\) are the images of one family of parallel world lines, \\(\\{\\mathbf{b}', \\mathbf{d}'\\}\\) of a second family.\n\nseg = dict(cv.DEFAULT_SEGMENTS)   # keys: 'a', 'c' (first family), 'b', 'd' (second)\n\nax = cv.show(img, title=\"the two families of parallel lines\")\nfor k, col in [(\"a\", \"tab:red\"), (\"c\", \"tab:red\"),\n               (\"b\", \"tab:blue\"), (\"d\", \"tab:blue\")]:\n    cv.draw_segment(ax, seg[k], color=col)\n\n\n\n\n\n\n\n\n\nOptional: pick them yourself\nUncomment and run to click the eight endpoints (a then c in red, b then d in blue). Needs %matplotlib widget and ipympl, which works locally but not on Colab — there, edit the numbers in seg by hand instead.\n\n# %matplotlib widget\n# ax = cv.show(img, title=\"click 8 points: a1 a2 c1 c2 b1 b2 d1 d2\")\n# pts = plt.ginput(8, timeout=0)\n# seg = {k: [pts[2*i], pts[2*i+1]] for i, k in enumerate([\"a\", \"c\", \"b\", \"d\"])}\n# print(seg)",
+    "crumbs": [
+      "Home",
+      "Rectification",
+      "Affine rectification"
+    ]
+  },
+  {
+    "objectID": "notebooks/04-rectification/affine.html#steps-1-3-the-vanishing-line",
+    "href": "notebooks/04-rectification/affine.html#steps-1-3-the-vanishing-line",
+    "title": "Affine rectification",
+    "section": "Steps 1-3: the vanishing line",
+    "text": "Steps 1-3: the vanishing line\nEach segment gives a line through its endpoints, \\(\\ell = \\mathbf{x}_1 \\times \\mathbf{x}_2\\). Intersecting lines within a family gives a vanishing point; joining the two vanishing points gives \\(\\ell'_\\infty\\).\nThe normalisation on line 3 of the algorithm is not cosmetic. Vanishing points often land thousands of pixels outside the frame, so \\(\\ell'_\\infty\\) comes out with a third coordinate several orders of magnitude larger than the first two. Left alone, that imbalance propagates straight into the bottom row of \\(H_P\\).\n\na, c = cv.seg_to_line(seg[\"a\"]), cv.seg_to_line(seg[\"c\"])\nb, d = cv.seg_to_line(seg[\"b\"]), cv.seg_to_line(seg[\"d\"])\n\nU = cv.meet(a, c)          # first vanishing point\nV = cv.meet(b, d)          # second vanishing point\nl_inf = cv.normalize_line(cv.join(U, V))\n\nprint(\"U' =\", cv.cartesian(U).ravel())\nprint(\"V' =\", cv.cartesian(V).ravel())\nprint(\"l'_inf =\", l_inf)\n\nU' = [1419.51237582  361.62485267]\nV' = [  307.81257809 -2790.46772178]\nl'_inf = [ 9.43065754e-01 -3.32606350e-01 -1.21841479e+03]\n\n\n\n# Both vanishing points usually fall well outside the image: widen the axes.\nu, v = cv.cartesian(U).ravel(), cv.cartesian(V).ravel()\nxs = [0, img.shape[1], u[0], v[0]]\nys = [0, img.shape[0], u[1], v[1]]\npad = 0.08 * max(max(xs) - min(xs), max(ys) - min(ys))\n\nfig, ax = plt.subplots(figsize=(9, 7))\nax.imshow(np.clip(img, 0, 1))\nfor k, col in [(\"a\", \"tab:red\"), (\"c\", \"tab:red\"),\n               (\"b\", \"tab:blue\"), (\"d\", \"tab:blue\")]:\n    cv.draw_segment(ax, seg[k], color=col)\nax.plot(*u, \"o\", color=\"tab:red\", ms=11, label=\"$U'$\")\nax.plot(*v, \"o\", color=\"tab:blue\", ms=11, label=\"$V'$\")\nax.set_xlim(min(xs) - pad, max(xs) + pad)\nax.set_ylim(max(ys) + pad, min(ys) - pad)\ncv.draw_line(ax, l_inf, xlim=ax.get_xlim(), color=\"tab:green\", lw=2.5,\n             label=r\"$\\ell'_\\infty$\")\nax.legend(loc=\"lower right\")\nax.set_axis_off()",
+    "crumbs": [
+      "Home",
+      "Rectification",
+      "Affine rectification"
+    ]
+  },
+  {
+    "objectID": "notebooks/04-rectification/affine.html#step-4-the-rectifying-homography",
+    "href": "notebooks/04-rectification/affine.html#step-4-the-rectifying-homography",
+    "title": "Affine rectification",
+    "section": "Step 4: the rectifying homography",
+    "text": "Step 4: the rectifying homography\n\\[\nH_P = \\begin{bmatrix} 1 & 0 & 0 \\\\ 0 & 1 & 0 \\\\ \\ell_1 & \\ell_2 & \\ell_3 \\end{bmatrix}\n\\]\nThe top two rows are a free choice — any affinity there would do, since the result is only defined up to one. All the work is in the bottom row.\nLines transform by the inverse transpose, so the check is \\(H_P^{-\\top} \\ell'_\\infty = (0:0:1)^\\top\\).\n\nH_P = cv.H_from_vanishing_line(l_inf)\nprint(H_P, \"\\n\")\n\ncheck = np.linalg.inv(H_P).T @ l_inf\nprint(\"H_P^-T l'_inf =\", np.round(check / check[2], 12))\n\n[[ 1.00000000e+00  0.00000000e+00  0.00000000e+00]\n [ 0.00000000e+00  1.00000000e+00  0.00000000e+00]\n [ 9.43065754e-01 -3.32606350e-01 -1.21841479e+03]] \n\nH_P^-T l'_inf = [-0. -0.  1.]",
+    "crumbs": [
+      "Home",
+      "Rectification",
+      "Affine rectification"
+    ]
+  },
+  {
+    "objectID": "notebooks/04-rectification/affine.html#warping",
+    "href": "notebooks/04-rectification/affine.html#warping",
+    "title": "Affine rectification",
+    "section": "Warping",
+    "text": "Warping\nOne practical note that costs an afternoon if you meet it cold: skimage.transform.warp pulls each output pixel from the input, so it wants the inverse map, and it keeps the original canvas — unlike MATLAB’s imwarp, which sizes the output for you. cv.warp_image handles both, and fits the canvas to the region of interest rather than to the image corners, which after rectification are usually far away.\n\nroi = np.vstack([seg[k] for k in (\"a\", \"c\", \"b\", \"d\")])\nrect = cv.warp_image(img, H_P, roi=roi, max_side=900)\n\nfig, axes = plt.subplots(1, 2, figsize=(13, 5))\ncv.show(img, ax=axes[0], title=\"original\")\ncv.show(rect, ax=axes[1], title=\"affine rectified\")\n\n\n\n\n\n\n\n\nThe facade is now a parallelogram. It is still sheared and rotated, and it should be: affine rectification recovers the plane only up to an affinity. Angles and length ratios need the metric step.",
+    "crumbs": [
+      "Home",
+      "Rectification",
+      "Affine rectification"
+    ]
+  },
+  {
+    "objectID": "notebooks/04-rectification/affine.html#checking-it-worked",
+    "href": "notebooks/04-rectification/affine.html#checking-it-worked",
+    "title": "Affine rectification",
+    "section": "Checking it worked",
+    "text": "Checking it worked\nEyeballing parallel lines is unreliable. Transform the lines themselves and read off the vanishing points: if the rectification is right, they have moved to infinity, so their third coordinate should be zero (to numerical precision).\n\nHinv_T = np.linalg.inv(H_P).T\na_r, c_r = Hinv_T @ a, Hinv_T @ c\nb_r, d_r = Hinv_T @ b, Hinv_T @ d\n\nfor name, (p, q) in [(\"a x c\", (a_r, c_r)), (\"b x d\", (b_r, d_r))]:\n    w = cv.meet(p, q)\n    print(f\"{name}: third coordinate = {w[2] / np.linalg.norm(w):+.2e}\")\n\na x c: third coordinate = +0.00e+00\nb x d: third coordinate = -4.56e-17",
+    "crumbs": [
+      "Home",
+      "Rectification",
+      "Affine rectification"
+    ]
+  },
+  {
+    "objectID": "notebooks/04-rectification/affine.html#where-it-breaks",
+    "href": "notebooks/04-rectification/affine.html#where-it-breaks",
+    "title": "Affine rectification",
+    "section": "Where it breaks",
+    "text": "Where it breaks\nWorth running before trusting this on a photograph. Nudge one endpoint by a few pixels and watch what happens to \\(\\ell'_\\infty\\): the more nearly parallel the segments look in the image, the further out the vanishing point goes, and the worse conditioned everything downstream becomes. This is the failure mode behind the bitangent construction in Section 1.7.\n\nrng = np.random.default_rng(0)\nbase = cv.normalize_line(cv.join(cv.meet(a, c), cv.meet(b, d)))\n\nfor sigma in (0.0, 0.5, 1.0, 2.0):\n    devs = []\n    for _ in range(200):\n        pert = {k: np.asarray(v, float) + rng.normal(0, sigma, (2, 2))\n                for k, v in seg.items()}\n        L = {k: cv.seg_to_line(pert[k]) for k in pert}\n        l = cv.normalize_line(cv.join(cv.meet(L[\"a\"], L[\"c\"]),\n                                      cv.meet(L[\"b\"], L[\"d\"])))\n        devs.append(np.linalg.norm(l - base) / max(np.linalg.norm(base), 1e-12))\n    print(f\"endpoint noise {sigma:.1f} px  -&gt;  relative error on l'_inf \"\n          f\"{np.mean(devs):.4f}\")\n\nendpoint noise 0.0 px  -&gt;  relative error on l'_inf 0.0000\nendpoint noise 0.5 px  -&gt;  relative error on l'_inf 0.0099\nendpoint noise 1.0 px  -&gt;  relative error on l'_inf 0.0193\nendpoint noise 2.0 px  -&gt;  relative error on l'_inf 0.0383",
+    "crumbs": [
+      "Home",
+      "Rectification",
+      "Affine rectification"
+    ]
+  },
+  {
+    "objectID": "notebooks/04-rectification/affine.html#exercises",
+    "href": "notebooks/04-rectification/affine.html#exercises",
+    "title": "Affine rectification",
+    "section": "Exercises",
+    "text": "Exercises\n\nReplace the synthetic facade with a photograph of your own: drop it in data/facade.jpg and pick the segments interactively.\nWith the synthetic image you have H_gt. The composition \\(H_P \\, H_{gt}\\) should be an affinity — check that its bottom row is \\((0, 0, \\star)\\), and quantify how far off it is.\nRecover the vanishing line from three equally spaced coplanar lines instead of two pairs of parallel ones (cross-ratio construction).\nContinue to the metric step: five pairs of orthogonal lines give \\(\\hat{C}^*_\\infty\\), and from it \\(H_A\\). See Algorithm 2, Section 1.5.",
+    "crumbs": [
+      "Home",
+      "Rectification",
+      "Affine rectification"
+    ]
+  },
+  {
+    "objectID": "tracks/iacv.html",
+    "href": "tracks/iacv.html",
+    "title": "IACV — Politecnico di Milano",
+    "section": "",
+    "text": "Reading order for the practical sessions of Image Analysis and Computer Vision. Course logistics, recordings and the project template are on the course page.\n\n\n\n\n\n\n\n\n#\nTopic\nNotebook\n\n\n\n\n1\nAffine rectification\nopen"
+  },
+  {
+    "objectID": "SETUP.html",
+    "href": "SETUP.html",
+    "title": "",
+    "section": "",
+    "text": "Code"
+  },
+  {
+    "objectID": "SETUP.html#create-the-repository-on-github",
+    "href": "SETUP.html#create-the-repository-on-github",
+    "title": "",
+    "section": "1. Create the repository on GitHub",
+    "text": "1. Create the repository on GitHub\nGo to https://github.com/new - Repository name: cv-dojo - Public - Do not tick “Add a README” / .gitignore / licence — the folder already has them, and an initialised repo would conflict."
+  },
+  {
+    "objectID": "SETUP.html#put-this-folder-next-to-your-site",
+    "href": "SETUP.html#put-this-folder-next-to-your-site",
+    "title": "",
+    "section": "2. Put this folder next to your site",
+    "text": "2. Put this folder next to your site\ncd ~/repos\n# unzip cv-dojo.zip here, so you end up with ~/repos/cv-dojo\nCheck it is beside magrilu.github.io, not inside it."
+  },
+  {
+    "objectID": "SETUP.html#first-push",
+    "href": "SETUP.html#first-push",
+    "title": "",
+    "section": "3. First push",
+    "text": "3. First push\ncd ~/repos/cv-dojo\ngit init\ngit add .\ngit commit -m \"Initial commit: affine rectification notebook + scaffolding\"\ngit branch -M main\ngit remote add origin git@github.com:magrilu/cv-dojo.git\ngit push -u origin main\nReload the repo page on GitHub — the files should be there."
+  },
+  {
+    "objectID": "SETUP.html#python-environment",
+    "href": "SETUP.html#python-environment",
+    "title": "",
+    "section": "4. Python environment",
+    "text": "4. Python environment\npython3 -m venv .venv\nsource .venv/bin/activate\npip install -r requirements.txt\nCheck the notebook runs:\njupyter lab notebooks/04-rectification/affine.ipynb"
+  },
+  {
+    "objectID": "SETUP.html#quarto",
+    "href": "SETUP.html#quarto",
+    "title": "",
+    "section": "5. Quarto",
+    "text": "5. Quarto\nInstall from https://quarto.org/docs/get-started/ (a .deb / .pkg, one minute).\nquarto preview\nThis opens a browser with live reload. Iterate here."
+  },
+  {
+    "objectID": "SETUP.html#publish",
+    "href": "SETUP.html#publish",
+    "title": "",
+    "section": "6. Publish",
+    "text": "6. Publish\nquarto publish gh-pages\nFirst run asks for confirmation, then creates the gh-pages branch, pushes the built site, and adds .nojekyll (without which GitHub would run the output through Jekyll and drop every _-prefixed folder — the classic “site with no CSS” failure).\nThen check on GitHub: Settings → Pages → source is gh-pages / (root).\nWait a couple of minutes: https://magrilu.github.io/cv-dojo/\nFrom now on, publishing is just quarto publish gh-pages. Your source lives on main; gh-pages is machine-written and never edited by hand — the same split you already have between source and master on the site repo."
+  },
+  {
+    "objectID": "SETUP.html#look-at-it-next-to-your-site",
+    "href": "SETUP.html#look-at-it-next-to-your-site",
+    "title": "",
+    "section": "7. Look at it next to your site",
+    "text": "7. Look at it next to your site\nNow decide whether the visual gap bothers you. If it does, open assets/custom.scss and copy in the real values from your al-folio _sass/_themes.scss (--global-theme-color) and _sass/_variables.scss."
+  },
+  {
+    "objectID": "SETUP.html#menu-entry-on-magrilu.github.io",
+    "href": "SETUP.html#menu-entry-on-magrilu.github.io",
+    "title": "",
+    "section": "8. Menu entry on magrilu.github.io",
+    "text": "8. Menu entry on magrilu.github.io\nIn the site repo, on the source branch, find the page that generates the teaching dropdown in _pages/ and copy its pattern:\n- title: CV Dojo\n  permalink: https://magrilu.github.io/cv-dojo/\nAn absolute URL works fine as a permalink. Then:\n./bin/deploy --user\n(The exact YAML key differs between al-folio versions — follow whatever your existing dropdown does rather than the snippet above.)"
+  },
+  {
+    "objectID": "SETUP.html#zenodo",
+    "href": "SETUP.html#zenodo",
+    "title": "",
+    "section": "9. Zenodo",
+    "text": "9. Zenodo\nhttps://zenodo.org → log in with GitHub → enable the toggle for cv-dojo. Then on GitHub: Releases → Create a new release → tag v0.1.0. The DOI is minted automatically, and again on every later release."
+  },
+  {
+    "objectID": "SETUP.html#troubleshooting",
+    "href": "SETUP.html#troubleshooting",
+    "title": "",
+    "section": "Troubleshooting",
+    "text": "Troubleshooting\ngit push permission denied — your SSH key is not set up. Quick fix: use git remote set-url origin https://github.com/magrilu/cv-dojo.git and authenticate with a personal access token instead.\nSite published but unstyled — .nojekyll is missing from gh-pages, or Pages is pointing at the wrong branch.\nColab badge 404 — the branch in the badge URL must match yours (main), and the repository must be public."
+  },
+  {
+    "objectID": "LICENSE.html",
+    "href": "LICENSE.html",
+    "title": "",
+    "section": "",
+    "text": "Code\n\n\n\n\n\nLicensing\nThis repository contains two kinds of material, under two licences.\nCode — everything under src/, matlab/, and the code cells of the notebooks: MIT, see LICENSE-CODE.\nContent — prose, figures, exercises, and the markdown cells of the notebooks: Creative Commons Attribution 4.0 International (CC BY 4.0), see LICENSE-CONTENT.\nIn both cases you may reuse and adapt freely, provided you credit:\n\nLuca Magri, Computer Vision Dojo, https://github.com/magrilu/cv-dojo\n\nSee CITATION.cff for a citable reference."
+  },
+  {
+    "objectID": "tracks/bocconi.html",
+    "href": "tracks/bocconi.html",
+    "title": "Bocconi",
+    "section": "",
+    "text": "Reading order for the Bocconi course. Same material, different path: lighter on MATLAB legacy, heavier on the Python notebooks.\n\n\n\n\n\n\n\n\n#\nTopic\nNotebook\n\n\n\n\n1\nAffine rectification\nopen"
+  },
+  {
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "Computer Vision Dojo",
+    "section": "",
+    "text": "A dojo is a place for practice: somewhere to return to the same ideas, repeat simple gestures, and gradually make them your own.\nThis is a small and growing collection of notebooks on the geometric foundations of 3D computer vision: projective planes, homographies, rectification, robust fitting, and, in time, more.\nLLM can now produce a surprising amount of working code in very little time, and much of it is correct. They will explain it as well, and clearly. But an explanation received is not the same as an argument understood.\nThe notebooks here therefore take a deliberately slower path. They are meant to be studied much like a mathematics book: with patience, perhaps with paper and pencil nearby, following each construction one step at a time. Every algorithm is developed through code that can be run, changed, broken, and put back together.\nSome parts of the collection are already usable; others are still sketches, experiments, or plans. This page is therefore both a course resource and a public notebook in progress. Over time, it may grow into a more complete set of notes on geometric computer vision.\nTo whoever has the patience to work through these pages: I hope you find results that are correct and useful, and that you will tell me when they are not. Above all I hope you find the pleasure of having understood something yourself, and some affection for the elegance of geometry underneath it all.",
+    "crumbs": [
+      "Home",
+      "Overview"
+    ]
+  },
+  {
+    "objectID": "index.html#the-notebooks",
+    "href": "index.html#the-notebooks",
+    "title": "Computer Vision Dojo",
+    "section": "The notebooks",
+    "text": "The notebooks\n\n\n\n\n\n\n\n\n01\nThe projective plane\npoints, lines, duality, conics\n\n\n02\nHomographies\nDLT from points and lines, warping\n\n\n03\nRectification\naffine, metric, stratified, direct\n\n\n04\nMeasuring from one view\nvanishing points, horizon, affine measurements\n\n\n05\nRobust fitting\nRANSAC, LMedS, MSAC, Hough\n\n\n06\nPutting it together\nfeature matching, stitching\n\n\n\nSections without a link are still in preparation.",
+    "crumbs": [
+      "Home",
+      "Overview"
+    ]
+  },
+  {
+    "objectID": "index.html#how-to-use-this-collection",
+    "href": "index.html#how-to-use-this-collection",
+    "title": "Computer Vision Dojo",
+    "section": "How to use this collection",
+    "text": "How to use this collection\nEach notebook is designed to run from top to bottom. You can open it in Colab and work through the cells in order.\nRead the explanations, inspect the intermediate quantities, and modify the examples. Keep paper nearby when a derivation becomes difficult. A notebook often becomes most useful when something is changed and the result is not quite what was expected.\nTo run the notebooks locally:\ngit clone https://github.com/magrilu/cv-dojo.git\ncd cv-dojo\npip install -r requirements.txt\nStudents following one of my courses can find a suggested reading order under Courses in the menu above.\nThe original MATLAB scripts used in the Politecnico exercise sessions are kept under matlab/.",
+    "crumbs": [
+      "Home",
+      "Overview"
+    ]
+  },
+  {
+    "objectID": "index.html#acknowledgements",
+    "href": "index.html#acknowledgements",
+    "title": "Computer Vision Dojo",
+    "section": "Acknowledgements",
+    "text": "Acknowledgements\nMy first thanks go to my father, Maurizio Magri, who taught me the joy and satisfaction of approaching mathematics armed with patience, paper, and pencil. I had to add an eraser, as my mistakes were rather more frequent than his.\nI hope these notebooks owe something to the way Andrea Fusiello taught me to approach computer vision. Whatever elegance they may contain is certainly inherited from his Computer Vision Toolkit, to which every interested reader is warmly—and immediately—referred. Any errors, of course, are entirely my own.\nI am also grateful to Giacomo Boracchi, with whom I have taught these topics on several occasions. His genuine commitment to teaching has been a source of inspiration. I share his conviction that teaching a student to reason clearly and independently is one of the most lasting ways in which we can contribute to the world.\nThese notebooks began as material for the exercise sessions in Vincenzo Caglioti’s course at Politecnico di Milano. I am grateful to him for the opportunity to develop and teach many of these ideas in that setting.",
+    "crumbs": [
+      "Home",
+      "Overview"
+    ]
+  },
+  {
+    "objectID": "index.html#about",
+    "href": "index.html#about",
+    "title": "Computer Vision Dojo",
+    "section": "About",
+    "text": "About\nThis collection is maintained by Luca Magri at Politecnico di Milano.\nCorrections, questions, and suggestions are always welcome. You can reach me by email.\nCode is released under the MIT License. Text and figures are licensed under CC BY-NC-ND 4.0; see the licensing page.\nTo cite this collection:\n@software{magri_cvdojo,\n  author = {Magri, Luca},\n  title  = {Computer Vision Dojo},\n  year   = {2026},\n  url    = {https://github.com/magrilu/cv-dojo}\n}",
+    "crumbs": [
+      "Home",
+      "Overview"
+    ]
+  }
+]

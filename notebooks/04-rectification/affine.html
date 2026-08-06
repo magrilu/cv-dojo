@@ -1,0 +1,1012 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.10.18">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>Affine rectification – Computer Vision Dojo</title>
+<style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: 1.5em;}
+div.column{flex: auto;}
+@media screen {
+div.columns{gap: min(4vw, 1.5em);}
+div.column{overflow-x: auto;}
+}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../">
+<link href="../../assets/favicon.png" rel="icon" type="image/png">
+<script src="../../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-d92e8767f1f42d56076cabe937f4151b.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap-d5ccca095b5bf89d8dd80f0a782f0fc2.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-chtml.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+</head>
+
+<body class="nav-sidebar docked nav-fixed quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a class="navbar-brand" href="../../index.html">
+    <span class="navbar-title">Computer Vision Dojo</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link active" href="../../index.html" aria-current="page"> 
+<span class="menu-text">Home</span></a>
+  </li>  
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-courses" role="link" data-bs-toggle="dropdown" aria-expanded="false">
+ <span class="menu-text">Courses</span>
+    </a>
+    <ul class="dropdown-menu" aria-labelledby="nav-menu-courses">    
+        <li>
+    <a class="dropdown-item" href="../../tracks/iacv.html">
+ <span class="dropdown-text">IACV — Politecnico di Milano</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../tracks/bocconi.html">
+ <span class="dropdown-text">IACV - Bocconi</span></a>
+  </li>  
+    </ul>
+  </li>
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../notebooks/04-rectification/affine.html">Rectification</a></li><li class="breadcrumb-item"><a href="../../notebooks/04-rectification/affine.html">Affine rectification</a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+      <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation docked overflow-auto">
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Overview</span></a>
+  </div>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true">
+ <span class="menu-text">Rectification</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../notebooks/04-rectification/affine.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text">Affine rectification</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#the-image" id="toc-the-image" class="nav-link active" data-scroll-target="#the-image">The image</a></li>
+  <li><a href="#the-four-segments" id="toc-the-four-segments" class="nav-link" data-scroll-target="#the-four-segments">The four segments</a>
+  <ul class="collapse">
+  <li><a href="#optional-pick-them-yourself" id="toc-optional-pick-them-yourself" class="nav-link" data-scroll-target="#optional-pick-them-yourself">Optional: pick them yourself</a></li>
+  </ul></li>
+  <li><a href="#steps-1-3-the-vanishing-line" id="toc-steps-1-3-the-vanishing-line" class="nav-link" data-scroll-target="#steps-1-3-the-vanishing-line">Steps 1-3: the vanishing line</a></li>
+  <li><a href="#step-4-the-rectifying-homography" id="toc-step-4-the-rectifying-homography" class="nav-link" data-scroll-target="#step-4-the-rectifying-homography">Step 4: the rectifying homography</a></li>
+  <li><a href="#warping" id="toc-warping" class="nav-link" data-scroll-target="#warping">Warping</a></li>
+  <li><a href="#checking-it-worked" id="toc-checking-it-worked" class="nav-link" data-scroll-target="#checking-it-worked">Checking it worked</a></li>
+  <li><a href="#where-it-breaks" id="toc-where-it-breaks" class="nav-link" data-scroll-target="#where-it-breaks">Where it breaks</a></li>
+  <li><a href="#exercises" id="toc-exercises" class="nav-link" data-scroll-target="#exercises">Exercises</a></li>
+  </ul>
+<div class="toc-actions"><ul><li><a href="https://github.com/magrilu/cv-dojo/blob/main/notebooks/04-rectification/affine.ipynb" class="toc-action"><i class="bi bi-github"></i>View source</a></li><li><a href="https://github.com/magrilu/cv-dojo/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../notebooks/04-rectification/affine.html">Rectification</a></li><li class="breadcrumb-item"><a href="../../notebooks/04-rectification/affine.html">Affine rectification</a></li></ol></nav>
+<div class="quarto-title">
+<h1 class="title">Affine rectification</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><a href="https://colab.research.google.com/github/magrilu/cv-dojo/blob/main/notebooks/04-rectification/affine.ipynb"><img src="https://colab.research.google.com/assets/colab-badge.svg" class="img-fluid figure-img"></a></p>
+<figcaption>Open In Colab</figcaption>
+</figure>
+</div>
+<p><em>Companion to Algorithm 1, Section 1.3.</em></p>
+<p>Perspective destroys parallelism: two rails that never meet in the world do meet on the page. <strong>Affine rectification</strong> puts it back. It does not recover angles or length ratios — that comes later, in the metric step — but it does recover everything affine: parallelism, midpoints, ratios of lengths along a line.</p>
+<p>The whole method rests on one observation. Under perspective the line at infinity <span class="math inline">\(\ell_\infty\)</span> no longer sits at <span class="math inline">\((0:0:1)\)</span>; it lands somewhere in the image as <span class="math inline">\(\ell'_\infty\)</span>, the <strong>vanishing line</strong>. Send it back where it belongs and the affine structure returns with it.</p>
+<p>Two pairs of parallel lines are enough:</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<tbody>
+<tr class="odd">
+<td>1</td>
+<td>Intersect each pair to get the vanishing points <span class="math inline">\(\mathbf{U}' = \mathbf{a}' \times \mathbf{c}'\)</span>, <span class="math inline">\(\mathbf{V}' = \mathbf{b}' \times \mathbf{d}'\)</span></td>
+</tr>
+<tr class="even">
+<td>2</td>
+<td>Join them: <span class="math inline">\(\ell'_\infty = \mathbf{U}' \times \mathbf{V}'\)</span></td>
+</tr>
+<tr class="odd">
+<td>3</td>
+<td>Normalise <span class="math inline">\(\ell'_\infty\)</span></td>
+</tr>
+<tr class="even">
+<td>4</td>
+<td>Build <span class="math inline">\(H_P\)</span> so that <span class="math inline">\(H_P^{-\top}\,\ell'_\infty = (0:0:1)^\top\)</span></td>
+</tr>
+</tbody>
+</table>
+<div id="e20bd413" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-08-06T09:03:17.975327Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-08-06T09:03:17.975095Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-08-06T09:03:18.922282Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-08-06T09:03:18.920862Z&quot;}}" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># On Colab, fetch the repository. Locally this is a no-op.</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> os, sys, subprocess</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="st">"COLAB_GPU"</span> <span class="kw">in</span> os.environ <span class="kw">or</span> <span class="st">"COLAB_RELEASE_TAG"</span> <span class="kw">in</span> os.environ:</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="kw">not</span> os.path.isdir(<span class="st">"cv-dojo"</span>):</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>        subprocess.run([<span class="st">"git"</span>, <span class="st">"clone"</span>, <span class="st">"-q"</span>,</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>                        <span class="st">"https://github.com/magrilu/cv-dojo.git"</span>], check<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>    os.chdir(<span class="st">"cv-dojo"</span>)</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>sys.path.insert(<span class="dv">0</span>, os.path.abspath(<span class="st">"../../src"</span>))   <span class="co"># local run, from notebooks/04-rectification</span></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>sys.path.insert(<span class="dv">0</span>, os.path.abspath(<span class="st">"src"</span>))        <span class="co"># Colab run, from the repo root</span></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> cvdojo <span class="im">as</span> cv</span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>plt.rcParams[<span class="st">"figure.figsize"</span>] <span class="op">=</span> (<span class="dv">7</span>, <span class="dv">5</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<section id="the-image" class="level2">
+<h2 class="anchored" data-anchor-id="the-image">The image</h2>
+<p><code>load_facade</code> picks up <code>data/facade.jpg</code> if you have put one there, and otherwise synthesises a facade under a known homography. Start with the synthetic one: the ground truth is available, so you can check the answer rather than eyeball it.</p>
+<div id="e54e9b70" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-08-06T09:03:18.924572Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-08-06T09:03:18.924303Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-08-06T09:03:19.344902Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-08-06T09:03:19.343844Z&quot;}}" data-execution_count="2">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>img, H_gt <span class="op">=</span> cv.load_facade()</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>cv.show(img, title<span class="op">=</span><span class="st">"input image"</span>)</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"synthetic"</span> <span class="cf">if</span> H_gt <span class="kw">is</span> <span class="kw">not</span> <span class="va">None</span> <span class="cf">else</span> <span class="st">"photograph"</span>, <span class="st">"-"</span>, img.shape)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>synthetic - (520, 700, 3)</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="affine_files/figure-html/cell-3-output-2.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="the-four-segments" class="level2">
+<h2 class="anchored" data-anchor-id="the-four-segments">The four segments</h2>
+<p>Here is the design decision worth flagging. The notebook ships with <strong>precomputed endpoints</strong>, so it runs top to bottom on any machine, including Colab, with nothing to click. The interactive selection lives in the next cell and is optional — that is the one to use in the lecture room.</p>
+<p>The naming follows the book: <span class="math inline">\(\{\mathbf{a}', \mathbf{c}'\}\)</span> are the images of one family of parallel world lines, <span class="math inline">\(\{\mathbf{b}', \mathbf{d}'\}\)</span> of a second family.</p>
+<div id="1a147ba6" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-08-06T09:03:19.346912Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-08-06T09:03:19.346696Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-08-06T09:03:19.479464Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-08-06T09:03:19.478343Z&quot;}}" data-execution_count="3">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>seg <span class="op">=</span> <span class="bu">dict</span>(cv.DEFAULT_SEGMENTS)   <span class="co"># keys: 'a', 'c' (first family), 'b', 'd' (second)</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>ax <span class="op">=</span> cv.show(img, title<span class="op">=</span><span class="st">"the two families of parallel lines"</span>)</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> k, col <span class="kw">in</span> [(<span class="st">"a"</span>, <span class="st">"tab:red"</span>), (<span class="st">"c"</span>, <span class="st">"tab:red"</span>),</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>               (<span class="st">"b"</span>, <span class="st">"tab:blue"</span>), (<span class="st">"d"</span>, <span class="st">"tab:blue"</span>)]:</span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>    cv.draw_segment(ax, seg[k], color<span class="op">=</span>col)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="affine_files/figure-html/cell-4-output-1.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+<section id="optional-pick-them-yourself" class="level3">
+<h3 class="anchored" data-anchor-id="optional-pick-them-yourself">Optional: pick them yourself</h3>
+<p>Uncomment and run to click the eight endpoints (<code>a</code> then <code>c</code> in red, <code>b</code> then <code>d</code> in blue). Needs <code>%matplotlib widget</code> and <code>ipympl</code>, which works locally but not on Colab — there, edit the numbers in <code>seg</code> by hand instead.</p>
+<div id="f12d8870" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-08-06T09:03:19.482124Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-08-06T09:03:19.481379Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-08-06T09:03:19.485309Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-08-06T09:03:19.484468Z&quot;}}" data-execution_count="4">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># %matplotlib widget</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="co"># ax = cv.show(img, title="click 8 points: a1 a2 c1 c2 b1 b2 d1 d2")</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="co"># pts = plt.ginput(8, timeout=0)</span></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="co"># seg = {k: [pts[2*i], pts[2*i+1]] for i, k in enumerate(["a", "c", "b", "d"])}</span></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a><span class="co"># print(seg)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</section>
+</section>
+<section id="steps-1-3-the-vanishing-line" class="level2">
+<h2 class="anchored" data-anchor-id="steps-1-3-the-vanishing-line">Steps 1-3: the vanishing line</h2>
+<p>Each segment gives a line through its endpoints, <span class="math inline">\(\ell = \mathbf{x}_1 \times \mathbf{x}_2\)</span>. Intersecting lines within a family gives a vanishing point; joining the two vanishing points gives <span class="math inline">\(\ell'_\infty\)</span>.</p>
+<p>The normalisation on line 3 of the algorithm is not cosmetic. Vanishing points often land thousands of pixels outside the frame, so <span class="math inline">\(\ell'_\infty\)</span> comes out with a third coordinate several orders of magnitude larger than the first two. Left alone, that imbalance propagates straight into the bottom row of <span class="math inline">\(H_P\)</span>.</p>
+<div id="36c5b79f" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-08-06T09:03:19.486865Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-08-06T09:03:19.486701Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-08-06T09:03:19.494866Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-08-06T09:03:19.493901Z&quot;}}" data-execution_count="5">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>a, c <span class="op">=</span> cv.seg_to_line(seg[<span class="st">"a"</span>]), cv.seg_to_line(seg[<span class="st">"c"</span>])</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>b, d <span class="op">=</span> cv.seg_to_line(seg[<span class="st">"b"</span>]), cv.seg_to_line(seg[<span class="st">"d"</span>])</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>U <span class="op">=</span> cv.meet(a, c)          <span class="co"># first vanishing point</span></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>V <span class="op">=</span> cv.meet(b, d)          <span class="co"># second vanishing point</span></span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>l_inf <span class="op">=</span> cv.normalize_line(cv.join(U, V))</span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"U' ="</span>, cv.cartesian(U).ravel())</span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"V' ="</span>, cv.cartesian(V).ravel())</span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"l'_inf ="</span>, l_inf)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>U' = [1419.51237582  361.62485267]
+V' = [  307.81257809 -2790.46772178]
+l'_inf = [ 9.43065754e-01 -3.32606350e-01 -1.21841479e+03]</code></pre>
+</div>
+</div>
+<div id="73695b6c" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-08-06T09:03:19.496518Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-08-06T09:03:19.496356Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-08-06T09:03:19.720749Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-08-06T09:03:19.719631Z&quot;}}" data-execution_count="6">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Both vanishing points usually fall well outside the image: widen the axes.</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>u, v <span class="op">=</span> cv.cartesian(U).ravel(), cv.cartesian(V).ravel()</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>xs <span class="op">=</span> [<span class="dv">0</span>, img.shape[<span class="dv">1</span>], u[<span class="dv">0</span>], v[<span class="dv">0</span>]]</span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>ys <span class="op">=</span> [<span class="dv">0</span>, img.shape[<span class="dv">0</span>], u[<span class="dv">1</span>], v[<span class="dv">1</span>]]</span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>pad <span class="op">=</span> <span class="fl">0.08</span> <span class="op">*</span> <span class="bu">max</span>(<span class="bu">max</span>(xs) <span class="op">-</span> <span class="bu">min</span>(xs), <span class="bu">max</span>(ys) <span class="op">-</span> <span class="bu">min</span>(ys))</span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>fig, ax <span class="op">=</span> plt.subplots(figsize<span class="op">=</span>(<span class="dv">9</span>, <span class="dv">7</span>))</span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>ax.imshow(np.clip(img, <span class="dv">0</span>, <span class="dv">1</span>))</span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> k, col <span class="kw">in</span> [(<span class="st">"a"</span>, <span class="st">"tab:red"</span>), (<span class="st">"c"</span>, <span class="st">"tab:red"</span>),</span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a>               (<span class="st">"b"</span>, <span class="st">"tab:blue"</span>), (<span class="st">"d"</span>, <span class="st">"tab:blue"</span>)]:</span>
+<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a>    cv.draw_segment(ax, seg[k], color<span class="op">=</span>col)</span>
+<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a>ax.plot(<span class="op">*</span>u, <span class="st">"o"</span>, color<span class="op">=</span><span class="st">"tab:red"</span>, ms<span class="op">=</span><span class="dv">11</span>, label<span class="op">=</span><span class="st">"$U'$"</span>)</span>
+<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a>ax.plot(<span class="op">*</span>v, <span class="st">"o"</span>, color<span class="op">=</span><span class="st">"tab:blue"</span>, ms<span class="op">=</span><span class="dv">11</span>, label<span class="op">=</span><span class="st">"$V'$"</span>)</span>
+<span id="cb8-14"><a href="#cb8-14" aria-hidden="true" tabindex="-1"></a>ax.set_xlim(<span class="bu">min</span>(xs) <span class="op">-</span> pad, <span class="bu">max</span>(xs) <span class="op">+</span> pad)</span>
+<span id="cb8-15"><a href="#cb8-15" aria-hidden="true" tabindex="-1"></a>ax.set_ylim(<span class="bu">max</span>(ys) <span class="op">+</span> pad, <span class="bu">min</span>(ys) <span class="op">-</span> pad)</span>
+<span id="cb8-16"><a href="#cb8-16" aria-hidden="true" tabindex="-1"></a>cv.draw_line(ax, l_inf, xlim<span class="op">=</span>ax.get_xlim(), color<span class="op">=</span><span class="st">"tab:green"</span>, lw<span class="op">=</span><span class="fl">2.5</span>,</span>
+<span id="cb8-17"><a href="#cb8-17" aria-hidden="true" tabindex="-1"></a>             label<span class="op">=</span><span class="vs">r"</span><span class="dv">$</span><span class="er">\</span><span class="vs">ell'_</span><span class="er">\</span><span class="vs">infty</span><span class="dv">$</span><span class="vs">"</span>)</span>
+<span id="cb8-18"><a href="#cb8-18" aria-hidden="true" tabindex="-1"></a>ax.legend(loc<span class="op">=</span><span class="st">"lower right"</span>)</span>
+<span id="cb8-19"><a href="#cb8-19" aria-hidden="true" tabindex="-1"></a>ax.set_axis_off()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="affine_files/figure-html/cell-7-output-1.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="step-4-the-rectifying-homography" class="level2">
+<h2 class="anchored" data-anchor-id="step-4-the-rectifying-homography">Step 4: the rectifying homography</h2>
+<p><span class="math display">\[
+H_P = \begin{bmatrix} 1 &amp; 0 &amp; 0 \\ 0 &amp; 1 &amp; 0 \\ \ell_1 &amp; \ell_2 &amp; \ell_3 \end{bmatrix}
+\]</span></p>
+<p>The top two rows are a free choice — any affinity there would do, since the result is only defined up to one. All the work is in the bottom row.</p>
+<p>Lines transform by the inverse transpose, so the check is <span class="math inline">\(H_P^{-\top} \ell'_\infty = (0:0:1)^\top\)</span>.</p>
+<div id="ea727bd6" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-08-06T09:03:19.723036Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-08-06T09:03:19.722312Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-08-06T09:03:19.728228Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-08-06T09:03:19.727290Z&quot;}}" data-execution_count="7">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>H_P <span class="op">=</span> cv.H_from_vanishing_line(l_inf)</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(H_P, <span class="st">"</span><span class="ch">\n</span><span class="st">"</span>)</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>check <span class="op">=</span> np.linalg.inv(H_P).T <span class="op">@</span> l_inf</span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"H_P^-T l'_inf ="</span>, np.<span class="bu">round</span>(check <span class="op">/</span> check[<span class="dv">2</span>], <span class="dv">12</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[[ 1.00000000e+00  0.00000000e+00  0.00000000e+00]
+ [ 0.00000000e+00  1.00000000e+00  0.00000000e+00]
+ [ 9.43065754e-01 -3.32606350e-01 -1.21841479e+03]] 
+
+H_P^-T l'_inf = [-0. -0.  1.]</code></pre>
+</div>
+</div>
+</section>
+<section id="warping" class="level2">
+<h2 class="anchored" data-anchor-id="warping">Warping</h2>
+<p>One practical note that costs an afternoon if you meet it cold: <code>skimage.transform.warp</code> pulls each output pixel from the input, so it wants the <strong>inverse</strong> map, and it keeps the original canvas — unlike MATLAB’s <code>imwarp</code>, which sizes the output for you. <code>cv.warp_image</code> handles both, and fits the canvas to the region of interest rather than to the image corners, which after rectification are usually far away.</p>
+<div id="877459e3" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-08-06T09:03:19.729993Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-08-06T09:03:19.729839Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-08-06T09:03:20.230570Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-08-06T09:03:20.229569Z&quot;}}" data-execution_count="8">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>roi <span class="op">=</span> np.vstack([seg[k] <span class="cf">for</span> k <span class="kw">in</span> (<span class="st">"a"</span>, <span class="st">"c"</span>, <span class="st">"b"</span>, <span class="st">"d"</span>)])</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>rect <span class="op">=</span> cv.warp_image(img, H_P, roi<span class="op">=</span>roi, max_side<span class="op">=</span><span class="dv">900</span>)</span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>fig, axes <span class="op">=</span> plt.subplots(<span class="dv">1</span>, <span class="dv">2</span>, figsize<span class="op">=</span>(<span class="dv">13</span>, <span class="dv">5</span>))</span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>cv.show(img, ax<span class="op">=</span>axes[<span class="dv">0</span>], title<span class="op">=</span><span class="st">"original"</span>)</span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>cv.show(rect, ax<span class="op">=</span>axes[<span class="dv">1</span>], title<span class="op">=</span><span class="st">"affine rectified"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="affine_files/figure-html/cell-9-output-1.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>The facade is now a parallelogram. It is still sheared and rotated, and it should be: affine rectification recovers the plane only up to an affinity. Angles and length ratios need the metric step.</p>
+</section>
+<section id="checking-it-worked" class="level2">
+<h2 class="anchored" data-anchor-id="checking-it-worked">Checking it worked</h2>
+<p>Eyeballing parallel lines is unreliable. Transform the lines themselves and read off the vanishing points: if the rectification is right, they have moved to infinity, so their third coordinate should be zero (to numerical precision).</p>
+<div id="6ecbbaaa" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-08-06T09:03:20.232496Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-08-06T09:03:20.232307Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-08-06T09:03:20.237776Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-08-06T09:03:20.236889Z&quot;}}" data-execution_count="9">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>Hinv_T <span class="op">=</span> np.linalg.inv(H_P).T</span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>a_r, c_r <span class="op">=</span> Hinv_T <span class="op">@</span> a, Hinv_T <span class="op">@</span> c</span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>b_r, d_r <span class="op">=</span> Hinv_T <span class="op">@</span> b, Hinv_T <span class="op">@</span> d</span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> name, (p, q) <span class="kw">in</span> [(<span class="st">"a x c"</span>, (a_r, c_r)), (<span class="st">"b x d"</span>, (b_r, d_r))]:</span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>    w <span class="op">=</span> cv.meet(p, q)</span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f"</span><span class="sc">{</span>name<span class="sc">}</span><span class="ss">: third coordinate = </span><span class="sc">{</span>w[<span class="dv">2</span>] <span class="op">/</span> np<span class="sc">.</span>linalg<span class="sc">.</span>norm(w)<span class="sc">:+.2e}</span><span class="ss">"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>a x c: third coordinate = +0.00e+00
+b x d: third coordinate = -4.56e-17</code></pre>
+</div>
+</div>
+</section>
+<section id="where-it-breaks" class="level2">
+<h2 class="anchored" data-anchor-id="where-it-breaks">Where it breaks</h2>
+<p>Worth running before trusting this on a photograph. Nudge one endpoint by a few pixels and watch what happens to <span class="math inline">\(\ell'_\infty\)</span>: the more nearly parallel the segments look in the image, the further out the vanishing point goes, and the worse conditioned everything downstream becomes. This is the failure mode behind the bitangent construction in Section 1.7.</p>
+<div id="8bf5d294" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-08-06T09:03:20.239954Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-08-06T09:03:20.239233Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-08-06T09:03:20.425037Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-08-06T09:03:20.423944Z&quot;}}" data-execution_count="10">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>rng <span class="op">=</span> np.random.default_rng(<span class="dv">0</span>)</span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>base <span class="op">=</span> cv.normalize_line(cv.join(cv.meet(a, c), cv.meet(b, d)))</span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> sigma <span class="kw">in</span> (<span class="fl">0.0</span>, <span class="fl">0.5</span>, <span class="fl">1.0</span>, <span class="fl">2.0</span>):</span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>    devs <span class="op">=</span> []</span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> _ <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">200</span>):</span>
+<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a>        pert <span class="op">=</span> {k: np.asarray(v, <span class="bu">float</span>) <span class="op">+</span> rng.normal(<span class="dv">0</span>, sigma, (<span class="dv">2</span>, <span class="dv">2</span>))</span>
+<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a>                <span class="cf">for</span> k, v <span class="kw">in</span> seg.items()}</span>
+<span id="cb14-9"><a href="#cb14-9" aria-hidden="true" tabindex="-1"></a>        L <span class="op">=</span> {k: cv.seg_to_line(pert[k]) <span class="cf">for</span> k <span class="kw">in</span> pert}</span>
+<span id="cb14-10"><a href="#cb14-10" aria-hidden="true" tabindex="-1"></a>        l <span class="op">=</span> cv.normalize_line(cv.join(cv.meet(L[<span class="st">"a"</span>], L[<span class="st">"c"</span>]),</span>
+<span id="cb14-11"><a href="#cb14-11" aria-hidden="true" tabindex="-1"></a>                                      cv.meet(L[<span class="st">"b"</span>], L[<span class="st">"d"</span>])))</span>
+<span id="cb14-12"><a href="#cb14-12" aria-hidden="true" tabindex="-1"></a>        devs.append(np.linalg.norm(l <span class="op">-</span> base) <span class="op">/</span> <span class="bu">max</span>(np.linalg.norm(base), <span class="fl">1e-12</span>))</span>
+<span id="cb14-13"><a href="#cb14-13" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f"endpoint noise </span><span class="sc">{</span>sigma<span class="sc">:.1f}</span><span class="ss"> px  -&gt;  relative error on l'_inf "</span></span>
+<span id="cb14-14"><a href="#cb14-14" aria-hidden="true" tabindex="-1"></a>          <span class="ss">f"</span><span class="sc">{</span>np<span class="sc">.</span>mean(devs)<span class="sc">:.4f}</span><span class="ss">"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>endpoint noise 0.0 px  -&gt;  relative error on l'_inf 0.0000
+endpoint noise 0.5 px  -&gt;  relative error on l'_inf 0.0099
+endpoint noise 1.0 px  -&gt;  relative error on l'_inf 0.0193
+endpoint noise 2.0 px  -&gt;  relative error on l'_inf 0.0383</code></pre>
+</div>
+</div>
+</section>
+<section id="exercises" class="level2">
+<h2 class="anchored" data-anchor-id="exercises">Exercises</h2>
+<ol type="1">
+<li>Replace the synthetic facade with a photograph of your own: drop it in <code>data/facade.jpg</code> and pick the segments interactively.</li>
+<li>With the synthetic image you have <code>H_gt</code>. The composition <span class="math inline">\(H_P \, H_{gt}\)</span> should be an affinity — check that its bottom row is <span class="math inline">\((0, 0, \star)\)</span>, and quantify how far off it is.</li>
+<li>Recover the vanishing line from <em>three</em> equally spaced coplanar lines instead of two pairs of parallel ones (cross-ratio construction).</li>
+<li>Continue to the metric step: five pairs of orthogonal lines give <span class="math inline">\(\hat{C}^*_\infty\)</span>, and from it <span class="math inline">\(H_A\)</span>. See Algorithm 2, Section 1.5.</li>
+</ol>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+    const viewSource = window.document.getElementById('quarto-view-source') ||
+                       window.document.getElementById('quarto-code-tools-source');
+    if (viewSource) {
+      const sourceUrl = viewSource.getAttribute("data-quarto-source-url");
+      viewSource.addEventListener("click", function(e) {
+        if (sourceUrl) {
+          // rstudio viewer pane
+          if (/\bcapabilities=\b/.test(window.location)) {
+            window.open(sourceUrl);
+          } else {
+            window.location.href = sourceUrl;
+          }
+        } else {
+          const modal = new bootstrap.Modal(document.getElementById('quarto-embedded-source-code-modal'));
+          modal.show();
+        }
+        return false;
+      });
+    }
+    function toggleCodeHandler(show) {
+      return function(e) {
+        const cellDetails = window.document.querySelectorAll(".cell details.code-fold");
+        for (let i=0; i<cellDetails.length; i++) {
+          const details = cellDetails[i];
+          if (show) {
+            details.open = true;
+          } else {
+            details.removeAttribute("open");
+          }
+        }
+        const cellCodeDivs = window.document.querySelectorAll(".cell div.sourceCode.cell-code");
+        const fromCls = show ? "hidden" : "unhidden";
+        const toCls = show ? "unhidden" : "hidden";
+        for (let i=0; i<cellCodeDivs.length; i++) {
+          const codeDiv = cellCodeDivs[i];
+          if (codeDiv.classList.contains(fromCls)) {
+            codeDiv.classList.remove(fromCls);
+            codeDiv.classList.add(toCls);
+          } 
+        }
+        return false;
+      }
+    }
+    const hideAllCode = window.document.getElementById("quarto-hide-all-code");
+    if (hideAllCode) {
+      hideAllCode.addEventListener("click", toggleCodeHandler(false));
+    }
+    const showAllCode = window.document.getElementById("quarto-show-all-code");
+    if (showAllCode) {
+      showAllCode.addEventListener("click", toggleCodeHandler(true));
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp("https:\/\/magrilu\.github\.io\/cv-dojo\/");
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+</div> <!-- /content -->
+<footer class="footer">
+  <div class="nav-footer">
+    <div class="nav-footer-left">
+<p>© 2026 Luca Magri — CC BY-NC-ND 4.0 (text and images) / MIT (code)</p>
+</div>   
+    <div class="nav-footer-center">
+      &nbsp;
+    <div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/magrilu/cv-dojo/blob/main/notebooks/04-rectification/affine.ipynb" class="toc-action"><i class="bi bi-github"></i>View source</a></li><li><a href="https://github.com/magrilu/cv-dojo/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></div>
+    <div class="nav-footer-right">
+      <ul class="footer-items list-unstyled">
+    <li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/magrilu/cv-dojo">
+      <i class="bi bi-github" role="img">
+</i> 
+    </a>
+  </li>  
+    <li class="nav-item">
+    <a class="nav-link" href="https://magrilu.github.io/">
+<p>magrilu.github.io</p>
+</a>
+  </li>  
+</ul>
+    </div>
+  </div>
+</footer>
+
+
+
+
+</body></html>
