@@ -17,7 +17,7 @@ By [Luca Magri](https://magrilu.github.io/), Politecnico di Milano.
 
 ## Using this material
 
-Text and figures are CC BY 4.0, code is MIT. Reuse and adapt freely, with attribution.
+Text and figures are CC BY-NC-ND 4.0, code is MIT. The code may be reused and adapted freely; the text and figures may be redistributed with attribution.
 
 The original MATLAB scripts from the Politecnico exercise sessions are kept under
 [`matlab/`](https://github.com/magrilu/cv-dojo/tree/main/matlab) in the repository.

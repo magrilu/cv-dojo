@@ -10,7 +10,7 @@ website:
   repo-actions: [source, issue]
   favicon: assets/favicon.png
   page-footer:
-    left: "© 2026 Luca Magri — CC BY 4.0 (text) / MIT (code)"
+    left: "© 2026 Luca Magri — CC BY-NC-ND 4.0 (text and images) / MIT (code)"
     right:
       - icon: github
         href: https://github.com/magrilu/cv-dojo
@@ -25,7 +25,7 @@ website:
           - href: tracks/iacv.qmd
             text: "IACV — Politecnico di Milano"
           - href: tracks/bocconi.qmd
-            text: "Bocconi"
+            text: "IACV - Bocconi"
   sidebar:
     style: docked
     search: true
