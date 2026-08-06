@@ -1,0 +1,52 @@
+project:
+  type: website
+  output-dir: _site
+
+website:
+  title: "Computer Vision Dojo"
+  description: "Hands-on notebooks in geometric computer vision."
+  site-url: https://magrilu.github.io/cv-dojo/
+  repo-url: https://github.com/magrilu/cv-dojo
+  repo-actions: [source, issue]
+  favicon: assets/favicon.png
+  page-footer:
+    left: "© 2026 Luca Magri — CC BY 4.0 (text) / MIT (code)"
+    right:
+      - icon: github
+        href: https://github.com/magrilu/cv-dojo
+      - text: "magrilu.github.io"
+        href: https://magrilu.github.io/
+  navbar:
+    left:
+      - href: index.qmd
+        text: Home
+      - text: "Courses"
+        menu:
+          - href: tracks/iacv.qmd
+            text: "IACV — Politecnico di Milano"
+          - href: tracks/bocconi.qmd
+            text: "Bocconi"
+  sidebar:
+    style: docked
+    search: true
+    contents:
+      - href: index.qmd
+        text: Overview
+      - section: "Rectification"
+        contents:
+          - notebooks/04-rectification/affine.ipynb
+
+format:
+  html:
+    theme: [cosmo, assets/custom.scss]
+    toc: true
+    toc-depth: 3
+    code-tools: true
+    code-fold: false
+    highlight-style: github
+    fig-align: center
+
+execute:
+  freeze: auto
+
+bibliography: references.bib

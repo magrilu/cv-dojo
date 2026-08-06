@@ -1,0 +1,34 @@
+---
+title: "Computer Vision Dojo"
+subtitle: "A geometric way"
+---
+
+Hands-on notebooks in geometric computer vision: projective geometry of the plane,
+homography estimation, rectification, robust fitting, matching. Every notebook is
+paired with an algorithm from the accompanying notes, runs top to bottom with no
+setup, and opens in Colab with one click.
+
+By [Luca Magri](https://magrilu.github.io/), Politecnico di Milano.
+
+## Start here
+
+- [Affine rectification](notebooks/04-rectification/affine.ipynb) — vanishing points,
+  the vanishing line, and the homography that restores parallelism.
+
+## Using this material
+
+Text and figures are CC BY 4.0, code is MIT. Reuse and adapt freely, with attribution.
+
+The original MATLAB scripts from the Politecnico exercise sessions are kept under
+[`matlab/`](https://github.com/magrilu/cv-dojo/tree/main/matlab) in the repository.
+
+## Citing
+
+```bibtex
+@software{magri_cvdojo,
+  author  = {Magri, Luca},
+  title   = {Computer Vision Dojo},
+  year    = {2026},
+  url     = {https://github.com/magrilu/cv-dojo}
+}
+```

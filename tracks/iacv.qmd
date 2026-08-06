@@ -1,0 +1,13 @@
+---
+title: "IACV — Politecnico di Milano"
+---
+
+Reading order for the practical sessions of *Image Analysis and Computer Vision*.
+Course logistics, recordings and the project template are on the
+[course page](https://magrilu.github.io/iacv/).
+
+| # | Topic | Notebook |
+|---|-------|----------|
+| 1 | Affine rectification | [open](../notebooks/04-rectification/affine.ipynb) |
+
+: {tbl-colwidths="[8,52,40]"}
