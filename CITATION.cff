@@ -6,10 +6,11 @@ authors:
   - family-names: Magri
     given-names: Luca
     affiliation: "Politecnico di Milano"
-    orcid: "https://orcid.org/0000-0000-0000-0000"
+    orcid: "https://orcid.org/0000-0002-0598-8279"
 repository-code: "https://github.com/magrilu/cv-dojo"
 url: "https://magrilu.github.io/cv-dojo/"
 abstract: "Hands-on notebooks in geometric computer vision."
 license: MIT
+license-url: "https://github.com/magrilu/cv-dojo/blob/main/LICENSE.md"
 version: "0.1.0"
 date-released: "2026-08-06"
