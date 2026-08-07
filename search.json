@@ -1,275 +1,123 @@
 [
   {
-    "objectID": "notebooks/rectification/affine.html",
-    "href": "notebooks/rectification/affine.html",
-    "title": "Affine rectification",
+    "objectID": "notebooks/triangulation/triangulation.html",
+    "href": "notebooks/triangulation/triangulation.html",
+    "title": "Triangulation from two views",
     "section": "",
-    "text": "Open In Colab\nCompanion to Algorithm 1, Section 1.3.\nPerspective destroys parallelism: two rails that never meet in the world do meet on the page. Affine rectification puts it back. It does not recover angles or length ratios — that comes later, in the metric step — but it does recover everything affine: parallelism, midpoints, ratios of lengths along a line.\nThe whole method rests on one observation. Under perspective the line at infinity \\(\\ell_\\infty\\) no longer sits at \\((0:0:1)\\); it lands somewhere in the image as \\(\\ell'_\\infty\\), the vanishing line. Send it back where it belongs and the affine structure returns with it.\nTwo pairs of parallel lines are enough:\n# On Colab, fetch the repository. Locally this is a no-op.\nimport os, sys, subprocess\nif \"COLAB_GPU\" in os.environ or \"COLAB_RELEASE_TAG\" in os.environ:\n    if not os.path.isdir(\"cv-dojo\"):\n        subprocess.run([\"git\", \"clone\", \"-q\",\n                        \"https://github.com/magrilu/cv-dojo.git\"], check=True)\n    os.chdir(\"cv-dojo\")\n\nsys.path.insert(0, os.path.abspath(\"../../src\"))   # local run, from notebooks/rectification\nsys.path.insert(0, os.path.abspath(\"src\"))        # Colab run, from the repo root\n\nimport numpy as np\nimport matplotlib.pyplot as plt\nimport cvdojo as cv\n\nplt.rcParams[\"figure.figsize\"] = (7, 5)",
+    "text": "Open In Colab\nIn input We have two real images, a few point correspondences on them, and the two camera matrices that took the pictures.\nThe desired output is ot have a collection of triangulated 3D point:\n\\[\n\\boxed{(\\widetilde{\\mathbf m}_1,\\widetilde{\\mathbf m}_2,P_1,P_2)\\longrightarrow \\widetilde{\\mathbf M}.}\n\\]\nWhile a single image point does not determine a 3D point, but a whole viewing ray, a second view gives a second ray, and their intersection succesfully constrains the missing depth.\nThe Origami House will serve as the running example. At the moment, we assume both the 2D correspondences and cameras as deliberately given: feature matching, the fundamental matrix, and camera recovery are treated separately.\n# On Colab, fetch the repository. Locally this is a no-op.\nimport os, subprocess\nfrom pathlib import Path\n\nif \"COLAB_GPU\" in os.environ or \"COLAB_RELEASE_TAG\" in os.environ:\n    if not Path(\"cv-dojo\").is_dir():\n        subprocess.run([\"git\", \"clone\", \"-q\", \"--depth\", \"1\",\n                        \"https://github.com/magrilu/cv-dojo.git\"], check=True)\n    os.chdir(\"cv-dojo\")\n\nROOT = None\nfor p in [Path.cwd(), *Path.cwd().parents]:\n    if (p / \"data/dojo_house/annotations/triangulation.json\").exists():\n        ROOT = p\n        break\nif ROOT is None:\n    raise FileNotFoundError(\"Could not find data/dojo_house/annotations/triangulation.json\")\n\nimport json\nimport numpy as np\nimport matplotlib.pyplot as plt\nfrom PIL import Image\n\nplt.rcParams[\"figure.figsize\"] = (7, 5)\nplt.rcParams[\"axes.grid\"] = False\n\n\ndef set_axes_equal(ax, pad=0.05):\n    \"\"\"Use the same physical scale on x, y, and z in a Matplotlib 3D axis.\"\"\"\n    limits = np.array([ax.get_xlim3d(), ax.get_ylim3d(), ax.get_zlim3d()], dtype=float)\n    centers = limits.mean(axis=1)\n    radius = 0.5 * np.max(limits[:, 1] - limits[:, 0]) * (1.0 + pad)\n    ax.set_xlim3d(centers[0] - radius, centers[0] + radius)\n    ax.set_ylim3d(centers[1] - radius, centers[1] + radius)\n    ax.set_zlim3d(centers[2] - radius, centers[2] + radius)\n    ax.set_box_aspect((1, 1, 1))\n\n\ndef skew(v):\n    x, y, z = np.asarray(v, float)\n    return np.array([[0, -z, y], [z, 0, -x], [-y, x, 0]])\n\n\ndef qvec_to_rotmat(q):\n    \"\"\"COLMAP quaternion [qw,qx,qy,qz] -&gt; world-to-camera rotation.\"\"\"\n    w, x, y, z = np.asarray(q, float)\n    return np.array([\n        [1-2*y*y-2*z*z, 2*x*y-2*w*z,   2*x*z+2*w*y],\n        [2*x*y+2*w*z,   1-2*x*x-2*z*z, 2*y*z-2*w*x],\n        [2*x*z-2*w*y,   2*y*z+2*w*x,   1-2*x*x-2*y*y],\n    ])\n\n\ndef dehomogenize(xh):\n    xh = np.asarray(xh, float)\n    return xh[..., :-1] / xh[..., -1, None]",
     "crumbs": [
       "Home",
-      "Rectification",
-      "Affine rectification"
+      "Triangulation",
+      "Triangulation from two views"
     ]
   },
   {
-    "objectID": "notebooks/rectification/affine.html#the-image",
-    "href": "notebooks/rectification/affine.html#the-image",
-    "title": "Affine rectification",
-    "section": "The image",
-    "text": "The image\nload_facade picks up data/facade.jpg if you have put one there, and otherwise synthesises a facade under a known homography. Start with the synthetic one: the ground truth is available, so you can check the answer rather than eyeball it.\n\nimg, H_gt = cv.load_facade()\ncv.show(img, title=\"input image\")\nprint(\"synthetic\" if H_gt is not None else \"photograph\", \"-\", img.shape)\n\nsynthetic - (520, 700, 3)",
+    "objectID": "notebooks/triangulation/triangulation.html#two-real-images-with-correspondences-given",
+    "href": "notebooks/triangulation/triangulation.html#two-real-images-with-correspondences-given",
+    "title": "Triangulation from two views",
+    "section": "Two real images, with correspondences given",
+    "text": "Two real images, with correspondences given\nWe use the images of the six structural vertices visible in both photographs:\n\\[\nX_0,\\;X_1,\\;X_4,\\;X_5,\\;X_8,\\;X_9.\n\\]\nFor now, treat these matches as measurements.\n\nwith open(ROOT / \"data/dojo_house/annotations/triangulation.json\") as f:\n    data = json.load(f)\n\nlabels = data[\"vertices_used\"]\nimage_names = list(data[\"images\"])\ncam = data[\"camera\"]\n\nf = cam[\"f\"]\ncx, cy = cam[\"cx\"], cam[\"cy\"]\nk1 = cam[\"k1\"]\nK = np.array([[f, 0, cx], [0, f, cy], [0, 0, 1.0]])\n\nposes = {}\nobs_raw = {}\nfor name in image_names:\n    info = data[\"images\"][name]\n    R = qvec_to_rotmat(info[\"qvec_wxyz\"])\n    t = np.asarray(info[\"tvec\"], float)\n    poses[name] = (R, t)\n    obs_raw[name] = {k: np.asarray(v, float)\n                     for k, v in info[\"observations_original_colmap_pixels\"].items()}\n\n# The displayed JPEG is a clockwise-rotated, uniformly scaled copy of\n# COLMAP's original 4032x3024 pixel raster.\nscale = data[\"display_to_colmap_mapping\"][\"uniform_scale\"]\nDISPLAY_WIDTH = 1536.0\n\ndef colmap_to_display(xy):\n    x, y = np.asarray(xy, float)\n    u = DISPLAY_WIDTH - y / scale\n    v = x / scale\n    return np.array([u, v])\n\nfig, axes = plt.subplots(1, 2, figsize=(13, 6))\nfor ax, name in zip(axes, image_names):\n    im = np.asarray(Image.open(ROOT / \"data/dojo_house/selected\" / name))\n    pts = np.array([colmap_to_display(obs_raw[name][k]) for k in labels])\n    ax.imshow(im)\n    ax.scatter(pts[:,0], pts[:,1], s=45)\n    for k, p in zip(labels, pts):\n        ax.text(p[0]+10, p[1]-10, k, fontsize=10,\n                bbox=dict(facecolor=\"white\", alpha=.7, edgecolor=\"none\"))\n    pad = 170\n    ax.set_xlim(max(0, pts[:,0].min()-pad), min(im.shape[1], pts[:,0].max()+pad))\n    ax.set_ylim(min(im.shape[0], pts[:,1].max()+pad), max(0, pts[:,1].min()-pad))\n    ax.set_title(name)\n    ax.axis(\"off\")\nplt.tight_layout()\nplt.show()",
     "crumbs": [
       "Home",
-      "Rectification",
-      "Affine rectification"
+      "Triangulation",
+      "Triangulation from two views"
     ]
   },
   {
-    "objectID": "notebooks/rectification/affine.html#the-four-segments",
-    "href": "notebooks/rectification/affine.html#the-four-segments",
-    "title": "Affine rectification",
-    "section": "The four segments",
-    "text": "The four segments\nHere is the design decision worth flagging. The notebook ships with precomputed endpoints, so it runs top to bottom on any machine, including Colab, with nothing to click. The interactive selection lives in the next cell and is optional — that is the one to use in the lecture room.\nThe naming follows the book: \\(\\{\\mathbf{a}', \\mathbf{c}'\\}\\) are the images of one family of parallel world lines, \\(\\{\\mathbf{b}', \\mathbf{d}'\\}\\) of a second family.\n\nseg = dict(cv.DEFAULT_SEGMENTS)   # keys: 'a', 'c' (first family), 'b', 'd' (second)\n\nax = cv.show(img, title=\"the two families of parallel lines\")\nfor k, col in [(\"a\", \"tab:red\"), (\"c\", \"tab:red\"),\n               (\"b\", \"tab:blue\"), (\"d\", \"tab:blue\")]:\n    cv.draw_segment(ax, seg[k], color=col)\n\n\n\n\n\n\n\n\n\nOptional: pick them yourself\nUncomment and run to click the eight endpoints (a then c in red, b then d in blue). Needs %matplotlib widget and ipympl, which works locally but not on Colab — there, edit the numbers in seg by hand instead.\n\n# %matplotlib widget\n# ax = cv.show(img, title=\"click 8 points: a1 a2 c1 c2 b1 b2 d1 d2\")\n# pts = plt.ginput(8, timeout=0)\n# seg = {k: [pts[2*i], pts[2*i+1]] for i, k in enumerate([\"a\", \"c\", \"b\", \"d\"])}\n# print(seg)",
+    "objectID": "notebooks/triangulation/triangulation.html#from-a-pixel-to-a-ray",
+    "href": "notebooks/triangulation/triangulation.html#from-a-pixel-to-a-ray",
+    "title": "Triangulation from two views",
+    "section": "From a pixel to a ray",
+    "text": "From a pixel to a ray\nThe camera calibration lets us remove the pixel coordinate system. For an undistorted image point\n\\[\n\\widetilde{\\mathbf m}=(u,v,1)^\\top,\n\\]\nits normalized camera direction is\n\\[\n\\mathbf d_c\\propto K^{-1}\\widetilde{\\mathbf m}.\n\\]\nWith the world-to-camera convention\n\\[\n\\mathbf M_c=R\\mathbf M+\\mathbf t,\n\\]\nthe optical centre is\n\\[\n\\mathbf C=-R^\\top\\mathbf t,\n\\]\nand the same direction expressed in the world frame is\n\\[\n\\mathbf d_w\\propto R^\\top\\mathbf d_c.\n\\]\nHence one measurement defines the whole ray\n\\[\n\\boxed{\\mathbf L(\\alpha)=\\mathbf C+\\alpha\\mathbf d_w,\\qquad \\alpha&gt;0.}\n\\]\nOur camera model contains a small radial distortion, so before using this equation we first undo that distortion numerically.\n\ndef undistort_normalized(raw_xy):\n    \"\"\"Invert COLMAP SIMPLE_RADIAL: xd=x(1+k r^2), yd=y(1+k r^2).\"\"\"\n    xd = (raw_xy[0] - cx) / f\n    yd = (raw_xy[1] - cy) / f\n    x, y = xd, yd\n    for _ in range(12):\n        fac = 1.0 + k1 * (x*x + y*y)\n        x, y = xd / fac, yd / fac\n    return np.array([x, y])\n\n\ndef camera_center(R, t):\n    return -R.T @ t\n\n\ndef ray_from_observation(name, raw_xy):\n    R, t = poses[name]\n    x, y = undistort_normalized(raw_xy)\n    dc = np.array([x, y, 1.0])\n    dw = R.T @ dc\n    dw /= np.linalg.norm(dw)\n    return camera_center(R, t), dw\n\n# Inspect one correspondence numerically.\nlabel = \"X9\"\nfor name in image_names:\n    C, d = ray_from_observation(name, obs_raw[name][label])\n    print(name)\n    print(\"  camera centre =\", np.round(C, 4))\n    print(\"  ray direction =\", np.round(d, 4))\n\nIMG_4331.jpeg\n  camera centre = [ 0.3538  1.0384 -0.1626]\n  ray direction = [ 0.4991 -0.6573  0.5647]\nIMG_4337.jpeg\n  camera centre = [0.5942 0.8603 0.8572]\n  ray direction = [ 0.551  -0.7878  0.2752]",
     "crumbs": [
       "Home",
-      "Rectification",
-      "Affine rectification"
+      "Triangulation",
+      "Triangulation from two views"
     ]
   },
   {
-    "objectID": "notebooks/rectification/affine.html#steps-1-3-the-vanishing-line",
-    "href": "notebooks/rectification/affine.html#steps-1-3-the-vanishing-line",
-    "title": "Affine rectification",
-    "section": "Steps 1-3: the vanishing line",
-    "text": "Steps 1-3: the vanishing line\nEach segment gives a line through its endpoints, \\(\\ell = \\mathbf{x}_1 \\times \\mathbf{x}_2\\). Intersecting lines within a family gives a vanishing point; joining the two vanishing points gives \\(\\ell'_\\infty\\).\nThe normalisation on line 3 of the algorithm is not cosmetic. Vanishing points often land thousands of pixels outside the frame, so \\(\\ell'_\\infty\\) comes out with a third coordinate several orders of magnitude larger than the first two. Left alone, that imbalance propagates straight into the bottom row of \\(H_P\\).\n\na, c = cv.seg_to_line(seg[\"a\"]), cv.seg_to_line(seg[\"c\"])\nb, d = cv.seg_to_line(seg[\"b\"]), cv.seg_to_line(seg[\"d\"])\n\nU = cv.meet(a, c)          # first vanishing point\nV = cv.meet(b, d)          # second vanishing point\nl_inf = cv.normalize_line(cv.join(U, V))\n\nprint(\"U' =\", cv.cartesian(U).ravel())\nprint(\"V' =\", cv.cartesian(V).ravel())\nprint(\"l'_inf =\", l_inf)\n\nU' = [1419.51237582  361.62485267]\nV' = [  307.81257809 -2790.46772178]\nl'_inf = [ 9.43065754e-01 -3.32606350e-01 -1.21841479e+03]\n\n\n\n# Both vanishing points usually fall well outside the image: widen the axes.\nu, v = cv.cartesian(U).ravel(), cv.cartesian(V).ravel()\nxs = [0, img.shape[1], u[0], v[0]]\nys = [0, img.shape[0], u[1], v[1]]\npad = 0.08 * max(max(xs) - min(xs), max(ys) - min(ys))\n\nfig, ax = plt.subplots(figsize=(9, 7))\nax.imshow(np.clip(img, 0, 1))\nfor k, col in [(\"a\", \"tab:red\"), (\"c\", \"tab:red\"),\n               (\"b\", \"tab:blue\"), (\"d\", \"tab:blue\")]:\n    cv.draw_segment(ax, seg[k], color=col)\nax.plot(*u, \"o\", color=\"tab:red\", ms=11, label=\"$U'$\")\nax.plot(*v, \"o\", color=\"tab:blue\", ms=11, label=\"$V'$\")\nax.set_xlim(min(xs) - pad, max(xs) + pad)\nax.set_ylim(max(ys) + pad, min(ys) - pad)\ncv.draw_line(ax, l_inf, xlim=ax.get_xlim(), color=\"tab:green\", lw=2.5,\n             label=r\"$\\ell'_\\infty$\")\nax.legend(loc=\"lower right\")\nax.set_axis_off()",
+    "objectID": "notebooks/triangulation/triangulation.html#triangulation-with-dlt",
+    "href": "notebooks/triangulation/triangulation.html#triangulation-with-dlt",
+    "title": "Triangulation from two views",
+    "section": "Triangulation with DLT",
+    "text": "Triangulation with DLT\nFor one camera we have\n\\[\n\\lambda\\widetilde{\\mathbf x}=P\\widetilde{\\mathbf M},\n\\]\nwhere here \\(\\widetilde{\\mathbf x}=(x,y,1)^\\top\\) is an undistorted normalized image point and, because calibration has already been removed,\n\\[\nP=[R\\mid\\mathbf t].\n\\]\nThe unknown scale \\(\\lambda\\) disappears if we take the cross product:\n\\[\n\\widetilde{\\mathbf x}\\times P\\widetilde{\\mathbf M}=0.\n\\]\nEquivalently,\n\\[\n[\\widetilde{\\mathbf x}]_\\times P\\widetilde{\\mathbf M}=0,\n\\]\nwith\n\\[\n[\\widetilde{\\mathbf x}]_\\times=\n\\begin{bmatrix}\n0 & -1 & y\\\\\n1 & 0 & -x\\\\\n-y & x & 0\n\\end{bmatrix}.\n\\]\n\nWhy do we keep only two equations per view?\nThe cross product gives three scalar equations, but the skew-symmetric matrix \\([\\widetilde{\\mathbf x}]_\\times\\) has rank two for every non-zero image point:\n\\[\n\\operatorname{rank}([\\widetilde{\\mathbf x}]_\\times)=2,\n\\qquad\n[\\widetilde{\\mathbf x}]_\\times\\widetilde{\\mathbf x}=0.\n\\]\nIts nullspace is therefore the one-dimensional subspace spanned by \\(\\widetilde{\\mathbf x}\\). Consequently \\([\\widetilde{\\mathbf x}]_\\times P\\widetilde{\\mathbf M}=0\\) can provide at most two independent constraints.\nThere is also a useful Kronecker-product form of the same incidence equation. Using \\(\\operatorname{vec}(APB)=(B^\\top\\otimes A)\\operatorname{vec}(P)\\),\n\\[\n[\\widetilde{\\mathbf x}]_\\times P\\widetilde{\\mathbf M}\n=\n\\left(\\widetilde{\\mathbf M}^{\\top}\\otimes[\\widetilde{\\mathbf x}]_\\times\\right)\\operatorname{vec}(P)=0.\n\\]\nWe do not solve this form here because \\(P\\) is given and \\(\\widetilde{\\mathbf M}\\) is the unknown. It is nevertheless the same projective incidence constraint, and its rank-two structure explains again why one image contributes only two independent scalar equations.\nWriting the rows of \\(P\\) as \\(P_1^\\top,P_2^\\top,P_3^\\top\\), two convenient independent equations are\n\\[\n(xP_3^\\top-P_1^\\top)\\widetilde{\\mathbf M}=0,\n\\]\n\\[\n(yP_3^\\top-P_2^\\top)\\widetilde{\\mathbf M}=0.\n\\]\nTwo views therefore give four equations in the four homogeneous coordinates of the 3D point:\n\\[\nA\\widetilde{\\mathbf M}=0,\n\\]\nwith\n\\[\nA=\n\\begin{bmatrix}\nx_1P_{13}^\\top-P_{11}^\\top\\\\\ny_1P_{13}^\\top-P_{12}^\\top\\\\\nx_2P_{23}^\\top-P_{21}^\\top\\\\\ny_2P_{23}^\\top-P_{22}^\\top\n\\end{bmatrix}.\n\\]\nWith real measurements the equations are not perfectly compatible. DLT chooses the unit vector \\(\\widetilde{\\mathbf M}\\) that minimizes \\(\\|A\\widetilde{\\mathbf M}\\|\\): the last right singular vector of \\(A\\).\nThe result is a homogeneous vector. We must dehomogenize it before plotting the 3D point.\n\ndef triangulate_dlt(P1, P2, x1, x2):\n    \"\"\"Linear two-view triangulation from normalized image coordinates.\"\"\"\n    x1, y1 = np.asarray(x1, float)\n    x2, y2 = np.asarray(x2, float)\n    A = np.vstack([\n        x1 * P1[2] - P1[0],\n        y1 * P1[2] - P1[1],\n        x2 * P2[2] - P2[0],\n        y2 * P2[2] - P2[1],\n    ])\n    _, _, Vt = np.linalg.svd(A)\n    Xh = Vt[-1]\n    return Xh / Xh[-1], A\n\nname1, name2 = image_names\nR1, t1 = poses[name1]\nR2, t2 = poses[name2]\nP1 = np.c_[R1, t1]\nP2 = np.c_[R2, t2]\n\nX_world = {}\nfor k in labels:\n    x1 = undistort_normalized(obs_raw[name1][k])\n    x2 = undistort_normalized(obs_raw[name2][k])\n    Xh, A = triangulate_dlt(P1, P2, x1, x2)\n    X_world[k] = Xh[:3]\n\nprint(\"One reconstructed homogeneous point:\")\nprint(\"X9 ~\", np.round(np.r_[X_world['X9'], 1.0], 5))\n\nOne reconstructed homogeneous point:\nX9 ~ [ 1.78093 -0.83885  1.45064  1.     ]\n\n\n\n\nPut the reconstruction in a readable Euclidean frame\nThe coordinate frame produced by the triangulation is arbitrary. Before plotting, we attach a new Euclidean reference frame to the reconstructed house:\n\norigin at \\(X_0\\);\n\\(x\\) axis along the recovered edge \\(X_0X_1\\);\n\\(z\\) axis from the average direction of the two recovered wall edges;\n\\(y\\) completes a right-handed orthonormal frame and points toward the roof.\n\nThis is only a rigid change of coordinates. It does not alter distances or angles, and it does not use the ideal house to straighten the reconstruction.\n\ndef house_frame(Xdict):\n    O = Xdict[\"X0\"]\n    ex = Xdict[\"X1\"] - O\n    ex /= np.linalg.norm(ex)\n\n    z_hint = 0.5 * ((Xdict[\"X4\"] - Xdict[\"X0\"]) +\n                    (Xdict[\"X5\"] - Xdict[\"X1\"]))\n    z_hint -= ex * (ex @ z_hint)\n    ez = z_hint / np.linalg.norm(z_hint)\n    ey = np.cross(ez, ex)\n    ey /= np.linalg.norm(ey)\n\n    roof = 0.5 * (Xdict[\"X8\"] + Xdict[\"X9\"])\n    eaves = 0.5 * (Xdict[\"X4\"] + Xdict[\"X5\"])\n    if (roof - eaves) @ ey &lt; 0:\n        ey = -ey\n    ez = np.cross(ex, ey)\n    ez /= np.linalg.norm(ez)\n\n    B = np.vstack([ex, ey, ez])  # world -&gt; house axes\n    T = np.eye(4)\n    T[:3,:3] = B\n    T[:3,3] = -B @ O\n    return T\n\nT_house = house_frame(X_world)\nTinv = np.linalg.inv(T_house)\n\nX_house = {k: dehomogenize(T_house @ np.r_[X,1.0]) for k, X in X_world.items()}\nP1_house = P1 @ Tinv\nP2_house = P2 @ Tinv\n\n# Verify that the SAME DLT now reconstructs directly in the house frame.\nX_house_dlt = {}\nfor k in labels:\n    x1 = undistort_normalized(obs_raw[name1][k])\n    x2 = undistort_normalized(obs_raw[name2][k])\n    Xh, _ = triangulate_dlt(P1_house, P2_house, x1, x2)\n    X_house_dlt[k] = Xh[:3]\n\nprint(\"max coordinate difference after changing Euclidean frame:\",\n      max(np.linalg.norm(X_house[k]-X_house_dlt[k]) for k in labels))\n\nmax coordinate difference after changing Euclidean frame: 0.00015282983689467126\n\n\n\nfront_edges = [\n    (\"X0\",\"X1\"), (\"X0\",\"X4\"), (\"X1\",\"X5\"), (\"X4\",\"X5\"),\n    (\"X4\",\"X8\"), (\"X5\",\"X9\"), (\"X8\",\"X9\")\n]\n\ndef draw_reconstruction(ax, Xdict, edges=front_edges, labels_on=True, lw=2):\n    for a,b in edges:\n        q = np.vstack([Xdict[a], Xdict[b]])\n        ax.plot(q[:,0], q[:,1], q[:,2], lw=lw)\n    for k,p in Xdict.items():\n        ax.scatter(*p, s=30)\n        if labels_on:\n            ax.text(*(p + np.array([.015,.015,.015])), k, fontsize=8)\n\n# Transform camera centres to the same house frame.\ndef transform_point(T, X):\n    return dehomogenize(T @ np.r_[X,1.0])\n\nC1h = transform_point(T_house, camera_center(R1,t1))\nC2h = transform_point(T_house, camera_center(R2,t2))\n\nfig = plt.figure(figsize=(9,7))\nax = fig.add_subplot(111, projection='3d')\ndraw_reconstruction(ax, X_house)\nax.scatter(*C1h, marker='^', s=75)\nax.scatter(*C2h, marker='^', s=75)\nax.text(*C1h, name1.replace('.jpeg',''), fontsize=8)\nax.text(*C2h, name2.replace('.jpeg',''), fontsize=8)\nax.set_xlabel('house x [arbitrary units]')\nax.set_ylabel('house depth [arbitrary units]')\nax.set_zlabel('house z [arbitrary units]')\nax.set_title('Six triangulated vertices of the Origami House')\nax.view_init(elev=21, azim=-62)\nset_axes_equal(ax)\nplt.show()",
     "crumbs": [
       "Home",
-      "Rectification",
-      "Affine rectification"
+      "Triangulation",
+      "Triangulation from two views"
     ]
   },
   {
-    "objectID": "notebooks/rectification/affine.html#step-4-the-rectifying-homography",
-    "href": "notebooks/rectification/affine.html#step-4-the-rectifying-homography",
-    "title": "Affine rectification",
-    "section": "Step 4: the rectifying homography",
-    "text": "Step 4: the rectifying homography\n\\[\nH_P = \\begin{bmatrix} 1 & 0 & 0 \\\\ 0 & 1 & 0 \\\\ \\ell_1 & \\ell_2 & \\ell_3 \\end{bmatrix}\n\\]\nThe top two rows are a free choice — any affinity there would do, since the result is only defined up to one. All the work is in the bottom row.\nLines transform by the inverse transpose, so the check is \\(H_P^{-\\top} \\ell'_\\infty = (0:0:1)^\\top\\).\n\nH_P = cv.H_from_vanishing_line(l_inf)\nprint(H_P, \"\\n\")\n\ncheck = np.linalg.inv(H_P).T @ l_inf\nprint(\"H_P^-T l'_inf =\", np.round(check / check[2], 12))\n\n[[ 1.00000000e+00  0.00000000e+00  0.00000000e+00]\n [ 0.00000000e+00  1.00000000e+00  0.00000000e+00]\n [ 9.43065754e-01 -3.32606350e-01 -1.21841479e+03]] \n\nH_P^-T l'_inf = [-0.  0.  1.]",
+    "objectID": "notebooks/triangulation/triangulation.html#what-geometry-did-dlt-reconstruct",
+    "href": "notebooks/triangulation/triangulation.html#what-geometry-did-dlt-reconstruct",
+    "title": "Triangulation from two views",
+    "section": "What geometry did DLT reconstruct?",
+    "text": "What geometry did DLT reconstruct?\nDLT itself does not know what a metre, a right angle, or a rigid motion is. It reconstructs points in the 3D projective coordinate system encoded by the camera matrices.\nOur matrices \\(P_1\\) and \\(P_2\\) came from calibrated cameras and Euclidean poses, so their 3D coordinates carry Euclidean geometry (up to the global scale left undetermined by SfM).\nBut consider any invertible \\(4\\times4\\) projective transformation \\(H\\). Define\n\\[\n\\widetilde{\\mathbf M}'=H\\widetilde{\\mathbf M},\n\\qquad\nP_i'=P_iH^{-1}.\n\\]\nThen\n\\[\nP_i'\\widetilde{\\mathbf M}'\n=P_iH^{-1}H\\widetilde{\\mathbf M}\n=P_i\\widetilde{\\mathbf M}.\n\\]\nThe image points are unchanged, even though the 3D house may be strongly distorted.\nThis is the projective ambiguity in its simplest form. We are not yet recovering projective cameras from a fundamental matrix; that belongs to two-view geometry. Here the cameras are still given — we simply express them in a different 3D projective frame.\n\n# A genuine projective transformation: the last row depends on x,y,z,\n# so this is not an affine map or a similarity.\nH = np.array([\n    [1.00,  0.10, 0.00, 0.00],\n    [0.00,  1.00, 0.15, 0.00],\n    [0.05,  0.00, 1.00, 0.00],\n    [0.65, -0.20, 0.25, 1.00],\n])\n\nP1_proj = P1_house @ np.linalg.inv(H)\nP2_proj = P2_house @ np.linalg.inv(H)\n\nX_proj = {}\nfor k in labels:\n    x1 = undistort_normalized(obs_raw[name1][k])\n    x2 = undistort_normalized(obs_raw[name2][k])\n    Xh, _ = triangulate_dlt(P1_proj, P2_proj, x1, x2)\n    X_proj[k] = Xh[:3]\n\n# Directly transform the Euclidean reconstruction to check the identity X' ~ H X.\nX_proj_direct = {\n    k: dehomogenize(H @ np.r_[X_house[k], 1.0])\n    for k in labels\n}\nprint(\"max difference: DLT in projective frame vs H X =\",\n      max(np.linalg.norm(X_proj[k]-X_proj_direct[k]) for k in labels))\n\nfig = plt.figure(figsize=(12,5))\nax = fig.add_subplot(121, projection='3d')\ndraw_reconstruction(ax, X_house)\nax.set_title('Euclidean frame')\nax.set_xlabel('x'); ax.set_ylabel('y'); ax.set_zlabel('z')\nax.view_init(elev=20, azim=-60)\nset_axes_equal(ax)\n\nax = fig.add_subplot(122, projection='3d')\ndraw_reconstruction(ax, X_proj)\nax.set_title('Projective frame: same image measurements')\nax.set_xlabel(\"x'\"); ax.set_ylabel(\"y'\"); ax.set_zlabel(\"z'\")\nax.view_init(elev=20, azim=-60)\nset_axes_equal(ax)\nplt.tight_layout()\nplt.show()\n\nmax difference: DLT in projective frame vs H X = 0.0003162058124405462\n\n\n\n\n\n\n\n\n\n\nThe image really does not change\nThe identity above is exact, so we can check it directly on the photographs. In the first row we project the Euclidean reconstruction with \\((P_1,P_2)\\). In the second row we first transform the 3D points by \\(H\\) and the cameras by \\(H^{-1}\\), and then project again.\nThe two rows should be visually indistinguishable: the 3D house has changed, but the image points have not.\n\ndef distort_to_raw(xy):\n    \"\"\"COLMAP SIMPLE_RADIAL: normalized undistorted -&gt; original raw pixels.\"\"\"\n    x, y = np.asarray(xy, float)\n    fac = 1.0 + k1 * (x*x + y*y)\n    return np.array([f*x*fac + cx, f*y*fac + cy])\n\n\ndef project_to_display(P, X):\n    q = P @ np.r_[X, 1.0]\n    xy = q[:2] / q[2]\n    return colmap_to_display(distort_to_raw(xy))\n\nP_house = [P1_house, P2_house]\nP_projective = [P1_proj, P2_proj]\n\nmax_same_pixel = 0.0\nfig, axes = plt.subplots(2, 2, figsize=(13, 11))\n\nfor j, name in enumerate(image_names):\n    im = np.asarray(Image.open(ROOT / \"data/dojo_house/selected\" / name))\n    measured = np.array([colmap_to_display(obs_raw[name][k]) for k in labels])\n    projected_e = np.array([project_to_display(P_house[j], X_house[k]) for k in labels])\n    projected_h = np.array([project_to_display(P_projective[j], X_proj_direct[k]) for k in labels])\n\n    max_same_pixel = max(max_same_pixel,\n                         np.max(np.linalg.norm(projected_e - projected_h, axis=1)))\n\n    for row, (pred, row_title) in enumerate([\n        (projected_e, \"Euclidean 3D frame\"),\n        (projected_h, \"After $X'=HX$, $P'=PH^{-1}$\"),\n    ]):\n        ax = axes[row, j]\n        ax.imshow(im)\n        ax.scatter(measured[:,0], measured[:,1], s=55, marker='o',\n                   facecolors='none', linewidths=1.5, label='measured')\n        ax.scatter(pred[:,0], pred[:,1], s=50, marker='+',\n                   linewidths=1.8, label='reprojected')\n        for k, p in zip(labels, pred):\n            ax.text(p[0]+9, p[1]-9, k, fontsize=9,\n                    bbox=dict(facecolor='white', alpha=.65, edgecolor='none'))\n        pad = 170\n        ax.set_xlim(max(0, measured[:,0].min()-pad), min(im.shape[1], measured[:,0].max()+pad))\n        ax.set_ylim(min(im.shape[0], measured[:,1].max()+pad), max(0, measured[:,1].min()-pad))\n        ax.set_title(f\"{name} — {row_title}\")\n        ax.axis('off')\n        if row == 0 and j == 0:\n            ax.legend(loc='lower right')\n\nplt.tight_layout()\nplt.show()\n\nprint(f\"maximum difference between the two predicted image locations: {max_same_pixel:.3e} px\")\n\n\n\n\n\n\n\n\nmaximum difference between the two predicted image locations: 3.216e-13 px\n\n\nThe two 3D plots are different shapes, while the two rows of image projections are the same. Numerically the predicted pixels agree up to floating-point precision.\nThis is worth keeping separate from the numerical method:\n\\[\n\\boxed{\\text{DLT is projective. The geometry comes from the cameras.}}\n\\]\nWith calibrated Euclidean cameras, the reconstruction is Euclidean up to a global similarity. With arbitrary projective cameras, the reconstruction is only projective.",
     "crumbs": [
       "Home",
-      "Rectification",
-      "Affine rectification"
+      "Triangulation",
+      "Triangulation from two views"
     ]
   },
   {
-    "objectID": "notebooks/rectification/affine.html#warping",
-    "href": "notebooks/rectification/affine.html#warping",
-    "title": "Affine rectification",
-    "section": "Warping",
-    "text": "Warping\nOne practical note that costs an afternoon if you meet it cold: skimage.transform.warp pulls each output pixel from the input, so it wants the inverse map, and it keeps the original canvas — unlike MATLAB’s imwarp, which sizes the output for you. cv.warp_image handles both, and fits the canvas to the region of interest rather than to the image corners, which after rectification are usually far away.\n\nroi = np.vstack([seg[k] for k in (\"a\", \"c\", \"b\", \"d\")])\nrect = cv.warp_image(img, H_P, roi=roi, max_side=900)\n\nfig, axes = plt.subplots(1, 2, figsize=(13, 5))\ncv.show(img, ax=axes[0], title=\"original\")\ncv.show(rect, ax=axes[1], title=\"affine rectified\")\n\n\n\n\n\n\n\n\nThe facade is now a parallelogram. It is still sheared and rotated, and it should be: affine rectification recovers the plane only up to an affinity. Angles and length ratios need the metric step.",
+    "objectID": "notebooks/triangulation/triangulation.html#real-rays-do-not-intersect-exactly",
+    "href": "notebooks/triangulation/triangulation.html#real-rays-do-not-intersect-exactly",
+    "title": "Triangulation from two views",
+    "section": "Real rays do not intersect exactly",
+    "text": "Real rays do not intersect exactly\nWith perfect cameras and noiseless correspondences, the two optical rays of a 3D point intersect at exactly one point.\nReal measurements are different. A fraction of a pixel of localization error is enough to make the two reconstructed rays skew in 3D. There is then no exact intersection.\nOne very intuitive construction is midpoint triangulation:\n\nfind the closest point \\(Q_1\\) on the first ray and \\(Q_2\\) on the second ray;\ntake the midpoint of the shortest segment joining the rays,\n\n\\[\n\\boxed{\\mathbf M_{\\rm mid}=\\frac{Q_1+Q_2}{2}.}\n\\]\nThis is not what DLT does. Midpoint triangulation minimizes a Euclidean distance between rays; DLT minimizes an algebraic residual. A third possibility is to optimize the reprojection error directly.\nTo see the geometry cleanly, we now leave the photographs and use a controlled synthetic experiment. We deliberately exaggerate the image perturbation in the first plot so that the short segment between the skew rays is visible.\n\ndef midpoint_triangulation(C1, d1, C2, d2):\n    \"\"\"Midpoint of the shortest segment between two 3D lines.\"\"\"\n    d1 = np.asarray(d1, float); d1 /= np.linalg.norm(d1)\n    d2 = np.asarray(d2, float); d2 /= np.linalg.norm(d2)\n    A = np.array([[d1@d1, -(d1@d2)],\n                  [d1@d2, -(d2@d2)]], float)\n    b = np.array([d1@(C2-C1), d2@(C2-C1)], float)\n    a, bpar = np.linalg.solve(A, b)\n    Q1 = C1 + a*d1\n    Q2 = C2 + bpar*d2\n    return 0.5*(Q1+Q2), Q1, Q2\n\n\ndef project_normalized(P, X):\n    q = P @ np.r_[X,1.0]\n    return q[:2] / q[2]\n\n# Parallel synthetic cameras in normalized coordinates.\nbaseline = 1.2\nC1 = np.array([-baseline/2, 0.0, 0.0])\nC2 = np.array([ baseline/2, 0.0, 0.0])\nR = np.eye(3)\nP1s = np.c_[R, -R@C1]\nP2s = np.c_[R, -R@C2]\nXtrue = np.array([0.25, 0.18, 5.0])\n\nx1 = project_normalized(P1s, Xtrue)\nx2 = project_normalized(P2s, Xtrue)\n\n# Deliberately use a visible perturbation here; the next experiment returns to 1 px.\nnoise_px = np.array([12.0, -8.0])\nf_virtual = 800.0\nx2_noisy = x2 + noise_px/f_virtual\n\nXdlt_h, _ = triangulate_dlt(P1s, P2s, x1, x2_noisy)\nXdlt = Xdlt_h[:3]\n\nd1 = np.r_[x1,1.0]; d1 /= np.linalg.norm(d1)\nd2 = np.r_[x2_noisy,1.0]; d2 /= np.linalg.norm(d2)\nXmid, Q1, Q2 = midpoint_triangulation(C1,d1,C2,d2)\n\n# First: the whole ray geometry.\nfig = plt.figure(figsize=(9,7))\nax = fig.add_subplot(111, projection='3d')\nfor C,d in [(C1,d1),(C2,d2)]:\n    L = np.vstack([C, C + 6.0*d])\n    ax.plot(L[:,0],L[:,1],L[:,2],lw=1.7)\n    ax.scatter(*C, marker='^', s=70)\nax.plot([Q1[0],Q2[0]],[Q1[1],Q2[1]],[Q1[2],Q2[2]],lw=2.2)\nax.scatter(*Xtrue, marker='*', s=170, label='true point')\nax.scatter(*Xmid, marker='o', s=90, label='midpoint')\nax.scatter(*Xdlt, marker='X', s=90, label='DLT')\nax.set_xlabel('x'); ax.set_ylabel('y'); ax.set_zlabel('z')\nax.set_title('Noisy measurements: the two rays are skew')\nax.legend()\nax.view_init(elev=16, azim=-70)\nset_axes_equal(ax)\nplt.show()\n\n# Second: zoom into the reconstructed region so the three estimates can be read.\nfocus = np.vstack([Xtrue, Xmid, Xdlt, Q1, Q2])\ncentre = 0.5 * (focus.min(axis=0) + focus.max(axis=0))\nradius = 0.60 * np.max(focus.max(axis=0) - focus.min(axis=0))\n\nfig = plt.figure(figsize=(8,7))\nax = fig.add_subplot(111, projection='3d')\nax.plot([Q1[0],Q2[0]],[Q1[1],Q2[1]],[Q1[2],Q2[2]],lw=2.2, label='shortest segment')\nax.scatter(*Q1, marker='s', s=55, label='$Q_1$')\nax.scatter(*Q2, marker='s', s=55, label='$Q_2$')\nax.scatter(*Xtrue, marker='*', s=190, label='true point')\nax.scatter(*Xmid, marker='o', s=105, label='midpoint')\nax.scatter(*Xdlt, marker='X', s=105, label='DLT')\n\nfor txt, p in [('true',Xtrue),('mid',Xmid),('DLT',Xdlt),('$Q_1$',Q1),('$Q_2$',Q2)]:\n    ax.text(*(p + np.array([0.008,0.008,0.008])), txt, fontsize=9)\n\nax.set_xlim(centre[0]-radius, centre[0]+radius)\nax.set_ylim(centre[1]-radius, centre[1]+radius)\nax.set_zlim(centre[2]-radius, centre[2]+radius)\nax.set_box_aspect((1,1,1))\nax.set_xlabel('x'); ax.set_ylabel('y'); ax.set_zlabel('z')\nax.set_title('Close-up: true point, midpoint, and DLT are distinct')\nax.view_init(elev=18, azim=-63)\nax.legend(loc='best')\nplt.show()\n\nprint('true point     ', np.round(Xtrue,4))\nprint('midpoint       ', np.round(Xmid,4), '3D error =', round(np.linalg.norm(Xmid-Xtrue),5))\nprint('DLT            ', np.round(Xdlt,4), '3D error =', round(np.linalg.norm(Xdlt-Xtrue),5))\nprint('midpoint-DLT distance =', round(np.linalg.norm(Xmid-Xdlt),5))\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\ntrue point      [0.25 0.18 5.  ]\nmidpoint        [0.306  0.165  5.3232] 3D error = 0.32837\nDLT             [0.3067 0.1653 5.333 ] 3D error = 0.33808\nmidpoint-DLT distance = 0.00979\n\n\n\nReprojection error\nThe image measurements are what we actually observed, so a natural geometric criterion is the reprojection error:\n\\[\nE(\\mathbf M)=\n\\sum_i\n\\left\\|\n\\mathbf x_i-\\pi(P_i\\widetilde{\\mathbf M})\n\\right\\|^2.\n\\]\nNeither linear DLT nor midpoint triangulation is, in general, the minimizer of this nonlinear objective. DLT is nevertheless an excellent initialization: simple, fast, and often already accurate when the geometry is well conditioned.\n\ndef reprojection_error_normalized(Ps, xs, X):\n    err = []\n    for P,x in zip(Ps,xs):\n        xp = project_normalized(P,X)\n        err.append(np.linalg.norm(xp-x))\n    return np.array(err)\n\nfor name, Xest in [('midpoint',Xmid),('DLT',Xdlt)]:\n    e = reprojection_error_normalized([P1s,P2s],[x1,x2_noisy],Xest) * f_virtual\n    print(f'{name:9s}: per-view reprojection error = {np.round(e,3)} px, RMS = {np.sqrt(np.mean(e**2)):.3f} px')\n\nmidpoint : per-view reprojection error = [4.004 4.004] px, RMS = 4.004 px\nDLT      : per-view reprojection error = [3.999 4.001] px, RMS = 4.000 px",
     "crumbs": [
       "Home",
-      "Rectification",
-      "Affine rectification"
+      "Triangulation",
+      "Triangulation from two views"
     ]
   },
   {
-    "objectID": "notebooks/rectification/affine.html#checking-it-worked",
-    "href": "notebooks/rectification/affine.html#checking-it-worked",
-    "title": "Affine rectification",
-    "section": "Checking it worked",
-    "text": "Checking it worked\nEyeballing parallel lines is unreliable. Transform the lines themselves and read off the vanishing points: if the rectification is right, they have moved to infinity, so their third coordinate should be zero (to numerical precision).\n\nHinv_T = np.linalg.inv(H_P).T\na_r, c_r = Hinv_T @ a, Hinv_T @ c\nb_r, d_r = Hinv_T @ b, Hinv_T @ d\n\nfor name, (p, q) in [(\"a x c\", (a_r, c_r)), (\"b x d\", (b_r, d_r))]:\n    w = cv.meet(p, q)\n    print(f\"{name}: third coordinate = {w[2] / np.linalg.norm(w):+.2e}\")\n\na x c: third coordinate = +0.00e+00\nb x d: third coordinate = +2.28e-17",
+    "objectID": "notebooks/triangulation/triangulation.html#conditioning-triangulation-angle-matters",
+    "href": "notebooks/triangulation/triangulation.html#conditioning-triangulation-angle-matters",
+    "title": "Triangulation from two views",
+    "section": "Conditioning: triangulation angle matters",
+    "text": "Conditioning: triangulation angle matters\nTriangulation becomes fragile when the two viewing rays are almost parallel. The key quantity is not simply the numerical baseline in isolation, but the angle between the rays.\nWe can isolate this effect synthetically: keep the same 3D point, use the same focal length, inject the same one-pixel perturbation, and change only the distance between the camera centres.\nA wide triangulation angle gives strong depth information. As the angle approaches zero, a tiny image displacement can produce a very large depth displacement.\n\ndef triangulation_angle(C1,C2,X):\n    d1=X-C1; d2=X-C2\n    d1/=np.linalg.norm(d1); d2/=np.linalg.norm(d2)\n    return np.degrees(np.arccos(np.clip(d1@d2,-1,1)))\n\nbaselines = np.geomspace(0.08, 2.5, 40)\nangles, depth_errors = [], []\nnoise = np.array([1.0,0.0])/f_virtual\n\nfor b in baselines:\n    C1b=np.array([-b/2,0,0]); C2b=np.array([b/2,0,0])\n    P1b=np.c_[np.eye(3),-C1b]\n    P2b=np.c_[np.eye(3),-C2b]\n    xx1=project_normalized(P1b,Xtrue)\n    xx2=project_normalized(P2b,Xtrue)+noise\n    Xbh,_=triangulate_dlt(P1b,P2b,xx1,xx2)\n    angles.append(triangulation_angle(C1b,C2b,Xtrue))\n    depth_errors.append(abs(Xbh[2]-Xtrue[2]))\n\nfig,ax=plt.subplots(figsize=(7,5))\nax.plot(angles,depth_errors,marker='o',ms=3)\nax.set_xlabel('triangulation angle [deg]')\nax.set_ylabel('absolute depth error')\nax.set_title('Same 1 px error, different triangulation geometry')\nax.set_yscale('log')\nplt.show()\n\n\n\n\n\n\n\n\nThe plot is the controlled version of the usual stereo intuition: depth is poorly constrained when the rays are nearly parallel.\nThis is why triangulation should never be judged only by whether the linear system returns a number. The camera configuration determines how much that number can be trusted.",
     "crumbs": [
       "Home",
-      "Rectification",
-      "Affine rectification"
+      "Triangulation",
+      "Triangulation from two views"
     ]
   },
   {
-    "objectID": "notebooks/rectification/affine.html#where-it-breaks",
-    "href": "notebooks/rectification/affine.html#where-it-breaks",
-    "title": "Affine rectification",
-    "section": "Where it breaks",
-    "text": "Where it breaks\nWorth running before trusting this on a photograph. Nudge one endpoint by a few pixels and watch what happens to \\(\\ell'_\\infty\\): the more nearly parallel the segments look in the image, the further out the vanishing point goes, and the worse conditioned everything downstream becomes. This is the failure mode behind the bitangent construction in Section 1.7.\n\nrng = np.random.default_rng(0)\nbase = cv.normalize_line(cv.join(cv.meet(a, c), cv.meet(b, d)))\n\nfor sigma in (0.0, 0.5, 1.0, 2.0):\n    devs = []\n    for _ in range(200):\n        pert = {k: np.asarray(v, float) + rng.normal(0, sigma, (2, 2))\n                for k, v in seg.items()}\n        L = {k: cv.seg_to_line(pert[k]) for k in pert}\n        l = cv.normalize_line(cv.join(cv.meet(L[\"a\"], L[\"c\"]),\n                                      cv.meet(L[\"b\"], L[\"d\"])))\n        devs.append(np.linalg.norm(l - base) / max(np.linalg.norm(base), 1e-12))\n    print(f\"endpoint noise {sigma:.1f} px  -&gt;  relative error on l'_inf \"\n          f\"{np.mean(devs):.4f}\")\n\nendpoint noise 0.0 px  -&gt;  relative error on l'_inf 0.0000\nendpoint noise 0.5 px  -&gt;  relative error on l'_inf 0.0099\nendpoint noise 1.0 px  -&gt;  relative error on l'_inf 0.0193\nendpoint noise 2.0 px  -&gt;  relative error on l'_inf 0.0383",
+    "objectID": "notebooks/triangulation/triangulation.html#fixing-the-global-scale",
+    "href": "notebooks/triangulation/triangulation.html#fixing-the-global-scale",
+    "title": "Triangulation from two views",
+    "section": "Fixing the global scale",
+    "text": "Fixing the global scale\nThe calibrated two-view geometry has recovered a Euclidean shape, but the camera poses came from monocular SfM, so the whole reconstruction still carries one arbitrary global scale.\nOne physical length is enough to remove it. The long front edge of the Origami House is approximately\n\\[\n\\|X_1-X_0\\|\\simeq 5\\;\\text{cm}.\n\\]\nIf its reconstructed length is \\(\\ell\\), we multiply every reconstructed coordinate by\n\\[\ns=\\frac{5\\;\\text{cm}}{\\ell}.\n\\]\nAfter this single operation, all distances are expressed in centimetres.\n\nknown_cm = data['known_length_cm']['length_cm']\nreconstructed_long_edge = np.linalg.norm(X_house['X1']-X_house['X0'])\nmetric_scale = known_cm / reconstructed_long_edge\nX_cm = {k: metric_scale*p for k,p in X_house.items()}\n\nprint(f'reconstructed long edge = {reconstructed_long_edge:.4f} arbitrary units')\nprint(f'scale                    = {metric_scale:.4f} cm / unit')\nprint(f'wall height X0-X4        = {np.linalg.norm(X_cm[\"X4\"]-X_cm[\"X0\"]):.2f} cm')\nprint(f'ridge height above X0    = {X_cm[\"X8\"][2]:.2f} cm (in the house-attached frame)')\n\nfig=plt.figure(figsize=(8,6))\nax=fig.add_subplot(111,projection='3d')\ndraw_reconstruction(ax,X_cm)\nax.set_xlabel('x [cm]'); ax.set_ylabel('depth [cm]'); ax.set_zlabel('z [cm]')\nax.set_title('Origami House: two-view reconstruction with metric scale')\nax.view_init(elev=21,azim=-62)\nset_axes_equal(ax)\nplt.show()\n\nreconstructed long edge = 0.8079 arbitrary units\nscale                    = 6.1890 cm / unit\nwall height X0-X4        = 2.22 cm\nridge height above X0    = 4.02 cm (in the house-attached frame)",
     "crumbs": [
       "Home",
-      "Rectification",
-      "Affine rectification"
+      "Triangulation",
+      "Triangulation from two views"
     ]
   },
   {
-    "objectID": "notebooks/rectification/affine.html#exercises",
-    "href": "notebooks/rectification/affine.html#exercises",
-    "title": "Affine rectification",
+    "objectID": "notebooks/triangulation/triangulation.html#takeaways",
+    "href": "notebooks/triangulation/triangulation.html#takeaways",
+    "title": "Triangulation from two views",
+    "section": "Takeaways",
+    "text": "Takeaways\nTwo-view triangulation is conceptually small but geometrically rich:\n\\[\n\\boxed{\n\\text{image point}\n\\rightarrow\n\\text{viewing ray}\n\\rightarrow\n\\text{two-view constraint}\n\\rightarrow\n\\text{3D point}\n}\n\\]\nThe main lessons are:\n\nDLT eliminates the unknown projective depths and solves \\(A\\widetilde{\\mathbf M}=0\\) by SVD;\nthe 3D coordinates reconstructed by DLT inherit their geometry from the camera matrices;\na simultaneous transformation \\(\\widetilde M'=H\\widetilde M\\), \\(P'=PH^{-1}\\) leaves every image unchanged;\nwith noisy measurements the two rays generally do not intersect;\nmidpoint triangulation, DLT, and reprojection-error minimization use different criteria;\na small triangulation angle makes depth intrinsically unstable;\na single known length fixes the remaining global scale.\n\nThe cameras were given throughout this notebook. The natural next question is where those cameras come from when only image correspondences are available.",
+    "crumbs": [
+      "Home",
+      "Triangulation",
+      "Triangulation from two views"
+    ]
+  },
+  {
+    "objectID": "notebooks/triangulation/triangulation.html#exercises",
+    "href": "notebooks/triangulation/triangulation.html#exercises",
+    "title": "Triangulation from two views",
     "section": "Exercises",
-    "text": "Exercises\n\nReplace the synthetic facade with a photograph of your own: drop it in data/facade.jpg and pick the segments interactively.\nWith the synthetic image you have H_gt. The composition \\(H_P \\, H_{gt}\\) should be an affinity — check that its bottom row is \\((0, 0, \\star)\\), and quantify how far off it is.\nRecover the vanishing line from three equally spaced coplanar lines instead of two pairs of parallel ones (cross-ratio construction).\nContinue to the metric step: five pairs of orthogonal lines give \\(\\hat{C}^*_\\infty\\), and from it \\(H_A\\). See Algorithm 2, Section 1.5.",
+    "text": "Exercises\n\nExercise 1 — Why only two DLT equations per view?\nThe cross product\n\\[\n\\widetilde{\\mathbf x}\\times P\\widetilde{\\mathbf M}=0\n\\]\nproduces three scalar equations. Show that only two are linearly independent, and derive the two rows used in the implementation.\n\n\n\n\n\n\nTipAnswer\n\n\n\n\n\nThe compact form is \\([\\widetilde{\\mathbf x}]_\\times P\\widetilde M=0\\). Since \\([\\widetilde{\\mathbf x}]_\\times\\) is a \\(3\\times3\\) skew-symmetric matrix with nullspace \\(\\operatorname{span}(\\widetilde{\\mathbf x})\\), it has rank two for \\(\\widetilde{\\mathbf x}\\neq0\\). Therefore the three scalar rows contain only two independent constraints. Explicitly, if \\(P\\widetilde M=(a,b,c)^\\top\\), the equations are \\(yc-b=0\\), \\(a-xc=0\\), and \\(xb-ya=0\\), and the third is a linear combination of the first two. The same incidence constraint can be vectorized as \\((\\widetilde M^\\top\\otimes[\\widetilde{\\mathbf x}]_\\times)\\operatorname{vec}(P)=0\\); in triangulation \\(P\\) is known, so we instead solve the two independent rows for \\(\\widetilde M\\).\n\n\n\n\n\nExercise 2 — A projective change of 3D coordinates\nChoose a different invertible \\(H\\) and verify numerically that\n\\[\nP_iH^{-1}(H\\widetilde M)=P_i\\widetilde M.\n\\]\nWhat properties of the 3D house are preserved if \\(H\\) is a general projectivity? What extra properties are preserved if \\(H\\) is a similarity?\n\n\n\n\n\n\nTipAnswer\n\n\n\n\n\nA general projectivity preserves incidence: points on lines remain on lines, and planes map to planes. It does not in general preserve lengths, angles, parallelism, or ratios along a line. A similarity additionally preserves angles and all length ratios; it changes absolute lengths only by one global scale factor.\n\n\n\n\n\nExercise 3 — Midpoint versus DLT\nIncrease the synthetic image perturbation from \\(1\\)–\\(2\\) pixels to \\(10\\) pixels. Compare the 3D error and reprojection error of midpoint triangulation and DLT. Is one method always better according to both criteria?\n\n\n\n\n\n\nTipAnswer\n\n\n\n\n\nNo. They optimize different quantities. Midpoint is tied to Euclidean distance between the two 3D rays, while DLT minimizes an algebraic residual. Either can have the smaller 3D or reprojection error in a particular configuration. Minimizing reprojection error is a separate nonlinear problem.\n\n\n\n\n\nExercise 4 — Baseline and depth uncertainty\nIn the controlled experiment, halve the triangulation angle while keeping the same one-pixel perturbation. What happens to the recovered depth? Why is this a geometric limitation rather than a failure of SVD?\n\n\n\n\n\n\nTipAnswer\n\n\n\n\n\nThe depth becomes much more sensitive to the same image error. Nearly parallel rays can move a long distance along depth before their image projections change appreciably. SVD is only solving the supplied equations; the underlying geometry itself contains little depth information.\n\n\n\n\nLuca Magri — Computer Vision Dojo\nCode MIT · text and figures CC BY-NC-ND 4.0\nhttps://magrilu.github.io/cv-dojo/",
     "crumbs": [
       "Home",
-      "Rectification",
-      "Affine rectification"
+      "Triangulation",
+      "Triangulation from two views"
     ]
-  },
-  {
-    "objectID": "index.html",
-    "href": "index.html",
-    "title": "Computer Vision Dojo",
-    "section": "",
-    "text": "A dojo is a place for practice: somewhere to return to the same ideas, repeat simple gestures, and gradually make them your own.\nThis is a small and growing collection of notebooks on the geometric foundations of 3D computer vision: projective planes, homographies, rectification, robust fitting, and, in time, more.\nLLMs can now produce a surprising amount of working code in very little time, and much of it is correct. They will explain it as well, and clearly. But an explanation received is not the same as an argument understood.\nThe notebooks here therefore take a deliberately slower path. They are meant to be studied much like a mathematics book: with patience, perhaps with paper and pencil nearby, following each construction one step at a time. Every algorithm is developed through code that can be run, changed, broken, and put back together.\nSome parts of the collection are already usable; others are still sketches, experiments, or plans. This page is therefore both a course resource and a public notebook in progress. Over time, it may grow into a more complete set of notes on geometric computer vision.\nTo whoever has the patience to work through these pages: I hope you find results that are correct and useful, and that you will tell me when they are not. Above all I hope you find the pleasure of having understood something yourself, and some affection for the elegance of geometry underneath it all.",
-    "crumbs": [
-      "Home",
-      "Overview"
-    ]
-  },
-  {
-    "objectID": "index.html#the-notebooks",
-    "href": "index.html#the-notebooks",
-    "title": "Computer Vision Dojo",
-    "section": "The notebooks",
-    "text": "The notebooks\n\n\n\n\n\n\n\n\n01\nThe projective plane\npoints, lines, duality, conics\n\n\n02\nHomographies\nDLT from points and lines, warping\n\n\n03\nRectification\naffine, metric, stratified, direct\n\n\n04\nMeasuring from one view\nvanishing points, horizon, affine measurements\n\n\n05\nRobust fitting\nRANSAC, LMedS, MSAC, Hough\n\n\n06\nPutting it together\nfeature matching, stitching\n\n\n\nSections without a link are still in preparation.",
-    "crumbs": [
-      "Home",
-      "Overview"
-    ]
-  },
-  {
-    "objectID": "index.html#how-to-use-this-collection",
-    "href": "index.html#how-to-use-this-collection",
-    "title": "Computer Vision Dojo",
-    "section": "How to use this collection",
-    "text": "How to use this collection\nEach notebook is designed to run from top to bottom. You can open it in Colab and work through the cells in order.\nRead the explanations, inspect the intermediate quantities, and modify the examples. Keep paper nearby when a derivation becomes difficult. A notebook often becomes most useful when something is changed and the result is not quite what was expected.\nTo run the notebooks locally:\ngit clone https://github.com/magrilu/cv-dojo.git\ncd cv-dojo\npip install -r requirements.txt\nStudents following one of my courses can find a suggested reading order under Courses in the menu above.\nThe original MATLAB scripts used in the Politecnico exercise sessions are kept under matlab/.",
-    "crumbs": [
-      "Home",
-      "Overview"
-    ]
-  },
-  {
-    "objectID": "index.html#acknowledgements",
-    "href": "index.html#acknowledgements",
-    "title": "Computer Vision Dojo",
-    "section": "Acknowledgements",
-    "text": "Acknowledgements\nMy first thanks go to my father, Maurizio Magri, who taught me the joy and satisfaction of approaching mathematics armed with patience, paper, and pencil. I had to add an eraser, as my mistakes were rather more frequent than his.\nI hope these notebooks owe something to the way Andrea Fusiello taught me to approach computer vision. Whatever elegance they may contain is certainly inherited from his Computer Vision Toolkit, to which every interested reader is warmly—and immediately—referred. Any errors, of course, are entirely my own.\nI am also grateful to Giacomo Boracchi, with whom I have taught these topics on several occasions. His genuine commitment to teaching has been a source of inspiration. I share his conviction that teaching a student to reason clearly and independently is one of the most lasting ways in which we can contribute to the world.\nThese notebooks began as material for the exercise sessions in Vincenzo Caglioti’s course at Politecnico di Milano. I am grateful to him for the opportunity to develop and teach many of these ideas in that setting.",
-    "crumbs": [
-      "Home",
-      "Overview"
-    ]
-  },
-  {
-    "objectID": "index.html#about-this-project",
-    "href": "index.html#about-this-project",
-    "title": "Computer Vision Dojo",
-    "section": "About this project",
-    "text": "About this project\nThese notebooks grew out of material prepared for Computer Vision courses and exercise sessions. They are still growing: I revise them as I teach with them, correct mistakes, add examples, and find better ways of explaining things.\nIf you find a mistake, something unclear, or simply want to discuss one of the notebooks, please write to me. Corrections and suggestions are always welcome.",
-    "crumbs": [
-      "Home",
-      "Overview"
-    ]
-  },
-  {
-    "objectID": "index.html#using-this-material",
-    "href": "index.html#using-this-material",
-    "title": "Computer Vision Dojo",
-    "section": "Using this material",
-    "text": "Using this material\nPlease use the code and build on it. It is released under the MIT License.\nThe text and illustrations are licensed under CC BY-NC-ND 4.0: you are welcome to share them unchanged for non-commercial purposes, with appropriate credit. If you would like to translate, adapt, or reuse them in some other way, just write to me. You can have a look at the licensing page.\nIf you find this material useful and would like to cite it, here is a BibTeX entry:\n@software{magri_cvdojo,\n  author = {Magri, Luca},\n  title  = {Computer Vision Dojo},\n  year   = {2026},\n  url    = {https://github.com/magrilu/cv-dojo}\n}",
-    "crumbs": [
-      "Home",
-      "Overview"
-    ]
-  },
-  {
-    "objectID": "tracks/bocconi.html",
-    "href": "tracks/bocconi.html",
-    "title": "Bocconi",
-    "section": "",
-    "text": "Reading order for the Bocconi course. Same material, different path: lighter on MATLAB legacy, heavier on the Python notebooks.\n\n\n\n\n\n\n\n\n#\nTopic\nNotebook\n\n\n\n\n1\nAffine rectification\nopen"
-  },
-  {
-    "objectID": "LICENSE.html",
-    "href": "LICENSE.html",
-    "title": "",
-    "section": "",
-    "text": "Code\n\n\n\n\n\nLicensing\nThis repository contains two kinds of material, under two licences.\nCode — everything under src/, matlab/, and the code cells of the notebooks: MIT, see LICENSE-CODE.\nContent — prose, figures, exercises, and the markdown cells of the notebooks: Creative Commons Attribution 4.0 International (CC BY 4.0), see LICENSE-CONTENT.\nIn both cases you may reuse and adapt freely, provided you credit:\n\nLuca Magri, Computer Vision Dojo, https://github.com/magrilu/cv-dojo\n\nSee CITATION.cff for a citable reference."
-  },
-  {
-    "objectID": "SETUP.html",
-    "href": "SETUP.html",
-    "title": "",
-    "section": "",
-    "text": "Code"
-  },
-  {
-    "objectID": "SETUP.html#create-the-repository-on-github",
-    "href": "SETUP.html#create-the-repository-on-github",
-    "title": "",
-    "section": "1. Create the repository on GitHub",
-    "text": "1. Create the repository on GitHub\nGo to https://github.com/new - Repository name: cv-dojo - Public - Do not tick “Add a README” / .gitignore / licence — the folder already has them, and an initialised repo would conflict."
-  },
-  {
-    "objectID": "SETUP.html#put-this-folder-next-to-your-site",
-    "href": "SETUP.html#put-this-folder-next-to-your-site",
-    "title": "",
-    "section": "2. Put this folder next to your site",
-    "text": "2. Put this folder next to your site\ncd ~/repos\n# unzip cv-dojo.zip here, so you end up with ~/repos/cv-dojo\nCheck it is beside magrilu.github.io, not inside it."
-  },
-  {
-    "objectID": "SETUP.html#first-push",
-    "href": "SETUP.html#first-push",
-    "title": "",
-    "section": "3. First push",
-    "text": "3. First push\ncd ~/repos/cv-dojo\ngit init\ngit add .\ngit commit -m \"Initial commit: affine rectification notebook + scaffolding\"\ngit branch -M main\ngit remote add origin git@github.com:magrilu/cv-dojo.git\ngit push -u origin main\nReload the repo page on GitHub — the files should be there."
-  },
-  {
-    "objectID": "SETUP.html#python-environment",
-    "href": "SETUP.html#python-environment",
-    "title": "",
-    "section": "4. Python environment",
-    "text": "4. Python environment\npython3 -m venv .venv\nsource .venv/bin/activate\npip install -r requirements.txt\nCheck the notebook runs:\njupyter lab notebooks/rectification/affine.ipynb"
-  },
-  {
-    "objectID": "SETUP.html#quarto",
-    "href": "SETUP.html#quarto",
-    "title": "",
-    "section": "5. Quarto",
-    "text": "5. Quarto\nInstall from https://quarto.org/docs/get-started/ (a .deb / .pkg, one minute).\nquarto preview\nThis opens a browser with live reload. Iterate here."
-  },
-  {
-    "objectID": "SETUP.html#publish",
-    "href": "SETUP.html#publish",
-    "title": "",
-    "section": "6. Publish",
-    "text": "6. Publish\nquarto publish gh-pages\nFirst run asks for confirmation, then creates the gh-pages branch, pushes the built site, and adds .nojekyll (without which GitHub would run the output through Jekyll and drop every _-prefixed folder — the classic “site with no CSS” failure).\nThen check on GitHub: Settings → Pages → source is gh-pages / (root).\nWait a couple of minutes: https://magrilu.github.io/cv-dojo/\nFrom now on, publishing is just quarto publish gh-pages. Your source lives on main; gh-pages is machine-written and never edited by hand — the same split you already have between source and master on the site repo."
-  },
-  {
-    "objectID": "SETUP.html#look-at-it-next-to-your-site",
-    "href": "SETUP.html#look-at-it-next-to-your-site",
-    "title": "",
-    "section": "7. Look at it next to your site",
-    "text": "7. Look at it next to your site\nNow decide whether the visual gap bothers you. If it does, open assets/custom.scss and copy in the real values from your al-folio _sass/_themes.scss (--global-theme-color) and _sass/_variables.scss."
-  },
-  {
-    "objectID": "SETUP.html#menu-entry-on-magrilu.github.io",
-    "href": "SETUP.html#menu-entry-on-magrilu.github.io",
-    "title": "",
-    "section": "8. Menu entry on magrilu.github.io",
-    "text": "8. Menu entry on magrilu.github.io\nIn the site repo, on the source branch, find the page that generates the teaching dropdown in _pages/ and copy its pattern:\n- title: CV Dojo\n  permalink: https://magrilu.github.io/cv-dojo/\nAn absolute URL works fine as a permalink. Then:\n./bin/deploy --user\n(The exact YAML key differs between al-folio versions — follow whatever your existing dropdown does rather than the snippet above.)"
-  },
-  {
-    "objectID": "SETUP.html#zenodo",
-    "href": "SETUP.html#zenodo",
-    "title": "",
-    "section": "9. Zenodo",
-    "text": "9. Zenodo\nhttps://zenodo.org → log in with GitHub → enable the toggle for cv-dojo. Then on GitHub: Releases → Create a new release → tag v0.1.0. The DOI is minted automatically, and again on every later release."
-  },
-  {
-    "objectID": "SETUP.html#troubleshooting",
-    "href": "SETUP.html#troubleshooting",
-    "title": "",
-    "section": "Troubleshooting",
-    "text": "Troubleshooting\ngit push permission denied — your SSH key is not set up. Quick fix: use git remote set-url origin https://github.com/magrilu/cv-dojo.git and authenticate with a personal access token instead.\nSite published but unstyled — .nojekyll is missing from gh-pages, or Pages is pointing at the wrong branch.\nColab badge 404 — the branch in the badge URL must match yours (main), and the repository must be public."
-  },
-  {
-    "objectID": "tracks/iacv.html",
-    "href": "tracks/iacv.html",
-    "title": "IACV — Politecnico di Milano",
-    "section": "",
-    "text": "Reading order for the practical sessions of Image Analysis and Computer Vision. Course logistics, recordings and the project template are on the course page.\n\n\n\n\n\n\n\n\n#\nTopic\nNotebook\n\n\n\n\n1\nAffine rectification\nopen"
   },
   {
     "objectID": "notebooks/camera/camera.html",
@@ -437,6 +285,278 @@
       "Home",
       "Camera",
       "The pinhole camera"
+    ]
+  },
+  {
+    "objectID": "tracks/iacv.html",
+    "href": "tracks/iacv.html",
+    "title": "IACV — Politecnico di Milano",
+    "section": "",
+    "text": "Reading order for the practical sessions of Image Analysis and Computer Vision. Course logistics, recordings and the project template are on the course page.\n\n\n\n\n\n\n\n\n#\nTopic\nNotebook\n\n\n\n\n1\nAffine rectification\nopen"
+  },
+  {
+    "objectID": "SETUP.html",
+    "href": "SETUP.html",
+    "title": "",
+    "section": "",
+    "text": "Code"
+  },
+  {
+    "objectID": "SETUP.html#create-the-repository-on-github",
+    "href": "SETUP.html#create-the-repository-on-github",
+    "title": "",
+    "section": "1. Create the repository on GitHub",
+    "text": "1. Create the repository on GitHub\nGo to https://github.com/new - Repository name: cv-dojo - Public - Do not tick “Add a README” / .gitignore / licence — the folder already has them, and an initialised repo would conflict."
+  },
+  {
+    "objectID": "SETUP.html#put-this-folder-next-to-your-site",
+    "href": "SETUP.html#put-this-folder-next-to-your-site",
+    "title": "",
+    "section": "2. Put this folder next to your site",
+    "text": "2. Put this folder next to your site\ncd ~/repos\n# unzip cv-dojo.zip here, so you end up with ~/repos/cv-dojo\nCheck it is beside magrilu.github.io, not inside it."
+  },
+  {
+    "objectID": "SETUP.html#first-push",
+    "href": "SETUP.html#first-push",
+    "title": "",
+    "section": "3. First push",
+    "text": "3. First push\ncd ~/repos/cv-dojo\ngit init\ngit add .\ngit commit -m \"Initial commit: affine rectification notebook + scaffolding\"\ngit branch -M main\ngit remote add origin git@github.com:magrilu/cv-dojo.git\ngit push -u origin main\nReload the repo page on GitHub — the files should be there."
+  },
+  {
+    "objectID": "SETUP.html#python-environment",
+    "href": "SETUP.html#python-environment",
+    "title": "",
+    "section": "4. Python environment",
+    "text": "4. Python environment\npython3 -m venv .venv\nsource .venv/bin/activate\npip install -r requirements.txt\nCheck the notebook runs:\njupyter lab notebooks/rectification/affine.ipynb"
+  },
+  {
+    "objectID": "SETUP.html#quarto",
+    "href": "SETUP.html#quarto",
+    "title": "",
+    "section": "5. Quarto",
+    "text": "5. Quarto\nInstall from https://quarto.org/docs/get-started/ (a .deb / .pkg, one minute).\nquarto preview\nThis opens a browser with live reload. Iterate here."
+  },
+  {
+    "objectID": "SETUP.html#publish",
+    "href": "SETUP.html#publish",
+    "title": "",
+    "section": "6. Publish",
+    "text": "6. Publish\nquarto publish gh-pages\nFirst run asks for confirmation, then creates the gh-pages branch, pushes the built site, and adds .nojekyll (without which GitHub would run the output through Jekyll and drop every _-prefixed folder — the classic “site with no CSS” failure).\nThen check on GitHub: Settings → Pages → source is gh-pages / (root).\nWait a couple of minutes: https://magrilu.github.io/cv-dojo/\nFrom now on, publishing is just quarto publish gh-pages. Your source lives on main; gh-pages is machine-written and never edited by hand — the same split you already have between source and master on the site repo."
+  },
+  {
+    "objectID": "SETUP.html#look-at-it-next-to-your-site",
+    "href": "SETUP.html#look-at-it-next-to-your-site",
+    "title": "",
+    "section": "7. Look at it next to your site",
+    "text": "7. Look at it next to your site\nNow decide whether the visual gap bothers you. If it does, open assets/custom.scss and copy in the real values from your al-folio _sass/_themes.scss (--global-theme-color) and _sass/_variables.scss."
+  },
+  {
+    "objectID": "SETUP.html#menu-entry-on-magrilu.github.io",
+    "href": "SETUP.html#menu-entry-on-magrilu.github.io",
+    "title": "",
+    "section": "8. Menu entry on magrilu.github.io",
+    "text": "8. Menu entry on magrilu.github.io\nIn the site repo, on the source branch, find the page that generates the teaching dropdown in _pages/ and copy its pattern:\n- title: CV Dojo\n  permalink: https://magrilu.github.io/cv-dojo/\nAn absolute URL works fine as a permalink. Then:\n./bin/deploy --user\n(The exact YAML key differs between al-folio versions — follow whatever your existing dropdown does rather than the snippet above.)"
+  },
+  {
+    "objectID": "SETUP.html#zenodo",
+    "href": "SETUP.html#zenodo",
+    "title": "",
+    "section": "9. Zenodo",
+    "text": "9. Zenodo\nhttps://zenodo.org → log in with GitHub → enable the toggle for cv-dojo. Then on GitHub: Releases → Create a new release → tag v0.1.0. The DOI is minted automatically, and again on every later release."
+  },
+  {
+    "objectID": "SETUP.html#troubleshooting",
+    "href": "SETUP.html#troubleshooting",
+    "title": "",
+    "section": "Troubleshooting",
+    "text": "Troubleshooting\ngit push permission denied — your SSH key is not set up. Quick fix: use git remote set-url origin https://github.com/magrilu/cv-dojo.git and authenticate with a personal access token instead.\nSite published but unstyled — .nojekyll is missing from gh-pages, or Pages is pointing at the wrong branch.\nColab badge 404 — the branch in the badge URL must match yours (main), and the repository must be public."
+  },
+  {
+    "objectID": "LICENSE.html",
+    "href": "LICENSE.html",
+    "title": "",
+    "section": "",
+    "text": "Code\n\n\n\n\n\nLicensing\nThis repository contains two kinds of material, under two licences.\nCode — everything under src/, matlab/, and the code cells of the notebooks: MIT, see LICENSE-CODE.\nContent — prose, figures, exercises, and the markdown cells of the notebooks: Creative Commons Attribution 4.0 International (CC BY 4.0), see LICENSE-CONTENT.\nIn both cases you may reuse and adapt freely, provided you credit:\n\nLuca Magri, Computer Vision Dojo, https://github.com/magrilu/cv-dojo\n\nSee CITATION.cff for a citable reference."
+  },
+  {
+    "objectID": "tracks/bocconi.html",
+    "href": "tracks/bocconi.html",
+    "title": "Bocconi",
+    "section": "",
+    "text": "Reading order for the Bocconi course. Same material, different path: lighter on MATLAB legacy, heavier on the Python notebooks.\n\n\n\n\n\n\n\n\n#\nTopic\nNotebook\n\n\n\n\n1\nAffine rectification\nopen"
+  },
+  {
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "Computer Vision Dojo",
+    "section": "",
+    "text": "A dojo is a place for practice: somewhere to return to the same ideas, repeat simple gestures, and gradually make them your own.\nThis is a small and growing collection of notebooks on the geometric foundations of 3D computer vision: projective planes, homographies, rectification, robust fitting, and, in time, more.\nLLMs can now produce a surprising amount of working code in very little time, and much of it is correct. They will explain it as well, and clearly. But an explanation received is not the same as an argument understood.\nThe notebooks here therefore take a deliberately slower path. They are meant to be studied much like a mathematics book: with patience, perhaps with paper and pencil nearby, following each construction one step at a time. Every algorithm is developed through code that can be run, changed, broken, and put back together.\nSome parts of the collection are already usable; others are still sketches, experiments, or plans. This page is therefore both a course resource and a public notebook in progress. Over time, it may grow into a more complete set of notes on geometric computer vision.\nTo whoever has the patience to work through these pages: I hope you find results that are correct and useful, and that you will tell me when they are not. Above all I hope you find the pleasure of having understood something yourself, and some affection for the elegance of geometry underneath it all.",
+    "crumbs": [
+      "Home",
+      "Overview"
+    ]
+  },
+  {
+    "objectID": "index.html#the-notebooks",
+    "href": "index.html#the-notebooks",
+    "title": "Computer Vision Dojo",
+    "section": "The notebooks",
+    "text": "The notebooks\n\n\n\n\n\n\n\n\n01\nThe projective plane\npoints, lines, duality, conics\n\n\n02\nHomographies\nDLT from points and lines, warping\n\n\n03\nRectification\naffine, metric, stratified, direct\n\n\n04\nMeasuring from one view\nvanishing points, horizon, affine measurements\n\n\n05\nRobust fitting\nRANSAC, LMedS, MSAC, Hough\n\n\n06\nPutting it together\nfeature matching, stitching\n\n\n\nSections without a link are still in preparation.",
+    "crumbs": [
+      "Home",
+      "Overview"
+    ]
+  },
+  {
+    "objectID": "index.html#how-to-use-this-collection",
+    "href": "index.html#how-to-use-this-collection",
+    "title": "Computer Vision Dojo",
+    "section": "How to use this collection",
+    "text": "How to use this collection\nEach notebook is designed to run from top to bottom. You can open it in Colab and work through the cells in order.\nRead the explanations, inspect the intermediate quantities, and modify the examples. Keep paper nearby when a derivation becomes difficult. A notebook often becomes most useful when something is changed and the result is not quite what was expected.\nTo run the notebooks locally:\ngit clone https://github.com/magrilu/cv-dojo.git\ncd cv-dojo\npip install -r requirements.txt\nStudents following one of my courses can find a suggested reading order under Courses in the menu above.\nThe original MATLAB scripts used in the Politecnico exercise sessions are kept under matlab/.",
+    "crumbs": [
+      "Home",
+      "Overview"
+    ]
+  },
+  {
+    "objectID": "index.html#acknowledgements",
+    "href": "index.html#acknowledgements",
+    "title": "Computer Vision Dojo",
+    "section": "Acknowledgements",
+    "text": "Acknowledgements\nMy first thanks go to my father, Maurizio Magri, who taught me the joy and satisfaction of approaching mathematics armed with patience, paper, and pencil. I had to add an eraser, as my mistakes were rather more frequent than his.\nI hope these notebooks owe something to the way Andrea Fusiello taught me to approach computer vision. Whatever elegance they may contain is certainly inherited from his Computer Vision Toolkit, to which every interested reader is warmly—and immediately—referred. Any errors, of course, are entirely my own.\nI am also grateful to Giacomo Boracchi, with whom I have taught these topics on several occasions. His genuine commitment to teaching has been a source of inspiration. I share his conviction that teaching a student to reason clearly and independently is one of the most lasting ways in which we can contribute to the world.\nThese notebooks began as material for the exercise sessions in Vincenzo Caglioti’s course at Politecnico di Milano. I am grateful to him for the opportunity to develop and teach many of these ideas in that setting.",
+    "crumbs": [
+      "Home",
+      "Overview"
+    ]
+  },
+  {
+    "objectID": "index.html#about-this-project",
+    "href": "index.html#about-this-project",
+    "title": "Computer Vision Dojo",
+    "section": "About this project",
+    "text": "About this project\nThese notebooks grew out of material prepared for Computer Vision courses and exercise sessions. They are still growing: I revise them as I teach with them, correct mistakes, add examples, and find better ways of explaining things.\nIf you find a mistake, something unclear, or simply want to discuss one of the notebooks, please write to me. Corrections and suggestions are always welcome.",
+    "crumbs": [
+      "Home",
+      "Overview"
+    ]
+  },
+  {
+    "objectID": "index.html#using-this-material",
+    "href": "index.html#using-this-material",
+    "title": "Computer Vision Dojo",
+    "section": "Using this material",
+    "text": "Using this material\nPlease use the code and build on it. It is released under the MIT License.\nThe text and illustrations are licensed under CC BY-NC-ND 4.0: you are welcome to share them unchanged for non-commercial purposes, with appropriate credit. If you would like to translate, adapt, or reuse them in some other way, just write to me. You can have a look at the licensing page.\nIf you find this material useful and would like to cite it, here is a BibTeX entry:\n@software{magri_cvdojo,\n  author = {Magri, Luca},\n  title  = {Computer Vision Dojo},\n  year   = {2026},\n  url    = {https://github.com/magrilu/cv-dojo}\n}",
+    "crumbs": [
+      "Home",
+      "Overview"
+    ]
+  },
+  {
+    "objectID": "notebooks/rectification/affine.html",
+    "href": "notebooks/rectification/affine.html",
+    "title": "Affine rectification",
+    "section": "",
+    "text": "Open In Colab\nCompanion to Algorithm 1, Section 1.3.\nPerspective destroys parallelism: two rails that never meet in the world do meet on the page. Affine rectification puts it back. It does not recover angles or length ratios — that comes later, in the metric step — but it does recover everything affine: parallelism, midpoints, ratios of lengths along a line.\nThe whole method rests on one observation. Under perspective the line at infinity \\(\\ell_\\infty\\) no longer sits at \\((0:0:1)\\); it lands somewhere in the image as \\(\\ell'_\\infty\\), the vanishing line. Send it back where it belongs and the affine structure returns with it.\nTwo pairs of parallel lines are enough:\n# On Colab, fetch the repository. Locally this is a no-op.\nimport os, sys, subprocess\nif \"COLAB_GPU\" in os.environ or \"COLAB_RELEASE_TAG\" in os.environ:\n    if not os.path.isdir(\"cv-dojo\"):\n        subprocess.run([\"git\", \"clone\", \"-q\",\n                        \"https://github.com/magrilu/cv-dojo.git\"], check=True)\n    os.chdir(\"cv-dojo\")\n\nsys.path.insert(0, os.path.abspath(\"../../src\"))   # local run, from notebooks/rectification\nsys.path.insert(0, os.path.abspath(\"src\"))        # Colab run, from the repo root\n\nimport numpy as np\nimport matplotlib.pyplot as plt\nimport cvdojo as cv\n\nplt.rcParams[\"figure.figsize\"] = (7, 5)",
+    "crumbs": [
+      "Home",
+      "Rectification",
+      "Affine rectification"
+    ]
+  },
+  {
+    "objectID": "notebooks/rectification/affine.html#the-image",
+    "href": "notebooks/rectification/affine.html#the-image",
+    "title": "Affine rectification",
+    "section": "The image",
+    "text": "The image\nload_facade picks up data/facade.jpg if you have put one there, and otherwise synthesises a facade under a known homography. Start with the synthetic one: the ground truth is available, so you can check the answer rather than eyeball it.\n\nimg, H_gt = cv.load_facade()\ncv.show(img, title=\"input image\")\nprint(\"synthetic\" if H_gt is not None else \"photograph\", \"-\", img.shape)\n\nsynthetic - (520, 700, 3)",
+    "crumbs": [
+      "Home",
+      "Rectification",
+      "Affine rectification"
+    ]
+  },
+  {
+    "objectID": "notebooks/rectification/affine.html#the-four-segments",
+    "href": "notebooks/rectification/affine.html#the-four-segments",
+    "title": "Affine rectification",
+    "section": "The four segments",
+    "text": "The four segments\nHere is the design decision worth flagging. The notebook ships with precomputed endpoints, so it runs top to bottom on any machine, including Colab, with nothing to click. The interactive selection lives in the next cell and is optional — that is the one to use in the lecture room.\nThe naming follows the book: \\(\\{\\mathbf{a}', \\mathbf{c}'\\}\\) are the images of one family of parallel world lines, \\(\\{\\mathbf{b}', \\mathbf{d}'\\}\\) of a second family.\n\nseg = dict(cv.DEFAULT_SEGMENTS)   # keys: 'a', 'c' (first family), 'b', 'd' (second)\n\nax = cv.show(img, title=\"the two families of parallel lines\")\nfor k, col in [(\"a\", \"tab:red\"), (\"c\", \"tab:red\"),\n               (\"b\", \"tab:blue\"), (\"d\", \"tab:blue\")]:\n    cv.draw_segment(ax, seg[k], color=col)\n\n\n\n\n\n\n\n\n\nOptional: pick them yourself\nUncomment and run to click the eight endpoints (a then c in red, b then d in blue). Needs %matplotlib widget and ipympl, which works locally but not on Colab — there, edit the numbers in seg by hand instead.\n\n# %matplotlib widget\n# ax = cv.show(img, title=\"click 8 points: a1 a2 c1 c2 b1 b2 d1 d2\")\n# pts = plt.ginput(8, timeout=0)\n# seg = {k: [pts[2*i], pts[2*i+1]] for i, k in enumerate([\"a\", \"c\", \"b\", \"d\"])}\n# print(seg)",
+    "crumbs": [
+      "Home",
+      "Rectification",
+      "Affine rectification"
+    ]
+  },
+  {
+    "objectID": "notebooks/rectification/affine.html#steps-1-3-the-vanishing-line",
+    "href": "notebooks/rectification/affine.html#steps-1-3-the-vanishing-line",
+    "title": "Affine rectification",
+    "section": "Steps 1-3: the vanishing line",
+    "text": "Steps 1-3: the vanishing line\nEach segment gives a line through its endpoints, \\(\\ell = \\mathbf{x}_1 \\times \\mathbf{x}_2\\). Intersecting lines within a family gives a vanishing point; joining the two vanishing points gives \\(\\ell'_\\infty\\).\nThe normalisation on line 3 of the algorithm is not cosmetic. Vanishing points often land thousands of pixels outside the frame, so \\(\\ell'_\\infty\\) comes out with a third coordinate several orders of magnitude larger than the first two. Left alone, that imbalance propagates straight into the bottom row of \\(H_P\\).\n\na, c = cv.seg_to_line(seg[\"a\"]), cv.seg_to_line(seg[\"c\"])\nb, d = cv.seg_to_line(seg[\"b\"]), cv.seg_to_line(seg[\"d\"])\n\nU = cv.meet(a, c)          # first vanishing point\nV = cv.meet(b, d)          # second vanishing point\nl_inf = cv.normalize_line(cv.join(U, V))\n\nprint(\"U' =\", cv.cartesian(U).ravel())\nprint(\"V' =\", cv.cartesian(V).ravel())\nprint(\"l'_inf =\", l_inf)\n\nU' = [1419.51237582  361.62485267]\nV' = [  307.81257809 -2790.46772178]\nl'_inf = [ 9.43065754e-01 -3.32606350e-01 -1.21841479e+03]\n\n\n\n# Both vanishing points usually fall well outside the image: widen the axes.\nu, v = cv.cartesian(U).ravel(), cv.cartesian(V).ravel()\nxs = [0, img.shape[1], u[0], v[0]]\nys = [0, img.shape[0], u[1], v[1]]\npad = 0.08 * max(max(xs) - min(xs), max(ys) - min(ys))\n\nfig, ax = plt.subplots(figsize=(9, 7))\nax.imshow(np.clip(img, 0, 1))\nfor k, col in [(\"a\", \"tab:red\"), (\"c\", \"tab:red\"),\n               (\"b\", \"tab:blue\"), (\"d\", \"tab:blue\")]:\n    cv.draw_segment(ax, seg[k], color=col)\nax.plot(*u, \"o\", color=\"tab:red\", ms=11, label=\"$U'$\")\nax.plot(*v, \"o\", color=\"tab:blue\", ms=11, label=\"$V'$\")\nax.set_xlim(min(xs) - pad, max(xs) + pad)\nax.set_ylim(max(ys) + pad, min(ys) - pad)\ncv.draw_line(ax, l_inf, xlim=ax.get_xlim(), color=\"tab:green\", lw=2.5,\n             label=r\"$\\ell'_\\infty$\")\nax.legend(loc=\"lower right\")\nax.set_axis_off()",
+    "crumbs": [
+      "Home",
+      "Rectification",
+      "Affine rectification"
+    ]
+  },
+  {
+    "objectID": "notebooks/rectification/affine.html#step-4-the-rectifying-homography",
+    "href": "notebooks/rectification/affine.html#step-4-the-rectifying-homography",
+    "title": "Affine rectification",
+    "section": "Step 4: the rectifying homography",
+    "text": "Step 4: the rectifying homography\n\\[\nH_P = \\begin{bmatrix} 1 & 0 & 0 \\\\ 0 & 1 & 0 \\\\ \\ell_1 & \\ell_2 & \\ell_3 \\end{bmatrix}\n\\]\nThe top two rows are a free choice — any affinity there would do, since the result is only defined up to one. All the work is in the bottom row.\nLines transform by the inverse transpose, so the check is \\(H_P^{-\\top} \\ell'_\\infty = (0:0:1)^\\top\\).\n\nH_P = cv.H_from_vanishing_line(l_inf)\nprint(H_P, \"\\n\")\n\ncheck = np.linalg.inv(H_P).T @ l_inf\nprint(\"H_P^-T l'_inf =\", np.round(check / check[2], 12))\n\n[[ 1.00000000e+00  0.00000000e+00  0.00000000e+00]\n [ 0.00000000e+00  1.00000000e+00  0.00000000e+00]\n [ 9.43065754e-01 -3.32606350e-01 -1.21841479e+03]] \n\nH_P^-T l'_inf = [-0.  0.  1.]",
+    "crumbs": [
+      "Home",
+      "Rectification",
+      "Affine rectification"
+    ]
+  },
+  {
+    "objectID": "notebooks/rectification/affine.html#warping",
+    "href": "notebooks/rectification/affine.html#warping",
+    "title": "Affine rectification",
+    "section": "Warping",
+    "text": "Warping\nOne practical note that costs an afternoon if you meet it cold: skimage.transform.warp pulls each output pixel from the input, so it wants the inverse map, and it keeps the original canvas — unlike MATLAB’s imwarp, which sizes the output for you. cv.warp_image handles both, and fits the canvas to the region of interest rather than to the image corners, which after rectification are usually far away.\n\nroi = np.vstack([seg[k] for k in (\"a\", \"c\", \"b\", \"d\")])\nrect = cv.warp_image(img, H_P, roi=roi, max_side=900)\n\nfig, axes = plt.subplots(1, 2, figsize=(13, 5))\ncv.show(img, ax=axes[0], title=\"original\")\ncv.show(rect, ax=axes[1], title=\"affine rectified\")\n\n\n\n\n\n\n\n\nThe facade is now a parallelogram. It is still sheared and rotated, and it should be: affine rectification recovers the plane only up to an affinity. Angles and length ratios need the metric step.",
+    "crumbs": [
+      "Home",
+      "Rectification",
+      "Affine rectification"
+    ]
+  },
+  {
+    "objectID": "notebooks/rectification/affine.html#checking-it-worked",
+    "href": "notebooks/rectification/affine.html#checking-it-worked",
+    "title": "Affine rectification",
+    "section": "Checking it worked",
+    "text": "Checking it worked\nEyeballing parallel lines is unreliable. Transform the lines themselves and read off the vanishing points: if the rectification is right, they have moved to infinity, so their third coordinate should be zero (to numerical precision).\n\nHinv_T = np.linalg.inv(H_P).T\na_r, c_r = Hinv_T @ a, Hinv_T @ c\nb_r, d_r = Hinv_T @ b, Hinv_T @ d\n\nfor name, (p, q) in [(\"a x c\", (a_r, c_r)), (\"b x d\", (b_r, d_r))]:\n    w = cv.meet(p, q)\n    print(f\"{name}: third coordinate = {w[2] / np.linalg.norm(w):+.2e}\")\n\na x c: third coordinate = +0.00e+00\nb x d: third coordinate = +2.28e-17",
+    "crumbs": [
+      "Home",
+      "Rectification",
+      "Affine rectification"
+    ]
+  },
+  {
+    "objectID": "notebooks/rectification/affine.html#where-it-breaks",
+    "href": "notebooks/rectification/affine.html#where-it-breaks",
+    "title": "Affine rectification",
+    "section": "Where it breaks",
+    "text": "Where it breaks\nWorth running before trusting this on a photograph. Nudge one endpoint by a few pixels and watch what happens to \\(\\ell'_\\infty\\): the more nearly parallel the segments look in the image, the further out the vanishing point goes, and the worse conditioned everything downstream becomes. This is the failure mode behind the bitangent construction in Section 1.7.\n\nrng = np.random.default_rng(0)\nbase = cv.normalize_line(cv.join(cv.meet(a, c), cv.meet(b, d)))\n\nfor sigma in (0.0, 0.5, 1.0, 2.0):\n    devs = []\n    for _ in range(200):\n        pert = {k: np.asarray(v, float) + rng.normal(0, sigma, (2, 2))\n                for k, v in seg.items()}\n        L = {k: cv.seg_to_line(pert[k]) for k in pert}\n        l = cv.normalize_line(cv.join(cv.meet(L[\"a\"], L[\"c\"]),\n                                      cv.meet(L[\"b\"], L[\"d\"])))\n        devs.append(np.linalg.norm(l - base) / max(np.linalg.norm(base), 1e-12))\n    print(f\"endpoint noise {sigma:.1f} px  -&gt;  relative error on l'_inf \"\n          f\"{np.mean(devs):.4f}\")\n\nendpoint noise 0.0 px  -&gt;  relative error on l'_inf 0.0000\nendpoint noise 0.5 px  -&gt;  relative error on l'_inf 0.0099\nendpoint noise 1.0 px  -&gt;  relative error on l'_inf 0.0193\nendpoint noise 2.0 px  -&gt;  relative error on l'_inf 0.0383",
+    "crumbs": [
+      "Home",
+      "Rectification",
+      "Affine rectification"
+    ]
+  },
+  {
+    "objectID": "notebooks/rectification/affine.html#exercises",
+    "href": "notebooks/rectification/affine.html#exercises",
+    "title": "Affine rectification",
+    "section": "Exercises",
+    "text": "Exercises\n\nReplace the synthetic facade with a photograph of your own: drop it in data/facade.jpg and pick the segments interactively.\nWith the synthetic image you have H_gt. The composition \\(H_P \\, H_{gt}\\) should be an affinity — check that its bottom row is \\((0, 0, \\star)\\), and quantify how far off it is.\nRecover the vanishing line from three equally spaced coplanar lines instead of two pairs of parallel ones (cross-ratio construction).\nContinue to the metric step: five pairs of orthogonal lines give \\(\\hat{C}^*_\\infty\\), and from it \\(H_A\\). See Algorithm 2, Section 1.5.",
+    "crumbs": [
+      "Home",
+      "Rectification",
+      "Affine rectification"
     ]
   }
 ]
