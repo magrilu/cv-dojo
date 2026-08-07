@@ -288,11 +288,66 @@
     ]
   },
   {
-    "objectID": "tracks/iacv.html",
-    "href": "tracks/iacv.html",
-    "title": "IACV — Politecnico di Milano",
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "Computer Vision Dojo",
     "section": "",
-    "text": "Reading order for the practical sessions of Image Analysis and Computer Vision. Course logistics, recordings and the project template are on the course page.\n\n\n\n\n\n\n\n\n#\nTopic\nNotebook\n\n\n\n\n1\nAffine rectification\nopen"
+    "text": "A dojo is a place for practice: somewhere to return to the same ideas, repeat simple gestures, and gradually make them your own.\nThis is a small and growing collection of notebooks on the geometric foundations of 3D computer vision: projective planes, homographies, rectification, robust fitting, and, in time, more.\nLLMs can now produce a surprising amount of working code in very little time, and much of it is correct. They will explain it as well, and clearly. But an explanation received is not the same as an argument understood.\nThe notebooks here therefore take a deliberately slower path. They are meant to be studied much like a mathematics book: with patience, perhaps with paper and pencil nearby, following each construction one step at a time. Every algorithm is developed through code that can be run, changed, broken, and put back together.\nSome parts of the collection are already usable; others are still sketches, experiments, or plans. This page is therefore both a course resource and a public notebook in progress. Over time, it may grow into a more complete set of notes on geometric computer vision.\nTo whoever has the patience to work through these pages: I hope you find results that are correct and useful, and that you will tell me when they are not. Above all I hope you find the pleasure of having understood something yourself, and some affection for the elegance of geometry underneath it all.",
+    "crumbs": [
+      "Home",
+      "Overview"
+    ]
+  },
+  {
+    "objectID": "index.html#the-notebooks",
+    "href": "index.html#the-notebooks",
+    "title": "Computer Vision Dojo",
+    "section": "The notebooks",
+    "text": "The notebooks\n\n\n\n\n\n\n\n\n01\nThe projective plane\npoints, lines, duality, conics\n\n\n02\nHomographies\nDLT from points and lines, warping\n\n\n03\nRectification\naffine, metric, stratified, direct\n\n\n04\nMeasuring from one view\nvanishing points, horizon, affine measurements\n\n\n05\nRobust fitting\nRANSAC, LMedS, MSAC, Hough\n\n\n06\nPutting it together\nfeature matching, stitching\n\n\n\nSections without a link are still in preparation.",
+    "crumbs": [
+      "Home",
+      "Overview"
+    ]
+  },
+  {
+    "objectID": "index.html#how-to-use-this-collection",
+    "href": "index.html#how-to-use-this-collection",
+    "title": "Computer Vision Dojo",
+    "section": "How to use this collection",
+    "text": "How to use this collection\nEach notebook is designed to run from top to bottom. You can open it in Colab and work through the cells in order.\nRead the explanations, inspect the intermediate quantities, and modify the examples. Keep paper nearby when a derivation becomes difficult. A notebook often becomes most useful when something is changed and the result is not quite what was expected.\nTo run the notebooks locally:\ngit clone https://github.com/magrilu/cv-dojo.git\ncd cv-dojo\npip install -r requirements.txt\nStudents following IACV will find a suggested reading order on the course page.",
+    "crumbs": [
+      "Home",
+      "Overview"
+    ]
+  },
+  {
+    "objectID": "index.html#working-together-for-a-research-thesis",
+    "href": "index.html#working-together-for-a-research-thesis",
+    "title": "Computer Vision Dojo",
+    "section": "Working together for a research thesis?",
+    "text": "Working together for a research thesis?\nIf you are starting to feel like a black belt: the geometry here is settled, but the questions it opens are not. There are still plenty of interesting problems in 3D vision with a strong geometric flavour.\nIf any of these notebooks left you wondering about something they did not answer, I would like to hear from you.\nI supervise theses at Politecnico di Milano and Bocconi, mostly in geometry-driven vision. Current topics, guidance, and past theses are on my main site: topics · how-to · hall of fame.\nDrop me an email, tell me which notebook you looked at and what you found interesting in it.",
+    "crumbs": [
+      "Home",
+      "Overview"
+    ]
+  },
+  {
+    "objectID": "index.html#acknowledgements",
+    "href": "index.html#acknowledgements",
+    "title": "Computer Vision Dojo",
+    "section": "Acknowledgements",
+    "text": "Acknowledgements\nMy first thanks go to my father, Maurizio Magri, who taught me the joy and satisfaction of approaching mathematics armed with patience, paper, and pencil. I had to add an eraser, as my mistakes were rather more frequent than his.\nI hope these notebooks owe something to the way Andrea Fusiello taught me to approach computer vision. Whatever elegance they may contain is certainly inherited from his Computer Vision Toolkit, to which every interested reader is warmly—and immediately—referred. Any errors, of course, are entirely my own.\nI am also grateful to Giacomo Boracchi, with whom I have taught these topics on several occasions. His genuine commitment to teaching has been a source of inspiration. I share his conviction that teaching a student to reason clearly and independently is one of the most lasting ways in which we can contribute to the world.\nThese notebooks began as material for the exercise sessions in Vincenzo Caglioti’s course at Politecnico di Milano. I am grateful to him for the opportunity to develop and teach many of these ideas in that setting.",
+    "crumbs": [
+      "Home",
+      "Overview"
+    ]
+  },
+  {
+    "objectID": "LICENSE.html",
+    "href": "LICENSE.html",
+    "title": "",
+    "section": "",
+    "text": "Code\n\n\n\n\n\nLicensing\nThis repository contains two kinds of material, under two licences.\nCode — everything under src/, matlab/, and the code cells of the notebooks: MIT, see LICENSE-CODE.\nContent — prose, figures, exercises, and the markdown cells of the notebooks: Creative Commons Attribution 4.0 International (CC BY 4.0), see LICENSE-CONTENT.\nIn both cases you may reuse and adapt freely, provided you credit:\n\nLuca Magri, Computer Vision Dojo, https://github.com/magrilu/cv-dojo\n\nSee CITATION.cff for a citable reference."
   },
   {
     "objectID": "SETUP.html",
@@ -372,84 +427,32 @@
     "text": "Troubleshooting\ngit push permission denied — your SSH key is not set up. Quick fix: use git remote set-url origin https://github.com/magrilu/cv-dojo.git and authenticate with a personal access token instead.\nSite published but unstyled — .nojekyll is missing from gh-pages, or Pages is pointing at the wrong branch.\nColab badge 404 — the branch in the badge URL must match yours (main), and the repository must be public."
   },
   {
-    "objectID": "LICENSE.html",
-    "href": "LICENSE.html",
-    "title": "",
+    "objectID": "about.html",
+    "href": "about.html",
+    "title": "About",
     "section": "",
-    "text": "Code\n\n\n\n\n\nLicensing\nThis repository contains two kinds of material, under two licences.\nCode — everything under src/, matlab/, and the code cells of the notebooks: MIT, see LICENSE-CODE.\nContent — prose, figures, exercises, and the markdown cells of the notebooks: Creative Commons Attribution 4.0 International (CC BY 4.0), see LICENSE-CONTENT.\nIn both cases you may reuse and adapt freely, provided you credit:\n\nLuca Magri, Computer Vision Dojo, https://github.com/magrilu/cv-dojo\n\nSee CITATION.cff for a citable reference."
+    "text": "These notebooks grew out of material prepared for Computer Vision courses and exercise sessions. They are still growing: I revise them as I teach with them, correct mistakes, add examples, and find better ways of explaining things.\nIf you find a mistake, something unclear, or simply want to discuss one of the notebooks, please write to me. Corrections and suggestions are always welcome.\nThe original MATLAB scripts used in the Politecnico exercise sessions are kept under matlab/."
   },
   {
-    "objectID": "tracks/bocconi.html",
-    "href": "tracks/bocconi.html",
-    "title": "Bocconi",
+    "objectID": "about.html#about-this-project",
+    "href": "about.html#about-this-project",
+    "title": "About",
     "section": "",
-    "text": "Reading order for the Bocconi course. Same material, different path: lighter on MATLAB legacy, heavier on the Python notebooks.\n\n\n\n\n\n\n\n\n#\nTopic\nNotebook\n\n\n\n\n1\nAffine rectification\nopen"
+    "text": "These notebooks grew out of material prepared for Computer Vision courses and exercise sessions. They are still growing: I revise them as I teach with them, correct mistakes, add examples, and find better ways of explaining things.\nIf you find a mistake, something unclear, or simply want to discuss one of the notebooks, please write to me. Corrections and suggestions are always welcome.\nThe original MATLAB scripts used in the Politecnico exercise sessions are kept under matlab/."
   },
   {
-    "objectID": "index.html",
-    "href": "index.html",
-    "title": "Computer Vision Dojo",
-    "section": "",
-    "text": "A dojo is a place for practice: somewhere to return to the same ideas, repeat simple gestures, and gradually make them your own.\nThis is a small and growing collection of notebooks on the geometric foundations of 3D computer vision: projective planes, homographies, rectification, robust fitting, and, in time, more.\nLLMs can now produce a surprising amount of working code in very little time, and much of it is correct. They will explain it as well, and clearly. But an explanation received is not the same as an argument understood.\nThe notebooks here therefore take a deliberately slower path. They are meant to be studied much like a mathematics book: with patience, perhaps with paper and pencil nearby, following each construction one step at a time. Every algorithm is developed through code that can be run, changed, broken, and put back together.\nSome parts of the collection are already usable; others are still sketches, experiments, or plans. This page is therefore both a course resource and a public notebook in progress. Over time, it may grow into a more complete set of notes on geometric computer vision.\nTo whoever has the patience to work through these pages: I hope you find results that are correct and useful, and that you will tell me when they are not. Above all I hope you find the pleasure of having understood something yourself, and some affection for the elegance of geometry underneath it all.",
-    "crumbs": [
-      "Home",
-      "Overview"
-    ]
-  },
-  {
-    "objectID": "index.html#the-notebooks",
-    "href": "index.html#the-notebooks",
-    "title": "Computer Vision Dojo",
-    "section": "The notebooks",
-    "text": "The notebooks\n\n\n\n\n\n\n\n\n01\nThe projective plane\npoints, lines, duality, conics\n\n\n02\nHomographies\nDLT from points and lines, warping\n\n\n03\nRectification\naffine, metric, stratified, direct\n\n\n04\nMeasuring from one view\nvanishing points, horizon, affine measurements\n\n\n05\nRobust fitting\nRANSAC, LMedS, MSAC, Hough\n\n\n06\nPutting it together\nfeature matching, stitching\n\n\n\nSections without a link are still in preparation.",
-    "crumbs": [
-      "Home",
-      "Overview"
-    ]
-  },
-  {
-    "objectID": "index.html#how-to-use-this-collection",
-    "href": "index.html#how-to-use-this-collection",
-    "title": "Computer Vision Dojo",
-    "section": "How to use this collection",
-    "text": "How to use this collection\nEach notebook is designed to run from top to bottom. You can open it in Colab and work through the cells in order.\nRead the explanations, inspect the intermediate quantities, and modify the examples. Keep paper nearby when a derivation becomes difficult. A notebook often becomes most useful when something is changed and the result is not quite what was expected.\nTo run the notebooks locally:\ngit clone https://github.com/magrilu/cv-dojo.git\ncd cv-dojo\npip install -r requirements.txt\nStudents following one of my courses can find a suggested reading order under Courses in the menu above.\nThe original MATLAB scripts used in the Politecnico exercise sessions are kept under matlab/.",
-    "crumbs": [
-      "Home",
-      "Overview"
-    ]
-  },
-  {
-    "objectID": "index.html#acknowledgements",
-    "href": "index.html#acknowledgements",
-    "title": "Computer Vision Dojo",
-    "section": "Acknowledgements",
-    "text": "Acknowledgements\nMy first thanks go to my father, Maurizio Magri, who taught me the joy and satisfaction of approaching mathematics armed with patience, paper, and pencil. I had to add an eraser, as my mistakes were rather more frequent than his.\nI hope these notebooks owe something to the way Andrea Fusiello taught me to approach computer vision. Whatever elegance they may contain is certainly inherited from his Computer Vision Toolkit, to which every interested reader is warmly—and immediately—referred. Any errors, of course, are entirely my own.\nI am also grateful to Giacomo Boracchi, with whom I have taught these topics on several occasions. His genuine commitment to teaching has been a source of inspiration. I share his conviction that teaching a student to reason clearly and independently is one of the most lasting ways in which we can contribute to the world.\nThese notebooks began as material for the exercise sessions in Vincenzo Caglioti’s course at Politecnico di Milano. I am grateful to him for the opportunity to develop and teach many of these ideas in that setting.",
-    "crumbs": [
-      "Home",
-      "Overview"
-    ]
-  },
-  {
-    "objectID": "index.html#about-this-project",
-    "href": "index.html#about-this-project",
-    "title": "Computer Vision Dojo",
-    "section": "About this project",
-    "text": "About this project\nThese notebooks grew out of material prepared for Computer Vision courses and exercise sessions. They are still growing: I revise them as I teach with them, correct mistakes, add examples, and find better ways of explaining things.\nIf you find a mistake, something unclear, or simply want to discuss one of the notebooks, please write to me. Corrections and suggestions are always welcome.",
-    "crumbs": [
-      "Home",
-      "Overview"
-    ]
-  },
-  {
-    "objectID": "index.html#using-this-material",
-    "href": "index.html#using-this-material",
-    "title": "Computer Vision Dojo",
+    "objectID": "about.html#using-this-material",
+    "href": "about.html#using-this-material",
+    "title": "About",
     "section": "Using this material",
-    "text": "Using this material\nPlease use the code and build on it. It is released under the MIT License.\nThe text and illustrations are licensed under CC BY-NC-ND 4.0: you are welcome to share them unchanged for non-commercial purposes, with appropriate credit. If you would like to translate, adapt, or reuse them in some other way, just write to me. You can have a look at the licensing page.\nIf you find this material useful and would like to cite it, here is a BibTeX entry:\n@software{magri_cvdojo,\n  author = {Magri, Luca},\n  title  = {Computer Vision Dojo},\n  year   = {2026},\n  url    = {https://github.com/magrilu/cv-dojo}\n}",
-    "crumbs": [
-      "Home",
-      "Overview"
-    ]
+    "text": "Using this material\nPlease use the code and build on it. It is released under the MIT License.\nThe text and illustrations are licensed under CC BY-NC-ND 4.0: you are welcome to share them unchanged for non-commercial purposes, with appropriate credit. If you would like to translate, adapt, or reuse them in some other way, just write to me. You can have a look at the licensing page."
+  },
+  {
+    "objectID": "about.html#citing",
+    "href": "about.html#citing",
+    "title": "About",
+    "section": "Citing",
+    "text": "Citing\nIf you find this material useful and would like to cite it, here is a BibTeX entry:\n@software{magri_cvdojo,\n  author = {Magri, Luca},\n  title  = {Computer Vision Dojo},\n  year   = {2026},\n  url    = {https://github.com/magrilu/cv-dojo}\n}"
   },
   {
     "objectID": "notebooks/rectification/affine.html",
