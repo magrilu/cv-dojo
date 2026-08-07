@@ -189,7 +189,7 @@ window.Quarto = {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../notebooks/04-rectification/affine.html">Rectification</a></li><li class="breadcrumb-item"><a href="../../notebooks/04-rectification/affine.html">Affine rectification</a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../notebooks/rectification/affine.html">Rectification</a></li><li class="breadcrumb-item"><a href="../../notebooks/rectification/affine.html">Affine rectification</a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
@@ -218,7 +218,7 @@ window.Quarto = {
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
             <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true">
- <span class="menu-text">Rectification</span></a>
+ <span class="menu-text">Camera</span></a>
           <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
@@ -226,7 +226,24 @@ window.Quarto = {
       <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../../notebooks/04-rectification/affine.html" class="sidebar-item-text sidebar-link active">
+  <a href="../../notebooks/camera/camera.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">The pinhole camera</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true">
+ <span class="menu-text">Rectification</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../notebooks/rectification/affine.html" class="sidebar-item-text sidebar-link active">
  <span class="menu-text">Affine rectification</span></a>
   </div>
 </li>
@@ -254,12 +271,12 @@ window.Quarto = {
   <li><a href="#where-it-breaks" id="toc-where-it-breaks" class="nav-link" data-scroll-target="#where-it-breaks">Where it breaks</a></li>
   <li><a href="#exercises" id="toc-exercises" class="nav-link" data-scroll-target="#exercises">Exercises</a></li>
   </ul>
-<div class="toc-actions"><ul><li><a href="https://github.com/magrilu/cv-dojo/blob/main/notebooks/04-rectification/affine.ipynb" class="toc-action"><i class="bi bi-github"></i>View source</a></li><li><a href="https://github.com/magrilu/cv-dojo/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></nav>
+<div class="toc-actions"><ul><li><a href="https://github.com/magrilu/cv-dojo/blob/main/notebooks/rectification/affine.ipynb" class="toc-action"><i class="bi bi-github"></i>View source</a></li><li><a href="https://github.com/magrilu/cv-dojo/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
-<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../notebooks/04-rectification/affine.html">Rectification</a></li><li class="breadcrumb-item"><a href="../../notebooks/04-rectification/affine.html">Affine rectification</a></li></ol></nav>
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../notebooks/rectification/affine.html">Rectification</a></li><li class="breadcrumb-item"><a href="../../notebooks/rectification/affine.html">Affine rectification</a></li></ol></nav>
 <div class="quarto-title">
 <h1 class="title">Affine rectification</h1>
 </div>
@@ -280,7 +297,7 @@ window.Quarto = {
 
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><a href="https://colab.research.google.com/github/magrilu/cv-dojo/blob/main/notebooks/04-rectification/affine.ipynb"><img src="https://colab.research.google.com/assets/colab-badge.svg" class="img-fluid figure-img"></a></p>
+<p><a href="https://colab.research.google.com/github/magrilu/cv-dojo/blob/main/notebooks/rectification/affine.ipynb"><img src="https://colab.research.google.com/assets/colab-badge.svg" class="img-fluid figure-img"></a></p>
 <figcaption>Open In Colab</figcaption>
 </figure>
 </div>
@@ -321,7 +338,7 @@ window.Quarto = {
 <span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>                        <span class="st">"https://github.com/magrilu/cv-dojo.git"</span>], check<span class="op">=</span><span class="va">True</span>)</span>
 <span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>    os.chdir(<span class="st">"cv-dojo"</span>)</span>
 <span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>sys.path.insert(<span class="dv">0</span>, os.path.abspath(<span class="st">"../../src"</span>))   <span class="co"># local run, from notebooks/04-rectification</span></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>sys.path.insert(<span class="dv">0</span>, os.path.abspath(<span class="st">"../../src"</span>))   <span class="co"># local run, from notebooks/rectification</span></span>
 <span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>sys.path.insert(<span class="dv">0</span>, os.path.abspath(<span class="st">"src"</span>))        <span class="co"># Colab run, from the repo root</span></span>
 <span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
@@ -343,7 +360,7 @@ window.Quarto = {
 <div class="cell-output cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="affine_files/figure-html/cell-3-output-2.png" class="img-fluid figure-img"></p>
+<p><img src="affine_files/figure-html/cell-3-output-2.png" width="517" height="409" class="figure-img"></p>
 </figure>
 </div>
 </div>
@@ -363,7 +380,7 @@ window.Quarto = {
 <div class="cell-output cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="affine_files/figure-html/cell-4-output-1.png" class="img-fluid figure-img"></p>
+<p><img src="affine_files/figure-html/cell-4-output-1.png" width="517" height="409" class="figure-img"></p>
 </figure>
 </div>
 </div>
@@ -424,7 +441,7 @@ l'_inf = [ 9.43065754e-01 -3.32606350e-01 -1.21841479e+03]</code></pre>
 <div class="cell-output cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="affine_files/figure-html/cell-7-output-1.png" class="img-fluid figure-img"></p>
+<p><img src="affine_files/figure-html/cell-7-output-1.png" width="282" height="537" class="figure-img"></p>
 </figure>
 </div>
 </div>
@@ -448,7 +465,7 @@ H_P = \begin{bmatrix} 1 &amp; 0 &amp; 0 \\ 0 &amp; 1 &amp; 0 \\ \ell_1 &amp; \el
  [ 0.00000000e+00  1.00000000e+00  0.00000000e+00]
  [ 9.43065754e-01 -3.32606350e-01 -1.21841479e+03]] 
 
-H_P^-T l'_inf = [-0. -0.  1.]</code></pre>
+H_P^-T l'_inf = [-0.  0.  1.]</code></pre>
 </div>
 </div>
 </section>
@@ -465,7 +482,7 @@ H_P^-T l'_inf = [-0. -0.  1.]</code></pre>
 <div class="cell-output cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="affine_files/figure-html/cell-9-output-1.png" class="img-fluid figure-img"></p>
+<p><img src="affine_files/figure-html/cell-9-output-1.png" width="986" height="366" class="figure-img"></p>
 </figure>
 </div>
 </div>
@@ -485,7 +502,7 @@ H_P^-T l'_inf = [-0. -0.  1.]</code></pre>
 <span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f"</span><span class="sc">{</span>name<span class="sc">}</span><span class="ss">: third coordinate = </span><span class="sc">{</span>w[<span class="dv">2</span>] <span class="op">/</span> np<span class="sc">.</span>linalg<span class="sc">.</span>norm(w)<span class="sc">:+.2e}</span><span class="ss">"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>a x c: third coordinate = +0.00e+00
-b x d: third coordinate = -4.56e-17</code></pre>
+b x d: third coordinate = +2.28e-17</code></pre>
 </div>
 </div>
 </section>
@@ -987,7 +1004,7 @@ endpoint noise 2.0 px  -&gt;  relative error on l'_inf 0.0383</code></pre>
 </div>   
     <div class="nav-footer-center">
       &nbsp;
-    <div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/magrilu/cv-dojo/blob/main/notebooks/04-rectification/affine.ipynb" class="toc-action"><i class="bi bi-github"></i>View source</a></li><li><a href="https://github.com/magrilu/cv-dojo/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></div>
+    <div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/magrilu/cv-dojo/blob/main/notebooks/rectification/affine.ipynb" class="toc-action"><i class="bi bi-github"></i>View source</a></li><li><a href="https://github.com/magrilu/cv-dojo/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></div>
     <div class="nav-footer-right">
       <ul class="footer-items list-unstyled">
     <li class="nav-item compact">

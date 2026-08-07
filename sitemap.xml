@@ -1,27 +1,31 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>https://magrilu.github.io/cv-dojo/notebooks/04-rectification/affine.html</loc>
-    <lastmod>2026-08-07T06:48:07.581Z</lastmod>
+    <loc>https://magrilu.github.io/cv-dojo/notebooks/rectification/affine.html</loc>
+    <lastmod>2026-08-07T15:39:26.429Z</lastmod>
   </url>
   <url>
-    <loc>https://magrilu.github.io/cv-dojo/tracks/iacv.html</loc>
-    <lastmod>2026-08-07T06:48:07.588Z</lastmod>
+    <loc>https://magrilu.github.io/cv-dojo/index.html</loc>
+    <lastmod>2026-08-07T15:32:59.931Z</lastmod>
   </url>
   <url>
-    <loc>https://magrilu.github.io/cv-dojo/SETUP.html</loc>
-    <lastmod>2026-08-07T06:48:07.554Z</lastmod>
+    <loc>https://magrilu.github.io/cv-dojo/tracks/bocconi.html</loc>
+    <lastmod>2026-08-07T15:32:59.930Z</lastmod>
   </url>
   <url>
     <loc>https://magrilu.github.io/cv-dojo/LICENSE.html</loc>
     <lastmod>2026-08-07T06:48:07.552Z</lastmod>
   </url>
   <url>
-    <loc>https://magrilu.github.io/cv-dojo/tracks/bocconi.html</loc>
-    <lastmod>2026-08-07T06:48:07.587Z</lastmod>
+    <loc>https://magrilu.github.io/cv-dojo/SETUP.html</loc>
+    <lastmod>2026-08-07T15:32:59.929Z</lastmod>
   </url>
   <url>
-    <loc>https://magrilu.github.io/cv-dojo/index.html</loc>
-    <lastmod>2026-08-07T07:45:08.641Z</lastmod>
+    <loc>https://magrilu.github.io/cv-dojo/tracks/iacv.html</loc>
+    <lastmod>2026-08-07T15:32:59.930Z</lastmod>
+  </url>
+  <url>
+    <loc>https://magrilu.github.io/cv-dojo/notebooks/camera/camera.html</loc>
+    <lastmod>2026-08-07T15:39:16.095Z</lastmod>
   </url>
 </urlset>

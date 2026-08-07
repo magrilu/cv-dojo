@@ -190,7 +190,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
             <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true">
- <span class="menu-text">Rectification</span></a>
+ <span class="menu-text">Camera</span></a>
           <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
@@ -198,7 +198,24 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./notebooks/04-rectification/affine.html" class="sidebar-item-text sidebar-link">
+  <a href="./notebooks/camera/camera.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">The pinhole camera</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true">
+ <span class="menu-text">Rectification</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./notebooks/rectification/affine.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Affine rectification</span></a>
   </div>
 </li>
@@ -279,7 +296,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <tr class="odd">
 <td>03</td>
 <td>Rectification</td>
-<td><a href="./notebooks/04-rectification/affine.html">affine</a>, metric, stratified, direct</td>
+<td><a href="./notebooks/rectification/affine.html">affine</a>, metric, stratified, direct</td>
 </tr>
 <tr class="even">
 <td>04</td>
@@ -827,7 +844,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb3-33"><a href="#cb3-33" aria-hidden="true" tabindex="-1"></a><span class="pp">|-----|--------------------------|---------------------------------------------------------------------|</span></span>
 <span id="cb3-34"><a href="#cb3-34" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> 01  <span class="pp">|</span> The projective plane     <span class="pp">|</span> points, lines, duality, conics                                       <span class="pp">|</span></span>
 <span id="cb3-35"><a href="#cb3-35" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> 02  <span class="pp">|</span> Homographies             <span class="pp">|</span> DLT from points and lines, warping                                   <span class="pp">|</span></span>
-<span id="cb3-36"><a href="#cb3-36" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> 03  <span class="pp">|</span> Rectification            <span class="pp">|</span> <span class="co">[</span><span class="ot">affine</span><span class="co">](notebooks/04-rectification/affine.ipynb)</span>, metric, stratified, direct <span class="pp">|</span></span>
+<span id="cb3-36"><a href="#cb3-36" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> 03  <span class="pp">|</span> Rectification            <span class="pp">|</span> <span class="co">[</span><span class="ot">affine</span><span class="co">](notebooks/rectification/affine.ipynb)</span>, metric, stratified, direct <span class="pp">|</span></span>
 <span id="cb3-37"><a href="#cb3-37" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> 04  <span class="pp">|</span> Measuring from one view  <span class="pp">|</span> vanishing points, horizon, affine measurements                       <span class="pp">|</span></span>
 <span id="cb3-38"><a href="#cb3-38" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> 05  <span class="pp">|</span> Robust fitting           <span class="pp">|</span> RANSAC, LMedS, MSAC, Hough                                           <span class="pp">|</span></span>
 <span id="cb3-39"><a href="#cb3-39" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> 06  <span class="pp">|</span> Putting it together      <span class="pp">|</span> feature matching, stitching                                          <span class="pp">|</span></span>
