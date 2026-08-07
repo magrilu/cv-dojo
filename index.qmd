@@ -6,6 +6,7 @@ author:
   url: https://magrilu.github.io/
 ---
 
+![](images/cv_dojo.jpg){fig-align="center" width="60%"}
 A dojo is a place for practice: somewhere to return to the same ideas, repeat
 simple gestures, and gradually make them your own.
 
