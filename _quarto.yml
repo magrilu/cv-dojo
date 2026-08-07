@@ -20,12 +20,11 @@ website:
     left:
       - href: index.qmd
         text: Home
-      - text: "Courses"
-        menu:
-          - href: tracks/iacv.qmd
-            text: "IACV — Politecnico di Milano"
-          - href: tracks/bocconi.qmd
-            text: "IACV - Bocconi"
+      - href: about.qmd
+        text: About
+    right:
+      - icon: github
+        href: https://github.com/magrilu/cv-dojo
   sidebar:
     style: docked
     search: true

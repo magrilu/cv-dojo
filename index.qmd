@@ -61,12 +61,28 @@ cd cv-dojo
 pip install -r requirements.txt
 ```
 
-Students following one of my courses can find a suggested reading order under
-**Courses** in the menu above.
+Students following [IACV](https://magrilu.github.io/iacv/) will find a
+suggested reading order on the course page.
 
-The original MATLAB scripts used in the Politecnico exercise sessions are kept
-under [`matlab/`](https://github.com/magrilu/cv-dojo/tree/main/matlab).
 
+
+## Working together for a research thesis?
+
+If you are starting to feel like a black belt: the geometry here is settled,
+but the questions it opens are not. There are still plenty of interesting
+problems in 3D vision with a strong geometric flavour.
+
+If any of these notebooks left you wondering about something they did not
+answer, I would like to hear from you.
+
+I supervise theses at Politecnico di Milano and Bocconi, mostly in
+geometry-driven vision. Current topics, guidance, and past theses are on my
+main site: [topics](https://magrilu.github.io/thesis/) ·
+[how-to](https://magrilu.github.io/tht/) ·
+[hall of fame](https://magrilu.github.io/thof/).
+
+[Drop me an email](mailto:luca.magri@polimi.it), tell me which notebook you
+looked at and what you found interesting in it.
 
 
 ## Acknowledgements
@@ -91,36 +107,3 @@ world.
 
 These notebooks began as material for the exercise sessions in Vincenzo Caglioti’s
 course at Politecnico di Milano. I am grateful to him for the opportunity to develop and teach many of these ideas in that setting.
-
-
-
-## About this project
-
-These notebooks grew out of material prepared for Computer Vision courses and exercise sessions. They are still growing: I revise them as I teach with
-them, correct mistakes, add examples, and find better ways of explaining things.
-
-If you find a mistake, something unclear, or simply want to discuss one of the
-notebooks, please write to me. Corrections and suggestions are always welcome.
-
-## Using this material
-
-Please use the code and build on it. It is released under the MIT License.
-
-The text and illustrations are licensed under CC BY-NC-ND 4.0: you are welcome
-to share them unchanged for non-commercial purposes, with appropriate credit.
-If you would like to translate, adapt, or reuse them in some other way, just
-write to me. You can have a look at the [licensing
-page](https://github.com/magrilu/cv-dojo/blob/main/LICENSE.md).
-
-
-
-If you find this material useful and would like to cite it, here is a BibTeX entry:
-
-``` bibtex
-@software{magri_cvdojo,
-  author = {Magri, Luca},
-  title  = {Computer Vision Dojo},
-  year   = {2026},
-  url    = {https://github.com/magrilu/cv-dojo}
-}
-```

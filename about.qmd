@@ -1,0 +1,40 @@
+---
+title: "About"
+---
+
+## About this project
+
+These notebooks grew out of material prepared for Computer Vision courses and
+exercise sessions. They are still growing: I revise them as I teach with them,
+correct mistakes, add examples, and find better ways of explaining things.
+
+If you find a mistake, something unclear, or simply want to discuss one of the
+notebooks, please [write to me](mailto:luca.magri@polimi.it). Corrections and
+suggestions are always welcome.
+
+The original MATLAB scripts used in the Politecnico exercise sessions are kept
+under [`matlab/`](https://github.com/magrilu/cv-dojo/tree/main/matlab).
+
+## Using this material
+
+Please use the code and build on it. It is released under the MIT License.
+
+The text and illustrations are licensed under CC BY-NC-ND 4.0: you are welcome
+to share them unchanged for non-commercial purposes, with appropriate credit.
+If you would like to translate, adapt, or reuse them in some other way, just
+write to me. You can have a look at the
+[licensing page](https://github.com/magrilu/cv-dojo/blob/main/LICENSE.md).
+
+## Citing
+
+If you find this material useful and would like to cite it, here is a BibTeX
+entry:
+
+``` bibtex
+@software{magri_cvdojo,
+  author = {Magri, Luca},
+  title  = {Computer Vision Dojo},
+  year   = {2026},
+  url    = {https://github.com/magrilu/cv-dojo}
+}
+```
