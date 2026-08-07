@@ -32,6 +32,9 @@ website:
     contents:
       - href: index.qmd
         text: Overview
+      - section: "Camera"
+        contents:
+          - notebooks/camera/camera.ipynb
       - section: "Rectification"
         contents:
           - notebooks/rectification/affine.ipynb
