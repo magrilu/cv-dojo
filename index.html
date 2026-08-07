@@ -6,6 +6,7 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
+<meta name="author" content="Luca Magri">
 
 <title>Computer Vision Dojo</title>
 <style>
@@ -216,7 +217,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li><a href="#the-notebooks" id="toc-the-notebooks" class="nav-link active" data-scroll-target="#the-notebooks">The notebooks</a></li>
   <li><a href="#how-to-use-this-collection" id="toc-how-to-use-this-collection" class="nav-link" data-scroll-target="#how-to-use-this-collection">How to use this collection</a></li>
   <li><a href="#acknowledgements" id="toc-acknowledgements" class="nav-link" data-scroll-target="#acknowledgements">Acknowledgements</a></li>
-  <li><a href="#about" id="toc-about" class="nav-link" data-scroll-target="#about">About</a></li>
+  <li><a href="#about-this-project" id="toc-about-this-project" class="nav-link" data-scroll-target="#about-this-project">About this project</a></li>
+  <li><a href="#using-this-material" id="toc-using-this-material" class="nav-link" data-scroll-target="#using-this-material">Using this material</a></li>
   </ul>
 <div class="toc-actions"><ul><li><a href="https://github.com/magrilu/cv-dojo/blob/main/index.qmd" class="toc-action"><i class="bi bi-github"></i>View source</a></li><li><a href="https://github.com/magrilu/cv-dojo/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></nav>
     </div>
@@ -233,6 +235,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 <div class="quarto-title-meta">
 
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p><a href="https://magrilu.github.io/">Luca Magri</a> </p>
+          </div>
+  </div>
     
   
     
@@ -245,7 +253,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 <p>A dojo is a place for practice: somewhere to return to the same ideas, repeat simple gestures, and gradually make them your own.</p>
 <p>This is a small and growing collection of notebooks on the geometric foundations of 3D computer vision: projective planes, homographies, rectification, robust fitting, and, in time, more.</p>
-<p>LLM can now produce a surprising amount of working code in very little time, and much of it is correct. They will explain it as well, and clearly. But an explanation received is not the same as an argument understood.</p>
+<p>LLMs can now produce a surprising amount of working code in very little time, and much of it is correct. They will explain it as well, and clearly. But an explanation received is not the same as an argument understood.</p>
 <p>The notebooks here therefore take a deliberately slower path. They are meant to be studied much like a mathematics book: with patience, perhaps with paper and pencil nearby, following each construction one step at a time. Every algorithm is developed through code that can be run, changed, broken, and put back together.</p>
 <p>Some parts of the collection are already usable; others are still sketches, experiments, or plans. This page is therefore both a course resource and a public notebook in progress. Over time, it may grow into a more complete set of notes on geometric computer vision.</p>
 <p>To whoever has the patience to work through these pages: I hope you find results that are correct and useful, and that you will tell me when they are not. Above all I hope you find the pleasure of having understood something yourself, and some affection for the elegance of geometry underneath it all.</p>
@@ -310,12 +318,16 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>I am also grateful to Giacomo Boracchi, with whom I have taught these topics on several occasions. His genuine commitment to teaching has been a source of inspiration. I share his conviction that teaching a student to reason clearly and independently is one of the most lasting ways in which we can contribute to the world.</p>
 <p>These notebooks began as material for the exercise sessions in Vincenzo Caglioti’s course at Politecnico di Milano. I am grateful to him for the opportunity to develop and teach many of these ideas in that setting.</p>
 </section>
-<section id="about" class="level2">
-<h2 class="anchored" data-anchor-id="about">About</h2>
-<p>This collection is maintained by <a href="https://magrilu.github.io/">Luca Magri</a> at Politecnico di Milano.</p>
-<p>Corrections, questions, and suggestions are always welcome. You can reach me by email.</p>
-<p>Code is released under the MIT License. Text and figures are licensed under CC BY-NC-ND 4.0; see the <a href="https://github.com/magrilu/cv-dojo/blob/main/LICENSE.md">licensing page</a>.</p>
-<p>To cite this collection:</p>
+<section id="about-this-project" class="level2">
+<h2 class="anchored" data-anchor-id="about-this-project">About this project</h2>
+<p>These notebooks grew out of material prepared for Computer Vision courses and exercise sessions. They are still growing: I revise them as I teach with them, correct mistakes, add examples, and find better ways of explaining things.</p>
+<p>If you find a mistake, something unclear, or simply want to discuss one of the notebooks, please write to me. Corrections and suggestions are always welcome.</p>
+</section>
+<section id="using-this-material" class="level2">
+<h2 class="anchored" data-anchor-id="using-this-material">Using this material</h2>
+<p>Please use the code and build on it. It is released under the MIT License.</p>
+<p>The text and illustrations are licensed under CC BY-NC-ND 4.0: you are welcome to share them unchanged for non-commercial purposes, with appropriate credit. If you would like to translate, adapt, or reuse them in some other way, just write to me. You can have a look at the <a href="https://github.com/magrilu/cv-dojo/blob/main/LICENSE.md">licensing page</a>.</p>
+<p>If you find this material useful and would like to cite it, here is a BibTeX entry:</p>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode bibtex code-with-copy"><code class="sourceCode bibtex"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co">@software{magri_cvdojo,</span></span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="co">  author = {Magri, Luca},</span></span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="co">  title  = {Computer Vision Dojo},</span></span>
@@ -783,118 +795,128 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3" data-shortcodes="false"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="an">title:</span><span class="co"> "Computer Vision Dojo"</span></span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="an">subtitle:</span><span class="co"> "a geometric way"</span></span>
-<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
-<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>A dojo is a place for practice: somewhere to return to the same ideas, repeat</span>
-<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>simple gestures, and gradually make them your own.</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="an">author:</span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="co">  name: Luca Magri</span></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a><span class="co">  url: https://magrilu.github.io/</span></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
 <span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>This is a small and growing collection of notebooks on the geometric foundations of 3D computer vision: projective planes, homographies, rectification, robust fitting, and, in time, more.</span>
-<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>LLM can now produce a surprising amount of working code in very little time, and much of it is correct. They will explain it as well, and clearly. But an explanation received is not the same as an argument understood.</span>
-<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a>The notebooks here therefore take a deliberately slower path. They are meant to</span>
-<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a>be studied much like a mathematics book: with patience, perhaps with paper and</span>
-<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a>pencil nearby, following each construction one step at a time. Every algorithm</span>
-<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a>is developed through code that can be run, changed, broken, and put back</span>
-<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a>together.</span>
-<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-19"><a href="#cb3-19" aria-hidden="true" tabindex="-1"></a>Some parts of the collection are already usable; others are still sketches,</span>
-<span id="cb3-20"><a href="#cb3-20" aria-hidden="true" tabindex="-1"></a>experiments, or plans. This page is therefore both a course resource and a</span>
-<span id="cb3-21"><a href="#cb3-21" aria-hidden="true" tabindex="-1"></a>public notebook in progress. Over time, it may grow into a more complete set of</span>
-<span id="cb3-22"><a href="#cb3-22" aria-hidden="true" tabindex="-1"></a>notes on geometric computer vision.</span>
-<span id="cb3-23"><a href="#cb3-23" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-24"><a href="#cb3-24" aria-hidden="true" tabindex="-1"></a>To whoever has the patience to work through these pages: I hope you find results that are correct and useful, and that you will tell me when they are not. Above all I hope you find the pleasure of having understood something yourself, and some affection for the elegance of geometry underneath it all.</span>
-<span id="cb3-25"><a href="#cb3-25" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>A dojo is a place for practice: somewhere to return to the same ideas, repeat</span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>simple gestures, and gradually make them your own.</span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>This is a small and growing collection of notebooks on the geometric foundations of 3D computer vision: projective planes, homographies, rectification, robust fitting, and, in time, more.</span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a>LLMs can now produce a surprising amount of working code in very little time, and much of it is correct. They will explain it as well, and clearly. But an explanation received is not the same as an argument understood.</span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a>The notebooks here therefore take a deliberately slower path. They are meant to</span>
+<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a>be studied much like a mathematics book: with patience, perhaps with paper and</span>
+<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a>pencil nearby, following each construction one step at a time. Every algorithm</span>
+<span id="cb3-19"><a href="#cb3-19" aria-hidden="true" tabindex="-1"></a>is developed through code that can be run, changed, broken, and put back</span>
+<span id="cb3-20"><a href="#cb3-20" aria-hidden="true" tabindex="-1"></a>together.</span>
+<span id="cb3-21"><a href="#cb3-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-22"><a href="#cb3-22" aria-hidden="true" tabindex="-1"></a>Some parts of the collection are already usable; others are still sketches,</span>
+<span id="cb3-23"><a href="#cb3-23" aria-hidden="true" tabindex="-1"></a>experiments, or plans. This page is therefore both a course resource and a</span>
+<span id="cb3-24"><a href="#cb3-24" aria-hidden="true" tabindex="-1"></a>public notebook in progress. Over time, it may grow into a more complete set of</span>
+<span id="cb3-25"><a href="#cb3-25" aria-hidden="true" tabindex="-1"></a>notes on geometric computer vision.</span>
 <span id="cb3-26"><a href="#cb3-26" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-27"><a href="#cb3-27" aria-hidden="true" tabindex="-1"></a><span class="fu">## The notebooks</span></span>
+<span id="cb3-27"><a href="#cb3-27" aria-hidden="true" tabindex="-1"></a>To whoever has the patience to work through these pages: I hope you find results that are correct and useful, and that you will tell me when they are not. Above all I hope you find the pleasure of having understood something yourself, and some affection for the elegance of geometry underneath it all.</span>
 <span id="cb3-28"><a href="#cb3-28" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-29"><a href="#cb3-29" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span>     <span class="pp">|</span>                          <span class="pp">|</span>                                                                     <span class="pp">|</span></span>
-<span id="cb3-30"><a href="#cb3-30" aria-hidden="true" tabindex="-1"></a><span class="pp">|-----|--------------------------|---------------------------------------------------------------------|</span></span>
-<span id="cb3-31"><a href="#cb3-31" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> 01  <span class="pp">|</span> The projective plane     <span class="pp">|</span> points, lines, duality, conics                                       <span class="pp">|</span></span>
-<span id="cb3-32"><a href="#cb3-32" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> 02  <span class="pp">|</span> Homographies             <span class="pp">|</span> DLT from points and lines, warping                                   <span class="pp">|</span></span>
-<span id="cb3-33"><a href="#cb3-33" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> 03  <span class="pp">|</span> Rectification            <span class="pp">|</span> <span class="co">[</span><span class="ot">affine</span><span class="co">](notebooks/04-rectification/affine.ipynb)</span>, metric, stratified, direct <span class="pp">|</span></span>
-<span id="cb3-34"><a href="#cb3-34" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> 04  <span class="pp">|</span> Measuring from one view  <span class="pp">|</span> vanishing points, horizon, affine measurements                       <span class="pp">|</span></span>
-<span id="cb3-35"><a href="#cb3-35" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> 05  <span class="pp">|</span> Robust fitting           <span class="pp">|</span> RANSAC, LMedS, MSAC, Hough                                           <span class="pp">|</span></span>
-<span id="cb3-36"><a href="#cb3-36" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> 06  <span class="pp">|</span> Putting it together      <span class="pp">|</span> feature matching, stitching                                          <span class="pp">|</span></span>
-<span id="cb3-37"><a href="#cb3-37" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-38"><a href="#cb3-38" aria-hidden="true" tabindex="-1"></a>: {tbl-colwidths="<span class="co">[</span><span class="ot">8,32,60</span><span class="co">]</span>"}</span>
-<span id="cb3-39"><a href="#cb3-39" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-40"><a href="#cb3-40" aria-hidden="true" tabindex="-1"></a>Sections without a link are still in preparation.</span>
-<span id="cb3-41"><a href="#cb3-41" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-42"><a href="#cb3-42" aria-hidden="true" tabindex="-1"></a><span class="fu">## How to use this collection</span></span>
-<span id="cb3-43"><a href="#cb3-43" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-44"><a href="#cb3-44" aria-hidden="true" tabindex="-1"></a>Each notebook is designed to run from top to bottom. You can open it in Colab</span>
-<span id="cb3-45"><a href="#cb3-45" aria-hidden="true" tabindex="-1"></a>and work through the cells in order. </span>
+<span id="cb3-29"><a href="#cb3-29" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-30"><a href="#cb3-30" aria-hidden="true" tabindex="-1"></a><span class="fu">## The notebooks</span></span>
+<span id="cb3-31"><a href="#cb3-31" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-32"><a href="#cb3-32" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span>     <span class="pp">|</span>                          <span class="pp">|</span>                                                                     <span class="pp">|</span></span>
+<span id="cb3-33"><a href="#cb3-33" aria-hidden="true" tabindex="-1"></a><span class="pp">|-----|--------------------------|---------------------------------------------------------------------|</span></span>
+<span id="cb3-34"><a href="#cb3-34" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> 01  <span class="pp">|</span> The projective plane     <span class="pp">|</span> points, lines, duality, conics                                       <span class="pp">|</span></span>
+<span id="cb3-35"><a href="#cb3-35" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> 02  <span class="pp">|</span> Homographies             <span class="pp">|</span> DLT from points and lines, warping                                   <span class="pp">|</span></span>
+<span id="cb3-36"><a href="#cb3-36" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> 03  <span class="pp">|</span> Rectification            <span class="pp">|</span> <span class="co">[</span><span class="ot">affine</span><span class="co">](notebooks/04-rectification/affine.ipynb)</span>, metric, stratified, direct <span class="pp">|</span></span>
+<span id="cb3-37"><a href="#cb3-37" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> 04  <span class="pp">|</span> Measuring from one view  <span class="pp">|</span> vanishing points, horizon, affine measurements                       <span class="pp">|</span></span>
+<span id="cb3-38"><a href="#cb3-38" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> 05  <span class="pp">|</span> Robust fitting           <span class="pp">|</span> RANSAC, LMedS, MSAC, Hough                                           <span class="pp">|</span></span>
+<span id="cb3-39"><a href="#cb3-39" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> 06  <span class="pp">|</span> Putting it together      <span class="pp">|</span> feature matching, stitching                                          <span class="pp">|</span></span>
+<span id="cb3-40"><a href="#cb3-40" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-41"><a href="#cb3-41" aria-hidden="true" tabindex="-1"></a>: {tbl-colwidths="<span class="co">[</span><span class="ot">8,32,60</span><span class="co">]</span>"}</span>
+<span id="cb3-42"><a href="#cb3-42" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-43"><a href="#cb3-43" aria-hidden="true" tabindex="-1"></a>Sections without a link are still in preparation.</span>
+<span id="cb3-44"><a href="#cb3-44" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-45"><a href="#cb3-45" aria-hidden="true" tabindex="-1"></a><span class="fu">## How to use this collection</span></span>
 <span id="cb3-46"><a href="#cb3-46" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-47"><a href="#cb3-47" aria-hidden="true" tabindex="-1"></a>Read the explanations, inspect the intermediate quantities, and modify the</span>
-<span id="cb3-48"><a href="#cb3-48" aria-hidden="true" tabindex="-1"></a>examples. Keep paper nearby when a derivation becomes difficult. A notebook</span>
-<span id="cb3-49"><a href="#cb3-49" aria-hidden="true" tabindex="-1"></a>often becomes most useful when something is changed and the result is not quite</span>
-<span id="cb3-50"><a href="#cb3-50" aria-hidden="true" tabindex="-1"></a>what was expected.</span>
-<span id="cb3-51"><a href="#cb3-51" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-52"><a href="#cb3-52" aria-hidden="true" tabindex="-1"></a>To run the notebooks locally:</span>
-<span id="cb3-53"><a href="#cb3-53" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-54"><a href="#cb3-54" aria-hidden="true" tabindex="-1"></a><span class="in">``` bash</span></span>
-<span id="cb3-55"><a href="#cb3-55" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> clone https://github.com/magrilu/cv-dojo.git</span>
-<span id="cb3-56"><a href="#cb3-56" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> cv-dojo</span>
-<span id="cb3-57"><a href="#cb3-57" aria-hidden="true" tabindex="-1"></a><span class="ex">pip</span> install <span class="at">-r</span> requirements.txt</span>
-<span id="cb3-58"><a href="#cb3-58" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb3-59"><a href="#cb3-59" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-60"><a href="#cb3-60" aria-hidden="true" tabindex="-1"></a>Students following one of my courses can find a suggested reading order under</span>
-<span id="cb3-61"><a href="#cb3-61" aria-hidden="true" tabindex="-1"></a>**Courses** in the menu above.</span>
+<span id="cb3-47"><a href="#cb3-47" aria-hidden="true" tabindex="-1"></a>Each notebook is designed to run from top to bottom. You can open it in Colab</span>
+<span id="cb3-48"><a href="#cb3-48" aria-hidden="true" tabindex="-1"></a>and work through the cells in order. </span>
+<span id="cb3-49"><a href="#cb3-49" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-50"><a href="#cb3-50" aria-hidden="true" tabindex="-1"></a>Read the explanations, inspect the intermediate quantities, and modify the</span>
+<span id="cb3-51"><a href="#cb3-51" aria-hidden="true" tabindex="-1"></a>examples. Keep paper nearby when a derivation becomes difficult. A notebook</span>
+<span id="cb3-52"><a href="#cb3-52" aria-hidden="true" tabindex="-1"></a>often becomes most useful when something is changed and the result is not quite</span>
+<span id="cb3-53"><a href="#cb3-53" aria-hidden="true" tabindex="-1"></a>what was expected.</span>
+<span id="cb3-54"><a href="#cb3-54" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-55"><a href="#cb3-55" aria-hidden="true" tabindex="-1"></a>To run the notebooks locally:</span>
+<span id="cb3-56"><a href="#cb3-56" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-57"><a href="#cb3-57" aria-hidden="true" tabindex="-1"></a><span class="in">``` bash</span></span>
+<span id="cb3-58"><a href="#cb3-58" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> clone https://github.com/magrilu/cv-dojo.git</span>
+<span id="cb3-59"><a href="#cb3-59" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> cv-dojo</span>
+<span id="cb3-60"><a href="#cb3-60" aria-hidden="true" tabindex="-1"></a><span class="ex">pip</span> install <span class="at">-r</span> requirements.txt</span>
+<span id="cb3-61"><a href="#cb3-61" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 <span id="cb3-62"><a href="#cb3-62" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-63"><a href="#cb3-63" aria-hidden="true" tabindex="-1"></a>The original MATLAB scripts used in the Politecnico exercise sessions are kept</span>
-<span id="cb3-64"><a href="#cb3-64" aria-hidden="true" tabindex="-1"></a>under <span class="co">[</span><span class="ot">`matlab/`</span><span class="co">](https://github.com/magrilu/cv-dojo/tree/main/matlab)</span>.</span>
+<span id="cb3-63"><a href="#cb3-63" aria-hidden="true" tabindex="-1"></a>Students following one of my courses can find a suggested reading order under</span>
+<span id="cb3-64"><a href="#cb3-64" aria-hidden="true" tabindex="-1"></a>**Courses** in the menu above.</span>
 <span id="cb3-65"><a href="#cb3-65" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-66"><a href="#cb3-66" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-67"><a href="#cb3-67" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-68"><a href="#cb3-68" aria-hidden="true" tabindex="-1"></a><span class="fu">## Acknowledgements</span></span>
+<span id="cb3-66"><a href="#cb3-66" aria-hidden="true" tabindex="-1"></a>The original MATLAB scripts used in the Politecnico exercise sessions are kept</span>
+<span id="cb3-67"><a href="#cb3-67" aria-hidden="true" tabindex="-1"></a>under <span class="co">[</span><span class="ot">`matlab/`</span><span class="co">](https://github.com/magrilu/cv-dojo/tree/main/matlab)</span>.</span>
+<span id="cb3-68"><a href="#cb3-68" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb3-69"><a href="#cb3-69" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb3-70"><a href="#cb3-70" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-71"><a href="#cb3-71" aria-hidden="true" tabindex="-1"></a>My first thanks go to my father, Maurizio Magri, who taught me the joy and</span>
-<span id="cb3-72"><a href="#cb3-72" aria-hidden="true" tabindex="-1"></a>satisfaction of approaching mathematics armed with patience, paper, and pencil.</span>
-<span id="cb3-73"><a href="#cb3-73" aria-hidden="true" tabindex="-1"></a>I had to add an eraser, as my mistakes were rather more frequent than his.</span>
-<span id="cb3-74"><a href="#cb3-74" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-75"><a href="#cb3-75" aria-hidden="true" tabindex="-1"></a>I hope these notebooks owe something to the way Andrea Fusiello taught me to</span>
-<span id="cb3-76"><a href="#cb3-76" aria-hidden="true" tabindex="-1"></a>approach computer vision. Whatever elegance they may contain is certainly</span>
-<span id="cb3-77"><a href="#cb3-77" aria-hidden="true" tabindex="-1"></a>inherited from his</span>
-<span id="cb3-78"><a href="#cb3-78" aria-hidden="true" tabindex="-1"></a><span class="co">[</span><span class="ot">Computer Vision Toolkit</span><span class="co">](https://github.com/fusiello/Computer_Vision_Toolkit)</span>,</span>
-<span id="cb3-79"><a href="#cb3-79" aria-hidden="true" tabindex="-1"></a>to which every interested reader is warmly—and immediately—referred. Any errors,</span>
-<span id="cb3-80"><a href="#cb3-80" aria-hidden="true" tabindex="-1"></a>of course, are entirely my own.</span>
-<span id="cb3-81"><a href="#cb3-81" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-82"><a href="#cb3-82" aria-hidden="true" tabindex="-1"></a>I am also grateful to Giacomo Boracchi, with whom I have taught these topics on</span>
-<span id="cb3-83"><a href="#cb3-83" aria-hidden="true" tabindex="-1"></a>several occasions. His genuine commitment to teaching has been a</span>
-<span id="cb3-84"><a href="#cb3-84" aria-hidden="true" tabindex="-1"></a>source of inspiration. I share his conviction that teaching a student to reason clearly and</span>
-<span id="cb3-85"><a href="#cb3-85" aria-hidden="true" tabindex="-1"></a>independently is one of the most lasting ways in which we can contribute to the</span>
-<span id="cb3-86"><a href="#cb3-86" aria-hidden="true" tabindex="-1"></a>world.</span>
-<span id="cb3-87"><a href="#cb3-87" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-88"><a href="#cb3-88" aria-hidden="true" tabindex="-1"></a>These notebooks began as material for the exercise sessions in Vincenzo Caglioti’s</span>
-<span id="cb3-89"><a href="#cb3-89" aria-hidden="true" tabindex="-1"></a>course at Politecnico di Milano. I am grateful to him for the opportunity to develop and teach many of these ideas in that setting.</span>
+<span id="cb3-71"><a href="#cb3-71" aria-hidden="true" tabindex="-1"></a><span class="fu">## Acknowledgements</span></span>
+<span id="cb3-72"><a href="#cb3-72" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-73"><a href="#cb3-73" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-74"><a href="#cb3-74" aria-hidden="true" tabindex="-1"></a>My first thanks go to my father, Maurizio Magri, who taught me the joy and</span>
+<span id="cb3-75"><a href="#cb3-75" aria-hidden="true" tabindex="-1"></a>satisfaction of approaching mathematics armed with patience, paper, and pencil.</span>
+<span id="cb3-76"><a href="#cb3-76" aria-hidden="true" tabindex="-1"></a>I had to add an eraser, as my mistakes were rather more frequent than his.</span>
+<span id="cb3-77"><a href="#cb3-77" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-78"><a href="#cb3-78" aria-hidden="true" tabindex="-1"></a>I hope these notebooks owe something to the way Andrea Fusiello taught me to</span>
+<span id="cb3-79"><a href="#cb3-79" aria-hidden="true" tabindex="-1"></a>approach computer vision. Whatever elegance they may contain is certainly</span>
+<span id="cb3-80"><a href="#cb3-80" aria-hidden="true" tabindex="-1"></a>inherited from his</span>
+<span id="cb3-81"><a href="#cb3-81" aria-hidden="true" tabindex="-1"></a><span class="co">[</span><span class="ot">Computer Vision Toolkit</span><span class="co">](https://github.com/fusiello/Computer_Vision_Toolkit)</span>,</span>
+<span id="cb3-82"><a href="#cb3-82" aria-hidden="true" tabindex="-1"></a>to which every interested reader is warmly—and immediately—referred. Any errors,</span>
+<span id="cb3-83"><a href="#cb3-83" aria-hidden="true" tabindex="-1"></a>of course, are entirely my own.</span>
+<span id="cb3-84"><a href="#cb3-84" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-85"><a href="#cb3-85" aria-hidden="true" tabindex="-1"></a>I am also grateful to Giacomo Boracchi, with whom I have taught these topics on</span>
+<span id="cb3-86"><a href="#cb3-86" aria-hidden="true" tabindex="-1"></a>several occasions. His genuine commitment to teaching has been a</span>
+<span id="cb3-87"><a href="#cb3-87" aria-hidden="true" tabindex="-1"></a>source of inspiration. I share his conviction that teaching a student to reason clearly and</span>
+<span id="cb3-88"><a href="#cb3-88" aria-hidden="true" tabindex="-1"></a>independently is one of the most lasting ways in which we can contribute to the</span>
+<span id="cb3-89"><a href="#cb3-89" aria-hidden="true" tabindex="-1"></a>world.</span>
 <span id="cb3-90"><a href="#cb3-90" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-91"><a href="#cb3-91" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-92"><a href="#cb3-92" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-93"><a href="#cb3-93" aria-hidden="true" tabindex="-1"></a><span class="fu">## About</span></span>
+<span id="cb3-91"><a href="#cb3-91" aria-hidden="true" tabindex="-1"></a>These notebooks began as material for the exercise sessions in Vincenzo Caglioti’s</span>
+<span id="cb3-92"><a href="#cb3-92" aria-hidden="true" tabindex="-1"></a>course at Politecnico di Milano. I am grateful to him for the opportunity to develop and teach many of these ideas in that setting.</span>
+<span id="cb3-93"><a href="#cb3-93" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb3-94"><a href="#cb3-94" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-95"><a href="#cb3-95" aria-hidden="true" tabindex="-1"></a>This collection is maintained by <span class="co">[</span><span class="ot">Luca Magri</span><span class="co">](https://magrilu.github.io/)</span> at</span>
-<span id="cb3-96"><a href="#cb3-96" aria-hidden="true" tabindex="-1"></a>Politecnico di Milano.</span>
+<span id="cb3-95"><a href="#cb3-95" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-96"><a href="#cb3-96" aria-hidden="true" tabindex="-1"></a><span class="fu">## About this project</span></span>
 <span id="cb3-97"><a href="#cb3-97" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-98"><a href="#cb3-98" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-99"><a href="#cb3-99" aria-hidden="true" tabindex="-1"></a>Corrections, questions, and suggestions are always welcome. You can reach me by</span>
-<span id="cb3-100"><a href="#cb3-100" aria-hidden="true" tabindex="-1"></a>email.</span>
-<span id="cb3-101"><a href="#cb3-101" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-102"><a href="#cb3-102" aria-hidden="true" tabindex="-1"></a>Code is released under the MIT License. Text and figures are licensed under CC</span>
-<span id="cb3-103"><a href="#cb3-103" aria-hidden="true" tabindex="-1"></a>BY-NC-ND 4.0; see the [licensing</span>
-<span id="cb3-104"><a href="#cb3-104" aria-hidden="true" tabindex="-1"></a>page](https://github.com/magrilu/cv-dojo/blob/main/LICENSE.md).</span>
+<span id="cb3-98"><a href="#cb3-98" aria-hidden="true" tabindex="-1"></a>These notebooks grew out of material prepared for Computer Vision courses and exercise sessions. They are still growing: I revise them as I teach with</span>
+<span id="cb3-99"><a href="#cb3-99" aria-hidden="true" tabindex="-1"></a>them, correct mistakes, add examples, and find better ways of explaining things.</span>
+<span id="cb3-100"><a href="#cb3-100" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-101"><a href="#cb3-101" aria-hidden="true" tabindex="-1"></a>If you find a mistake, something unclear, or simply want to discuss one of the</span>
+<span id="cb3-102"><a href="#cb3-102" aria-hidden="true" tabindex="-1"></a>notebooks, please write to me. Corrections and suggestions are always welcome.</span>
+<span id="cb3-103"><a href="#cb3-103" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-104"><a href="#cb3-104" aria-hidden="true" tabindex="-1"></a><span class="fu">## Using this material</span></span>
 <span id="cb3-105"><a href="#cb3-105" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-106"><a href="#cb3-106" aria-hidden="true" tabindex="-1"></a>To cite this collection:</span>
+<span id="cb3-106"><a href="#cb3-106" aria-hidden="true" tabindex="-1"></a>Please use the code and build on it. It is released under the MIT License.</span>
 <span id="cb3-107"><a href="#cb3-107" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-108"><a href="#cb3-108" aria-hidden="true" tabindex="-1"></a><span class="in">``` bibtex</span></span>
-<span id="cb3-109"><a href="#cb3-109" aria-hidden="true" tabindex="-1"></a><span class="in">@software{magri_cvdojo,</span></span>
-<span id="cb3-110"><a href="#cb3-110" aria-hidden="true" tabindex="-1"></a><span class="in">  author = {Magri, Luca},</span></span>
-<span id="cb3-111"><a href="#cb3-111" aria-hidden="true" tabindex="-1"></a><span class="in">  title  = {Computer Vision Dojo},</span></span>
-<span id="cb3-112"><a href="#cb3-112" aria-hidden="true" tabindex="-1"></a><span class="in">  year   = {2026},</span></span>
-<span id="cb3-113"><a href="#cb3-113" aria-hidden="true" tabindex="-1"></a><span class="in">  url    = {https://github.com/magrilu/cv-dojo}</span></span>
-<span id="cb3-114"><a href="#cb3-114" aria-hidden="true" tabindex="-1"></a><span class="in">}</span></span>
-<span id="cb3-115"><a href="#cb3-115" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></div>
+<span id="cb3-108"><a href="#cb3-108" aria-hidden="true" tabindex="-1"></a>The text and illustrations are licensed under CC BY-NC-ND 4.0: you are welcome</span>
+<span id="cb3-109"><a href="#cb3-109" aria-hidden="true" tabindex="-1"></a>to share them unchanged for non-commercial purposes, with appropriate credit.</span>
+<span id="cb3-110"><a href="#cb3-110" aria-hidden="true" tabindex="-1"></a>If you would like to translate, adapt, or reuse them in some other way, just</span>
+<span id="cb3-111"><a href="#cb3-111" aria-hidden="true" tabindex="-1"></a>write to me. You can have a look at the [licensing</span>
+<span id="cb3-112"><a href="#cb3-112" aria-hidden="true" tabindex="-1"></a>page](https://github.com/magrilu/cv-dojo/blob/main/LICENSE.md).</span>
+<span id="cb3-113"><a href="#cb3-113" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-114"><a href="#cb3-114" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-115"><a href="#cb3-115" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-116"><a href="#cb3-116" aria-hidden="true" tabindex="-1"></a>If you find this material useful and would like to cite it, here is a BibTeX entry:</span>
+<span id="cb3-117"><a href="#cb3-117" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-118"><a href="#cb3-118" aria-hidden="true" tabindex="-1"></a><span class="in">``` bibtex</span></span>
+<span id="cb3-119"><a href="#cb3-119" aria-hidden="true" tabindex="-1"></a><span class="in">@software{magri_cvdojo,</span></span>
+<span id="cb3-120"><a href="#cb3-120" aria-hidden="true" tabindex="-1"></a><span class="in">  author = {Magri, Luca},</span></span>
+<span id="cb3-121"><a href="#cb3-121" aria-hidden="true" tabindex="-1"></a><span class="in">  title  = {Computer Vision Dojo},</span></span>
+<span id="cb3-122"><a href="#cb3-122" aria-hidden="true" tabindex="-1"></a><span class="in">  year   = {2026},</span></span>
+<span id="cb3-123"><a href="#cb3-123" aria-hidden="true" tabindex="-1"></a><span class="in">  url    = {https://github.com/magrilu/cv-dojo}</span></span>
+<span id="cb3-124"><a href="#cb3-124" aria-hidden="true" tabindex="-1"></a><span class="in">}</span></span>
+<span id="cb3-125"><a href="#cb3-125" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></div>
 </div></div></div></div></div>
 </div> <!-- /content -->
 <footer class="footer">

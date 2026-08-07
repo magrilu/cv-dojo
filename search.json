@@ -210,7 +210,7 @@
     "href": "index.html",
     "title": "Computer Vision Dojo",
     "section": "",
-    "text": "A dojo is a place for practice: somewhere to return to the same ideas, repeat simple gestures, and gradually make them your own.\nThis is a small and growing collection of notebooks on the geometric foundations of 3D computer vision: projective planes, homographies, rectification, robust fitting, and, in time, more.\nLLM can now produce a surprising amount of working code in very little time, and much of it is correct. They will explain it as well, and clearly. But an explanation received is not the same as an argument understood.\nThe notebooks here therefore take a deliberately slower path. They are meant to be studied much like a mathematics book: with patience, perhaps with paper and pencil nearby, following each construction one step at a time. Every algorithm is developed through code that can be run, changed, broken, and put back together.\nSome parts of the collection are already usable; others are still sketches, experiments, or plans. This page is therefore both a course resource and a public notebook in progress. Over time, it may grow into a more complete set of notes on geometric computer vision.\nTo whoever has the patience to work through these pages: I hope you find results that are correct and useful, and that you will tell me when they are not. Above all I hope you find the pleasure of having understood something yourself, and some affection for the elegance of geometry underneath it all.",
+    "text": "A dojo is a place for practice: somewhere to return to the same ideas, repeat simple gestures, and gradually make them your own.\nThis is a small and growing collection of notebooks on the geometric foundations of 3D computer vision: projective planes, homographies, rectification, robust fitting, and, in time, more.\nLLMs can now produce a surprising amount of working code in very little time, and much of it is correct. They will explain it as well, and clearly. But an explanation received is not the same as an argument understood.\nThe notebooks here therefore take a deliberately slower path. They are meant to be studied much like a mathematics book: with patience, perhaps with paper and pencil nearby, following each construction one step at a time. Every algorithm is developed through code that can be run, changed, broken, and put back together.\nSome parts of the collection are already usable; others are still sketches, experiments, or plans. This page is therefore both a course resource and a public notebook in progress. Over time, it may grow into a more complete set of notes on geometric computer vision.\nTo whoever has the patience to work through these pages: I hope you find results that are correct and useful, and that you will tell me when they are not. Above all I hope you find the pleasure of having understood something yourself, and some affection for the elegance of geometry underneath it all.",
     "crumbs": [
       "Home",
       "Overview"
@@ -250,11 +250,22 @@
     ]
   },
   {
-    "objectID": "index.html#about",
-    "href": "index.html#about",
+    "objectID": "index.html#about-this-project",
+    "href": "index.html#about-this-project",
     "title": "Computer Vision Dojo",
-    "section": "About",
-    "text": "About\nThis collection is maintained by Luca Magri at Politecnico di Milano.\nCorrections, questions, and suggestions are always welcome. You can reach me by email.\nCode is released under the MIT License. Text and figures are licensed under CC BY-NC-ND 4.0; see the licensing page.\nTo cite this collection:\n@software{magri_cvdojo,\n  author = {Magri, Luca},\n  title  = {Computer Vision Dojo},\n  year   = {2026},\n  url    = {https://github.com/magrilu/cv-dojo}\n}",
+    "section": "About this project",
+    "text": "About this project\nThese notebooks grew out of material prepared for Computer Vision courses and exercise sessions. They are still growing: I revise them as I teach with them, correct mistakes, add examples, and find better ways of explaining things.\nIf you find a mistake, something unclear, or simply want to discuss one of the notebooks, please write to me. Corrections and suggestions are always welcome.",
+    "crumbs": [
+      "Home",
+      "Overview"
+    ]
+  },
+  {
+    "objectID": "index.html#using-this-material",
+    "href": "index.html#using-this-material",
+    "title": "Computer Vision Dojo",
+    "section": "Using this material",
+    "text": "Using this material\nPlease use the code and build on it. It is released under the MIT License.\nThe text and illustrations are licensed under CC BY-NC-ND 4.0: you are welcome to share them unchanged for non-commercial purposes, with appropriate credit. If you would like to translate, adapt, or reuse them in some other way, just write to me. You can have a look at the licensing page.\nIf you find this material useful and would like to cite it, here is a BibTeX entry:\n@software{magri_cvdojo,\n  author = {Magri, Luca},\n  title  = {Computer Vision Dojo},\n  year   = {2026},\n  url    = {https://github.com/magrilu/cv-dojo}\n}",
     "crumbs": [
       "Home",
       "Overview"
