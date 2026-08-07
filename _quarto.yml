@@ -34,7 +34,7 @@ website:
         text: Overview
       - section: "Rectification"
         contents:
-          - notebooks/04-rectification/affine.ipynb
+          - notebooks/rectification/affine.ipynb
 
 format:
   html:
@@ -47,6 +47,7 @@ format:
     fig-align: center
 
 execute:
+  enabled: true
   freeze: auto
 
 bibliography: references.bib

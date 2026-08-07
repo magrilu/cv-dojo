@@ -1,0 +1,147 @@
+{
+  "name": "dojo_house_ideal",
+  "units": "cm",
+  "dimensions_cm": {
+    "long_side": 5.0,
+    "depth": 3.8,
+    "wall_height": 2.4,
+    "total_height": 4.2,
+    "roof_rise": 1.8000000000000003
+  },
+  "front": "long wall with the red door",
+  "vertex_convention": {
+    "X0": "front-left-bottom",
+    "X1": "front-right-bottom",
+    "X2": "back-right-bottom",
+    "X3": "back-left-bottom",
+    "X4": "front-left-eave",
+    "X5": "front-right-eave",
+    "X6": "back-right-eave",
+    "X7": "back-left-eave",
+    "X8": "left ridge",
+    "X9": "right ridge"
+  },
+  "vertices": {
+    "X0": [
+      0,
+      0,
+      0
+    ],
+    "X1": [
+      5.0,
+      0,
+      0
+    ],
+    "X2": [
+      5.0,
+      3.8,
+      0
+    ],
+    "X3": [
+      0,
+      3.8,
+      0
+    ],
+    "X4": [
+      0,
+      0,
+      2.4
+    ],
+    "X5": [
+      5.0,
+      0,
+      2.4
+    ],
+    "X6": [
+      5.0,
+      3.8,
+      2.4
+    ],
+    "X7": [
+      0,
+      3.8,
+      2.4
+    ],
+    "X8": [
+      0,
+      1.9,
+      4.2
+    ],
+    "X9": [
+      5.0,
+      1.9,
+      4.2
+    ]
+  },
+  "edges": [
+    [
+      "X0",
+      "X1"
+    ],
+    [
+      "X1",
+      "X2"
+    ],
+    [
+      "X2",
+      "X3"
+    ],
+    [
+      "X3",
+      "X0"
+    ],
+    [
+      "X4",
+      "X5"
+    ],
+    [
+      "X5",
+      "X6"
+    ],
+    [
+      "X6",
+      "X7"
+    ],
+    [
+      "X7",
+      "X4"
+    ],
+    [
+      "X0",
+      "X4"
+    ],
+    [
+      "X1",
+      "X5"
+    ],
+    [
+      "X2",
+      "X6"
+    ],
+    [
+      "X3",
+      "X7"
+    ],
+    [
+      "X4",
+      "X8"
+    ],
+    [
+      "X7",
+      "X8"
+    ],
+    [
+      "X5",
+      "X9"
+    ],
+    [
+      "X6",
+      "X9"
+    ],
+    [
+      "X8",
+      "X9"
+    ]
+  ],
+  "note": "Idealized metric model of the folded-paper Dojo house. Dimensions are approximate physical measurements."
+}

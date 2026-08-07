@@ -1,11 +1,50 @@
+# ---------------------------------------------------------------
+# cv-dojo — .gitignore
+# ---------------------------------------------------------------
+
+# --- macOS ------------------------------------------------------
+.DS_Store
+._*
+.Spotlight-V100
+.Trashes
+
+# --- Python -----------------------------------------------------
+__pycache__/
+*.py[cod]
 .venv/
 venv/
-_site/
-.quarto/
-__pycache__/
-*.pyc
+*.egg-info/
 .ipynb_checkpoints/
-.DS_Store
 
+# --- Quarto -----------------------------------------------------
+/_site/
 /.quarto/
+*_files/
+*_cache/
+# NOTE: _freeze/ is deliberately NOT ignored — it holds the frozen
+# notebook results that let the site build without rerunning code.
+
+# --- Generated notebook artefacts -------------------------------
+_inspect/
+*_preview.html
+assets/**/*.png
+
+# --- Data: originals and heavy sets stay out --------------------
+data/**/raw/
+data/**/originals/
+data/**/*.HEIC
+data/**/*.heic
+data/**/*.dng
+data/**/*.DNG
+data/**/*.mov
+data/**/*.MOV
+data/.cache/
+
+# Downloaded-on-demand datasets (fetched by cvdojo.data)
+data/**/full/
+
+# --- Misc -------------------------------------------------------
+*.log
+.env
+
 **/*.quarto_ipynb
