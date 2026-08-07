@@ -7,6 +7,6 @@ MATLAB legacy, heavier on the Python notebooks.
 
 | # | Topic | Notebook |
 |---|-------|----------|
-| 1 | Affine rectification | [open](../notebooks/04-rectification/affine.ipynb) |
+| 1 | Affine rectification | [open](../notebooks/rectification/affine.ipynb) |
 
 : {tbl-colwidths="[8,52,40]"}

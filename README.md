@@ -15,7 +15,7 @@ By [Luca Magri](https://magrilu.github.io/), Politecnico di Milano.
 
 | Topic | Notebook |
 |---|---|
-| Affine rectification | [`notebooks/04-rectification/affine.ipynb`](notebooks/04-rectification/affine.ipynb) |
+| Affine rectification | [`notebooks/rectification/affine.ipynb`](notebooks/rectification/affine.ipynb) |
 
 The original MATLAB scripts from the Politecnico exercise sessions are kept
 under [`matlab/`](matlab/).

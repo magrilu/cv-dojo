@@ -33,7 +33,7 @@ To whoever has the patience to work through these pages: I hope you find results
 |-----|--------------------------|---------------------------------------------------------------------|
 | 01  | The projective plane     | points, lines, duality, conics                                       |
 | 02  | Homographies             | DLT from points and lines, warping                                   |
-| 03  | Rectification            | [affine](notebooks/04-rectification/affine.ipynb), metric, stratified, direct |
+| 03  | Rectification            | [affine](notebooks/rectification/affine.ipynb), metric, stratified, direct |
 | 04  | Measuring from one view  | vanishing points, horizon, affine measurements                       |
 | 05  | Robust fitting           | RANSAC, LMedS, MSAC, Hough                                           |
 | 06  | Putting it together      | feature matching, stitching                                          |

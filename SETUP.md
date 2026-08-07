@@ -38,7 +38,7 @@ Reload the repo page on GitHub — the files should be there.
 
 Check the notebook runs:
 
-    jupyter lab notebooks/04-rectification/affine.ipynb
+    jupyter lab notebooks/rectification/affine.ipynb
 
 ## 5. Quarto
 
