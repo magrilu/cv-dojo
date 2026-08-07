@@ -1,6 +1,9 @@
 ---
 title: "Computer Vision Dojo"
 subtitle: "a geometric way"
+author:
+  name: Luca Magri
+  url: https://magrilu.github.io/
 ---
 
 A dojo is a place for practice: somewhere to return to the same ideas, repeat
@@ -8,7 +11,7 @@ simple gestures, and gradually make them your own.
 
 This is a small and growing collection of notebooks on the geometric foundations of 3D computer vision: projective planes, homographies, rectification, robust fitting, and, in time, more.
 
-LLM can now produce a surprising amount of working code in very little time, and much of it is correct. They will explain it as well, and clearly. But an explanation received is not the same as an argument understood.
+LLMs can now produce a surprising amount of working code in very little time, and much of it is correct. They will explain it as well, and clearly. But an explanation received is not the same as an argument understood.
 
 The notebooks here therefore take a deliberately slower path. They are meant to
 be studied much like a mathematics book: with patience, perhaps with paper and
@@ -90,20 +93,27 @@ course at Politecnico di Milano. I am grateful to him for the opportunity to dev
 
 
 
-## About
+## About this project
 
-This collection is maintained by [Luca Magri](https://magrilu.github.io/) at
-Politecnico di Milano.
+These notebooks grew out of material prepared for Computer Vision courses and exercise sessions. They are still growing: I revise them as I teach with
+them, correct mistakes, add examples, and find better ways of explaining things.
 
+If you find a mistake, something unclear, or simply want to discuss one of the
+notebooks, please write to me. Corrections and suggestions are always welcome.
 
-Corrections, questions, and suggestions are always welcome. You can reach me by
-email.
+## Using this material
 
-Code is released under the MIT License. Text and figures are licensed under CC
-BY-NC-ND 4.0; see the [licensing
+Please use the code and build on it. It is released under the MIT License.
+
+The text and illustrations are licensed under CC BY-NC-ND 4.0: you are welcome
+to share them unchanged for non-commercial purposes, with appropriate credit.
+If you would like to translate, adapt, or reuse them in some other way, just
+write to me. You can have a look at the [licensing
 page](https://github.com/magrilu/cv-dojo/blob/main/LICENSE.md).
 
-To cite this collection:
+
+
+If you find this material useful and would like to cite it, here is a BibTeX entry:
 
 ``` bibtex
 @software{magri_cvdojo,
