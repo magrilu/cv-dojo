@@ -1,0 +1,136 @@
+{
+  "description": "Two-view data for the Origami House triangulation notebook. The repository folder keeps the historical name data/dojo_house.",
+  "camera": {
+    "model": "SIMPLE_RADIAL",
+    "width": 4032,
+    "height": 3024,
+    "f": 3187.559032058025,
+    "cx": 2016.0,
+    "cy": 1512.0,
+    "k1": -0.004800948911524316
+  },
+  "vertex_convention": {
+    "front": "long wall with the red door",
+    "X0": "front-left-bottom",
+    "X1": "front-right-bottom",
+    "X2": "back-right-bottom",
+    "X3": "back-left-bottom",
+    "X4": "front-left-eave",
+    "X5": "front-right-eave",
+    "X6": "back-right-eave",
+    "X7": "back-left-eave",
+    "X8": "left ridge",
+    "X9": "right ridge"
+  },
+  "vertices_used": [
+    "X0",
+    "X1",
+    "X4",
+    "X5",
+    "X8",
+    "X9"
+  ],
+  "known_length_cm": {
+    "edge": [
+      "X0",
+      "X1"
+    ],
+    "length_cm": 5.0
+  },
+  "display_to_colmap_mapping": {
+    "uploaded_size": [
+      1536,
+      2048
+    ],
+    "colmap_raw_size": [
+      4032,
+      3024
+    ],
+    "uniform_scale": 1.96875,
+    "formula": "x_colmap = scale * v_display; y_colmap = scale * (1536 - u_display)"
+  },
+  "images": {
+    "IMG_4331.jpeg": {
+      "image_id": 13,
+      "qvec_wxyz": [
+        0.8225353226413283,
+        -0.4346059400611065,
+        -0.0597696232750739,
+        -0.3619128513944809
+      ],
+      "tvec": [
+        -0.8955792731643665,
+        -0.0585691064478016,
+        0.6513864360514616
+      ],
+      "camera_id": 1,
+      "observations_original_colmap_pixels": {
+        "X0": [
+          3051.5625,
+          2029.78125
+        ],
+        "X1": [
+          2953.125,
+          1153.6875
+        ],
+        "X4": [
+          2756.25,
+          2084.90625
+        ],
+        "X5": [
+          2657.8125,
+          1153.6875
+        ],
+        "X8": [
+          2313.28125,
+          2147.90625
+        ],
+        "X9": [
+          2212.875,
+          1256.0625
+        ]
+      }
+    },
+    "IMG_4337.jpeg": {
+      "image_id": 23,
+      "qvec_wxyz": [
+        0.7212300540647547,
+        -0.549905721858295,
+        -0.07766737739261408,
+        -0.4140032423426318
+      ],
+      "tvec": [
+        -1.2648592573952813,
+        -0.4760460107309091,
+        -0.038422615175648454
+      ],
+      "camera_id": 1,
+      "observations_original_colmap_pixels": {
+        "X0": [
+          3076.51911388,
+          2105.71694587
+        ],
+        "X1": [
+          2688.5927535,
+          1003.04705821
+        ],
+        "X4": [
+          2658.25705391,
+          2188.88809632
+        ],
+        "X5": [
+          2278.40107312,
+          997.7895853
+        ],
+        "X8": [
+          2038.71794673,
+          2423.51756087
+        ],
+        "X9": [
+          1733.8316297,
+          1231.7636669
+        ]
+      }
+    }
+  }
+}

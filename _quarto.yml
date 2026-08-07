@@ -38,6 +38,9 @@ website:
       - section: "Rectification"
         contents:
           - notebooks/rectification/affine.ipynb
+      - section: "Triangulation"
+        contents:
+          - notebooks/triangulation/triangulation.ipynb
 
 format:
   html:
