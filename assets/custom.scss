@@ -10,16 +10,21 @@ $verza:      #E6F598;
 $zucchina:   #66C2A5;
 $mirtillo:   #3288BD;
 
-$primary:    $pomodoro;
+// Accento dell'interfaccia, allineato al sito personale.
+// Distinto dalla palette: quella codifica i dati, questo l'identita'.
+$arancione:       #F29105;
+$arancione-scuro: darken(saturate($arancione, 8%), 12%);
+
+$primary:    $arancione;
 $secondary:  $mirtillo;
-$link-color: $pomodoro;
+$link-color: $arancione-scuro;
 
 $body-color: #1a1a1a;
 $body-bg:    #ffffff;
 $gray-200:   #eceff1;
 
-$font-family-serif:      "Source Serif Pro", Georgia, serif;
-$font-family-sans-serif: "Source Sans Pro", -apple-system, BlinkMacSystemFont, sans-serif;
+$font-family-serif:      "Source Serif 4", "Source Serif Pro", Georgia, serif;
+$font-family-sans-serif: "Source Sans 3", -apple-system, BlinkMacSystemFont, sans-serif;
 $font-family-monospace:  "Source Code Pro", "SF Mono", Menlo, monospace;
 
 $font-family-base:     $font-family-serif;
@@ -27,19 +32,34 @@ $headings-font-family: $font-family-serif;
 $headings-font-weight: 600;
 $font-size-root:       18px;
 $h1-font-size:         2.1rem;
-$h2-font-size:         1.5rem;
+$h2-font-size:         1.6rem;
 
-$toc-color:     $mirtillo;
+// Misura di riga: ~70 caratteri a 18px
+$grid-body-width: 720px;
+
+// Navbar chiara: l'accento resta raro e conta di piu'
+$navbar-bg: #ffffff;
+$navbar-fg: $arancione-scuro;
+$navbar-hl: $arancione-scuro;
+
+// Sidebar: grigio scuro, non sbiadito
+$sidebar-fg: #3d3d3a;
+
+// Indice: elemento di servizio, non deve competere col testo
+$toc-color:          #6c757d;
+$toc-active-border:  $arancione-scuro;
+
 $code-block-bg: #f8f9fa;
 $code-color:    $lampone;
 
 /*-- scss:rules --*/
 
-@import url('https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@300;400;600&family=Source+Serif+Pro:wght@400;600&family=Source+Code+Pro:wght@400&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Source+Sans+3:wght@300;400;600&family=Source+Serif+4:opsz,wght@8..60,400;8..60,500;8..60,600&family=Source+Code+Pro:wght@400&display=swap');
 
 body {
   font-family: $font-family-serif;
   line-height: 1.65;
+  font-variant-numeric: oldstyle-num;
 }
 
 h1, h2, h3, h4, h5, h6,
@@ -51,16 +71,52 @@ h1, h2, h3, h4, h5, h6,
 
 .navbar-brand { font-weight: 600; }
 h1, h2 { letter-spacing: -0.01em; }
-h2 { margin-top: 2.2rem; }
 
-// I disegni portano l'identità: largo respiro, nessuna cornice
+// Spazio asimmetrico: un titolo appartiene a cio' che introduce.
+// Niente riga sotto: lo spazio bianco separa gia'.
+h2, .h2 {
+  margin-top: 3rem;
+  margin-bottom: 0.75rem;
+  border-bottom: none;
+  padding-bottom: 0;
+}
+h3, .h3 {
+  margin-top: 2rem;
+  margin-bottom: 0.5rem;
+}
+
+// Navbar: tutte le voci in accento, quella corrente scura
+.navbar { border-bottom: 1px solid #e8e8e6; box-shadow: none; }
+.navbar .nav-link { color: $arancione-scuro; opacity: 1; }
+.navbar .nav-link.active { color: $body-color; }
+
+// Sidebar: due livelli distinguibili
+.sidebar-navigation .sidebar-item .sidebar-item-container > a {
+  font-weight: 500;
+}
+.sidebar-navigation .sidebar-item .sidebar-item .sidebar-item-container > a {
+  font-weight: 400;
+  font-size: 0.95em;
+}
+.sidebar-navigation .sidebar-item-container { margin-bottom: 0.15rem; }
+
+// Visited: inutile nella navigazione, utile nel testo
+.sidebar a:visited,
+.navbar a:visited,
+nav[role="doc-toc"] a:visited { color: inherit; }
+
+main a:visited { color: $lampone; }
+
+a { text-decoration: none; }
+a:hover { text-decoration: underline; text-underline-offset: 2px; }
+
+// I disegni portano l'identita': largo respiro, nessuna cornice
 figure img, .figure img, p > img {
   max-width: 100%;
   margin: 2rem auto;
   display: block;
 }
 
-// Disegno di apertura di sezione
 .opener img { max-width: 420px; margin: 2.5rem auto 3rem; }
 
 blockquote {
@@ -70,9 +126,17 @@ blockquote {
   font-style: normal;
 }
 
-a { text-decoration: none; }
-a:hover { text-decoration: underline; text-underline-offset: 2px; }
+// Le formule hanno bisogno d'aria, e non devono sfondare su schermo stretto
+.math.display {
+  margin: 1.6rem 0;
+  overflow-x: auto;
+  overflow-y: hidden;
+}
 
 table { font-size: 0.95rem; }
 
-code, pre { font-family: $font-family-monospace; }
+// I monospazi appaiono otticamente piu' grandi a parita' di corpo
+code, pre { font-family: $font-family-monospace; font-size: 0.9em; }
+
+// Cifre old-style nel testo, allineate e tabulari dove serve incolonnare
+code, pre, table, .sourceCode { font-variant-numeric: lining-nums tabular-nums; }
