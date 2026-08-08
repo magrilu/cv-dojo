@@ -1,12 +1,25 @@
 {
   "name": "dojo_house_ideal",
   "units": "cm",
+  "fold_unit_cm": {
+    "sheet_side": 15.0,
+    "u": 2.5,
+    "definition": "u = sheet_side / 6; the paper is folded into a grid of six."
+  },
   "dimensions_cm": {
     "long_side": 5.0,
-    "depth": 3.8,
-    "wall_height": 2.4,
-    "total_height": 4.2,
-    "roof_rise": 1.8000000000000003
+    "depth": 3.5355,
+    "wall_height": 2.5,
+    "total_height": 4.2678,
+    "roof_rise": 1.7678
+  },
+  "dimensions_in_u": {
+    "long_side": "2u",
+    "depth": "u*sqrt(2)",
+    "wall_height": "u",
+    "roof_slope": "u",
+    "roof_rise": "u/sqrt(2)",
+    "total_height": "u*(1 + 1/sqrt(2))"
   },
   "front": "long wall with the red door",
   "vertex_convention": {
@@ -34,43 +47,43 @@
     ],
     "X2": [
       5.0,
-      3.8,
+      3.5355,
       0
     ],
     "X3": [
       0,
-      3.8,
+      3.5355,
       0
     ],
     "X4": [
       0,
       0,
-      2.4
+      2.5
     ],
     "X5": [
       5.0,
       0,
-      2.4
+      2.5
     ],
     "X6": [
       5.0,
-      3.8,
-      2.4
+      3.5355,
+      2.5
     ],
     "X7": [
       0,
-      3.8,
-      2.4
+      3.5355,
+      2.5
     ],
     "X8": [
       0,
-      1.9,
-      4.2
+      1.7678,
+      4.2678
     ],
     "X9": [
       5.0,
-      1.9,
-      4.2
+      1.7678,
+      4.2678
     ]
   },
   "edges": [
@@ -143,5 +156,5 @@
       "X9"
     ]
   ],
-  "note": "Idealized metric model of the folded-paper Dojo house. Dimensions are approximate physical measurements."
+  "note": "Idealized metric model of the folded-paper Dojo house. Every dimension follows from the fold unit u = sheet_side / 6, together with the 45 degree roof: the long side spans two grid squares, the wall and each roof slope one, so the depth is the diagonal u*sqrt(2). Real paper departs from this by a fraction of a millimetre."
 }

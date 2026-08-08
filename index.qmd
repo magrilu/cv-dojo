@@ -7,41 +7,19 @@ author:
 ---
 
 ![](images/cv_dojo.jpg){fig-align="center" width="60%"}
-A dojo is a place for practice: somewhere to return to the same ideas, repeat
-simple gestures, and gradually make them your own.
+A dojo is a place for practice: somewhere to return to the same ideas and gradually make them your own.
 
-This is a small and growing collection of notebooks on the geometric foundations of 3D computer vision: projective planes, homographies, rectification, robust fitting, and, in time, more.
+This is a small and growing collection of notebooks on the geometric foundations of 3D computer vision: projective geometry, multi-view relations, robust fitting, and, in time, more. Most of the examples are built around a small origami house folded from one sheet of paper. Fold your own, take your own images, and you have your own ground truth to check the reconstructions on this site against. The origami model is [described in detail](origami-house.qmd).
 
-LLMs can now produce a surprising amount of working code in very little time, and much of it is correct. They will explain it as well, and clearly. But an explanation received is not the same as an argument understood.
+LLMs can now produce a surprising amount of working code in very little time, and much of it is correct and well documented. But an explanation received is not the same as an argument understood.
 
-The notebooks here therefore take a deliberately slower path. They are meant to
-be studied much like a mathematics book: with patience, perhaps with paper and
-pencil nearby, following each construction one step at a time. Every algorithm
-is developed through code that can be run, changed, broken, and put back
-together.
+The notebooks here therefore take a deliberately slower path. They are meant to be studied much like a mathematics book: with patience, perhaps with paper and pencil nearby, following each construction one step at a time. Every algorithm is developed through code that can be run, changed, broken, and put back together.
 
-Some parts of the collection are already usable; others are still sketches,
-experiments, or plans. This page is therefore both a course resource and a
-public notebook in progress. Over time, it may grow into a more complete set of
-notes on geometric computer vision.
+Some parts of the collection are already usable; others are still sketches, experiments, or plans. This page is therefore both a course resource and a public notebook in progress. Over time, it may grow into a more complete set of notes on geometric computer vision.
 
 To whoever has the patience to work through these pages: I hope you find results that are correct and useful, and that you will tell me when they are not. Above all I hope you find the pleasure of having understood something yourself, and some affection for the elegance of geometry underneath it all.
 
 
-## The notebooks
-
-|     |                          |                                                                     |
-|-----|--------------------------|---------------------------------------------------------------------|
-| 01  | The projective plane     | points, lines, duality, conics                                       |
-| 02  | Homographies             | DLT from points and lines, warping                                   |
-| 03  | Rectification            | [affine](notebooks/rectification/affine.ipynb), metric, stratified, direct |
-| 04  | Measuring from one view  | vanishing points, horizon, affine measurements                       |
-| 05  | Robust fitting           | RANSAC, LMedS, MSAC, Hough                                           |
-| 06  | Putting it together      | feature matching, stitching                                          |
-
-: {tbl-colwidths="[8,32,60]"}
-
-Sections without a link are still in preparation.
 
 ## How to use this collection
 
@@ -66,7 +44,7 @@ suggested reading order on the course page.
 
 
 
-## Working together for a research thesis?
+## Looking for a thesis in geometric 3D vision?
 
 If you are starting to feel like a black belt: the geometry here is settled,
 but the questions it opens are not. There are still plenty of interesting

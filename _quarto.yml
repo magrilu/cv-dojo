@@ -31,6 +31,8 @@ website:
     contents:
       - href: index.qmd
         text: Overview
+      - href: origami-house.qmd
+        text: "The Origami house"
       - section: "Camera"
         contents:
           - notebooks/camera/camera.ipynb
