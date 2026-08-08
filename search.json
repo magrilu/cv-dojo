@@ -288,66 +288,32 @@
     ]
   },
   {
-    "objectID": "index.html",
-    "href": "index.html",
-    "title": "Computer Vision Dojo",
+    "objectID": "about.html",
+    "href": "about.html",
+    "title": "About",
     "section": "",
-    "text": "A dojo is a place for practice: somewhere to return to the same ideas, repeat simple gestures, and gradually make them your own.\nThis is a small and growing collection of notebooks on the geometric foundations of 3D computer vision: projective planes, homographies, rectification, robust fitting, and, in time, more.\nLLMs can now produce a surprising amount of working code in very little time, and much of it is correct. They will explain it as well, and clearly. But an explanation received is not the same as an argument understood.\nThe notebooks here therefore take a deliberately slower path. They are meant to be studied much like a mathematics book: with patience, perhaps with paper and pencil nearby, following each construction one step at a time. Every algorithm is developed through code that can be run, changed, broken, and put back together.\nSome parts of the collection are already usable; others are still sketches, experiments, or plans. This page is therefore both a course resource and a public notebook in progress. Over time, it may grow into a more complete set of notes on geometric computer vision.\nTo whoever has the patience to work through these pages: I hope you find results that are correct and useful, and that you will tell me when they are not. Above all I hope you find the pleasure of having understood something yourself, and some affection for the elegance of geometry underneath it all.",
-    "crumbs": [
-      "Home",
-      "Overview"
-    ]
+    "text": "These notebooks grew out of material prepared for Computer Vision courses and exercise sessions. They are still growing: I revise them as I teach with them, correct mistakes, add examples, and find better ways of explaining things.\nIf you find a mistake, something unclear, or simply want to discuss one of the notebooks, please write to me. Corrections and suggestions are always welcome.\nThe original MATLAB scripts used in the Politecnico exercise sessions are kept under matlab/."
   },
   {
-    "objectID": "index.html#the-notebooks",
-    "href": "index.html#the-notebooks",
-    "title": "Computer Vision Dojo",
-    "section": "The notebooks",
-    "text": "The notebooks\n\n\n\n\n\n\n\n\n01\nThe projective plane\npoints, lines, duality, conics\n\n\n02\nHomographies\nDLT from points and lines, warping\n\n\n03\nRectification\naffine, metric, stratified, direct\n\n\n04\nMeasuring from one view\nvanishing points, horizon, affine measurements\n\n\n05\nRobust fitting\nRANSAC, LMedS, MSAC, Hough\n\n\n06\nPutting it together\nfeature matching, stitching\n\n\n\nSections without a link are still in preparation.",
-    "crumbs": [
-      "Home",
-      "Overview"
-    ]
-  },
-  {
-    "objectID": "index.html#how-to-use-this-collection",
-    "href": "index.html#how-to-use-this-collection",
-    "title": "Computer Vision Dojo",
-    "section": "How to use this collection",
-    "text": "How to use this collection\nEach notebook is designed to run from top to bottom. You can open it in Colab and work through the cells in order.\nRead the explanations, inspect the intermediate quantities, and modify the examples. Keep paper nearby when a derivation becomes difficult. A notebook often becomes most useful when something is changed and the result is not quite what was expected.\nTo run the notebooks locally:\ngit clone https://github.com/magrilu/cv-dojo.git\ncd cv-dojo\npip install -r requirements.txt\nStudents following IACV will find a suggested reading order on the course page.",
-    "crumbs": [
-      "Home",
-      "Overview"
-    ]
-  },
-  {
-    "objectID": "index.html#working-together-for-a-research-thesis",
-    "href": "index.html#working-together-for-a-research-thesis",
-    "title": "Computer Vision Dojo",
-    "section": "Working together for a research thesis?",
-    "text": "Working together for a research thesis?\nIf you are starting to feel like a black belt: the geometry here is settled, but the questions it opens are not. There are still plenty of interesting problems in 3D vision with a strong geometric flavour.\nIf any of these notebooks left you wondering about something they did not answer, I would like to hear from you.\nI supervise theses at Politecnico di Milano and Bocconi, mostly in geometry-driven vision. Current topics, guidance, and past theses are on my main site: topics · how-to · hall of fame.\nDrop me an email, tell me which notebook you looked at and what you found interesting in it.",
-    "crumbs": [
-      "Home",
-      "Overview"
-    ]
-  },
-  {
-    "objectID": "index.html#acknowledgements",
-    "href": "index.html#acknowledgements",
-    "title": "Computer Vision Dojo",
-    "section": "Acknowledgements",
-    "text": "Acknowledgements\nMy first thanks go to my father, Maurizio Magri, who taught me the joy and satisfaction of approaching mathematics armed with patience, paper, and pencil. I had to add an eraser, as my mistakes were rather more frequent than his.\nI hope these notebooks owe something to the way Andrea Fusiello taught me to approach computer vision. Whatever elegance they may contain is certainly inherited from his Computer Vision Toolkit, to which every interested reader is warmly—and immediately—referred. Any errors, of course, are entirely my own.\nI am also grateful to Giacomo Boracchi, with whom I have taught these topics on several occasions. His genuine commitment to teaching has been a source of inspiration. I share his conviction that teaching a student to reason clearly and independently is one of the most lasting ways in which we can contribute to the world.\nThese notebooks began as material for the exercise sessions in Vincenzo Caglioti’s course at Politecnico di Milano. I am grateful to him for the opportunity to develop and teach many of these ideas in that setting.",
-    "crumbs": [
-      "Home",
-      "Overview"
-    ]
-  },
-  {
-    "objectID": "LICENSE.html",
-    "href": "LICENSE.html",
-    "title": "",
+    "objectID": "about.html#about-this-project",
+    "href": "about.html#about-this-project",
+    "title": "About",
     "section": "",
-    "text": "Code\n\n\n\n\n\nLicensing\nThis repository contains two kinds of material, under two licences.\nCode — everything under src/, matlab/, and the code cells of the notebooks: MIT, see LICENSE-CODE.\nContent — prose, figures, exercises, and the markdown cells of the notebooks: Creative Commons Attribution 4.0 International (CC BY 4.0), see LICENSE-CONTENT.\nIn both cases you may reuse and adapt freely, provided you credit:\n\nLuca Magri, Computer Vision Dojo, https://github.com/magrilu/cv-dojo\n\nSee CITATION.cff for a citable reference."
+    "text": "These notebooks grew out of material prepared for Computer Vision courses and exercise sessions. They are still growing: I revise them as I teach with them, correct mistakes, add examples, and find better ways of explaining things.\nIf you find a mistake, something unclear, or simply want to discuss one of the notebooks, please write to me. Corrections and suggestions are always welcome.\nThe original MATLAB scripts used in the Politecnico exercise sessions are kept under matlab/."
+  },
+  {
+    "objectID": "about.html#using-this-material",
+    "href": "about.html#using-this-material",
+    "title": "About",
+    "section": "Using this material",
+    "text": "Using this material\nPlease use the code and build on it. It is released under the MIT License.\nThe text and illustrations are licensed under CC BY-NC-ND 4.0: you are welcome to share them unchanged for non-commercial purposes, with appropriate credit. If you would like to translate, adapt, or reuse them in some other way, just write to me. You can have a look at the licensing page."
+  },
+  {
+    "objectID": "about.html#citing",
+    "href": "about.html#citing",
+    "title": "About",
+    "section": "Citing",
+    "text": "Citing\nIf you find this material useful and would like to cite it, here is a BibTeX entry:\n@software{magri_cvdojo,\n  author = {Magri, Luca},\n  title  = {Computer Vision Dojo},\n  year   = {2026},\n  url    = {https://github.com/magrilu/cv-dojo}\n}"
   },
   {
     "objectID": "SETUP.html",
@@ -427,32 +393,99 @@
     "text": "Troubleshooting\ngit push permission denied — your SSH key is not set up. Quick fix: use git remote set-url origin https://github.com/magrilu/cv-dojo.git and authenticate with a personal access token instead.\nSite published but unstyled — .nojekyll is missing from gh-pages, or Pages is pointing at the wrong branch.\nColab badge 404 — the branch in the badge URL must match yours (main), and the repository must be public."
   },
   {
-    "objectID": "about.html",
-    "href": "about.html",
-    "title": "About",
+    "objectID": "LICENSE.html",
+    "href": "LICENSE.html",
+    "title": "",
     "section": "",
-    "text": "These notebooks grew out of material prepared for Computer Vision courses and exercise sessions. They are still growing: I revise them as I teach with them, correct mistakes, add examples, and find better ways of explaining things.\nIf you find a mistake, something unclear, or simply want to discuss one of the notebooks, please write to me. Corrections and suggestions are always welcome.\nThe original MATLAB scripts used in the Politecnico exercise sessions are kept under matlab/."
+    "text": "Code\n\n\n\n\n\nLicensing\nThis repository contains two kinds of material, under two licences.\nCode — everything under src/, matlab/, and the code cells of the notebooks: MIT, see LICENSE-CODE.\nContent — prose, figures, exercises, and the markdown cells of the notebooks: Creative Commons Attribution 4.0 International (CC BY 4.0), see LICENSE-CONTENT.\nIn both cases you may reuse and adapt freely, provided you credit:\n\nLuca Magri, Computer Vision Dojo, https://github.com/magrilu/cv-dojo\n\nSee CITATION.cff for a citable reference."
   },
   {
-    "objectID": "about.html#about-this-project",
-    "href": "about.html#about-this-project",
-    "title": "About",
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "Computer Vision Dojo",
     "section": "",
-    "text": "These notebooks grew out of material prepared for Computer Vision courses and exercise sessions. They are still growing: I revise them as I teach with them, correct mistakes, add examples, and find better ways of explaining things.\nIf you find a mistake, something unclear, or simply want to discuss one of the notebooks, please write to me. Corrections and suggestions are always welcome.\nThe original MATLAB scripts used in the Politecnico exercise sessions are kept under matlab/."
+    "text": "A dojo is a place for practice: somewhere to return to the same ideas and gradually make them your own.\nThis is a small and growing collection of notebooks on the geometric foundations of 3D computer vision: projective geometry, multi-view relations, robust fitting, and, in time, more. Most of the examples are built around a small origami house folded from one sheet of paper. Fold your own, take your own images, and you have your own ground truth to check the reconstructions on this site against. The origami model is described in detail.\nLLMs can now produce a surprising amount of working code in very little time, and much of it is correct and well documented. But an explanation received is not the same as an argument understood.\nThe notebooks here therefore take a deliberately slower path. They are meant to be studied much like a mathematics book: with patience, perhaps with paper and pencil nearby, following each construction one step at a time. Every algorithm is developed through code that can be run, changed, broken, and put back together.\nSome parts of the collection are already usable; others are still sketches, experiments, or plans. This page is therefore both a course resource and a public notebook in progress. Over time, it may grow into a more complete set of notes on geometric computer vision.\nTo whoever has the patience to work through these pages: I hope you find results that are correct and useful, and that you will tell me when they are not. Above all I hope you find the pleasure of having understood something yourself, and some affection for the elegance of geometry underneath it all.",
+    "crumbs": [
+      "Home",
+      "Overview"
+    ]
   },
   {
-    "objectID": "about.html#using-this-material",
-    "href": "about.html#using-this-material",
-    "title": "About",
-    "section": "Using this material",
-    "text": "Using this material\nPlease use the code and build on it. It is released under the MIT License.\nThe text and illustrations are licensed under CC BY-NC-ND 4.0: you are welcome to share them unchanged for non-commercial purposes, with appropriate credit. If you would like to translate, adapt, or reuse them in some other way, just write to me. You can have a look at the licensing page."
+    "objectID": "index.html#how-to-use-this-collection",
+    "href": "index.html#how-to-use-this-collection",
+    "title": "Computer Vision Dojo",
+    "section": "How to use this collection",
+    "text": "How to use this collection\nEach notebook is designed to run from top to bottom. You can open it in Colab and work through the cells in order.\nRead the explanations, inspect the intermediate quantities, and modify the examples. Keep paper nearby when a derivation becomes difficult. A notebook often becomes most useful when something is changed and the result is not quite what was expected.\nTo run the notebooks locally:\ngit clone https://github.com/magrilu/cv-dojo.git\ncd cv-dojo\npip install -r requirements.txt\nStudents following IACV will find a suggested reading order on the course page.",
+    "crumbs": [
+      "Home",
+      "Overview"
+    ]
   },
   {
-    "objectID": "about.html#citing",
-    "href": "about.html#citing",
-    "title": "About",
-    "section": "Citing",
-    "text": "Citing\nIf you find this material useful and would like to cite it, here is a BibTeX entry:\n@software{magri_cvdojo,\n  author = {Magri, Luca},\n  title  = {Computer Vision Dojo},\n  year   = {2026},\n  url    = {https://github.com/magrilu/cv-dojo}\n}"
+    "objectID": "index.html#looking-for-a-thesis-in-geometric-3d-vision",
+    "href": "index.html#looking-for-a-thesis-in-geometric-3d-vision",
+    "title": "Computer Vision Dojo",
+    "section": "Looking for a thesis in geometric 3D vision?",
+    "text": "Looking for a thesis in geometric 3D vision?\nIf you are starting to feel like a black belt: the geometry here is settled, but the questions it opens are not. There are still plenty of interesting problems in 3D vision with a strong geometric flavour.\nIf any of these notebooks left you wondering about something they did not answer, I would like to hear from you.\nI supervise theses at Politecnico di Milano and Bocconi, mostly in geometry-driven vision. Current topics, guidance, and past theses are on my main site: topics · how-to · hall of fame.\nDrop me an email, tell me which notebook you looked at and what you found interesting in it.",
+    "crumbs": [
+      "Home",
+      "Overview"
+    ]
+  },
+  {
+    "objectID": "index.html#acknowledgements",
+    "href": "index.html#acknowledgements",
+    "title": "Computer Vision Dojo",
+    "section": "Acknowledgements",
+    "text": "Acknowledgements\nMy first thanks go to my father, Maurizio Magri, who taught me the joy and satisfaction of approaching mathematics armed with patience, paper, and pencil. I had to add an eraser, as my mistakes were rather more frequent than his.\nI hope these notebooks owe something to the way Andrea Fusiello taught me to approach computer vision. Whatever elegance they may contain is certainly inherited from his Computer Vision Toolkit, to which every interested reader is warmly—and immediately—referred. Any errors, of course, are entirely my own.\nI am also grateful to Giacomo Boracchi, with whom I have taught these topics on several occasions. His genuine commitment to teaching has been a source of inspiration. I share his conviction that teaching a student to reason clearly and independently is one of the most lasting ways in which we can contribute to the world.\nThese notebooks began as material for the exercise sessions in Vincenzo Caglioti’s course at Politecnico di Milano. I am grateful to him for the opportunity to develop and teach many of these ideas in that setting.",
+    "crumbs": [
+      "Home",
+      "Overview"
+    ]
+  },
+  {
+    "objectID": "origami-house.html",
+    "href": "origami-house.html",
+    "title": "The Origami house",
+    "section": "",
+    "text": "The origami house, its pink sibling, and the caliper that keeps them honest. The red door marks the front wall.\nMost of the examples on this site revolve around the same object: a small origami house folded from a single sheet of paper. It stands about four centimetres tall, it sits on a table without being held, and, if you start from a standard 15 × 15 cm origami sheet, its measurements are roughly those recorded here.\nRoughly, because a folded object is only as accurate as the person folding it, and I am no master. The model below is an idealization of a real piece of paper, and the two do not agree to the last millimetre.",
+    "crumbs": [
+      "Home",
+      "The Origami house"
+    ]
+  },
+  {
+    "objectID": "origami-house.html#folding-one",
+    "href": "origami-house.html#folding-one",
+    "title": "The Origami house",
+    "section": "Folding one",
+    "text": "Folding one\nThe model is Easy Origami House by Leyla Torres, whose video tutorial is the place to learn it.\nThree practical suggestions when you fold your own model. Use matte paper rather than glossy, because specular highlights are unkind to feature matching. Press the creases firmly: a rounded edge is a vertex that shifts by a few pixels between views, and that error propagates all the way to the reconstruction. And prefer paper with some texture to it.\nThen break the symmetry. A few pen marks, a scribble on one wall or a door will do the job, and it will help disambiguate the 3D reconstruction.",
+    "crumbs": [
+      "Home",
+      "The Origami house"
+    ]
+  },
+  {
+    "objectID": "origami-house.html#the-geometric-model",
+    "href": "origami-house.html#the-geometric-model",
+    "title": "The Origami house",
+    "section": "The geometric model",
+    "text": "The geometric model\nThe fold divides the sheet into a grid of six, so every dimension is a multiple of a single unit:\n\\[u = \\frac{\\text{sheet side}}{6} = 2.5\\ \\text{cm}\\]\nThree of the four faces sit directly on that grid. The long wall spans two squares, so it is \\(2u\\) wide and \\(u\\) tall; each roof slope is one square, so it measures \\(u\\) from eave to ridge.\nThe depth is the interesting one. It is not on the grid at all: the two roof slopes meet at right angles, so the gable is an isosceles right triangle with legs \\(u\\), and the depth is its hypotenuse.\n\\[\\text{depth} = u\\sqrt2 \\approx 3.54\\ \\text{cm}\\]\nThe ridge then rises by half the depth — that is, \\(u/\\sqrt2\\) — and the total height is the wall plus that rise.\n\n\n\n\n\n\n\n\nQuantity\nIn units of \\(u\\)\ncm\n\n\n\n\nLong side\n\\(2u\\)\n5.00\n\n\nWall height\n\\(u\\)\n2.50\n\n\nRoof slope\n\\(u\\)\n2.50\n\n\nDepth\n\\(u\\sqrt2\\)\n3.54\n\n\nRidge rise\n\\(u/\\sqrt2\\)\n1.77\n\n\nTotal height\n\\(u\\left(1 + \\tfrac{1}{\\sqrt2}\\right)\\)\n4.27\n\n\n\nSo the whole model follows from the size of the sheet. Fold from a 20 cm square instead and every number scales with it; nothing else changes.\nNothing here was measured, which is the point — a fold is a construction, and a construction can be reasoned about.\nThe vertices are named by position:\n\n\n\n\n\n\n\nX0–X3\nthe four bottom corners, starting front-left and going clockwise seen from above\n\n\nX4–X7\nthe four eaves, directly above X0–X3\n\n\nX8, X9\nthe two ends of the ridge, left and right\n\n\n\nThe full model — coordinates, edges, and the naming convention — lives in data/dojo_house/ideal_house.json, and the notebooks read it from there.\n\n\n\n\n\nThe idealized wireframe, drawn from ideal_house.json.\n\n\n\n\nThe edge X0–X1, the bottom of the front wall, is the one used to fix the global scale when a reconstruction is recovered only up to similarity. Its length is recorded separately in the annotation file, so that the notebook takes the number from the data rather than from the text.",
+    "crumbs": [
+      "Home",
+      "The Origami house"
+    ]
+  },
+  {
+    "objectID": "origami-house.html#making-it-yours",
+    "href": "origami-house.html#making-it-yours",
+    "title": "The Origami house",
+    "section": "Making it yours",
+    "text": "Making it yours\nThe model is a description of one particular origami house, not a universal constant. If you fold your own with different proportions, measure it, edit the dimensions in ideal_house.json, and everything downstream continues to work — the synthetic scene, the projections, the reconstruction, the error against ground truth.\nFold your own house, and run the notebooks on it. See what happens, the interesting part is not when the reconstruction works, but when it doesn’t, and you have to decide whether to blame the algorithm or the ruler.",
+    "crumbs": [
+      "Home",
+      "The Origami house"
+    ]
   },
   {
     "objectID": "notebooks/rectification/affine.html",
