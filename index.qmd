@@ -1,9 +1,7 @@
 ---
 title: "Computer Vision Dojo"
-subtitle: "a geometric way"
-author:
-  name: Luca Magri
-  url: https://magrilu.github.io/
+subtitle: "a geometric way — <span style='opacity:0.7'>by [Luca Magri](https://magrilu.github.io/)</span>"
+
 ---
 
 ![](images/cv_dojo.jpg){fig-align="center" width="60%"}

@@ -7,7 +7,7 @@ website:
   description: "Hands-on notebooks in geometric computer vision."
   site-url: https://magrilu.github.io/cv-dojo/
   repo-url: https://github.com/magrilu/cv-dojo
-  repo-actions: [source, issue]
+  repo-actions: [issue]
   favicon: assets/favicon.png
   page-footer:
     left: "© 2026 Luca Magri — CC BY-NC-ND 4.0 (text and images) / MIT (code)"
@@ -48,6 +48,7 @@ format:
     theme: [cosmo, assets/custom.scss]
     toc: true
     toc-depth: 3
+    toc-title: " "
     code-tools: true
     code-fold: false
     highlight-style: github
