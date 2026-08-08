@@ -33,7 +33,7 @@ entry:
 ``` bibtex
 @software{magri_cvdojo,
   author = {Magri, Luca},
-  title  = {Computer Vision Dojo},
+  title  = {Computer Vision Dojo: a geometric way},
   year   = {2026},
   url    = {https://github.com/magrilu/cv-dojo}
 }

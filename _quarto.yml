@@ -3,14 +3,14 @@ project:
   output-dir: _site
 
 website:
-  title: "Computer Vision Dojo"
+  title: "Computer Vision Dojo: a geometric way"
   description: "Hands-on notebooks in geometric computer vision."
   site-url: https://magrilu.github.io/cv-dojo/
   repo-url: https://github.com/magrilu/cv-dojo
   repo-actions: [issue]
   favicon: assets/favicon.png
   page-footer:
-    left: "© 2026 Luca Magri — CC BY-NC-ND 4.0 (text and images) / MIT (code)"
+    left: "© 2026 Luca Magri — CC BY-NC-ND 4.0 (text and figures) / MIT (code)"
     right:
       - icon: github
         href: https://github.com/magrilu/cv-dojo
@@ -18,8 +18,6 @@ website:
         href: https://magrilu.github.io/
   navbar:
     left:
-      - href: index.qmd
-        text: Home
       - href: about.qmd
         text: About
     right:
@@ -30,7 +28,7 @@ website:
     search: true
     contents:
       - href: index.qmd
-        text: Overview
+        text: Preface
       - href: origami-house.qmd
         text: "The Origami house"
       - section: "Camera"
