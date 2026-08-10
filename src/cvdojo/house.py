@@ -83,3 +83,36 @@ def load_two_view_matches():
     x = homogeneous([m["x"] for m in ann["matches"]])
     xp = homogeneous([m["xp"] for m in ann["matches"]])
     return x, xp, [m["label"] for m in ann["matches"]]
+
+
+def load_two_view_cameras():
+    """
+    The two camera matrices for IMG_4331 and IMG_4337.
+
+    They come from a COLMAP reconstruction, aligned by a similarity to the
+    frame of ideal_house.json, so they map centimetres in the model directly
+    to pixels in the uploaded photographs. Within the accuracy of that
+    alignment they are the true cameras, and everything derived from them —
+    synthetic views, the fundamental matrix, the epipoles — is ground truth.
+
+    Returns
+    -------
+    P, Pp : (3, 4) arrays
+    """
+    ann = load_annotation("two_view_cameras")
+    P, Pp = (np.asarray(M, float) for M in ann["P"])
+    return P, Pp
+
+
+def project(P, X):
+    """Project 3D points (n, 3) or (3,) through P, returning pixel coordinates."""
+    X = np.atleast_2d(np.asarray(X, float))
+    q = (P @ np.c_[X, np.ones(len(X))].T).T
+    return q[:, :2] / q[:, 2, None]
+
+
+def model_points(ids=None):
+    """Vertices of the idealized model, as an (n, 3) array of centimetres."""
+    V = load_model()["vertices"]
+    ids = list(V) if ids is None else list(ids)
+    return np.array([V[i] for i in ids], float), ids

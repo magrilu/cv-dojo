@@ -1,5 +1,6 @@
 {
   "name": "two_view_matches",
+  "description": "Correspondences between the two photographs of the Origami House, placed by hand starting from the projection of the idealized model. Their mean distance to the true epipolar lines is about 1.7 pixels: ordinary annotation noise, which is the point. The synthetic correspondences used earlier in the same notebook are exact; these are not.",
   "images": {
     "view": "IMG_4331.jpeg",
     "view_prime": "IMG_4337.jpeg"
@@ -8,105 +9,127 @@
     "width": 1536,
     "height": 2048
   },
-  "coordinate_frame": "pixels in the original JPEGs, origin at top-left",
-  "convention": "x are image points in the first view, xp (x-prime) in the second. All points lie on the Origami House: the first six on the front facade, the last two on the roof ridge.",
+  "coordinate_frame": "pixels in the uploaded JPEGs, origin at top-left",
   "matches": [
     {
-      "id": "x1",
-      "label": "left front eave",
+      "id": "X0",
+      "label": "front-left-bottom corner",
       "x": [
-        480.0,
-        1412.0
+        522.0,
+        1564.2
       ],
       "xp": [
-        327.0,
-        1365.0
+        482.4,
+        1583.7
       ]
     },
     {
-      "id": "x2",
-      "label": "right front eave",
+      "id": "X1",
+      "label": "front-right-bottom corner",
       "x": [
-        915.0,
-        1360.0
+        949.0,
+        1500.0
       ],
       "xp": [
-        1002.0,
-        1147.0
+        1006.5,
+        1366.6
       ]
     },
     {
-      "id": "x3",
-      "label": "left front bottom corner",
+      "id": "X4",
+      "label": "front-left eave",
       "x": [
-        505.0,
-        1554.0
+        485.0,
+        1435.0
       ],
       "xp": [
-        365.0,
-        1590.0
+        441.2,
+        1399.2
       ]
     },
     {
-      "id": "x4",
-      "label": "door top-left",
+      "id": "X5",
+      "label": "front-right eave",
       "x": [
-        697.0,
-        1452.0
-      ],
-      "xp": [
-        697.0,
+        942.0,
         1353.0
-      ]
-    },
-    {
-      "id": "x5",
-      "label": "door top-right",
-      "x": [
-        763.0,
-        1444.0
       ],
       "xp": [
-        795.0,
-        1317.0
+        1013.2,
+        1162.3
       ]
     },
     {
-      "id": "x6",
-      "label": "door bottom-left",
+      "id": "X8",
+      "label": "left ridge end",
       "x": [
-        704.0,
-        1533.0
-      ],
-      "xp": [
-        708.0,
-        1457.0
-      ]
-    },
-    {
-      "id": "x7",
-      "label": "left roof-ridge endpoint",
-      "x": [
-        448.0,
+        445.0,
         1175.0
       ],
       "xp": [
-        302.0,
-        1050.0
+        305.0,
+        1035.5
       ]
     },
     {
-      "id": "x8",
-      "label": "right roof-ridge endpoint",
+      "id": "X9",
+      "label": "right ridge end",
       "x": [
-        877.0,
-        1125.0
+        898.0,
+        1124.0
       ],
       "xp": [
-        905.0,
-        925.0
+        910.3,
+        880.7
+      ]
+    },
+    {
+      "id": "D0",
+      "label": "door bottom-left",
+      "x": [
+        694.5,
+        1540.3
+      ],
+      "xp": [
+        707.0,
+        1495.5
+      ]
+    },
+    {
+      "id": "D1",
+      "label": "door top-left",
+      "x": [
+        683.9,
+        1463.0
+      ],
+      "xp": [
+        704.8,
+        1390.6
+      ]
+    },
+    {
+      "id": "D2",
+      "label": "door top-right",
+      "x": [
+        767.0,
+        1449.0
+      ],
+      "xp": [
+        809.0,
+        1342.3
+      ]
+    },
+    {
+      "id": "D3",
+      "label": "door bottom-right",
+      "x": [
+        777.4,
+        1529.9
+      ],
+      "xp": [
+        811.8,
+        1452.6
       ]
     }
-  ],
-  "note": "Hand-annotated. Accurate to a few pixels; the residuals reported in the notebooks reflect this as much as they reflect the algorithms."
+  ]
 }

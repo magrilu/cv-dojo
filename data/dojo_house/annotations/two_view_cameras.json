@@ -1,0 +1,54 @@
+{
+  "description": "Camera matrices for the two views of the Origami House, expressed in the coordinate frame of ideal_house.json (centimetres) and in the pixel frame of the uploaded 1536x2048 JPEGs. Obtained from a COLMAP reconstruction, then aligned to the ideal model by a similarity.",
+  "images": [
+    "IMG_4331.jpeg",
+    "IMG_4337.jpeg"
+  ],
+  "image_size_px": {
+    "width": 1536,
+    "height": 2048
+  },
+  "world_frame": "data/dojo_house/ideal_house.json, units cm",
+  "P": [
+    [
+      [
+        258.27495437859363,
+        76.88868327235424,
+        -79.58425473264579,
+        1491.4264699299422
+      ],
+      [
+        -20.22437853917314,
+        9.347415648555664,
+        -299.5562637129276,
+        4554.877093174086
+      ],
+      [
+        0.008333271444466238,
+        0.13435033276939476,
+        -0.08041486728549271,
+        2.918286656216798
+      ]
+    ],
+    [
+      [
+        269.6247912261946,
+        -11.903065022686334,
+        -78.18097131187632,
+        971.610392464243
+      ],
+      [
+        -14.955059254575007,
+        6.852711801926911,
+        -299.9328947279767,
+        3219.9254013336886
+      ],
+      [
+        0.0511626756365387,
+        0.1223253709431337,
+        -0.08369522360381597,
+        2.0383332742876545
+      ]
+    ]
+  ]
+}
