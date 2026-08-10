@@ -37,6 +37,11 @@ website:
       - section: "Rectification"
         contents:
           - notebooks/rectification/affine.ipynb
+      - section: "Two views"
+        contents:
+          - notebooks/two-views/eight-point.ipynb
+          - notebooks/two-views/critical-configurations.ipynb
+          - notebooks/two-views/seven-point.ipynb
       - section: "Triangulation"
         contents:
           - notebooks/triangulation/triangulation.ipynb

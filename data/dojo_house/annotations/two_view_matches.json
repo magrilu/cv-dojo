@@ -1,0 +1,112 @@
+{
+  "name": "two_view_matches",
+  "images": {
+    "view": "IMG_4331.jpeg",
+    "view_prime": "IMG_4337.jpeg"
+  },
+  "image_size_px": {
+    "width": 1536,
+    "height": 2048
+  },
+  "coordinate_frame": "pixels in the original JPEGs, origin at top-left",
+  "convention": "x are image points in the first view, xp (x-prime) in the second. All points lie on the Origami House: the first six on the front facade, the last two on the roof ridge.",
+  "matches": [
+    {
+      "id": "x1",
+      "label": "left front eave",
+      "x": [
+        480.0,
+        1412.0
+      ],
+      "xp": [
+        327.0,
+        1365.0
+      ]
+    },
+    {
+      "id": "x2",
+      "label": "right front eave",
+      "x": [
+        915.0,
+        1360.0
+      ],
+      "xp": [
+        1002.0,
+        1147.0
+      ]
+    },
+    {
+      "id": "x3",
+      "label": "left front bottom corner",
+      "x": [
+        505.0,
+        1554.0
+      ],
+      "xp": [
+        365.0,
+        1590.0
+      ]
+    },
+    {
+      "id": "x4",
+      "label": "door top-left",
+      "x": [
+        697.0,
+        1452.0
+      ],
+      "xp": [
+        697.0,
+        1353.0
+      ]
+    },
+    {
+      "id": "x5",
+      "label": "door top-right",
+      "x": [
+        763.0,
+        1444.0
+      ],
+      "xp": [
+        795.0,
+        1317.0
+      ]
+    },
+    {
+      "id": "x6",
+      "label": "door bottom-left",
+      "x": [
+        704.0,
+        1533.0
+      ],
+      "xp": [
+        708.0,
+        1457.0
+      ]
+    },
+    {
+      "id": "x7",
+      "label": "left roof-ridge endpoint",
+      "x": [
+        448.0,
+        1175.0
+      ],
+      "xp": [
+        302.0,
+        1050.0
+      ]
+    },
+    {
+      "id": "x8",
+      "label": "right roof-ridge endpoint",
+      "x": [
+        877.0,
+        1125.0
+      ],
+      "xp": [
+        905.0,
+        925.0
+      ]
+    }
+  ],
+  "note": "Hand-annotated. Accurate to a few pixels; the residuals reported in the notebooks reflect this as much as they reflect the algorithms."
+}
