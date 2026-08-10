@@ -166,3 +166,26 @@ nav[role="doc-toc"] ul > li > ul > li > a.active {
   max-width: 620px;
   margin: 1.5rem auto 2.5rem;
 }
+
+// Ambienti alla LaTeX: filetto sottile, niente riquadro
+.theorem, .lemma, .corollary, .proposition,
+.definition, .example, .exercise, .remark, .proof {
+  margin: 1.7rem 0;
+  padding: 0.15rem 0 0.15rem 1.1rem;
+  border-left: 2px solid;
+}
+
+// Definizioni e affini: pomodoro, testo tondo
+.definition, .example, .exercise { border-left-color: $pomodoro; }
+
+// Teoremi e affini: zucchina, testo corsivo come vuole la tradizione
+.theorem, .lemma, .corollary, .proposition {
+  border-left-color: $zucchina;
+  font-style: italic;
+}
+
+// Osservazioni e dimostrazioni: grigio, restano in secondo piano
+.remark, .proof { border-left-color: #cfcfca; }
+
+// Il titolo resta dritto anche dentro un ambiente in corsivo
+.theorem-title, .proof-title { font-style: normal; }
