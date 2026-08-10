@@ -4,7 +4,7 @@ subtitle: "a geometric way — <span style='opacity:0.7'>by [Luca Magri](https:/
 
 ---
 
-![](images/cv_dojo.jpg){fig-align="center" width="60%"}
+![](images/cv_dojo.jpg){fig-align="center" width="65%"}
 A dojo is a place for practice: somewhere to return to the same ideas and gradually make them your own.
 
 This is a small and growing collection of notebooks on the geometric foundations of 3D computer vision: projective geometry, multi-view relations, robust fitting, and, in time, more. Most of the examples are built around a small origami house folded from one sheet of paper. Fold your own, take your own images, and you have your own ground truth to check the reconstructions on this site against. The origami model is [described in detail](origami-house.qmd).

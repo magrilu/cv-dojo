@@ -1,46 +1,63 @@
 # Computer Vision Dojo
 
-Hands-on notebooks in geometric computer vision — projective geometry of the
-plane, homography estimation, rectification, robust fitting, matching.
+*a geometric way*
 
-**→ [magrilu.github.io/cv-dojo](https://magrilu.github.io/cv-dojo/)**
+![](https://raw.githubusercontent.com/magrilu/cv-dojo/main/images/cv_dojo.jpg)
 
-Each notebook is paired with an algorithm from the accompanying notes, runs top
-to bottom with no manual input, and opens in Colab with one click. Interactive
-point selection is available as an optional cell, for use during lectures.
+Hands-on notebooks in 3D computer vision — projective geometry, multiple-view
+relations, camera calibration, reconstruction, robust fitting.
+
+**→ [magrilu.github.io/cv-dojo](https://magrilu.github.io/cv-dojo/)** — the
+notebooks are meant to be read there. Some of it is written, some is still in
+preparation.
+
+Each notebook runs top to bottom with no manual input, and opens in Colab with
+one click. Most examples are built around a small origami house folded from one
+sheet of paper: every dimension follows from the size of the sheet, so the
+reconstructions can be checked against a ground truth you can fold yourself.
 
 By [Luca Magri](https://magrilu.github.io/), Politecnico di Milano.
 
-## Contents
+## Layout
 
-| Topic | Notebook |
-|---|---|
-| Affine rectification | [`notebooks/rectification/affine.ipynb`](notebooks/rectification/affine.ipynb) |
+```
+notebooks/    one folder per topic
+data/         images, annotations, and the metric model of the origami house
+matlab/       the original scripts from the Politecnico exercise sessions
+images/       illustrations used on the site
+```
 
-The original MATLAB scripts from the Politecnico exercise sessions are kept
-under [`matlab/`](matlab/).
-
-## Running locally
+## Running the notebooks
 
 ```bash
+git clone https://github.com/magrilu/cv-dojo.git
+cd cv-dojo
 python -m venv .venv && source .venv/bin/activate
 pip install -r requirements.txt
 jupyter lab
 ```
 
-To build the website (requires [Quarto](https://quarto.org)):
+## Building the site
+
+Requires [Quarto](https://quarto.org). The virtual environment must be active,
+or Quarto will fall back to the system Python and fail to find Jupyter:
 
 ```bash
-quarto preview              # live reload
-quarto publish gh-pages     # build and deploy
+source .venv/bin/activate
+quarto render
+quarto publish gh-pages
 ```
 
-## Course tracks
+Notebooks are committed without outputs; the rendered results live in
+`_freeze/`, which is tracked on purpose so the site can be built without
+rerunning any code.
 
-- [IACV — Politecnico di Milano](https://magrilu.github.io/cv-dojo/tracks/iacv.html)
-- [Bocconi](https://magrilu.github.io/cv-dojo/tracks/bocconi.html)
+## Contributing
+
+Corrections are welcome — mistakes, unclear passages, a derivation that does not
+hold. Open an issue or write to me.
 
 ## License
 
-Text and figures CC BY 4.0; code MIT. Attribution appreciated — see
-`CITATION.cff`.
+Code MIT; text and figures CC BY-NC-ND 4.0. See `LICENSE.md`, and `CITATION.cff`
+if you would like to cite this work.

@@ -159,3 +159,10 @@ nav[role="doc-toc"] ul > li > ul > li > a.active {
   border-left: 1px solid $arancione-scuro;
   color: $body-color !important;
 }
+
+// per avere una figura hero (la prima della copertina) anche grande su mobile
+.hero img {
+  width: 100%;
+  max-width: 620px;
+  margin: 1.5rem auto 2.5rem;
+}
