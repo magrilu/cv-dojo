@@ -1,0 +1,1601 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.10.18">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>fitting-a-conic – Computer Vision Dojo: a geometric way</title>
+<style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: 1.5em;}
+div.column{flex: auto;}
+@media screen {
+div.columns{gap: min(4vw, 1.5em);}
+div.column{overflow-x: auto;}
+}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../">
+<link href="../../assets/favicon.png" rel="icon" type="image/png">
+<script src="../../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-d92e8767f1f42d56076cabe937f4151b.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap-4c6d3fea03ba38a75d48a1a26a094d32.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-chtml.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+</head>
+
+<body class="nav-sidebar docked nav-fixed quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a class="navbar-brand" href="../../index.html">
+    <span class="navbar-title">Computer Vision Dojo: a geometric way</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../../about.html"> 
+<span class="menu-text">About</span></a>
+  </li>  
+</ul>
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/magrilu/cv-dojo"> <i class="bi bi-github" role="img">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../notebooks/geometry/fitting-a-conic.html">Geometry fundamentals</a></li><li class="breadcrumb-item"><a href="../../notebooks/geometry/fitting-a-conic.html">Fitting a conic</a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+      <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation docked overflow-auto">
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Preface</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../origami-house.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">The Origami house</span></a>
+  </div>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true">
+ <span class="menu-text">Geometry fundamentals</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../notebooks/geometry/fitting-a-conic.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text">Fitting a conic</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true">
+ <span class="menu-text">Single-view geometry</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../notebooks/camera/camera.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">The pinhole camera</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../notebooks/rectification/affine.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Affine rectification</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true">
+ <span class="menu-text">Two-view geometry</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../notebooks/two-views/eight-point.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">The fundamental matrix</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../notebooks/two-views/residuals.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Residuals for the fundamental matrix</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="true">
+ <span class="menu-text">Triangulation</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-4" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../notebooks/triangulation/triangulation.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Triangulation from two views</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+   
+  <ul>
+  <li><a href="#fitting-a-conic" id="toc-fitting-a-conic" class="nav-link active" data-scroll-target="#fitting-a-conic">Fitting a conic</a>
+  <ul class="collapse">
+  <li><a href="#a-conic-is-a-projective-point-in-mathbbp5" id="toc-a-conic-is-a-projective-point-in-mathbbp5" class="nav-link" data-scroll-target="#a-conic-is-a-projective-point-in-mathbbp5">A conic is a projective point in <span class="math inline">\(\mathbb{P}^5\)</span></a></li>
+  <li><a href="#dlt-is-a-null-space-problem" id="toc-dlt-is-a-null-space-problem" class="nav-link" data-scroll-target="#dlt-is-a-null-space-problem">DLT is a null-space problem</a></li>
+  <li><a href="#four-points-a-pencil-of-conics" id="toc-four-points-a-pencil-of-conics" class="nav-link" data-scroll-target="#four-points-a-pencil-of-conics">Four points: a pencil of conics</a></li>
+  <li><a href="#fitting-a-conic-to-noisy-data" id="toc-fitting-a-conic-to-noisy-data" class="nav-link" data-scroll-target="#fitting-a-conic-to-noisy-data">Fitting a conic to noisy data</a></li>
+  <li><a href="#algebraic-error-is-not-a-distance" id="toc-algebraic-error-is-not-a-distance" class="nav-link" data-scroll-target="#algebraic-error-is-not-a-distance">4. Algebraic error is not a distance</a>
+  <ul class="collapse">
+  <li><a href="#what-does-nabla-f-mean" id="toc-what-does-nabla-f-mean" class="nav-link" data-scroll-target="#what-does-nabla-f-mean">What does <span class="math inline">\(\nabla f\)</span> mean?</a></li>
+  </ul></li>
+  <li><a href="#sampson-from-first-principles" id="toc-sampson-from-first-principles" class="nav-link" data-scroll-target="#sampson-from-first-principles">Sampson from first principles</a>
+  <ul class="collapse">
+  <li><a href="#the-sampson-myth" id="toc-the-sampson-myth" class="nav-link" data-scroll-target="#the-sampson-myth">The “Sampson myth”</a></li>
+  <li><a href="#where-does-the-linearised-constraint-live" id="toc-where-does-the-linearised-constraint-live" class="nav-link" data-scroll-target="#where-does-the-linearised-constraint-live">Where does the linearised constraint live?</a></li>
+  </ul></li>
+  <li><a href="#from-dlt-to-geometric-refinement" id="toc-from-dlt-to-geometric-refinement" class="nav-link" data-scroll-target="#from-dlt-to-geometric-refinement">From DLT to geometric refinement</a></li>
+  <li><a href="#going-deeper-exact-distance-evolutes-and-ed-degree" id="toc-going-deeper-exact-distance-evolutes-and-ed-degree" class="nav-link" data-scroll-target="#going-deeper-exact-distance-evolutes-and-ed-degree">Going deeper: exact distance, evolutes, and ED degree</a>
+  <ul class="collapse">
+  <li><a href="#bonus-the-evolute-of-an-ellipse-and-the-number-of-critical-points" id="toc-bonus-the-evolute-of-an-ellipse-and-the-number-of-critical-points" class="nav-link" data-scroll-target="#bonus-the-evolute-of-an-ellipse-and-the-number-of-critical-points">Bonus: the evolute of an ellipse and the number of critical points</a></li>
+  <li><a href="#what-is-the-euclidean-distance-degree" id="toc-what-is-the-euclidean-distance-degree" class="nav-link" data-scroll-target="#what-is-the-euclidean-distance-degree">What is the Euclidean distance degree?</a></li>
+  </ul></li>
+  <li><a href="#questions-to-leave-open" id="toc-questions-to-leave-open" class="nav-link" data-scroll-target="#questions-to-leave-open">Questions to leave open</a></li>
+  <li><a href="#further-reading" id="toc-further-reading" class="nav-link" data-scroll-target="#further-reading">Further reading</a></li>
+  </ul></li>
+  </ul>
+<div class="toc-actions"><ul><li><a href="https://github.com/magrilu/cv-dojo/issues/new" class="toc-action"><i class="bi bi-github"></i>Report an issue</a></li></ul></div></nav>
+    </div>
+<!-- main -->
+<main class="content page-columns page-full" id="quarto-document-content"><header id="title-block-header" class="quarto-title-block"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../notebooks/geometry/fitting-a-conic.html">Geometry fundamentals</a></li><li class="breadcrumb-item"><a href="../../notebooks/geometry/fitting-a-conic.html">Fitting a conic</a></li></ol></nav></header>
+
+
+
+
+<p><a href="https://colab.research.google.com/github/magrilu/cv-dojo/blob/main/notebooks/geometry/fitting-a-conic.ipynb"><img src="https://colab.research.google.com/assets/colab-badge.svg" class="img-fluid"></a></p>
+<section id="fitting-a-conic" class="level1 page-columns page-full">
+<h1>Fitting a conic</h1>
+<p>Conic fitting is a very convenient playground for training in geometric estimation. It is a task rich enough to contain most of the issues that will come back later, but simple enough that we can draw almost everything in the plane.</p>
+<p>We will use conic fitting to present two themes:</p>
+<ol type="1">
+<li><strong>Direct linear transform algorithm</strong></li>
+<li><strong>Sampson error to measure residuals in geometric estimation problmes</strong></li>
+</ol>
+<p>We will start with high-school algebra, pass through projective geometry, and end with the first-order geometric residual that we will later meet again in two-view geometry.</p>
+<section id="a-conic-is-a-projective-point-in-mathbbp5" class="level2">
+<h2 class="anchored" data-anchor-id="a-conic-is-a-projective-point-in-mathbbp5">A conic is a projective point in <span class="math inline">\(\mathbb{P}^5\)</span></h2>
+<p>A quick recap: a conic is the zero set of a quadratic polynomial in two variables,</p>
+<p><span id="eq-conic"><span class="math display">\[
+f(x,y)=ax^2+bxy+cy^2+dx+ey+f=0,
+\tag{1}\]</span></span></p>
+<p>or, in homogeneous coordinates <span class="math inline">\(\widetilde{\mathbf x}=(x,y,1)^\top\)</span>,</p>
+<p><span class="math display">\[
+\widetilde{\mathbf x}^{\top}\mathsf C\widetilde{\mathbf x}=0,
+\qquad
+\mathsf C=
+\begin{bmatrix}
+a &amp; b/2 &amp; d/2\\
+b/2 &amp; c &amp; e/2\\
+d/2 &amp; e/2 &amp; f
+\end{bmatrix}.
+\]</span></p>
+<p>It is often convenient to stack the six independent coefficients into</p>
+<p><span class="math display">\[
+\mathbf c=(a,b,c,d,e,f)^\top\in\mathbb R^6.
+\]</span></p>
+<p>But <span class="math inline">\(\mathbf c\)</span> and <span class="math inline">\(\lambda\mathbf c\)</span>, for every <span class="math inline">\(\lambda\neq0\)</span>, describe exactly the same curve. The coefficients therefore represent a point of the projective space <span class="math inline">\(\mathbb P^5\)</span>, and a conic has five degrees of freedom.</p>
+<p>Two simple algebraic tests will be useful later. The sign of <span class="math inline">\(b^2-4ac\)</span> distinguishes the usual non-degenerate types, while</p>
+<p><span class="math display">\[
+\det(\mathsf C)=0
+\]</span></p>
+<p>marks a <strong>degenerate conic</strong>, for example a pair of lines. We will actually meet three such conics in a moment.</p>
+<div id="58a82f5b" class="cell" data-execution_count="2">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> conic_matrix(v):</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""Build the symmetric matrix C from (a,b,c,d,e,f)."""</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>    a, b, c, d, e, f <span class="op">=</span> np.asarray(v, <span class="bu">float</span>)</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> np.array([[a, b<span class="op">/</span><span class="dv">2</span>, d<span class="op">/</span><span class="dv">2</span>],</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>                     [b<span class="op">/</span><span class="dv">2</span>, c, e<span class="op">/</span><span class="dv">2</span>],</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>                     [d<span class="op">/</span><span class="dv">2</span>, e<span class="op">/</span><span class="dv">2</span>, f]])</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> conic_vector(C):</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> np.array([C[<span class="dv">0</span>,<span class="dv">0</span>], <span class="dv">2</span><span class="op">*</span>C[<span class="dv">0</span>,<span class="dv">1</span>], C[<span class="dv">1</span>,<span class="dv">1</span>],</span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>                     <span class="dv">2</span><span class="op">*</span>C[<span class="dv">0</span>,<span class="dv">2</span>], <span class="dv">2</span><span class="op">*</span>C[<span class="dv">1</span>,<span class="dv">2</span>], C[<span class="dv">2</span>,<span class="dv">2</span>]])</span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> conic_value(C, P):</span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""Evaluate f at points stored row-wise in P."""</span></span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>    P <span class="op">=</span> np.atleast_2d(P)</span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a>    h <span class="op">=</span> np.c_[P, np.ones(<span class="bu">len</span>(P))]</span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> np.einsum(<span class="st">"ni,ij,nj-&gt;n"</span>, h, C, h)</span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> conic_grad(C, P):</span>
+<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""Gradient of f with respect to the Cartesian coordinates (x,y)."""</span></span>
+<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a>    P <span class="op">=</span> np.atleast_2d(P)</span>
+<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a>    h <span class="op">=</span> np.c_[P, np.ones(<span class="bu">len</span>(P))]</span>
+<span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="dv">2</span> <span class="op">*</span> (h <span class="op">@</span> C)[:, :<span class="dv">2</span>]</span>
+<span id="cb1-26"><a href="#cb1-26" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-27"><a href="#cb1-27" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-28"><a href="#cb1-28" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> conic_type(C, tol<span class="op">=</span><span class="fl">1e-11</span>):</span>
+<span id="cb1-29"><a href="#cb1-29" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="bu">abs</span>(np.linalg.det(C)) <span class="op">&lt;</span> tol <span class="op">*</span> <span class="bu">max</span>(<span class="fl">1.0</span>, np.linalg.norm(C)<span class="op">**</span><span class="dv">3</span>):</span>
+<span id="cb1-30"><a href="#cb1-30" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> <span class="st">"degenerate"</span></span>
+<span id="cb1-31"><a href="#cb1-31" aria-hidden="true" tabindex="-1"></a>    disc <span class="op">=</span> C[<span class="dv">0</span>,<span class="dv">1</span>]<span class="op">**</span><span class="dv">2</span> <span class="op">-</span> C[<span class="dv">0</span>,<span class="dv">0</span>]<span class="op">*</span>C[<span class="dv">1</span>,<span class="dv">1</span>]</span>
+<span id="cb1-32"><a href="#cb1-32" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="bu">abs</span>(disc) <span class="op">&lt;</span> tol:</span>
+<span id="cb1-33"><a href="#cb1-33" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> <span class="st">"parabola"</span></span>
+<span id="cb1-34"><a href="#cb1-34" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="st">"hyperbola"</span> <span class="cf">if</span> disc <span class="op">&gt;</span> <span class="dv">0</span> <span class="cf">else</span> <span class="st">"ellipse"</span></span>
+<span id="cb1-35"><a href="#cb1-35" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-36"><a href="#cb1-36" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-37"><a href="#cb1-37" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> conic_axes(C):</span>
+<span id="cb1-38"><a href="#cb1-38" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""Semi-axes if C is a real ellipse; otherwise None."""</span></span>
+<span id="cb1-39"><a href="#cb1-39" aria-hidden="true" tabindex="-1"></a>    A, b, c0 <span class="op">=</span> C[:<span class="dv">2</span>,:<span class="dv">2</span>], C[:<span class="dv">2</span>,<span class="dv">2</span>], C[<span class="dv">2</span>,<span class="dv">2</span>]</span>
+<span id="cb1-40"><a href="#cb1-40" aria-hidden="true" tabindex="-1"></a>    <span class="cf">try</span>:</span>
+<span id="cb1-41"><a href="#cb1-41" aria-hidden="true" tabindex="-1"></a>        ctr <span class="op">=</span> <span class="op">-</span>np.linalg.solve(A, b)</span>
+<span id="cb1-42"><a href="#cb1-42" aria-hidden="true" tabindex="-1"></a>    <span class="cf">except</span> np.linalg.LinAlgError:</span>
+<span id="cb1-43"><a href="#cb1-43" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> <span class="va">None</span></span>
+<span id="cb1-44"><a href="#cb1-44" aria-hidden="true" tabindex="-1"></a>    k <span class="op">=</span> ctr <span class="op">@</span> A <span class="op">@</span> ctr <span class="op">-</span> c0</span>
+<span id="cb1-45"><a href="#cb1-45" aria-hidden="true" tabindex="-1"></a>    w <span class="op">=</span> np.linalg.eigvalsh(A <span class="op">/</span> k)</span>
+<span id="cb1-46"><a href="#cb1-46" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> np.<span class="bu">any</span>(w <span class="op">&lt;=</span> <span class="dv">0</span>):</span>
+<span id="cb1-47"><a href="#cb1-47" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> <span class="va">None</span></span>
+<span id="cb1-48"><a href="#cb1-48" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> np.sort(<span class="dv">1</span><span class="op">/</span>np.sqrt(w))[::<span class="op">-</span><span class="dv">1</span>]</span>
+<span id="cb1-49"><a href="#cb1-49" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-50"><a href="#cb1-50" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-51"><a href="#cb1-51" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> value_grid(C, xlim, ylim, n<span class="op">=</span><span class="dv">400</span>):</span>
+<span id="cb1-52"><a href="#cb1-52" aria-hidden="true" tabindex="-1"></a>    gx, gy <span class="op">=</span> np.meshgrid(np.linspace(<span class="op">*</span>xlim, n), np.linspace(<span class="op">*</span>ylim, n))</span>
+<span id="cb1-53"><a href="#cb1-53" aria-hidden="true" tabindex="-1"></a>    G <span class="op">=</span> np.stack([gx, gy, np.ones_like(gx)])</span>
+<span id="cb1-54"><a href="#cb1-54" aria-hidden="true" tabindex="-1"></a>    F <span class="op">=</span> np.einsum(<span class="st">"ihw,ij,jhw-&gt;hw"</span>, G, C, G)</span>
+<span id="cb1-55"><a href="#cb1-55" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> gx, gy, F</span>
+<span id="cb1-56"><a href="#cb1-56" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-57"><a href="#cb1-57" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-58"><a href="#cb1-58" aria-hidden="true" tabindex="-1"></a>C_TRUE <span class="op">=</span> conic_matrix([<span class="dv">1</span><span class="op">/</span>A_TRUE<span class="op">**</span><span class="dv">2</span>, <span class="dv">0</span>, <span class="dv">1</span><span class="op">/</span>B_TRUE<span class="op">**</span><span class="dv">2</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="op">-</span><span class="fl">1.0</span>])</span>
+<span id="cb1-59"><a href="#cb1-59" aria-hidden="true" tabindex="-1"></a>C_TRUE <span class="op">/=</span> np.linalg.norm(C_TRUE)</span>
+<span id="cb1-60"><a href="#cb1-60" aria-hidden="true" tabindex="-1"></a>LIM <span class="op">=</span> ((<span class="op">-</span><span class="dv">280</span>, <span class="dv">280</span>), (<span class="op">-</span><span class="dv">210</span>, <span class="dv">210</span>))</span>
+<span id="cb1-61"><a href="#cb1-61" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-62"><a href="#cb1-62" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"running example:"</span>, conic_type(C_TRUE),</span>
+<span id="cb1-63"><a href="#cb1-63" aria-hidden="true" tabindex="-1"></a>      <span class="st">"with semi-axes"</span>, conic_axes(C_TRUE).<span class="bu">round</span>(<span class="dv">1</span>), <span class="st">"pixels"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>running example: ellipse with semi-axes [200. 120.] pixels</code></pre>
+</div>
+</div>
+</section>
+<section id="dlt-is-a-null-space-problem" class="level2">
+<h2 class="anchored" data-anchor-id="dlt-is-a-null-space-problem">DLT is a null-space problem</h2>
+<p>The important observation is that Equation <a href="#eq-conic" class="quarto-xref">1</a> is quadratic in the point coordinates but <strong>linear in the conic coefficients</strong>. A measured point <span class="math inline">\(\mathbf p_i=(x_i,y_i)\)</span> contributes one equation</p>
+<p><span class="math display">\[
+\begin{bmatrix}
+x_i^2 &amp; x_i y_i &amp; y_i^2 &amp; x_i &amp; y_i &amp; 1
+\end{bmatrix}\mathbf c=0.
+\]</span></p>
+<p>Stacking <span class="math inline">\(N\)</span> points gives the homogeneous linear system</p>
+<p><span class="math display">\[
+\mathsf A\mathbf c=0,
+\]</span></p>
+<p>where <span class="math inline">\(\mathsf A\)</span> is the <strong>design matrix</strong>. The whole solution set is therefore a vector space: the null space of <span class="math inline">\(\mathsf A\)</span>.</p>
+<p>The key bookkeeping identity is</p>
+<p><span class="math display">\[
+\dim\ker\mathsf A=6-\operatorname{rank}(\mathsf A).
+\]</span></p>
+<p>The rank tells us how many independent constraints the data provide; the nullity tells us how much freedom is left in the model.</p>
+<div id="6dc57c6b" class="cell" data-execution_count="3">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> design_matrix(P):</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>    x, y <span class="op">=</span> P[:,<span class="dv">0</span>], P[:,<span class="dv">1</span>]</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> np.column_stack([x<span class="op">*</span>x, x<span class="op">*</span>y, y<span class="op">*</span>y, x, y, np.ones(<span class="bu">len</span>(P))])</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> normalize_points(P):</span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""Hartley-style normalization: centroid at zero, mean radius sqrt(2)."""</span></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>    ctr <span class="op">=</span> P.mean(axis<span class="op">=</span><span class="dv">0</span>)</span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>    scale <span class="op">=</span> np.sqrt(<span class="dv">2</span>) <span class="op">/</span> np.linalg.norm(P<span class="op">-</span>ctr, axis<span class="op">=</span><span class="dv">1</span>).mean()</span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>    T <span class="op">=</span> np.array([[scale, <span class="dv">0</span>, <span class="op">-</span>scale<span class="op">*</span>ctr[<span class="dv">0</span>]],</span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>                  [<span class="dv">0</span>, scale, <span class="op">-</span>scale<span class="op">*</span>ctr[<span class="dv">1</span>]],</span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>                  [<span class="dv">0</span>, <span class="dv">0</span>, <span class="fl">1.0</span>]])</span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a>    Xh <span class="op">=</span> (T <span class="op">@</span> np.c_[P, np.ones(<span class="bu">len</span>(P))].T).T</span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> Xh[:,:<span class="dv">2</span>], T</span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> fit_dlt(P, normalize<span class="op">=</span><span class="va">True</span>):</span>
+<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a>    X, T <span class="op">=</span> normalize_points(P) <span class="cf">if</span> normalize <span class="cf">else</span> (P, np.eye(<span class="dv">3</span>))</span>
+<span id="cb3-19"><a href="#cb3-19" aria-hidden="true" tabindex="-1"></a>    _, _, Vt <span class="op">=</span> np.linalg.svd(design_matrix(X))</span>
+<span id="cb3-20"><a href="#cb3-20" aria-hidden="true" tabindex="-1"></a>    Cn <span class="op">=</span> conic_matrix(Vt[<span class="op">-</span><span class="dv">1</span>])</span>
+<span id="cb3-21"><a href="#cb3-21" aria-hidden="true" tabindex="-1"></a>    C <span class="op">=</span> T.T <span class="op">@</span> Cn <span class="op">@</span> T</span>
+<span id="cb3-22"><a href="#cb3-22" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> C <span class="op">/</span> np.linalg.norm(C)</span>
+<span id="cb3-23"><a href="#cb3-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-24"><a href="#cb3-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-25"><a href="#cb3-25" aria-hidden="true" tabindex="-1"></a>t5 <span class="op">=</span> np.deg2rad([<span class="dv">20</span>, <span class="dv">85</span>, <span class="dv">150</span>, <span class="dv">225</span>, <span class="dv">310</span>])</span>
+<span id="cb3-26"><a href="#cb3-26" aria-hidden="true" tabindex="-1"></a>P5 <span class="op">=</span> np.column_stack([A_TRUE<span class="op">*</span>np.cos(t5), B_TRUE<span class="op">*</span>np.sin(t5)])</span>
+<span id="cb3-27"><a href="#cb3-27" aria-hidden="true" tabindex="-1"></a>A5 <span class="op">=</span> design_matrix(P5)</span>
+<span id="cb3-28"><a href="#cb3-28" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-29"><a href="#cb3-29" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"five points"</span>)</span>
+<span id="cb3-30"><a href="#cb3-30" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"  design matrix shape :"</span>, A5.shape)</span>
+<span id="cb3-31"><a href="#cb3-31" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"  rank                :"</span>, np.linalg.matrix_rank(A5))</span>
+<span id="cb3-32"><a href="#cb3-32" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"  null-space dimension:"</span>, <span class="dv">6</span><span class="op">-</span>np.linalg.matrix_rank(A5))</span>
+<span id="cb3-33"><a href="#cb3-33" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-34"><a href="#cb3-34" aria-hidden="true" tabindex="-1"></a>C5 <span class="op">=</span> fit_dlt(P5)</span>
+<span id="cb3-35"><a href="#cb3-35" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"  recovered semi-axes :"</span>, conic_axes(C5).<span class="bu">round</span>(<span class="dv">3</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>five points
+  design matrix shape : (5, 6)
+  rank                : 5
+  null-space dimension: 1
+  recovered semi-axes : [200. 120.]</code></pre>
+</div>
+</div>
+<p>For five points in general position the rank is five, so the null space is one-dimensional. There are infinitely many coefficient vectors in that line, but they differ only by scale: in <span class="math inline">\(\mathbb P^5\)</span> they are <strong>one conic</strong>.</p>
+<p>In practice we should not build <span class="math inline">\(\mathsf A\)</span> directly from large pixel coordinates. The columns contain <span class="math inline">\(x^2\)</span> next to a column of ones, so the system is badly scaled. We use the same short preconditioning trick as in the eight-point algorithm: translate the points to zero mean and rescale their mean distance to <span class="math inline">\(\sqrt2\)</span>, fit there, then transform the conic back. This improves numerical conditioning; it does not change the geometry of the problem.</p>
+</section>
+<section id="four-points-a-pencil-of-conics" class="level2 page-columns page-full">
+<h2 class="anchored" data-anchor-id="four-points-a-pencil-of-conics">Four points: a pencil of conics</h2>
+<p>Now remove one point. With four generic points,</p>
+<p><span class="math display">\[
+\operatorname{rank}(\mathsf A)=4,
+\qquad
+\dim\ker\mathsf A=2.
+\]</span></p>
+<p>Choose two generators <span class="math inline">\(\mathbf c_0,\mathbf c_1\)</span> of the null space. Every exact solution has the form</p>
+<p><span class="math display">\[
+\mathbf c(\lambda,\mu)=\lambda\mathbf c_0+\mu\mathbf c_1.
+\]</span></p>
+<p>Since the overall scale is irrelevant, <span class="math inline">\([\lambda:\mu]\in\mathbb P^1\)</span>: a two-dimensional vector space of coefficient vectors becomes a <strong>one-parameter family of conics</strong>, called a <em>pencil</em>.</p>
+<div id="a93d1846" class="cell" data-execution_count="4">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>P4 <span class="op">=</span> P5[:<span class="dv">4</span>]</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>A4 <span class="op">=</span> design_matrix(P4)</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>_, _, Vt4 <span class="op">=</span> np.linalg.svd(A4)</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>N <span class="op">=</span> Vt4[<span class="op">-</span><span class="dv">2</span>:].T                    <span class="co"># columns form a basis of ker A</span></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a><span class="co"># For the plots, choose an equivalent basis in which C0 is the true ellipse.</span></span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>c0 <span class="op">=</span> conic_vector(C_TRUE)</span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>c0 <span class="op">=</span> c0 <span class="op">/</span> np.linalg.norm(c0)</span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>c1 <span class="op">=</span> N[:,<span class="dv">0</span>] <span class="op">-</span> c0 <span class="op">*</span> (c0 <span class="op">@</span> N[:,<span class="dv">0</span>])</span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>c1 <span class="op">=</span> c1 <span class="op">/</span> np.linalg.norm(c1)</span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>C0, C1 <span class="op">=</span> conic_matrix(c0), conic_matrix(c1)</span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"four points"</span>)</span>
+<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"  rank                :"</span>, np.linalg.matrix_rank(A4))</span>
+<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"  null-space dimension:"</span>, <span class="dv">6</span><span class="op">-</span>np.linalg.matrix_rank(A4))</span>
+<span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"  ||A c0||            :"</span>, <span class="ss">f"</span><span class="sc">{</span>np<span class="sc">.</span>linalg<span class="sc">.</span>norm(A4<span class="op">@</span>c0)<span class="sc">:.2e}</span><span class="ss">"</span>)</span>
+<span id="cb5-17"><a href="#cb5-17" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"  ||A c1||            :"</span>, <span class="ss">f"</span><span class="sc">{</span>np<span class="sc">.</span>linalg<span class="sc">.</span>norm(A4<span class="op">@</span>c1)<span class="sc">:.2e}</span><span class="ss">"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>four points
+  rank                : 4
+  null-space dimension: 2
+  ||A c0||            : 2.48e-16
+  ||A c1||            : 2.10e-13</code></pre>
+</div>
+</div>
+<div id="cell-fig-conic-pencil" class="cell page-columns page-full" data-execution_count="5">
+<div class="cell-output cell-output-display page-columns page-full">
+<div id="fig-conic-pencil" class="quarto-float quarto-figure quarto-figure-center anchored page-columns page-full">
+<figure class="quarto-float quarto-float-fig figure page-columns page-full">
+<div aria-describedby="fig-conic-pencil-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca" class="page-columns page-full">
+<img src="fitting-a-conic_files/figure-html/fig-conic-pencil-output-1.png" width="752" height="587" class="figure-img column-page">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-conic-pencil-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;1: A pencil of conics generated by the two-dimensional null space of the four-point design matrix. Every coloured conic is a different linear combination of the same two generators, and every one passes through the four fixed points.
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<p>There is a particularly nice feature hidden inside this pencil. A member is degenerate exactly when</p>
+<p><span class="math display">\[
+\det\!\bigl(\mathsf C(\lambda,\mu)\bigr)=0.
+\]</span></p>
+<p>The entries of <span class="math inline">\(\mathsf C(\lambda,\mu)\)</span> are linear in <span class="math inline">\(\lambda\)</span> and <span class="math inline">\(\mu\)</span>, so its determinant is a homogeneous polynomial of degree three. Hence the pencil contains <strong>three degenerate members, counting multiplicity</strong>.</p>
+<p>For four real points in general position, they have an immediate geometric interpretation: there are exactly three ways to pair four points, and each pairing gives a conic made of two lines,</p>
+<p><span class="math display">\[
+(p_1p_2)\cup(p_3p_4),\qquad
+(p_1p_3)\cup(p_2p_4),\qquad
+(p_1p_4)\cup(p_2p_3).
+\]</span></p>
+<p>Let us recover those three members from the cubic <span class="math inline">\(\det(\mathsf C_0+t\mathsf C_1)=0\)</span> and draw them.</p>
+<div id="ff737a13" class="cell" data-execution_count="6">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> det_polynomial(C0, C1):</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""Coefficients of det(C0 + t C1), in increasing powers of t."""</span></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>    ts <span class="op">=</span> np.array([<span class="op">-</span><span class="fl">2.0</span>, <span class="op">-</span><span class="fl">0.5</span>, <span class="fl">0.75</span>, <span class="fl">2.5</span>])</span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>    ys <span class="op">=</span> np.array([np.linalg.det(C0 <span class="op">+</span> t<span class="op">*</span>C1) <span class="cf">for</span> t <span class="kw">in</span> ts])</span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> Pn.polyfit(ts, ys, <span class="dv">3</span>)</span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> line_through(p, q):</span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> np.cross(np.r_[p,<span class="fl">1.0</span>], np.r_[q,<span class="fl">1.0</span>])</span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> line_pair_conic(l, m):</span>
+<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="fl">0.5</span><span class="op">*</span>(np.outer(l,m) <span class="op">+</span> np.outer(m,l))</span>
+<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-15"><a href="#cb7-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-16"><a href="#cb7-16" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> projective_gap(C, D):</span>
+<span id="cb7-17"><a href="#cb7-17" aria-hidden="true" tabindex="-1"></a>    c, d <span class="op">=</span> conic_vector(C), conic_vector(D)</span>
+<span id="cb7-18"><a href="#cb7-18" aria-hidden="true" tabindex="-1"></a>    c, d <span class="op">=</span> c<span class="op">/</span>np.linalg.norm(c), d<span class="op">/</span>np.linalg.norm(d)</span>
+<span id="cb7-19"><a href="#cb7-19" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="bu">min</span>(np.linalg.norm(c<span class="op">-</span>d), np.linalg.norm(c<span class="op">+</span>d))</span>
+<span id="cb7-20"><a href="#cb7-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-21"><a href="#cb7-21" aria-hidden="true" tabindex="-1"></a>coef <span class="op">=</span> det_polynomial(C0, C1)</span>
+<span id="cb7-22"><a href="#cb7-22" aria-hidden="true" tabindex="-1"></a>roots <span class="op">=</span> Pn.polyroots(coef)</span>
+<span id="cb7-23"><a href="#cb7-23" aria-hidden="true" tabindex="-1"></a>roots <span class="op">=</span> np.sort(roots[np.<span class="bu">abs</span>(roots.imag)<span class="op">&lt;</span><span class="fl">1e-8</span>].real)</span>
+<span id="cb7-24"><a href="#cb7-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-25"><a href="#cb7-25" aria-hidden="true" tabindex="-1"></a>pairs <span class="op">=</span> [((<span class="dv">0</span>,<span class="dv">1</span>),(<span class="dv">2</span>,<span class="dv">3</span>)), ((<span class="dv">0</span>,<span class="dv">2</span>),(<span class="dv">1</span>,<span class="dv">3</span>)), ((<span class="dv">0</span>,<span class="dv">3</span>),(<span class="dv">1</span>,<span class="dv">2</span>))]</span>
+<span id="cb7-26"><a href="#cb7-26" aria-hidden="true" tabindex="-1"></a>pair_C <span class="op">=</span> []</span>
+<span id="cb7-27"><a href="#cb7-27" aria-hidden="true" tabindex="-1"></a>labels <span class="op">=</span> []</span>
+<span id="cb7-28"><a href="#cb7-28" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (i,j),(k,l) <span class="kw">in</span> pairs:</span>
+<span id="cb7-29"><a href="#cb7-29" aria-hidden="true" tabindex="-1"></a>    Cpair <span class="op">=</span> line_pair_conic(line_through(P4[i],P4[j]), line_through(P4[k],P4[l]))</span>
+<span id="cb7-30"><a href="#cb7-30" aria-hidden="true" tabindex="-1"></a>    pair_C.append(Cpair)</span>
+<span id="cb7-31"><a href="#cb7-31" aria-hidden="true" tabindex="-1"></a>    labels.append(<span class="vs">rf"</span><span class="dv">$</span><span class="kw">(</span><span class="vs">p_</span><span class="sc">{</span>i<span class="op">+</span><span class="dv">1</span><span class="sc">}</span><span class="vs">p_</span><span class="sc">{</span>j<span class="op">+</span><span class="dv">1</span><span class="sc">}</span><span class="kw">)</span><span class="er">\</span><span class="vs">cup</span><span class="kw">(</span><span class="vs">p_</span><span class="sc">{</span>k<span class="op">+</span><span class="dv">1</span><span class="sc">}</span><span class="vs">p_</span><span class="sc">{</span>l<span class="op">+</span><span class="dv">1</span><span class="sc">}</span><span class="kw">)</span><span class="dv">$</span><span class="vs">"</span>)</span>
+<span id="cb7-32"><a href="#cb7-32" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-33"><a href="#cb7-33" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"roots of det(C0 + t C1) = 0:"</span>, np.<span class="bu">round</span>(roots, <span class="dv">6</span>))</span>
+<span id="cb7-34"><a href="#cb7-34" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"determinants:"</span>, [<span class="ss">f"</span><span class="sc">{</span>np<span class="sc">.</span>linalg<span class="sc">.</span>det(C0<span class="op">+</span>t<span class="op">*</span>C1)<span class="sc">:.1e}</span><span class="ss">"</span> <span class="cf">for</span> t <span class="kw">in</span> roots])</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>roots of det(C0 + t C1) = 0: [-0.0256  0.007   0.0323]
+determinants: ['-1.0e-18', '-1.0e-18', '-9.8e-19']</code></pre>
+</div>
+</div>
+<div id="cell-fig-degenerate-pencil" class="cell page-columns page-full" data-execution_count="7">
+<div class="cell-output cell-output-display page-columns page-full">
+<div id="fig-degenerate-pencil" class="quarto-float quarto-figure quarto-figure-center anchored page-columns page-full">
+<figure class="quarto-float quarto-float-fig figure page-columns page-full">
+<div aria-describedby="fig-degenerate-pencil-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca" class="page-columns page-full">
+<img src="fitting-a-conic_files/figure-html/fig-degenerate-pencil-output-1.png" width="1403" height="418" class="figure-img column-page">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-degenerate-pencil-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;2: The three degenerate members of the pencil. The cubic <span class="math inline">\(\det(\mathsf C_0+t\mathsf C_1)=0\)</span> recovers the three possible pairings of four points into two lines.
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<p>This is a useful picture of what the null space means. With four points the algorithm has not failed to choose the right conic: <strong>there is no unique conic to choose</strong>. The data determine a projective line in the space of conics, and even the degenerate line pairs live on that same line.</p>
+<p>A fifth generic point contributes one more independent linear constraint and cuts the pencil at one point.</p>
+</section>
+<section id="fitting-a-conic-to-noisy-data" class="level2 page-columns page-full">
+<h2 class="anchored" data-anchor-id="fitting-a-conic-to-noisy-data">Fitting a conic to noisy data</h2>
+<p>Exact incidence is a clean algebraic statement: <span class="math inline">\(f(\mathbf p)=0\)</span>. Real image points do not lie exactly on the model, so before fitting them we should decide what a residual is supposed to measure.</p>
+<p>The most direct answer is geometric. Given a measured point <span class="math inline">\(\mathbf p\)</span>, let <span class="math inline">\(\mathbf q\)</span> be the closest point on the conic. Then</p>
+<p><span id="eq-geometric-residual"><span class="math display">\[
+\boxed{
+r_G(\mathbf p,\mathsf C)
+=
+\min_{\mathbf q:\,f(\mathbf q)=0}
+\|\mathbf p-\mathbf q\|.
+}
+\tag{2}\]</span></span></p>
+<p>At a regular closest point, the segment <span class="math inline">\(\mathbf p-\mathbf q\)</span> is normal to the conic,</p>
+<p><span class="math display">\[
+\mathbf p-\mathbf q \ \parallel\ \nabla f(\mathbf q).
+\]</span></p>
+<p>So <span class="math inline">\(r_G\)</span> has the interpretation we would like: it is an actual displacement in the image plane, measured in pixels. The picture is simple even if computing <span class="math inline">\(\mathbf q\)</span> is not.</p>
+<div id="cell-fig-geometric-conic-residual" class="cell page-columns page-full" data-execution_count="8">
+<div class="cell-output cell-output-display page-columns page-full">
+<div id="fig-geometric-conic-residual" class="quarto-float quarto-figure quarto-figure-center anchored page-columns page-full">
+<figure class="quarto-float quarto-float-fig figure page-columns page-full">
+<div aria-describedby="fig-geometric-conic-residual-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca" class="page-columns page-full">
+<img src="fitting-a-conic_files/figure-html/fig-geometric-conic-residual-output-1.png" width="713" height="558" class="figure-img column-page">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-geometric-conic-residual-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;3: The geometric residual <span class="math inline">\(r_G\)</span>: <span class="math inline">\(\mathbf q\)</span> is the closest point on the conic to the measurement <span class="math inline">\(\mathbf p\)</span>. At a regular closest point, the correction <span class="math inline">\(\mathbf p-\mathbf q\)</span> is normal to the conic, hence perpendicular to the dashed tangent.
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<p>Now return to the linear system. With more than five noisy points there is usually no non-zero vector satisfying <span class="math inline">\(\mathsf A\mathbf c=0\)</span> exactly. The DLT replaces the null-space problem by</p>
+<p><span class="math display">\[
+\min_{\|\mathbf c\|=1}\|\mathsf A\mathbf c\|^2,
+\]</span></p>
+<p>whose solution is the right singular vector associated with the smallest singular value.</p>
+<p>But this objective is</p>
+<p><span class="math display">\[
+\|\mathsf A\mathbf c\|^2
+=
+\sum_i f(\mathbf p_i)^2.
+\]</span></p>
+<p>So DLT minimizes the <strong>algebraic residual</strong></p>
+<p><span class="math display">\[
+\boxed{r_A(\mathbf p,\mathsf C)=f(\mathbf p)}
+\]</span></p>
+<p>in the coordinate system in which the design matrix is built. This is what keeps the estimate linear. The next question is whether <span class="math inline">\(r_A\)</span> behaves like the geometric residual <span class="math inline">\(r_G\)</span>.</p>
+</section>
+<section id="algebraic-error-is-not-a-distance" class="level2 page-columns page-full">
+<h2 class="anchored" data-anchor-id="algebraic-error-is-not-a-distance">4. Algebraic error is not a distance</h2>
+<p>The quickest counterexample is scale. The matrices <span class="math inline">\(\mathsf C\)</span> and <span class="math inline">\(10\mathsf C\)</span> describe the same conic, hence they have the same geometric residual, but</p>
+<p><span class="math display">\[
+r_A(\mathbf p,10\mathsf C)=10\,r_A(\mathbf p,\mathsf C).
+\]</span></p>
+<p>A quantity that can change while the curve does not cannot be a geometric distance.</p>
+<div id="35c0cb87" class="cell" data-execution_count="9">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"same point, same curve"</span>)</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"  r_G(p,C)    = </span><span class="sc">{</span>geometric_residual(C_TRUE,p[<span class="va">None</span>,:])[<span class="dv">0</span>]<span class="sc">:8.3f}</span><span class="ss"> px"</span>)</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"  r_G(p,10 C) = </span><span class="sc">{</span>geometric_residual(<span class="dv">10</span><span class="op">*</span>C_TRUE,p[<span class="va">None</span>,:])[<span class="dv">0</span>]<span class="sc">:8.3f}</span><span class="ss"> px"</span>)</span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"  r_A(p,C)    = </span><span class="sc">{</span>conic_value(C_TRUE,p[<span class="va">None</span>,:])[<span class="dv">0</span>]<span class="sc">:8.4f}</span><span class="ss">"</span>)</span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"  r_A(p,10 C) = </span><span class="sc">{</span>conic_value(<span class="dv">10</span><span class="op">*</span>C_TRUE,p[<span class="va">None</span>,:])[<span class="dv">0</span>]<span class="sc">:8.4f}</span><span class="ss">"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>same point, same curve
+  r_G(p,C)    =   73.085 px
+  r_G(p,10 C) =   73.085 px
+  r_A(p,C)    =   1.0967
+  r_A(p,10 C) =  10.9671</code></pre>
+</div>
+</div>
+<section id="what-does-nabla-f-mean" class="level3 page-columns page-full">
+<h3 class="anchored" data-anchor-id="what-does-nabla-f-mean">What does <span class="math inline">\(\nabla f\)</span> mean?</h3>
+<p>The gradient is not an extra geometric object that we have introduced for Sampson. It is already hidden in the implicit equation of the curve. For the axis-aligned ellipse</p>
+<p><span class="math display">\[
+f(x,y)=\frac{x^2}{a^2}+\frac{y^2}{b^2}-1,
+\]</span></p>
+<p>we have</p>
+<p><span class="math display">\[
+\nabla f(x,y)=
+\begin{bmatrix}
+2x/a^2\\[2mm]
+2y/b^2
+\end{bmatrix}.
+\]</span></p>
+<p>At a point <span class="math inline">\(\mathbf q\)</span> on the ellipse, <span class="math inline">\(\nabla f(\mathbf q)\)</span> is perpendicular to the tangent. Indeed, with</p>
+<p><span class="math display">\[
+\mathbf q(t)=(a\cos t,b\sin t),
+\qquad
+\mathbf q'(t)=(-a\sin t,b\cos t),
+\]</span></p>
+<p>we get</p>
+<p><span class="math display">\[
+\nabla f(\mathbf q(t))^\top\mathbf q'(t)=0.
+\]</span></p>
+<p>So the <strong>direction</strong> of <span class="math inline">\(\nabla f\)</span> is the normal direction to the ellipse. Its <strong>magnitude</strong> tells us how fast the chosen implicit function <span class="math inline">\(f\)</span> changes when we move one pixel in that normal direction:</p>
+<p><span class="math display">\[
+f(\mathbf q+d\,\mathbf n)
+\simeq d\,\|\nabla f(\mathbf q)\|,
+\qquad
+\mathbf n=\frac{\nabla f(\mathbf q)}{\|\nabla f(\mathbf q)\|}.
+\]</span></p>
+<p>For our ellipse,</p>
+<p><span class="math display">\[
+\|\nabla f(\mathbf q(t))\|
+=2\sqrt{\frac{\cos^2t}{a^2}+\frac{\sin^2t}{b^2}},
+\]</span></p>
+<p>so it is not constant along the curve: it is smallest at the ends of the major axis and largest at the ends of the minor axis.</p>
+<p>This magnitude of <span class="math inline">\(\nabla f\)</span> measures in certain sense the local scale of this particular implicit equation. Equivalently, nearby level sets of <span class="math inline">\(f\)</span> are approximately <span class="math inline">\(|\Delta f|/\|\nabla f\|\)</span> pixels apart. This is exactly the arbitrary local scale that the Sampson denominator will remove.</p>
+<div id="cell-fig-conic-gradient" class="cell page-columns page-full" data-execution_count="10">
+<div class="cell-output cell-output-display page-columns page-full">
+<div id="fig-conic-gradient" class="quarto-float quarto-figure quarto-figure-center anchored page-columns page-full">
+<figure class="quarto-float quarto-float-fig figure page-columns page-full">
+<div aria-describedby="fig-conic-gradient-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca" class="page-columns page-full">
+<img src="fitting-a-conic_files/figure-html/fig-conic-gradient-output-1.png" width="1273" height="491" class="figure-img column-page">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-conic-gradient-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;4: What the gradient means on an ellipse. Left: <span class="math inline">\(\nabla f\)</span> is normal to each level set, but its length changes along the ellipse. Right: <span class="math inline">\(\|\nabla f\|\)</span> records the local scale of the chosen implicit equation; it is not the curvature of the ellipse.
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<p>Now the failure of the algebraic residual is easy to predict. Start from points <span class="math inline">\(\mathbf q_i\)</span> exactly on the ellipse and move every one of them by the same <span class="math inline">\(15\)</span> pixels along the outward unit normal. Their geometric residual is essentially constant, but to first order</p>
+<p><span class="math display">\[
+|r_A|=|f(\mathbf q_i+15\,\mathbf n_i)|
+\simeq 15\,\|\nabla f(\mathbf q_i)\|.
+\]</span></p>
+<p>The same physical displacement therefore produces a different algebraic residual at different places on the same ellipse.</p>
+<div id="cell-fig-algebraic-vs-geometric-conic" class="cell page-columns page-full" data-execution_count="11">
+<div class="cell-output cell-output-display page-columns page-full">
+<div id="fig-algebraic-vs-geometric-conic" class="quarto-float quarto-figure quarto-figure-center anchored page-columns page-full">
+<figure class="quarto-float quarto-float-fig figure page-columns page-full">
+<div aria-describedby="fig-algebraic-vs-geometric-conic-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca" class="page-columns page-full">
+<img src="fitting-a-conic_files/figure-html/fig-algebraic-vs-geometric-conic-output-1.png" width="1275" height="491" class="figure-img column-page">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-algebraic-vs-geometric-conic-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;5: Equal geometric displacements need not produce equal algebraic residuals. All displayed points are displaced by 15 pixels along the ellipse normals, yet <span class="math inline">\(|r_A|\)</span> varies because the implicit function changes at a different rate along the curve.
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<p>The plot is the numerical version of the previous equation. DLT sees the vertical-axis neighbourhood as more expensive simply because the chosen polynomial changes faster there. The geometry did not assign that preference; the implicit representation did.</p>
+<p>This suggests dividing the constraint violation by its local rate of change.</p>
+</section>
+</section>
+<section id="sampson-from-first-principles" class="level2 page-columns page-full">
+<h2 class="anchored" data-anchor-id="sampson-from-first-principles">Sampson from first principles</h2>
+<p>We would like to find the shortest correction that moves the measured point <span class="math inline">\(\mathbf p\)</span> onto the conic. Writing the corrected point as</p>
+<p><span class="math display">\[
+\mathbf q=\mathbf p+\boldsymbol\delta,
+\]</span></p>
+<p>the exact geometric problem is</p>
+<p><span class="math display">\[
+\min_{\boldsymbol\delta}\frac12\|\boldsymbol\delta\|^2
+\qquad\text{subject to}\qquad
+f(\mathbf p+\boldsymbol\delta)=0.
+\]</span></p>
+<p>The admissible corrected points <span class="math inline">\(\mathbf q\)</span> lie on the conic itself. This is a projection onto a <strong>curved set</strong>, so solving the problem exactly is nonlinear.</p>
+<p>Sampson makes one local simplification: near <span class="math inline">\(\mathbf p\)</span>, replace the nonlinear constraint by its first-order linear approximation,</p>
+<p><span class="math display">\[
+f(\mathbf p+\boldsymbol\delta)
+\simeq
+f(\mathbf p)+\nabla f(\mathbf p)^\top\boldsymbol\delta.
+\]</span></p>
+<p>We therefore solve the simpler problem</p>
+<p><span id="eq-sampson-problem"><span class="math display">\[
+\min_{\boldsymbol\delta}\frac12\|\boldsymbol\delta\|^2
+\qquad\text{subject to}\qquad
+f(\mathbf p)+\nabla f(\mathbf p)^\top\boldsymbol\delta=0.
+\tag{3}\]</span></span></p>
+<p>The original feasible set was the conic; after linearisation the feasible corrections lie on a line. Finding the shortest correction to that line is easy, but let us derive it rather than memorise the formula.</p>
+<p>Introduce a Lagrange multiplier <span class="math inline">\(\lambda\)</span>:</p>
+<p><span class="math display">\[
+\mathcal L(\boldsymbol\delta,\lambda)
+=
+\frac12\boldsymbol\delta^\top\boldsymbol\delta
++
+\lambda\left(f(\mathbf p)+\nabla f(\mathbf p)^\top\boldsymbol\delta\right).
+\]</span></p>
+<p>Stationarity with respect to <span class="math inline">\(\boldsymbol\delta\)</span> gives</p>
+<p><span class="math display">\[
+\nabla_{\boldsymbol\delta}\mathcal L
+=
+\boldsymbol\delta+\lambda\nabla f(\mathbf p)=0,
+\]</span></p>
+<p>hence</p>
+<p><span class="math display">\[
+\boldsymbol\delta=-\lambda\nabla f(\mathbf p).
+\]</span></p>
+<p>Substituting this into the linearised constraint,</p>
+<p><span class="math display">\[
+f(\mathbf p)-\lambda\|\nabla f(\mathbf p)\|^2=0,
+\]</span></p>
+<p>so</p>
+<p><span class="math display">\[
+\lambda=\frac{f(\mathbf p)}{\|\nabla f(\mathbf p)\|^2}.
+\]</span></p>
+<p>Therefore</p>
+<p><span class="math display">\[
+\boxed{
+\boldsymbol\delta_S
+=-\frac{f(\mathbf p)}{\|\nabla f(\mathbf p)\|^2}\nabla f(\mathbf p)
+}
+\]</span></p>
+<p>and the Euclidean distance to this <strong>linearised constraint</strong> is</p>
+<p><span id="eq-sampson"><span class="math display">\[
+\boxed{
+|r_S(\mathbf p,\mathsf C)|
+=\|\boldsymbol\delta_S\|
+=\frac{|f(\mathbf p)|}{\|\nabla f(\mathbf p)\|}.
+}
+\tag{4}\]</span></span></p>
+<p>For least-squares fitting we will keep the signed residual</p>
+<p><span class="math display">\[
+r_S(\mathbf p,\mathsf C)=\frac{f(\mathbf p)}{\|\nabla f(\mathbf p)\|}.
+\]</span></p>
+<p>The numerator is the algebraic constraint violation. The denominator converts that local change in constraint value into a displacement in the image plane.</p>
+<div id="7033de14" class="cell" data-execution_count="12">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> sampson_residual(C, P):</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>    g<span class="op">=</span>conic_grad(C,P)</span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> conic_value(C,P)<span class="op">/</span>np.linalg.norm(g,axis<span class="op">=</span><span class="dv">1</span>)</span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> sampson_correction(C, p):</span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a>    p<span class="op">=</span>np.asarray(p,<span class="bu">float</span>)</span>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a>    f<span class="op">=</span>conic_value(C,p[<span class="va">None</span>,:])[<span class="dv">0</span>]</span>
+<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a>    g<span class="op">=</span>conic_grad(C,p[<span class="va">None</span>,:])[<span class="dv">0</span>]</span>
+<span id="cb11-10"><a href="#cb11-10" aria-hidden="true" tabindex="-1"></a>    delta<span class="op">=-</span>f<span class="op">*</span>g<span class="op">/</span>(g<span class="op">@</span>g)</span>
+<span id="cb11-11"><a href="#cb11-11" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> delta, p<span class="op">+</span>delta</span>
+<span id="cb11-12"><a href="#cb11-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-13"><a href="#cb11-13" aria-hidden="true" tabindex="-1"></a>pS<span class="op">=</span>np.array([<span class="fl">230.0</span>,<span class="fl">95.0</span>])</span>
+<span id="cb11-14"><a href="#cb11-14" aria-hidden="true" tabindex="-1"></a>qG<span class="op">=</span>closest_point(C_TRUE,pS)</span>
+<span id="cb11-15"><a href="#cb11-15" aria-hidden="true" tabindex="-1"></a>deltaS,qS<span class="op">=</span>sampson_correction(C_TRUE,pS)</span>
+<span id="cb11-16"><a href="#cb11-16" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"for one point:"</span>)</span>
+<span id="cb11-17"><a href="#cb11-17" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"  exact geometric residual |r_G| = </span><span class="sc">{</span>np<span class="sc">.</span>linalg<span class="sc">.</span>norm(pS<span class="op">-</span>qG)<span class="sc">:.3f}</span><span class="ss"> px"</span>)</span>
+<span id="cb11-18"><a href="#cb11-18" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"  Sampson residual         |r_S| = </span><span class="sc">{</span>np<span class="sc">.</span>linalg<span class="sc">.</span>norm(deltaS)<span class="sc">:.3f}</span><span class="ss"> px"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>for one point:
+  exact geometric residual |r_G| = 65.732 px
+  Sampson residual         |r_S| = 54.234 px</code></pre>
+</div>
+</div>
+<section id="the-sampson-myth" class="level3">
+<h3 class="anchored" data-anchor-id="the-sampson-myth">The “Sampson myth”</h3>
+<p>A common shorthand of computer vision folklore says</p>
+<blockquote class="blockquote">
+<p><em>“The Sampson distance is the first-order approximation of the geometric distance.”</em></p>
+</blockquote>
+<p>This is close enough to be tempting, but it hides what is actually being approximated.</p>
+<p>We do <strong>not</strong> Taylor-expand the true distance function <span class="math inline">\(r_G(\mathbf p)\)</span>. Instead, we first replace the nonlinear constraint by its first-order model,</p>
+<p><span class="math display">\[
+f(\mathbf x)=0
+\quad\longrightarrow\quad
+f(\mathbf p)+\nabla f(\mathbf p)^\top(\mathbf x-\mathbf p)=0,
+\]</span></p>
+<p>and then compute the <strong>exact Euclidean distance from <span class="math inline">\(\mathbf p\)</span> to that affine line</strong>. That exact distance is the Sampson residual.</p>
+<p>So a more precise sentence to remember is:</p>
+<blockquote class="blockquote">
+<p><strong>Sampson is the exact geometric distance to a first-order model of the constraint.</strong></p>
+</blockquote>
+<p>Harker and O’Leary called the confusion between these two operations the <em>myth of Sampsonus</em>. Near a regular point the linearised constraint is a good local model of the curve, so <span class="math inline">\(|r_S|\)</span> is often close to <span class="math inline">\(r_G\)</span>. But the construction tells us exactly what has been approximated: <strong>the constraint set, not the distance function</strong>.</p>
+</section>
+<section id="where-does-the-linearised-constraint-live" class="level3 page-columns page-full">
+<h3 class="anchored" data-anchor-id="where-does-the-linearised-constraint-live">Where does the linearised constraint live?</h3>
+<p>The graph of the implicit function makes that distinction visible. Plot</p>
+<p><span class="math display">\[
+z=f(x,y).
+\]</span></p>
+<p>The conic is the intersection of this surface with the plane <span class="math inline">\(z=0\)</span>. The image measurement <span class="math inline">\(\mathbf p\)</span> lifts to</p>
+<p><span class="math display">\[
+P=(p_x,p_y,f(\mathbf p))
+\]</span></p>
+<p>on the surface. The tangent plane at <span class="math inline">\(P\)</span> is</p>
+<p><span class="math display">\[
+z=f(\mathbf p)+\nabla f(\mathbf p)^\top(\mathbf x-\mathbf p).
+\]</span></p>
+<p>Its intersection with <span class="math inline">\(z=0\)</span> is</p>
+<p><span class="math display">\[
+\boxed{
+f(\mathbf p)+\nabla f(\mathbf p)^\top(\mathbf x-\mathbf p)=0,
+}
+\]</span></p>
+<p>exactly the linearised constraint used above. In the 3D panel below the <strong>red line is constructed explicitly as this intersection</strong>. Sampson is the orthogonal projection of <span class="math inline">\(\mathbf p\)</span> onto that red line in the <span class="math inline">\(xy\)</span> plane.</p>
+<div id="cell-fig-sampson-conic-geometry" class="cell page-columns page-full" data-execution_count="13">
+<div class="cell-output cell-output-stdout">
+<pre><code>tangent-plane equation evaluated on q_S: -2.22e-16</code></pre>
+</div>
+<div class="cell-output cell-output-display page-columns page-full">
+<div id="fig-sampson-conic-geometry" class="quarto-float quarto-figure quarto-figure-center anchored page-columns page-full">
+<figure class="quarto-float quarto-float-fig figure page-columns page-full">
+<div aria-describedby="fig-sampson-conic-geometry-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca" class="page-columns page-full">
+<img src="fitting-a-conic_files/figure-html/fig-sampson-conic-geometry-output-2.png" width="1304" height="568" class="figure-img column-page">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-sampson-conic-geometry-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;6: Exact and Sampson corrections for one measurement. Left: <span class="math inline">\(\mathbf q\)</span> is the closest point on the true conic, whereas <span class="math inline">\(\mathbf q_S\)</span> is the closest point on the linearised constraint. Right: for the lifted surface <span class="math inline">\(z=f(x,y)\)</span>, the red line is exactly the intersection of the tangent plane at <span class="math inline">\(P=(p_x,p_y,f(\mathbf p))\)</span> with the plane <span class="math inline">\(z=0\)</span>.
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<p>The two panels now encode exactly the same construction. The exact residual goes from <span class="math inline">\(\mathbf p\)</span> to the closest point <span class="math inline">\(\mathbf q\)</span> on the curved zero set. Sampson goes from <span class="math inline">\(\mathbf p\)</span> to <span class="math inline">\(\mathbf q_S\)</span> on the zero set of the <strong>linearised</strong> constraint.</p>
+<p>When <span class="math inline">\(\mathbf p\)</span> is close to a regular part of the conic, the red line approximates the conic locally and <span class="math inline">\(|r_S|\)</span> is usually close to <span class="math inline">\(r_G\)</span>. The approximation deteriorates when curvature matters over the size of the correction. If <span class="math inline">\(\nabla f(\mathbf p)=0\)</span>, the linearised equation contains no directional information at all and the Sampson denominator vanishes.</p>
+</section>
+</section>
+<section id="from-dlt-to-geometric-refinement" class="level2 page-columns page-full">
+<h2 class="anchored" data-anchor-id="from-dlt-to-geometric-refinement">From DLT to geometric refinement</h2>
+<p>We can now use the usual recipe of geometric estimation:</p>
+<ol type="1">
+<li>use a linear method to get close;</li>
+<li>refine the model with a residual that has a geometric meaning.</li>
+</ol>
+<p>Let us take noisy points from a visible arc of the ellipse. DLT gives the initial conic. Then we run Levenberg–Marquardt on the vector of signed Sampson residuals <span class="math inline">\(r_S\)</span>.</p>
+<div id="8c597e73" class="cell" data-execution_count="14">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> arc(span_deg, n<span class="op">=</span><span class="dv">70</span>, seed<span class="op">=</span><span class="dv">4</span>, sigma<span class="op">=</span>SIGMA):</span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>    rng<span class="op">=</span>np.random.default_rng(seed)</span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>    t<span class="op">=</span>np.linspace(<span class="dv">0</span>,np.deg2rad(span_deg),n)</span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>    Q<span class="op">=</span>np.column_stack([A_TRUE<span class="op">*</span>np.cos(t),B_TRUE<span class="op">*</span>np.sin(t)])</span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> Q<span class="op">+</span>rng.normal(<span class="dv">0</span>,sigma,Q.shape)</span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> refine_sampson(C0, P):</span>
+<span id="cb14-9"><a href="#cb14-9" aria-hidden="true" tabindex="-1"></a>    v0<span class="op">=</span>conic_vector(C0)</span>
+<span id="cb14-10"><a href="#cb14-10" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> objective(v):</span>
+<span id="cb14-11"><a href="#cb14-11" aria-hidden="true" tabindex="-1"></a>        v<span class="op">=</span>v<span class="op">/</span>np.linalg.norm(v)</span>
+<span id="cb14-12"><a href="#cb14-12" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> sampson_residual(conic_matrix(v),P)</span>
+<span id="cb14-13"><a href="#cb14-13" aria-hidden="true" tabindex="-1"></a>    res<span class="op">=</span>least_squares(objective,v0,method<span class="op">=</span><span class="st">"lm"</span>,xtol<span class="op">=</span><span class="fl">1e-12</span>,ftol<span class="op">=</span><span class="fl">1e-12</span>,gtol<span class="op">=</span><span class="fl">1e-12</span>,max_nfev<span class="op">=</span><span class="dv">2000</span>)</span>
+<span id="cb14-14"><a href="#cb14-14" aria-hidden="true" tabindex="-1"></a>    v<span class="op">=</span>res.x<span class="op">/</span>np.linalg.norm(res.x)</span>
+<span id="cb14-15"><a href="#cb14-15" aria-hidden="true" tabindex="-1"></a>    C<span class="op">=</span>conic_matrix(v)</span>
+<span id="cb14-16"><a href="#cb14-16" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> C<span class="op">/</span>np.linalg.norm(C),res</span>
+<span id="cb14-17"><a href="#cb14-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-18"><a href="#cb14-18" aria-hidden="true" tabindex="-1"></a>Pnoisy<span class="op">=</span>arc(<span class="dv">120</span>)</span>
+<span id="cb14-19"><a href="#cb14-19" aria-hidden="true" tabindex="-1"></a>Cdlt<span class="op">=</span>fit_dlt(Pnoisy)</span>
+<span id="cb14-20"><a href="#cb14-20" aria-hidden="true" tabindex="-1"></a>Cref,res<span class="op">=</span>refine_sampson(Cdlt,Pnoisy)</span>
+<span id="cb14-21"><a href="#cb14-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-22"><a href="#cb14-22" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"</span><span class="sc">{</span><span class="st">'model'</span><span class="sc">:12s}{</span><span class="st">'type'</span><span class="sc">:&gt;12s}{</span><span class="st">'semi-axes [px]'</span><span class="sc">:&gt;24s}{</span><span class="st">'RMS |r_S| [px]'</span><span class="sc">:&gt;18s}{</span><span class="st">'RMS r_G [px]'</span><span class="sc">:&gt;16s}</span><span class="ss">"</span>)</span>
+<span id="cb14-23"><a href="#cb14-23" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> name,C <span class="kw">in</span> [(<span class="st">"DLT"</span>,Cdlt),(<span class="st">"refined"</span>,Cref),(<span class="st">"truth"</span>,C_TRUE)]:</span>
+<span id="cb14-24"><a href="#cb14-24" aria-hidden="true" tabindex="-1"></a>    axes<span class="op">=</span>conic_axes(C)</span>
+<span id="cb14-25"><a href="#cb14-25" aria-hidden="true" tabindex="-1"></a>    atxt<span class="op">=</span><span class="st">"-"</span> <span class="cf">if</span> axes <span class="kw">is</span> <span class="va">None</span> <span class="cf">else</span> <span class="ss">f"</span><span class="sc">{</span>axes[<span class="dv">0</span>]<span class="sc">:.1f}</span><span class="ss">, </span><span class="sc">{</span>axes[<span class="dv">1</span>]<span class="sc">:.1f}</span><span class="ss">"</span></span>
+<span id="cb14-26"><a href="#cb14-26" aria-hidden="true" tabindex="-1"></a>    rs<span class="op">=</span>np.sqrt(np.mean(sampson_residual(C,Pnoisy)<span class="op">**</span><span class="dv">2</span>))</span>
+<span id="cb14-27"><a href="#cb14-27" aria-hidden="true" tabindex="-1"></a>    rg<span class="op">=</span>np.sqrt(np.mean(geometric_residual(C,Pnoisy)<span class="op">**</span><span class="dv">2</span>))</span>
+<span id="cb14-28"><a href="#cb14-28" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f"</span><span class="sc">{</span>name<span class="sc">:12s}{</span>conic_type(C)<span class="sc">:&gt;12s}{</span>atxt<span class="sc">:&gt;24s}{</span>rs<span class="sc">:18.3f}{</span>rg<span class="sc">:16.3f}</span><span class="ss">"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>model               type          semi-axes [px]    RMS |r_S| [px]    RMS r_G [px]
+DLT              ellipse            194.8, 115.8             0.996           0.995
+refined          ellipse            199.4, 120.4             0.991           0.990
+truth            ellipse            200.0, 120.0             1.011           1.011</code></pre>
+</div>
+</div>
+<div id="cell-fig-conic-refinement" class="cell page-columns page-full" data-execution_count="15">
+<div class="cell-output cell-output-display page-columns page-full">
+<div id="fig-conic-refinement" class="quarto-float quarto-figure quarto-figure-center anchored page-columns page-full">
+<figure class="quarto-float quarto-float-fig figure page-columns page-full">
+<div aria-describedby="fig-conic-refinement-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca" class="page-columns page-full">
+<img src="fitting-a-conic_files/figure-html/fig-conic-refinement-output-1.png" width="1267" height="491" class="figure-img column-page">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-conic-refinement-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;7: From linear estimation to geometric refinement. Left: the DLT estimate and the conic obtained by Levenberg–Marquardt on the signed Sampson residual. Right: the distribution of <span class="math inline">\(|r_S|\)</span> on the noisy measurements before and after refinement.
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<p>The DLT estimate is valuable because it gives us a good model in one SVD. The nonlinear stage is valuable because it can optimise a residual expressed in the units of the data.</p>
+<p>This distinction will come back repeatedly. The linear equations are often the easiest way to <strong>represent and initialise</strong> a geometric problem; they do not automatically tell us which residual is appropriate for <strong>measuring fit</strong>.</p>
+<p>There is also an important limitation to remember. Changing the residual does not add information and does not impose a conic type. If a short, noisy arc is compatible with both an ellipse and a hyperbola, Sampson refinement alone cannot decide that the answer ought to be an ellipse. Model constraints and residual design are different issues.</p>
+</section>
+<section id="going-deeper-exact-distance-evolutes-and-ed-degree" class="level2 page-columns page-full">
+<h2 class="anchored" data-anchor-id="going-deeper-exact-distance-evolutes-and-ed-degree">Going deeper: exact distance, evolutes, and ED degree</h2>
+<p>The geometric residual <span class="math inline">\(r_G\)</span> looks innocent in the picture from Section 3, but computing it exactly already requires a nonlinear problem for every point.</p>
+<p>Write</p>
+<p><span class="math display">\[
+\mathsf C=
+\begin{bmatrix}
+\mathsf A &amp; \mathbf b\\
+\mathbf b^\top &amp; c
+\end{bmatrix},
+\qquad
+f(\mathbf q)=\mathbf q^\top\mathsf A\mathbf q+2\mathbf b^\top\mathbf q+c.
+\]</span></p>
+<p>To find <strong>all</strong> stationary distances from <span class="math inline">\(\mathbf p\)</span> to the conic, minimise</p>
+<p><span class="math display">\[
+\frac12\|\mathbf q-\mathbf p\|^2
+\quad\text{subject to}\quad f(\mathbf q)=0.
+\]</span></p>
+<p>The Lagrange equations are</p>
+<p><span class="math display">\[
+\mathbf q-\mathbf p+\mu(\mathsf A\mathbf q+\mathbf b)=0,
+\]</span></p>
+<p>so</p>
+<p><span class="math display">\[
+\mathbf q=(\mathsf I+\mu\mathsf A)^{-1}(\mathbf p-\mu\mathbf b).
+\]</span></p>
+<p>After diagonalising <span class="math inline">\(\mathsf A\)</span>, substituting this expression back into <span class="math inline">\(f(\mathbf q)=0\)</span>, and clearing denominators, we obtain a <strong>quartic polynomial in <span class="math inline">\(\mu\)</span></strong> for a non-circular ellipse. Each root gives a critical point of the distance. The geometric residual <span class="math inline">\(r_G\)</span> uses only the closest real one.</p>
+<p>The important word here is <em>critical</em>. A nearest point is one critical point, but there can also be a farthest point and other stationary points. Geometrically, every critical point <span class="math inline">\(\mathbf q\)</span> satisfies</p>
+<p><span class="math display">\[
+\mathbf p-\mathbf q\ \parallel\ \nabla f(\mathbf q),
+\]</span></p>
+<p>so the line from <span class="math inline">\(\mathbf q\)</span> to <span class="math inline">\(\mathbf p\)</span> is a <strong>normal to the ellipse</strong>.</p>
+<section id="bonus-the-evolute-of-an-ellipse-and-the-number-of-critical-points" class="level3 page-columns page-full">
+<h3 class="anchored" data-anchor-id="bonus-the-evolute-of-an-ellipse-and-the-number-of-critical-points">Bonus: the evolute of an ellipse and the number of critical points</h3>
+<p>So the real critical points are the feet of the normals through <span class="math inline">\(\mathbf p\)</span>, and the question becomes: how many normals to an ellipse pass through a given point? Four, or two — and it cannot be anything else, nor can it change arbitrarily. Complex roots of a real polynomial come in conjugate pairs, so a root turns real only by <em>meeting another one</em>. Wherever the count changes, two critical points have collided.</p>
+<p>Two feet of normals collide when the two normals coincide, and the point where consecutive normals of a curve meet is its <strong>centre of curvature</strong> — the centre of the circle that best fits the curve there. The boundary is therefore not a curve we get to choose: it is forced to be the locus of centres of curvature.</p>
+<p>For the ellipse <span class="math inline">\(\mathbf q(t) = (a\cos t, b\sin t)\)</span> with <span class="math inline">\(a &gt; b\)</span>, that locus is the <strong>evolute</strong>, equivalently the envelope of the normal lines:</p>
+<p><span class="math display">\[
+\mathbf e(t)=
+\left(
+\frac{a^2-b^2}{a}\cos^3t,
+\frac{b^2-a^2}{b}\sin^3t
+\right).
+\]</span></p>
+<p>For a generic point <strong>outside</strong> the evolute a non-circular ellipse has two real distance-critical points; for a generic point <strong>inside</strong>, four. On the evolute itself the problem is non-generic, because two critical points have merged.</p>
+<div id="cell-fig-ellipse-evolute" class="cell page-columns page-full" data-execution_count="16">
+<div class="cell-output cell-output-display page-columns page-full">
+<div id="fig-ellipse-evolute" class="quarto-float quarto-figure quarto-figure-center anchored page-columns page-full">
+<figure class="quarto-float quarto-float-fig figure page-columns page-full">
+<div aria-describedby="fig-ellipse-evolute-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca" class="page-columns page-full">
+<img src="fitting-a-conic_files/figure-html/fig-ellipse-evolute-output-1.png" width="1336" height="510" class="figure-img column-page">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-ellipse-evolute-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;8: The evolute and the exact Euclidean-distance problem for an ellipse. Left: the evolute is the envelope of the ellipse normals. Right: a generic point inside the evolute has four real distance-critical points, while a generic point outside has two.
+</figcaption>
+</figure>
+</div>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>real critical points, inside evolute : 4
+real critical points, outside evolute: 2</code></pre>
+</div>
+</div>
+</section>
+<section id="what-is-the-euclidean-distance-degree" class="level3">
+<h3 class="anchored" data-anchor-id="what-is-the-euclidean-distance-degree">What is the Euclidean distance degree?</h3>
+<p>This gives a concrete way to understand a piece of algebraic geometry without needing much algebraic geometry.</p>
+<p>Take an algebraic model <span class="math inline">\(X\)</span> and a data point <span class="math inline">\(\mathbf p\)</span>. Restrict the squared Euclidean distance</p>
+<p><span class="math display">\[
+d_{\mathbf p}(\mathbf q)=\|\mathbf q-\mathbf p\|^2
+\]</span></p>
+<p>to points <span class="math inline">\(\mathbf q\in X\)</span>, and write the stationarity equations. For a curve, they say</p>
+<p><span class="math display">\[
+\mathbf q\in X,
+\qquad
+\mathbf p-\mathbf q\perp T_{\mathbf q}X.
+\]</span></p>
+<p>Now count how many solutions this system has for a <strong>generic</strong> data point. To obtain a number that is stable as the data move, algebraic geometry counts the solutions over <span class="math inline">\(\mathbb C\)</span>, with multiplicity. That number is the <strong>Euclidean distance degree</strong>, or <strong>ED degree</strong>, of the model.</p>
+<p>So ED degree is not the degree of the curve and it does not count nearest points. It measures the algebraic complexity of the <em>nearest-point problem</em>: how many stationary candidates the exact distance equations generically produce before we choose the closest real one.</p>
+<p>For our non-circular ellipse the stationarity equation is quartic, and a generic data point has four complex critical points:</p>
+<p><span class="math display">\[
+\boxed{\operatorname{EDdegree}(\text{ellipse})=4.}
+\]</span></p>
+<p>The evolute explains why a real plot may show only two of them. Outside the evolute, two critical points are real and the other two are complex. Inside, all four are real. The ED degree remains four because the complex count is the stable one. On the evolute two solutions collide: this is exactly the exceptional locus where the generic counting picture changes.</p>
+<p>This is the useful intuition to carry to harder estimation problems:</p>
+<blockquote class="blockquote">
+<p><strong>ED degree asks how algebraically complicated exact Euclidean fitting is, before any approximation such as Sampson is introduced.</strong></p>
+</blockquote>
+<p>A line has ED degree one because orthogonal projection is unique and linear. A circle has ED degree two (nearest and farthest radial points). A generic ellipse already has ED degree four. The geometry is still elementary, but the exact fitting problem has become algebraically richer.</p>
+</section>
+</section>
+<section id="questions-to-leave-open" class="level2">
+<h2 class="anchored" data-anchor-id="questions-to-leave-open">Questions to leave open</h2>
+<ul>
+<li>What happens to the pencil if the four points are not in general position? Which rank drops are possible, and what do they mean geometrically?</li>
+<li>The Sampson residual is invariant to rescaling <span class="math inline">\(\mathsf C\)</span>. Is it also invariant to an arbitrary rescaling of the image coordinates?</li>
+<li>The direction of <span class="math inline">\(\nabla f\)</span> is geometric, but its magnitude depends on the chosen implicit equation. Which combinations of <span class="math inline">\(f\)</span> and <span class="math inline">\(\nabla f\)</span> survive a rescaling <span class="math inline">\(f\mapsto\alpha f\)</span>?</li>
+<li>The evolute marks where two distance-critical points collide. What would the analogous exceptional set look like for a more complicated geometric model?</li>
+<li>If the application tells us in advance that the conic must be an ellipse, where should that knowledge enter: in the residual or in the model parametrisation?</li>
+<li>How would the fitting pipeline change in the presence of outliers? Which residual would you give to RANSAC or MSAC?</li>
+</ul>
+</section>
+<section id="further-reading" class="level2">
+<h2 class="anchored" data-anchor-id="further-reading">Further reading</h2>
+<ul>
+<li>Sampson, P. D. “Fitting conic sections to very scattered data: an iterative refinement of the Bookstein algorithm”, <em>Computer Graphics and Image Processing</em> 18(1), 1982. The original conic-fitting setting of the approximation.</li>
+<li>Harker, M. and O’Leary, P. “First order geometric distance (the myth of Sampsonus)”, <em>BMVC</em>, 2006. The precise distinction between distance to a linearised curve and a first-order approximation of the distance itself.</li>
+<li>Bookstein, F. L. “Fitting conic sections to scattered data”, <em>Computer Graphics and Image Processing</em> 9(1), 1979.</li>
+<li>Taubin, G. “Estimation of planar curves, surfaces and nonplanar space curves defined by implicit equations”, <em>IEEE TPAMI</em> 13(11), 1991.</li>
+<li>Fitzgibbon, A., Pilu, M. and Fisher, R. “Direct least square fitting of ellipses”, <em>IEEE TPAMI</em> 21(5), 1999.</li>
+<li>Draisma, J., Horobet, E., Ottaviani, G., Sturmfels, B. and Thomas, R. “The Euclidean distance degree of an algebraic variety”, <em>Foundations of Computational Mathematics</em> 16, 2016. ED degree, ED discriminants, and the ellipse/evolute example.</li>
+<li>Hartley, R. and Zisserman, A. <em>Multiple View Geometry in Computer Vision</em>, 2nd ed., Cambridge University Press, 2004.</li>
+</ul>
+<hr>
+<p><strong>Luca Magri</strong> — Computer Vision Dojo<br>
+Code MIT · text and figures CC BY-NC-ND 4.0<br>
+<a href="https://magrilu.github.io/cv-dojo/" class="uri">https://magrilu.github.io/cv-dojo/</a></p>
+
+
+</section>
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+    const viewSource = window.document.getElementById('quarto-view-source') ||
+                       window.document.getElementById('quarto-code-tools-source');
+    if (viewSource) {
+      const sourceUrl = viewSource.getAttribute("data-quarto-source-url");
+      viewSource.addEventListener("click", function(e) {
+        if (sourceUrl) {
+          // rstudio viewer pane
+          if (/\bcapabilities=\b/.test(window.location)) {
+            window.open(sourceUrl);
+          } else {
+            window.location.href = sourceUrl;
+          }
+        } else {
+          const modal = new bootstrap.Modal(document.getElementById('quarto-embedded-source-code-modal'));
+          modal.show();
+        }
+        return false;
+      });
+    }
+    function toggleCodeHandler(show) {
+      return function(e) {
+        const cellDetails = window.document.querySelectorAll(".cell details.code-fold");
+        for (let i=0; i<cellDetails.length; i++) {
+          const details = cellDetails[i];
+          if (show) {
+            details.open = true;
+          } else {
+            details.removeAttribute("open");
+          }
+        }
+        const cellCodeDivs = window.document.querySelectorAll(".cell div.sourceCode.cell-code");
+        const fromCls = show ? "hidden" : "unhidden";
+        const toCls = show ? "unhidden" : "hidden";
+        for (let i=0; i<cellCodeDivs.length; i++) {
+          const codeDiv = cellCodeDivs[i];
+          if (codeDiv.classList.contains(fromCls)) {
+            codeDiv.classList.remove(fromCls);
+            codeDiv.classList.add(toCls);
+          } 
+        }
+        return false;
+      }
+    }
+    const hideAllCode = window.document.getElementById("quarto-hide-all-code");
+    if (hideAllCode) {
+      hideAllCode.addEventListener("click", toggleCodeHandler(false));
+    }
+    const showAllCode = window.document.getElementById("quarto-show-all-code");
+    if (showAllCode) {
+      showAllCode.addEventListener("click", toggleCodeHandler(true));
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp("https:\/\/magrilu\.github\.io\/cv-dojo\/");
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+</div> <!-- /content -->
+<footer class="footer">
+  <div class="nav-footer">
+    <div class="nav-footer-left">
+<p>© 2026 Luca Magri — CC BY-NC-ND 4.0 (text and figures) / MIT (code)</p>
+</div>   
+    <div class="nav-footer-center">
+      &nbsp;
+    <div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/magrilu/cv-dojo/issues/new" class="toc-action"><i class="bi bi-github"></i>Report an issue</a></li></ul></div></div>
+    <div class="nav-footer-right">
+      <ul class="footer-items list-unstyled">
+    <li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/magrilu/cv-dojo">
+      <i class="bi bi-github" role="img">
+</i> 
+    </a>
+  </li>  
+    <li class="nav-item">
+    <a class="nav-link" href="https://magrilu.github.io/">
+<p>magrilu.github.io</p>
+</a>
+  </li>  
+</ul>
+    </div>
+  </div>
+</footer>
+
+
+
+
+</body></html>

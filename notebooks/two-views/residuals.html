@@ -1,0 +1,1433 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.10.18">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>residuals – Computer Vision Dojo: a geometric way</title>
+<style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: 1.5em;}
+div.column{flex: auto;}
+@media screen {
+div.columns{gap: min(4vw, 1.5em);}
+div.column{overflow-x: auto;}
+}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../">
+<link href="../../assets/favicon.png" rel="icon" type="image/png">
+<script src="../../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-d92e8767f1f42d56076cabe937f4151b.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap-4c6d3fea03ba38a75d48a1a26a094d32.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-chtml.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+</head>
+
+<body class="nav-sidebar docked nav-fixed quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a class="navbar-brand" href="../../index.html">
+    <span class="navbar-title">Computer Vision Dojo: a geometric way</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../../about.html"> 
+<span class="menu-text">About</span></a>
+  </li>  
+</ul>
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/magrilu/cv-dojo"> <i class="bi bi-github" role="img">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../notebooks/two-views/eight-point.html">Two-view geometry</a></li><li class="breadcrumb-item"><a href="../../notebooks/two-views/residuals.html">Residuals for the fundamental matrix</a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+      <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation docked overflow-auto">
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Preface</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../origami-house.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">The Origami house</span></a>
+  </div>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true">
+ <span class="menu-text">Geometry fundamentals</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../notebooks/geometry/fitting-a-conic.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Fitting a conic</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true">
+ <span class="menu-text">Single-view geometry</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../notebooks/camera/camera.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">The pinhole camera</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../notebooks/rectification/affine.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Affine rectification</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true">
+ <span class="menu-text">Two-view geometry</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../notebooks/two-views/eight-point.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">The fundamental matrix</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../notebooks/two-views/residuals.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text">Residuals for the fundamental matrix</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="true">
+ <span class="menu-text">Triangulation</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-4" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../notebooks/triangulation/triangulation.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Triangulation from two views</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+   
+  <ul>
+  <li><a href="#residuals-for-the-fundamental-matrix" id="toc-residuals-for-the-fundamental-matrix" class="nav-link active" data-scroll-target="#residuals-for-the-fundamental-matrix">Residuals for the fundamental matrix</a>
+  <ul class="collapse">
+  <li><a href="#error-in-projective-space" id="toc-error-in-projective-space" class="nav-link" data-scroll-target="#error-in-projective-space">Error in projective space</a></li>
+  <li><a href="#four-residuals-for-one-epipolar-constraint" id="toc-four-residuals-for-one-epipolar-constraint" class="nav-link" data-scroll-target="#four-residuals-for-one-epipolar-constraint">Four residuals for one epipolar constraint</a></li>
+  <li><a href="#drawing-the-residuals" id="toc-drawing-the-residuals" class="nav-link" data-scroll-target="#drawing-the-residuals">Drawing the residuals</a>
+  <ul class="collapse">
+  <li><a href="#where-does-the-sampson-formula-come-from" id="toc-where-does-the-sampson-formula-come-from" class="nav-link" data-scroll-target="#where-does-the-sampson-formula-come-from">Where does the Sampson formula come from?</a></li>
+  </ul></li>
+  <li><a href="#heatmaps-over-the-second-image" id="toc-heatmaps-over-the-second-image" class="nav-link" data-scroll-target="#heatmaps-over-the-second-image">Heatmaps over the second image</a>
+  <ul class="collapse">
+  <li><a href="#a-useful-comparison-r_se-versus-r_s" id="toc-a-useful-comparison-r_se-versus-r_s" class="nav-link" data-scroll-target="#a-useful-comparison-r_se-versus-r_s">A useful comparison: <span class="math inline">\(r_{SE}\)</span> versus <span class="math inline">\(r_S\)</span></a></li>
+  </ul></li>
+  <li><a href="#residuals-depend-on-the-coordinates-in-which-distance-is-measured" id="toc-residuals-depend-on-the-coordinates-in-which-distance-is-measured" class="nav-link" data-scroll-target="#residuals-depend-on-the-coordinates-in-which-distance-is-measured">Residuals depend on the coordinates in which distance is measured</a></li>
+  <li><a href="#refining-the-dlt-estimate" id="toc-refining-the-dlt-estimate" class="nav-link" data-scroll-target="#refining-the-dlt-estimate">Refining the DLT estimate</a>
+  <ul class="collapse">
+  <li><a href="#questions-to-leave-open" id="toc-questions-to-leave-open" class="nav-link" data-scroll-target="#questions-to-leave-open">Questions to leave open</a></li>
+  </ul></li>
+  <li><a href="#further-reading" id="toc-further-reading" class="nav-link" data-scroll-target="#further-reading">Further reading</a></li>
+  </ul></li>
+  </ul>
+<div class="toc-actions"><ul><li><a href="https://github.com/magrilu/cv-dojo/issues/new" class="toc-action"><i class="bi bi-github"></i>Report an issue</a></li></ul></div></nav>
+    </div>
+<!-- main -->
+<main class="content page-columns page-full" id="quarto-document-content"><header id="title-block-header" class="quarto-title-block"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../notebooks/two-views/eight-point.html">Two-view geometry</a></li><li class="breadcrumb-item"><a href="../../notebooks/two-views/residuals.html">Residuals for the fundamental matrix</a></li></ol></nav></header>
+
+
+
+
+<p><a href="https://colab.research.google.com/github/magrilu/cv-dojo/blob/main/notebooks/two-views/residuals.ipynb"><img src="https://colab.research.google.com/assets/colab-badge.svg" class="img-fluid"></a></p>
+<section id="residuals-for-the-fundamental-matrix" class="level1 page-columns page-full">
+<h1>Residuals for the fundamental matrix</h1>
+<p>How can we tell whether a fundamental matrix describes the epipolar geometry of a scene well? If the ground-truth fundamental matrix is available, we can normalise the two matrices and compare them directly. A convenient scale- and sign-independent discrepancy is the so-called <em>chordal distance</em></p>
+<p><span class="math display">\[
+d_{\mathbb P}(\mathsf F_1,\mathsf F_2)
+= \min\!\left(
+\lVert \widehat{\mathsf F}_1-\widehat{\mathsf F}_2\rVert_F,
+\lVert \widehat{\mathsf F}_1+\widehat{\mathsf F}_2\rVert_F
+\right),
+\qquad
+\widehat{\mathsf F}=\frac{\mathsf F}{\lVert\mathsf F\rVert_F}.
+\]</span></p>
+<p>But in practice we do not know the ground-truth parameters of the fundamental matrix, and even when we do, this number has no direct interpretation in the image planes. In particular, it does not tell us whether a single correspondence misses its epipolar line or not.</p>
+<p>We will therefore introduce the idea of a <strong>residual</strong>: a number that measures how much one correspondence disagrees with the prescribed epipolar geometry.</p>
+<p>There is a second important reason to care about this. The eight-point algorithm is linear because it minimises an algebraic quantity. Once we have a more meaningful image residual, we can minimize that gaining a clearer geometric interpretation.</p>
+<p>We will compare four choices: the algebraic residual, a one-sided Euclidean point-to-line residual, the symmetric epipolar residual, and the Sampson residual.</p>
+<section id="error-in-projective-space" class="level2">
+<h2 class="anchored" data-anchor-id="error-in-projective-space">Error in projective space</h2>
+<p>Before moving to image residuals, let us make the matrix comparison above a little more precise.</p>
+<p>A fundamental matrix is defined only up to a non-zero scale factor, so its nine entries represent a point of <span class="math inline">\(\mathbb P^8\)</span>, not an ordinary point of <span class="math inline">\(\mathbb R^9\)</span>. After Frobenius normalisation, one projective matrix is represented by two antipodal points on the unit sphere: <span class="math inline">\(\widehat{\mathsf F}\)</span> and <span class="math inline">\(-\widehat{\mathsf F}\)</span>.</p>
+<p>This is why the sign matters in the formula above. The matrices <span class="math inline">\(\mathsf F\)</span> and <span class="math inline">\(-\mathsf F\)</span> describe exactly the same epipolar geometry, so we keep the smaller of the two Euclidean distances on the sphere.</p>
+<div id="d419f199" class="cell" data-execution_count="2">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> projective_F_distance(F1, F2):</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""Chordal distance between two projective matrix classes."""</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>    A, B <span class="op">=</span> unit_F(F1), unit_F(F2)</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="bu">min</span>(np.linalg.norm(A <span class="op">-</span> B), np.linalg.norm(A <span class="op">+</span> B))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div id="f14aaa65" class="cell" data-execution_count="3">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>matrix_gap <span class="op">=</span> projective_F_distance(F_dlt, F_true)</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Projective Frobenius distance:"</span>, <span class="ss">f"</span><span class="sc">{</span>matrix_gap<span class="sc">:.5f}</span><span class="ss">"</span>)</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"</span><span class="ch">\n</span><span class="st">And now the only question that matters:"</span>)</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"what does that number mean in pixels?"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Projective Frobenius distance: 0.00141
+
+And now the only question that matters:
+what does that number mean in pixels?</code></pre>
+</div>
+</div>
+<p>As anticipated, the chordal distance has two limitations. First, it is unavailable when the ground-truth fundamental matrix is unknown. Second, the entries of <span class="math inline">\(\mathsf F\)</span> depend on the chosen image coordinate systems, so a discrepancy between matrices is not itself an image-plane distance.</p>
+<p>We therefore move to residuals defined directly from <span class="math inline">\(\mathsf F\)</span> and the measured correspondences.</p>
+</section>
+<section id="four-residuals-for-one-epipolar-constraint" class="level2">
+<h2 class="anchored" data-anchor-id="four-residuals-for-one-epipolar-constraint">Four residuals for one epipolar constraint</h2>
+<p>For a correspondence <span class="math inline">\((\mathbf x,\mathbf x')\)</span> define</p>
+<p><span class="math display">\[
+C(\mathbf x,\mathbf x') = \mathbf x'^\top \mathsf F\mathbf x,
+\qquad
+\boldsymbol\ell' = \mathsf F\mathbf x,
+\qquad
+\boldsymbol\ell = \mathsf F^\top\mathbf x'.
+\]</span></p>
+<p>The ideal correspondence satisfies <span class="math inline">\(C=0\)</span>. There are several ways of turning a non-zero value into a residual.</p>
+<p><strong>Algebraic residual.</strong> The most immediate choice is</p>
+<p><span class="math display">\[
+r_A = \mathbf x'^\top\mathsf F\mathbf x.
+\]</span></p>
+<p>This is the quantity minimised by the linear DLT inside the eight-point algorithm. It is convenient algebraically, but its scale is arbitrary because <span class="math inline">\(\mathsf F\)</span> itself is defined only up to scale, and <span class="math inline">\(r_A\)</span> is not a distance in either image.</p>
+<div id="res-alg-code" class="cell" data-execution_count="4">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> algebraic_residual(F, x, xp):</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> np.<span class="bu">sum</span>(xp <span class="op">*</span> (F <span class="op">@</span> x.T).T, axis<span class="op">=</span><span class="dv">1</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p><strong>One-sided Euclidean residual.</strong> A more natural idea is to use the epipolar line. If we regard <span class="math inline">\(\mathbf x\)</span> as exact, the second point should lie on <span class="math inline">\(\boldsymbol\ell'=\mathsf F\mathbf x\)</span>. Its Euclidean distance from that line is</p>
+<p><span class="math display">\[
+r_E^{(2)} =
+\frac{|C|}{\sqrt{\ell_1'^2+\ell_2'^2}}.
+\]</span></p>
+<p>Likewise, if we freeze <span class="math inline">\(\mathbf x'\)</span> and move only the first point,</p>
+<p><span class="math display">\[
+r_E^{(1)} =
+\frac{|C|}{\sqrt{\ell_1^2+\ell_2^2}}.
+\]</span></p>
+<p>These residuals are measured in pixels, but each of them consider only one image point at time.</p>
+<div id="res-one-code" class="cell" data-execution_count="5">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> euclidean_epipolar_residuals(F, x, xp):</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""One-sided point-to-epipolar-line residuals in views 1 and 2."""</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>    C <span class="op">=</span> algebraic_residual(F, x, xp)</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>    lp <span class="op">=</span> (F <span class="op">@</span> x.T).T</span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>    l <span class="op">=</span> (F.T <span class="op">@</span> xp.T).T</span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>    np_ <span class="op">=</span> np.maximum(np.linalg.norm(lp[:, :<span class="dv">2</span>], axis<span class="op">=</span><span class="dv">1</span>), <span class="fl">1e-15</span>)</span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>    n <span class="op">=</span> np.maximum(np.linalg.norm(l[:, :<span class="dv">2</span>], axis<span class="op">=</span><span class="dv">1</span>), <span class="fl">1e-15</span>)</span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>    rE1 <span class="op">=</span> np.<span class="bu">abs</span>(C) <span class="op">/</span> n</span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>    rE2 <span class="op">=</span> np.<span class="bu">abs</span>(C) <span class="op">/</span> np_</span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> rE1, rE2</span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> foot_on_line(p, l):</span>
+<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a>    q <span class="op">=</span> p.copy()</span>
+<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a>    den <span class="op">=</span> l[<span class="dv">0</span>]<span class="op">**</span><span class="dv">2</span> <span class="op">+</span> l[<span class="dv">1</span>]<span class="op">**</span><span class="dv">2</span></span>
+<span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a>    q[:<span class="dv">2</span>] <span class="op">-=</span> (p <span class="op">@</span> l) <span class="op">*</span> l[:<span class="dv">2</span>] <span class="op">/</span> den</span>
+<span id="cb5-17"><a href="#cb5-17" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> q</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p><strong>Symmetric epipolar residual.</strong> We can combine the two one-sided distances,</p>
+<p><span class="math display">\[
+r_{SE} = \sqrt{\left(r_E^{(1)}\right)^2+\left(r_E^{(2)}\right)^2}.
+\]</span></p>
+<p>This treats the two views symmetrically. The catch is that each term is evaluated while pretending that the point in the other image is exact. The two perpendicular corrections are therefore not, in general, one jointly consistent correction of the correspondence.</p>
+<div id="res-sym-code" class="cell" data-execution_count="6">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> symmetric_epipolar_residual(F, x, xp):</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>    rE1, rE2 <span class="op">=</span> euclidean_epipolar_residuals(F, x, xp)</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> np.hypot(rE1, rE2)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p><strong>Sampson residual.</strong> What we would really like is the smallest joint perturbation of both image points that makes the epipolar constraint exact. Sampson replaces that nonlinear problem by its first-order approximation and gives</p>
+<p><span class="math display">\[
+r_S = \frac{C}{\sqrt{
+\ell_1^2+\ell_2^2+\ell_1'^2+\ell_2'^2}}.
+\]</span></p>
+<p>We keep the sign of <span class="math inline">\(r_S\)</span> in code because nonlinear least squares wants a residual vector; plots and tables will usually show <span class="math inline">\(|r_S|\)</span>. Squaring it gives the classical Sampson error.</p>
+<div id="res-sam-code" class="cell" data-execution_count="7">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> sampson_residual(F, x, xp):</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>    C <span class="op">=</span> algebraic_residual(F, x, xp)</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>    lp <span class="op">=</span> (F <span class="op">@</span> x.T).T</span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>    l <span class="op">=</span> (F.T <span class="op">@</span> xp.T).T</span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>    J2 <span class="op">=</span> (l[:, <span class="dv">0</span>]<span class="op">**</span><span class="dv">2</span> <span class="op">+</span> l[:, <span class="dv">1</span>]<span class="op">**</span><span class="dv">2</span> <span class="op">+</span></span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>          lp[:, <span class="dv">0</span>]<span class="op">**</span><span class="dv">2</span> <span class="op">+</span> lp[:, <span class="dv">1</span>]<span class="op">**</span><span class="dv">2</span>)</span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> C <span class="op">/</span> np.sqrt(np.maximum(J2, <span class="fl">1e-30</span>))</span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> sampson_correction(F, x, xp):</span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""Minimum-norm correction satisfying the linearised epipolar constraint."""</span></span>
+<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a>    C <span class="op">=</span> algebraic_residual(F, x, xp)</span>
+<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a>    lp <span class="op">=</span> (F <span class="op">@</span> x.T).T</span>
+<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a>    l <span class="op">=</span> (F.T <span class="op">@</span> xp.T).T</span>
+<span id="cb7-15"><a href="#cb7-15" aria-hidden="true" tabindex="-1"></a>    J <span class="op">=</span> np.column_stack([l[:, :<span class="dv">2</span>], lp[:, :<span class="dv">2</span>]])</span>
+<span id="cb7-16"><a href="#cb7-16" aria-hidden="true" tabindex="-1"></a>    J2 <span class="op">=</span> np.<span class="bu">sum</span>(J<span class="op">**</span><span class="dv">2</span>, axis<span class="op">=</span><span class="dv">1</span>)</span>
+<span id="cb7-17"><a href="#cb7-17" aria-hidden="true" tabindex="-1"></a>    delta <span class="op">=</span> <span class="op">-</span>(C <span class="op">/</span> np.maximum(J2, <span class="fl">1e-30</span>))[:, <span class="va">None</span>] <span class="op">*</span> J</span>
+<span id="cb7-18"><a href="#cb7-18" aria-hidden="true" tabindex="-1"></a>    xc, xpc <span class="op">=</span> x.copy(), xp.copy()</span>
+<span id="cb7-19"><a href="#cb7-19" aria-hidden="true" tabindex="-1"></a>    xc[:, :<span class="dv">2</span>] <span class="op">+=</span> delta[:, :<span class="dv">2</span>]</span>
+<span id="cb7-20"><a href="#cb7-20" aria-hidden="true" tabindex="-1"></a>    xpc[:, :<span class="dv">2</span>] <span class="op">+=</span> delta[:, <span class="dv">2</span>:]</span>
+<span id="cb7-21"><a href="#cb7-21" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> xc, xpc</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</section>
+<section id="drawing-the-residuals" class="level2 page-columns page-full">
+<h2 class="anchored" data-anchor-id="drawing-the-residuals">Drawing the residuals</h2>
+<p>The formulas become much easier to read once we draw the residuals directly in the image planes.</p>
+<p>First freeze the point <span class="math inline">\(\mathbf x\)</span> in view 1. In view 2 the fundamental matrix predicts the epipolar line <span class="math inline">\(\boldsymbol\ell'=\mathsf F\mathbf x\)</span>, and <span class="math inline">\(r_E^{(2)}\)</span> is literally the length of the perpendicular segment from the measured point <span class="math inline">\(\mathbf x'\)</span> to that line.</p>
+<p>One convention, kept in every figure from here on. An <strong>orange line</strong> is always an epipolar line. A <strong>hollow circle</strong> is a point we take as given: a match someone clicked, or the exact projection of a vertex whose position we know. A <strong>filled dot</strong> is where some computation has decided that point ought to be instead. The <strong>blue segment</strong> between them is the residual we are talking about, drawn to scale.</p>
+<div id="cell-fig-one-sided" class="cell" data-execution_count="8">
+<div class="cell-output cell-output-display">
+<div id="fig-one-sided" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-one-sided-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="residuals_files/figure-html/fig-one-sided-output-1.png" width="695" height="683" class="figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-one-sided-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;1: View 2, with the epipolar line of a fixed point of view 1 drawn in orange. The hollow circle is the match that was clicked, the filled dot is its foot on the line, and the blue segment between them is <span class="math inline">\(r_E^{(2)}\)</span>.
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<p>The symmetric epipolar residual simply draws <strong>two</strong> such perpendicular segments: one in each image. The top row below shows exactly this construction. Notice that each segment is computed while freezing the point in the other view.</p>
+<p>Sampson does something subtler. It lets both points move at the same time and chooses the shortest four-dimensional correction that satisfies the <strong>linearised</strong> epipolar constraint. The bottom row shows how that joint correction is split between the two image planes.</p>
+<p>The bottom row needs two orange lines rather than one, so read them carefully. The <strong>faint solid line</strong> is the epipolar line induced by the <em>measured</em> point in the other view — exactly the same line as in the panel above it. The <strong>dashed line</strong> is the line induced by that point <em>after</em> Sampson has corrected it. Since both points move, the line each of them has to meet moves too, and the dashed line is where it ended up. The blue arrow is the correction itself, and the filled dot at its tip is the corrected point.</p>
+<p>Now look at whether the tip of the arrow actually lands on the dashed line. It very nearly does, but not exactly: the corrected pair need not satisfy the nonlinear epipolar constraint, because Sampson solves the tangent problem and not the original curved one. The mismatch that remains is precisely the price of the first-order approximation — and, as the next cell shows, on data of this quality it is far too small to see at this scale, which is itself the reason the approximation is worth making.</p>
+<p>This distinction is the reason Sampson is not just a different normalisation of a point-to-line distance. It changes how the correction is distributed between the two measurements.</p>
+<div id="cell-fig-corrections" class="cell page-columns page-full" data-execution_count="9">
+<div class="cell-output cell-output-display page-columns page-full">
+<div id="fig-corrections" class="quarto-float quarto-figure quarto-figure-center anchored page-columns page-full">
+<figure class="quarto-float quarto-float-fig figure page-columns page-full">
+<div aria-describedby="fig-corrections-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca" class="page-columns page-full">
+<img src="residuals_files/figure-html/fig-corrections-output-1.png" width="1107" height="1067" class="figure-img column-page">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-corrections-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;2: <strong>Top row:</strong> the two one-sided residuals, each measured while pretending that the point in the other view is exact. <strong>Bottom row:</strong> the joint Sampson correction, which moves both points at once. Orange is always an epipolar line, a hollow circle a point we take as given, a filled dot where a computation places it. In the bottom row the faint solid orange line is the epipolar line induced by the <em>measured</em> partner and the dashed one that induced by the <em>corrected</em> partner; the blue arrow is the correction itself.
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<div id="sampson-gap" class="cell" data-execution_count="10">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>xc1, xpc1 <span class="op">=</span> sampson_correction(F_true, x0[<span class="va">None</span>, :], xp0[<span class="va">None</span>, :])</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>before <span class="op">=</span> <span class="bu">abs</span>(algebraic_residual(F_true, x0[<span class="va">None</span>, :],  xp0[<span class="va">None</span>, :])[<span class="dv">0</span>])</span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>after  <span class="op">=</span> <span class="bu">abs</span>(algebraic_residual(F_true, xc1, xpc1)[<span class="dv">0</span>])</span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"epipolar constraint, before the correction: </span><span class="sc">{</span>before<span class="sc">:.3e}</span><span class="ss">"</span>)</span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"                     after one Sampson step: </span><span class="sc">{</span>after<span class="sc">:.3e}</span><span class="ss">"</span>)</span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>l1c <span class="op">=</span> F_true.T <span class="op">@</span> xpc1[<span class="dv">0</span>]</span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>gap <span class="op">=</span> <span class="bu">abs</span>(xc1[<span class="dv">0</span>] <span class="op">@</span> l1c) <span class="op">/</span> np.linalg.norm(l1c[:<span class="dv">2</span>])</span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"</span><span class="ch">\n</span><span class="ss">distance of the corrected point from the dashed line: </span><span class="sc">{</span>gap<span class="sc">:.2e}</span><span class="ss"> px"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>epipolar constraint, before the correction: 5.817e-03
+                     after one Sampson step: 5.485e-08
+
+distance of the corrected point from the dashed line: 4.34e-05 px</code></pre>
+</div>
+</div>
+<p>The constraint drops by several orders of magnitude in one step, and the leftover gap is a small fraction of a pixel. One linear step does not land exactly on a curved surface — it just lands close enough that nobody minds.</p>
+<div id="c52d7abc" class="cell" data-execution_count="11">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"</span><span class="sc">{</span><span class="st">'matrix'</span><span class="sc">:16s}{</span><span class="st">'r_A RMS'</span><span class="sc">:&gt;13s}{</span><span class="st">'r_E^(2) RMS [px]'</span><span class="sc">:&gt;19s}{</span><span class="st">'r_SE RMS [px]'</span><span class="sc">:&gt;16s}{</span><span class="st">'r_S RMS [px]'</span><span class="sc">:&gt;15s}</span><span class="ss">"</span>)</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> name, F <span class="kw">in</span> [(<span class="st">"DLT"</span>, F_dlt), (<span class="st">"true F"</span>, F_true)]:</span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>    rA <span class="op">=</span> algebraic_residual(unit_F(F), xr, xpr)</span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>    _, rE2 <span class="op">=</span> euclidean_epipolar_residuals(F, xr, xpr)</span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>    rSE <span class="op">=</span> symmetric_epipolar_residual(F, xr, xpr)</span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>    rS <span class="op">=</span> sampson_residual(F, xr, xpr)</span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f"</span><span class="sc">{</span>name<span class="sc">:16s}{</span>np<span class="sc">.</span>sqrt(np.mean(rA<span class="op">**</span><span class="dv">2</span>))<span class="sc">:13.3e}</span><span class="ss">"</span></span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a>          <span class="ss">f"</span><span class="sc">{</span>np<span class="sc">.</span>sqrt(np.mean(rE2<span class="op">**</span><span class="dv">2</span>))<span class="sc">:19.3f}</span><span class="ss">"</span></span>
+<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a>          <span class="ss">f"</span><span class="sc">{</span>np<span class="sc">.</span>sqrt(np.mean(rSE<span class="op">**</span><span class="dv">2</span>))<span class="sc">:16.3f}</span><span class="ss">"</span></span>
+<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a>          <span class="ss">f"</span><span class="sc">{</span>np<span class="sc">.</span>sqrt(np.mean(rS<span class="op">**</span><span class="dv">2</span>))<span class="sc">:15.3f}</span><span class="ss">"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>matrix                r_A RMS   r_E^(2) RMS [px]   r_SE RMS [px]   r_S RMS [px]
+DLT                 8.054e-03             16.432          21.866         10.808
+true F              2.638e-03              2.698           3.349          1.597</code></pre>
+</div>
+</div>
+<p>The last three columns answer the opening question in the units of the data: pixels. They do <strong>not</strong> have to rank the DLT estimate and the true matrix in the same way as the matrix-space distance did. The DLT was fitted to these ten clicks; the true matrix describes the cameras. Those are different statements.</p>
+<p>The first column is deliberately left in the table as a warning. We normalised <span class="math inline">\(\mathsf F\)</span> before computing <span class="math inline">\(r_A\)</span>, so the numbers are comparable <em>inside this cell</em>, but the unit is still an arbitrary convention rather than a physical image distance.</p>
+<section id="where-does-the-sampson-formula-come-from" class="level3">
+<h3 class="anchored" data-anchor-id="where-does-the-sampson-formula-come-from">Where does the Sampson formula come from?</h3>
+<p>The derivation is just the minimum-norm solution of one linearised constraint.</p>
+<p>Write the four measured image coordinates as</p>
+<p><span class="math display">\[
+\mathbf z=(u,v,u',v')^\top \in \mathbb R^4,
+\qquad
+C(\mathbf z)=\mathbf x'^\top\mathsf F\mathbf x .
+\]</span></p>
+<p>It is worth pausing on the shapes. The measurement lives in <span class="math inline">\(\mathbb R^4\)</span>, but the constraint is a <strong>single scalar equation</strong>, so <span class="math inline">\(C:\mathbb R^4\to\mathbb R\)</span> and its Jacobian is a <span class="math inline">\(1\times4\)</span> row vector.</p>
+<p>We would like to find the smallest correction <span class="math inline">\(\Delta\mathbf z\)</span> such that the corrected correspondence satisfies <span class="math inline">\(C=0\)</span>. Sampson replaces the nonlinear constraint by its first-order Taylor expansion,</p>
+<p><span class="math display">\[
+C(\mathbf z+\Delta\mathbf z)
+\simeq C(\mathbf z)+\mathsf J\,\Delta\mathbf z = 0 .
+\]</span></p>
+<p>The four partial derivatives are immediate, because <span class="math inline">\(C\)</span> is bilinear. Differentiating with respect to <span class="math inline">\(u\)</span> only touches <span class="math inline">\(\mathbf x=(u,v,1)^\top\)</span>, so</p>
+<p><span class="math display">\[
+\frac{\partial C}{\partial u}
+=\mathbf x'^\top\mathsf F\,\mathbf e_1
+=\left(\mathsf F^\top\mathbf x'\right)_1
+=\ell_1 ,
+\]</span></p>
+<p>and in the same way <span class="math inline">\(\partial C/\partial v=\ell_2\)</span>, while differentiating in <span class="math inline">\(u'\)</span> and <span class="math inline">\(v'\)</span> touches only <span class="math inline">\(\mathbf x'\)</span> and gives <span class="math inline">\(\ell'_1\)</span> and <span class="math inline">\(\ell'_2\)</span>. Hence</p>
+<p><span class="math display">\[
+\mathsf J
+=
+\begin{bmatrix}
+\ell_1 &amp; \ell_2 &amp; \ell'_1 &amp; \ell'_2
+\end{bmatrix}
+\in\mathbb R^{1\times4}.
+\]</span></p>
+<p>So the gradient of the epipolar constraint is nothing but <strong>the two epipolar lines</strong>, stacked, with their homogeneous third coordinates dropped. The two entries acting on view 1 come from the line <span class="math inline">\(\boldsymbol\ell\)</span> that lives in view 1, and the other two from <span class="math inline">\(\boldsymbol\ell'\)</span> in view 2.</p>
+<p>So we solve</p>
+<p><span class="math display">\[
+\min_{\Delta\mathbf z}\ \lVert\Delta\mathbf z\rVert^2
+\qquad\text{subject to}\qquad
+\mathsf J\Delta\mathbf z=-C.
+\]</span></p>
+<p>Because there is only one scalar constraint, <span class="math inline">\(\mathsf J\mathsf J^\top\)</span> is a <span class="math inline">\(1\times1\)</span> matrix — a number — and the minimum-norm solution needs no matrix inverse at all:</p>
+<p><span class="math display">\[
+\Delta\mathbf z
+=-\frac{C}{\mathsf J\mathsf J^\top}\,\mathsf J^\top
+\in\mathbb R^4 .
+\]</span></p>
+<p>With <span class="math inline">\(N\)</span> independent constraints the same derivation goes through with <span class="math inline">\(\mathsf J\in\mathbb R^{N\times n}\)</span>, but <span class="math inline">\(\mathsf J\mathsf J^\top\)</span> becomes an <span class="math inline">\(N\times N\)</span> matrix that has to be inverted. That is where the multi-view case starts to get interesting.</p>
+<p>Taking its norm gives</p>
+<p><span class="math display">\[
+\lVert\Delta\mathbf z\rVert
+=
+\frac{|C|}{\sqrt{\mathsf J\mathsf J^\top}}
+=
+\frac{|C|}{\sqrt{\ell_1^2+\ell_2^2+\ell_1'^2+\ell_2'^2}}
+=|r_S|.
+\]</span></p>
+<p>That is the whole Sampson approximation: <strong>linearise the constraint, then take the shortest correction to the tangent hyperplane</strong>. The exact geometric residual solves the same minimum-distance problem on the true epipolar constraint instead of on its tangent approximation.</p>
+<p>The order of those two operations is worth stating precisely, because it is often garbled. We do not linearise the geometric distance and keep the first term; we linearise the <strong>constraint</strong> and then solve the resulting problem <em>exactly</em>. It is the exact answer to a slightly different question, which is why <span class="math inline">\(r_S\)</span> can land on either side of the true geometric residual with no predictable sign. Harker and O’Leary devote a whole paper to the distinction, under the excellent title <em>the myth of Sampsonus</em>.</p>
+</section>
+</section>
+<section id="heatmaps-over-the-second-image" class="level2 page-columns page-full">
+<h2 class="anchored" data-anchor-id="heatmaps-over-the-second-image">Heatmaps over the second image</h2>
+<p>Let us now visualise each residual as a function over the whole image. We fix one Origami House point <span class="math inline">\(\mathbf x\)</span> in view 1 and pretend that its match could be <strong>anywhere</strong> in view 2. At every candidate pixel <span class="math inline">\(\mathbf x'\)</span> we evaluate the four residuals.</p>
+<p>Here knowing the true <span class="math inline">\(\mathsf F\)</span> is especially useful. The maps below inherit no estimation error: they show only the geometry of the residuals themselves.</p>
+<p>The same convention holds: the orange line is the epipolar line of the fixed <span class="math inline">\(\mathbf x\)</span>, and the hollow circle is the match that was actually clicked. Everything else is the residual evaluated at candidate positions that no measurement ever occupied.</p>
+<div id="7196ec89" class="cell" data-execution_count="12">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> residual_maps(F, x0, W, H, step<span class="op">=</span><span class="dv">7</span>):</span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>    gx, gy <span class="op">=</span> np.meshgrid(np.arange(<span class="dv">0</span>, W, step), np.arange(<span class="dv">0</span>, H, step))</span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>    G <span class="op">=</span> np.column_stack([gx.ravel(), gy.ravel(), np.ones(gx.size)])</span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>    lp <span class="op">=</span> F <span class="op">@</span> x0</span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>    C <span class="op">=</span> G <span class="op">@</span> lp</span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a>    ap <span class="op">=</span> lp[<span class="dv">0</span>]<span class="op">**</span><span class="dv">2</span> <span class="op">+</span> lp[<span class="dv">1</span>]<span class="op">**</span><span class="dv">2</span></span>
+<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a>    l <span class="op">=</span> (F.T <span class="op">@</span> G.T).T</span>
+<span id="cb12-10"><a href="#cb12-10" aria-hidden="true" tabindex="-1"></a>    a <span class="op">=</span> l[:, <span class="dv">0</span>]<span class="op">**</span><span class="dv">2</span> <span class="op">+</span> l[:, <span class="dv">1</span>]<span class="op">**</span><span class="dv">2</span></span>
+<span id="cb12-11"><a href="#cb12-11" aria-hidden="true" tabindex="-1"></a>    a <span class="op">=</span> np.maximum(a, <span class="fl">1e-30</span>)</span>
+<span id="cb12-12"><a href="#cb12-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-13"><a href="#cb12-13" aria-hidden="true" tabindex="-1"></a>    maps <span class="op">=</span> {</span>
+<span id="cb12-14"><a href="#cb12-14" aria-hidden="true" tabindex="-1"></a>        <span class="vs">r"</span><span class="dv">$</span><span class="cf">|</span><span class="vs">r_A</span><span class="cf">|</span><span class="dv">$</span><span class="vs">"</span>: np.<span class="bu">abs</span>(C),</span>
+<span id="cb12-15"><a href="#cb12-15" aria-hidden="true" tabindex="-1"></a>        <span class="vs">r"</span><span class="dv">$</span><span class="vs">r_E</span><span class="dv">^</span><span class="vs">{</span><span class="kw">(</span><span class="vs">2</span><span class="kw">)</span><span class="vs">}</span><span class="dv">$</span><span class="vs">"</span>: np.<span class="bu">abs</span>(C) <span class="op">/</span> np.sqrt(ap),</span>
+<span id="cb12-16"><a href="#cb12-16" aria-hidden="true" tabindex="-1"></a>        <span class="vs">r"</span><span class="dv">$</span><span class="vs">r_{SE}</span><span class="dv">$</span><span class="vs">"</span>: np.<span class="bu">abs</span>(C) <span class="op">*</span> np.sqrt(<span class="dv">1</span><span class="op">/</span>ap <span class="op">+</span> <span class="dv">1</span><span class="op">/</span>a),</span>
+<span id="cb12-17"><a href="#cb12-17" aria-hidden="true" tabindex="-1"></a>        <span class="vs">r"</span><span class="dv">$</span><span class="cf">|</span><span class="vs">r_S</span><span class="cf">|</span><span class="dv">$</span><span class="vs">"</span>: np.<span class="bu">abs</span>(C) <span class="op">/</span> np.sqrt(ap <span class="op">+</span> a),</span>
+<span id="cb12-18"><a href="#cb12-18" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb12-19"><a href="#cb12-19" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> gx, gy, {k: v.reshape(gx.shape) <span class="cf">for</span> k, v <span class="kw">in</span> maps.items()}</span>
+<span id="cb12-20"><a href="#cb12-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-21"><a href="#cb12-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-22"><a href="#cb12-22" aria-hidden="true" tabindex="-1"></a>gx, gy, MAPS <span class="op">=</span> residual_maps(F_true, x0, W_IMG, H_IMG)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div id="cell-fig-maps" class="cell page-columns page-full" data-execution_count="13">
+<div class="cell-output cell-output-display page-columns page-full">
+<div id="fig-maps" class="quarto-float quarto-figure quarto-figure-center anchored page-columns page-full">
+<figure class="quarto-float quarto-float-fig figure page-columns page-full">
+<div aria-describedby="fig-maps-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca" class="page-columns page-full">
+<img src="residuals_files/figure-html/fig-maps-output-1.png" width="1534" height="453" class="figure-img column-screen-inset">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-maps-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;3: Each residual evaluated at every candidate position of <span class="math inline">\(\mathbf x'\)</span>, with <span class="math inline">\(\mathbf x\)</span> held fixed in view 1. Orange is the epipolar line of <span class="math inline">\(\mathbf x\)</span> and the hollow circle is the match actually clicked. The first two panels share their level sets; only the last two bend.
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<p>The first two panels have the same level sets: straight lines parallel to the epipolar line. For fixed <span class="math inline">\(\mathbf x\)</span>, dividing <span class="math inline">\(r_A\)</span> by <span class="math inline">\(\sqrt{\ell_1'^2+\ell_2'^2}\)</span> only changes the scale by one constant factor.</p>
+<p>The last two panels bend because <span class="math inline">\(\mathsf F^\top\mathbf x'\)</span> changes as the candidate point moves. Both <span class="math inline">\(r_{SE}\)</span> and <span class="math inline">\(r_S\)</span> therefore react to <strong>where</strong> the candidate lies, not only to how far it is from the orange line.</p>
+<p>They do so in opposite ways. The symmetric epipolar residual adds two one-sided penalties, each computed while freezing the point in the other view. Sampson instead lets the two image corrections trade against each other in one joint first-order problem.</p>
+<p>This is the picture to remember when the four formulas start looking deceptively similar.</p>
+<section id="a-useful-comparison-r_se-versus-r_s" class="level3">
+<h3 class="anchored" data-anchor-id="a-useful-comparison-r_se-versus-r_s">A useful comparison: <span class="math inline">\(r_{SE}\)</span> versus <span class="math inline">\(r_S\)</span></h3>
+<p>The two formulas are similar enough that one simple relation is worth making explicit. Let</p>
+<p><span class="math display">\[
+a=\ell_1^2+\ell_2^2,
+\qquad
+b=\ell_1'^2+\ell_2'^2.
+\]</span></p>
+<p>Then</p>
+<p><span class="math display">\[
+r_{SE}^2=C^2\left(\frac1a+\frac1b\right),
+\qquad
+r_S^2=\frac{C^2}{a+b}.
+\]</span></p>
+<p>Therefore</p>
+<p><span class="math display">\[
+\frac{r_{SE}}{|r_S|}
+=\frac{a+b}{\sqrt{ab}}
+\ge 2,
+\]</span></p>
+<p>with equality only when <span class="math inline">\(a=b\)</span>. So the <strong>symmetric epipolar residual is always at least twice the Sampson residual</strong> for the same correspondence; in squared form the factor is at least four.</p>
+<p>The algebra is short, but the reason is worth spelling out, because the factor of two is not an accident of normalisation.</p>
+<p><strong>Each of the two one-sided corrections would already fix the constraint on its own.</strong> The quantity <span class="math inline">\(r_E^{(1)}\)</span> is how far the first point would have to move <em>if it were the only one moving</em>; <span class="math inline">\(r_E^{(2)}\)</span> is the same statement for the second point. The symmetric residual adds both in quadrature, so it charges for the repair twice. Sampson does the job once and splits it between the two views.</p>
+<p>The split has an exact form. The Sampson correction moves the point of view 1 by</p>
+<p><span class="math display">\[
+\frac{a}{a+b}\, r_E^{(1)},
+\qquad\text{and the point of view 2 by}\qquad
+\frac{b}{a+b}\, r_E^{(2)},
+\]</span></p>
+<p>and the two fractions add up to one: the work is shared, not duplicated. When the two gradients happen to be equal, <span class="math inline">\(a=b\)</span>, each point moves exactly <strong>half</strong> as far as its one-sided residual would suggest, <span class="math inline">\(r_{SE}=\sqrt2\,r_E\)</span>, <span class="math inline">\(|r_S|=r_E/\sqrt2\)</span>, and the ratio is exactly <span class="math inline">\(2\)</span>.</p>
+<div id="7447710c" class="cell" data-execution_count="14">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>xc_all, xpc_all <span class="op">=</span> sampson_correction(F_true, xr, xpr)</span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>move1 <span class="op">=</span> np.linalg.norm(xc_all[:, :<span class="dv">2</span>]  <span class="op">-</span> xr[:, :<span class="dv">2</span>],  axis<span class="op">=</span><span class="dv">1</span>)</span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>move2 <span class="op">=</span> np.linalg.norm(xpc_all[:, :<span class="dv">2</span>] <span class="op">-</span> xpr[:, :<span class="dv">2</span>], axis<span class="op">=</span><span class="dv">1</span>)</span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>rE1, rE2 <span class="op">=</span> euclidean_epipolar_residuals(F_true, xr, xpr)</span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a>l  <span class="op">=</span> (F_true.T <span class="op">@</span> xpr.T).T</span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a>lp <span class="op">=</span> (F_true   <span class="op">@</span> xr.T).T</span>
+<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a>a <span class="op">=</span> l[:, <span class="dv">0</span>]<span class="op">**</span><span class="dv">2</span>  <span class="op">+</span> l[:, <span class="dv">1</span>]<span class="op">**</span><span class="dv">2</span></span>
+<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a>b <span class="op">=</span> lp[:, <span class="dv">0</span>]<span class="op">**</span><span class="dv">2</span> <span class="op">+</span> lp[:, <span class="dv">1</span>]<span class="op">**</span><span class="dv">2</span></span>
+<span id="cb13-10"><a href="#cb13-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-11"><a href="#cb13-11" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"share of the repair taken by view 1:"</span>, np.<span class="bu">round</span>(move1 <span class="op">/</span> rE1, <span class="dv">4</span>))</span>
+<span id="cb13-12"><a href="#cb13-12" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"predicted a / (a + b)              :"</span>, np.<span class="bu">round</span>(a <span class="op">/</span> (a <span class="op">+</span> b), <span class="dv">4</span>))</span>
+<span id="cb13-13"><a href="#cb13-13" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"the two shares add up to           :"</span>, np.<span class="bu">round</span>(move1<span class="op">/</span>rE1 <span class="op">+</span> move2<span class="op">/</span>rE2, <span class="dv">4</span>))</span>
+<span id="cb13-14"><a href="#cb13-14" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>()</span>
+<span id="cb13-15"><a href="#cb13-15" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"total move equals |r_S|, largest gap:"</span>,</span>
+<span id="cb13-16"><a href="#cb13-16" aria-hidden="true" tabindex="-1"></a>      <span class="ss">f"</span><span class="sc">{</span>np<span class="sc">.</span><span class="bu">abs</span>(np.hypot(move1, move2) <span class="op">-</span> np.<span class="bu">abs</span>(sampson_residual(F_true, xr, xpr)))<span class="sc">.</span><span class="bu">max</span>()<span class="sc">:.1e}</span><span class="ss">"</span>)</span>
+<span id="cb13-17"><a href="#cb13-17" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"smallest r_SE / |r_S| observed      :"</span>,</span>
+<span id="cb13-18"><a href="#cb13-18" aria-hidden="true" tabindex="-1"></a>      <span class="ss">f"</span><span class="sc">{</span>(symmetric_epipolar_residual(F_true, xr, xpr) <span class="op">/</span> np.<span class="bu">abs</span>(sampson_residual(F_true, xr, xpr)))<span class="sc">.</span><span class="bu">min</span>()<span class="sc">:.4f}</span><span class="ss">"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>share of the repair taken by view 1: [0.6625 0.6141 0.6792 0.6265 0.6937 0.637  0.6423 0.6504 0.6417 0.6338]
+predicted a / (a + b)              : [0.6625 0.6141 0.6792 0.6265 0.6937 0.637  0.6423 0.6504 0.6417 0.6338]
+the two shares add up to           : [1. 1. 1. 1. 1. 1. 1. 1. 1. 1.]
+
+total move equals |r_S|, largest gap: 6.8e-14
+smallest r_SE / |r_S| observed      : 2.0542</code></pre>
+</div>
+</div>
+<p>The shares match the prediction to four decimals, they add up to one, and the total length of the joint correction <em>is</em> the Sampson residual. The smallest ratio observed sits just above the bound of two, as it must.</p>
+</section>
+</section>
+<section id="residuals-depend-on-the-coordinates-in-which-distance-is-measured" class="level2 page-columns page-full">
+<h2 class="anchored" data-anchor-id="residuals-depend-on-the-coordinates-in-which-distance-is-measured">Residuals depend on the coordinates in which distance is measured</h2>
+<p>The epipolar relation is projective, but a residual in pixels is metric. Those are different layers of structure.</p>
+<p>Suppose we change image coordinates according to</p>
+<p><span class="math display">\[
+\mathbf x \mapsto \mathsf T\mathbf x,
+\qquad
+\mathbf x' \mapsto \mathsf T'\mathbf x'.
+\]</span></p>
+<p>The fundamental matrix transports as</p>
+<p><span class="math display">\[
+\mathsf F \mapsto \mathsf T'^{-\top}\mathsf F\mathsf T^{-1},
+\]</span></p>
+<p>so the equation <span class="math inline">\(\mathbf x'^\top\mathsf F\mathbf x=0\)</span> describes exactly the same correspondences. But Euclidean lengths need not survive the coordinate change.</p>
+<p>Let us make this visible by stretching only view 2: horizontal pixels become <span class="math inline">\(1.35\)</span> times larger, vertical pixels <span class="math inline">\(0.72\)</span> times larger. This is deliberately <strong>not</strong> a similarity.</p>
+<div id="a3c15488" class="cell" data-execution_count="15">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>Tp <span class="op">=</span> np.diag([<span class="fl">1.35</span>, <span class="fl">0.72</span>, <span class="fl">1.0</span>])</span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>T <span class="op">=</span> np.eye(<span class="dv">3</span>)</span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>F_stretch <span class="op">=</span> np.linalg.inv(Tp).T <span class="op">@</span> F_true <span class="op">@</span> np.linalg.inv(T)</span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a>xpr_stretch <span class="op">=</span> (Tp <span class="op">@</span> xpr.T).T</span>
+<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a>xp0_stretch <span class="op">=</span> Tp <span class="op">@</span> xp0</span>
+<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a>W2 <span class="op">=</span> <span class="fl">1.35</span> <span class="op">*</span> W_IMG</span>
+<span id="cb15-9"><a href="#cb15-9" aria-hidden="true" tabindex="-1"></a>H2 <span class="op">=</span> <span class="fl">0.72</span> <span class="op">*</span> H_IMG</span>
+<span id="cb15-10"><a href="#cb15-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-11"><a href="#cb15-11" aria-hidden="true" tabindex="-1"></a>gx2, gy2, MAPS2 <span class="op">=</span> residual_maps(F_stretch, x0, W2, H2)</span>
+<span id="cb15-12"><a href="#cb15-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-13"><a href="#cb15-13" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"</span><span class="sc">{</span><span class="st">'residual'</span><span class="sc">:20s}{</span><span class="st">'min ratio'</span><span class="sc">:&gt;12s}{</span><span class="st">'median'</span><span class="sc">:&gt;12s}{</span><span class="st">'max ratio'</span><span class="sc">:&gt;12s}</span><span class="ss">"</span>)</span>
+<span id="cb15-14"><a href="#cb15-14" aria-hidden="true" tabindex="-1"></a>base <span class="op">=</span> {</span>
+<span id="cb15-15"><a href="#cb15-15" aria-hidden="true" tabindex="-1"></a>    <span class="st">'r_E^(2)'</span>: euclidean_epipolar_residuals(F_true, xr, xpr)[<span class="dv">1</span>],</span>
+<span id="cb15-16"><a href="#cb15-16" aria-hidden="true" tabindex="-1"></a>    <span class="st">'r_SE'</span>: symmetric_epipolar_residual(F_true, xr, xpr),</span>
+<span id="cb15-17"><a href="#cb15-17" aria-hidden="true" tabindex="-1"></a>    <span class="st">'|r_S|'</span>: np.<span class="bu">abs</span>(sampson_residual(F_true, xr, xpr)),</span>
+<span id="cb15-18"><a href="#cb15-18" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb15-19"><a href="#cb15-19" aria-hidden="true" tabindex="-1"></a>new <span class="op">=</span> {</span>
+<span id="cb15-20"><a href="#cb15-20" aria-hidden="true" tabindex="-1"></a>    <span class="st">'r_E^(2)'</span>: euclidean_epipolar_residuals(F_stretch, xr, xpr_stretch)[<span class="dv">1</span>],</span>
+<span id="cb15-21"><a href="#cb15-21" aria-hidden="true" tabindex="-1"></a>    <span class="st">'r_SE'</span>: symmetric_epipolar_residual(F_stretch, xr, xpr_stretch),</span>
+<span id="cb15-22"><a href="#cb15-22" aria-hidden="true" tabindex="-1"></a>    <span class="st">'|r_S|'</span>: np.<span class="bu">abs</span>(sampson_residual(F_stretch, xr, xpr_stretch)),</span>
+<span id="cb15-23"><a href="#cb15-23" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb15-24"><a href="#cb15-24" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> name <span class="kw">in</span> base:</span>
+<span id="cb15-25"><a href="#cb15-25" aria-hidden="true" tabindex="-1"></a>    r <span class="op">=</span> new[name] <span class="op">/</span> np.maximum(base[name], <span class="fl">1e-15</span>)</span>
+<span id="cb15-26"><a href="#cb15-26" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f"</span><span class="sc">{</span>name<span class="sc">:20s}{</span>r<span class="sc">.</span><span class="bu">min</span>()<span class="sc">:12.3f}{</span>np<span class="sc">.</span>median(r)<span class="sc">:12.3f}{</span>r<span class="sc">.</span><span class="bu">max</span>()<span class="sc">:12.3f}</span><span class="ss">"</span>)</span>
+<span id="cb15-27"><a href="#cb15-27" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-28"><a href="#cb15-28" aria-hidden="true" tabindex="-1"></a>C0 <span class="op">=</span> algebraic_residual(F_true, xr, xpr)</span>
+<span id="cb15-29"><a href="#cb15-29" aria-hidden="true" tabindex="-1"></a>C1 <span class="op">=</span> algebraic_residual(F_stretch, xr, xpr_stretch)</span>
+<span id="cb15-30"><a href="#cb15-30" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"</span><span class="ch">\n</span><span class="st">constraint itself is unchanged:"</span>, <span class="ss">f"max |C_new-C_old| = </span><span class="sc">{</span>np<span class="sc">.</span><span class="bu">max</span>(np.<span class="bu">abs</span>(C1<span class="op">-</span>C0))<span class="sc">:.2e}</span><span class="ss">"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>residual               min ratio      median   max ratio
+r_E^(2)                    0.736       0.747       0.819
+r_SE                       0.834       0.845       0.878
+|r_S|                      0.871       0.883       0.932
+
+constraint itself is unchanged: max |C_new-C_old| = 4.44e-16</code></pre>
+</div>
+</div>
+<div id="cell-fig-maps-stretched" class="cell page-columns page-full" data-execution_count="16">
+<div class="cell-output cell-output-display page-columns page-full">
+<div id="fig-maps-stretched" class="quarto-float quarto-figure quarto-figure-center anchored page-columns page-full">
+<figure class="quarto-float quarto-float-fig figure page-columns page-full">
+<div aria-describedby="fig-maps-stretched-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca" class="page-columns page-full">
+<img src="residuals_files/figure-html/fig-maps-stretched-output-1.png" width="1643" height="390" class="figure-img column-screen-inset">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-maps-stretched-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;4: The same four maps after view 2 has been stretched by <span class="math inline">\(1.35\)</span> horizontally and <span class="math inline">\(0.72\)</span> vertically, with <span class="math inline">\(\mathsf F\)</span> transported accordingly. The constraint is unchanged, so the orange line still passes exactly where it should, but the level sets around it are no longer the same shapes.
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<p>The algebraic constraint survives exactly because we transported <span class="math inline">\(\mathsf F\)</span> with the coordinates. The metric residuals do not: the ratios are not even a single common scale factor across correspondences.</p>
+<p>That is not a defect. A pixel residual assumes an isotropic Euclidean noise model <strong>in the chosen pixel coordinates</strong>. Stretch an axis and you have changed that metric.</p>
+<p>A similarity is the benign special case. Rotations and translations preserve the residuals, and scaling both image planes by the same factor simply scales a pixel residual by that factor. Hartley normalisation is therefore excellent for the linear estimate, but a threshold of “one pixel” should still be interpreted back in pixel coordinates.</p>
+</section>
+<section id="refining-the-dlt-estimate" class="level2 page-columns page-full">
+<h2 class="anchored" data-anchor-id="refining-the-dlt-estimate">Refining the DLT estimate</h2>
+<p>The eight-point algorithm minimises an algebraic objective because that makes the estimate linear. Once it has given us a good starting point, there is no reason to keep minimising that surrogate.</p>
+<p>We now minimise the Sampson residuals with Levenberg–Marquardt. The only constraint we must enforce is that every iterate remains a valid rank-two fundamental matrix.</p>
+<p>A convenient seven-parameter representation is</p>
+<p><span class="math display">\[
+\mathsf F(\boldsymbol\theta)
+= \mathsf U\,\operatorname{diag}(1,s,0)\,\mathsf V^\top,
+\qquad \mathsf U,\mathsf V\in SO(3),\quad 0&lt;s&lt;1.
+\]</span></p>
+<p>The two rotations contribute three parameters each, <span class="math inline">\(s\)</span> contributes one, the zero singular value enforces rank two, and fixing the largest singular value to one removes the projective scale.</p>
+<div id="1ac58f59" class="cell" data-execution_count="17">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb17"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> rodrigues(w):</span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>    th <span class="op">=</span> np.linalg.norm(w)</span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> th <span class="op">&lt;</span> <span class="fl">1e-12</span>:</span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> np.eye(<span class="dv">3</span>)</span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a>    K <span class="op">=</span> skew(w <span class="op">/</span> th)</span>
+<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> np.eye(<span class="dv">3</span>) <span class="op">+</span> np.sin(th) <span class="op">*</span> K <span class="op">+</span> (<span class="dv">1</span> <span class="op">-</span> np.cos(th)) <span class="op">*</span> (K <span class="op">@</span> K)</span>
+<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-8"><a href="#cb17-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-9"><a href="#cb17-9" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> log_SO3(R):</span>
+<span id="cb17-10"><a href="#cb17-10" aria-hidden="true" tabindex="-1"></a>    c <span class="op">=</span> np.clip((np.trace(R) <span class="op">-</span> <span class="dv">1</span>) <span class="op">/</span> <span class="dv">2</span>, <span class="op">-</span><span class="fl">1.0</span>, <span class="fl">1.0</span>)</span>
+<span id="cb17-11"><a href="#cb17-11" aria-hidden="true" tabindex="-1"></a>    th <span class="op">=</span> np.arccos(c)</span>
+<span id="cb17-12"><a href="#cb17-12" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> th <span class="op">&lt;</span> <span class="fl">1e-9</span>:</span>
+<span id="cb17-13"><a href="#cb17-13" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> np.zeros(<span class="dv">3</span>)</span>
+<span id="cb17-14"><a href="#cb17-14" aria-hidden="true" tabindex="-1"></a>    w <span class="op">=</span> np.array([R[<span class="dv">2</span>,<span class="dv">1</span>]<span class="op">-</span>R[<span class="dv">1</span>,<span class="dv">2</span>], R[<span class="dv">0</span>,<span class="dv">2</span>]<span class="op">-</span>R[<span class="dv">2</span>,<span class="dv">0</span>], R[<span class="dv">1</span>,<span class="dv">0</span>]<span class="op">-</span>R[<span class="dv">0</span>,<span class="dv">1</span>]])</span>
+<span id="cb17-15"><a href="#cb17-15" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> th <span class="op">*</span> w <span class="op">/</span> (<span class="dv">2</span><span class="op">*</span>np.sin(th))</span>
+<span id="cb17-16"><a href="#cb17-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-17"><a href="#cb17-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-18"><a href="#cb17-18" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> F_from_params(p):</span>
+<span id="cb17-19"><a href="#cb17-19" aria-hidden="true" tabindex="-1"></a>    U, V <span class="op">=</span> rodrigues(p[:<span class="dv">3</span>]), rodrigues(p[<span class="dv">3</span>:<span class="dv">6</span>])</span>
+<span id="cb17-20"><a href="#cb17-20" aria-hidden="true" tabindex="-1"></a>    q <span class="op">=</span> np.clip(p[<span class="dv">6</span>], <span class="op">-</span><span class="dv">30</span>, <span class="dv">30</span>)</span>
+<span id="cb17-21"><a href="#cb17-21" aria-hidden="true" tabindex="-1"></a>    s <span class="op">=</span> <span class="fl">1.0</span> <span class="op">/</span> (<span class="fl">1.0</span> <span class="op">+</span> np.exp(<span class="op">-</span>q))</span>
+<span id="cb17-22"><a href="#cb17-22" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> U <span class="op">@</span> np.diag([<span class="fl">1.0</span>, s, <span class="fl">0.0</span>]) <span class="op">@</span> V.T</span>
+<span id="cb17-23"><a href="#cb17-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-24"><a href="#cb17-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-25"><a href="#cb17-25" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> params_from_F(F):</span>
+<span id="cb17-26"><a href="#cb17-26" aria-hidden="true" tabindex="-1"></a>    U, s, Vt <span class="op">=</span> np.linalg.svd(F)</span>
+<span id="cb17-27"><a href="#cb17-27" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> np.linalg.det(U) <span class="op">&lt;</span> <span class="dv">0</span>:</span>
+<span id="cb17-28"><a href="#cb17-28" aria-hidden="true" tabindex="-1"></a>        U[:, <span class="dv">2</span>] <span class="op">*=</span> <span class="op">-</span><span class="dv">1</span></span>
+<span id="cb17-29"><a href="#cb17-29" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> np.linalg.det(Vt) <span class="op">&lt;</span> <span class="dv">0</span>:</span>
+<span id="cb17-30"><a href="#cb17-30" aria-hidden="true" tabindex="-1"></a>        Vt[<span class="dv">2</span>, :] <span class="op">*=</span> <span class="op">-</span><span class="dv">1</span></span>
+<span id="cb17-31"><a href="#cb17-31" aria-hidden="true" tabindex="-1"></a>    ratio <span class="op">=</span> np.clip(s[<span class="dv">1</span>] <span class="op">/</span> s[<span class="dv">0</span>], <span class="fl">1e-6</span>, <span class="dv">1</span><span class="op">-</span><span class="fl">1e-6</span>)</span>
+<span id="cb17-32"><a href="#cb17-32" aria-hidden="true" tabindex="-1"></a>    q <span class="op">=</span> np.log(ratio <span class="op">/</span> (<span class="dv">1</span><span class="op">-</span>ratio))</span>
+<span id="cb17-33"><a href="#cb17-33" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> np.r_[log_SO3(U), log_SO3(Vt.T), q]</span>
+<span id="cb17-34"><a href="#cb17-34" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-35"><a href="#cb17-35" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-36"><a href="#cb17-36" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> refine_sampson(F0, x, xp):</span>
+<span id="cb17-37"><a href="#cb17-37" aria-hidden="true" tabindex="-1"></a>    p0 <span class="op">=</span> params_from_F(F0)</span>
+<span id="cb17-38"><a href="#cb17-38" aria-hidden="true" tabindex="-1"></a>    opt <span class="op">=</span> least_squares(<span class="kw">lambda</span> p: sampson_residual(F_from_params(p), x, xp),</span>
+<span id="cb17-39"><a href="#cb17-39" aria-hidden="true" tabindex="-1"></a>                        p0, method<span class="op">=</span><span class="st">"lm"</span>, xtol<span class="op">=</span><span class="fl">1e-12</span>, ftol<span class="op">=</span><span class="fl">1e-12</span>,</span>
+<span id="cb17-40"><a href="#cb17-40" aria-hidden="true" tabindex="-1"></a>                        gtol<span class="op">=</span><span class="fl">1e-12</span>, max_nfev<span class="op">=</span><span class="dv">5000</span>)</span>
+<span id="cb17-41"><a href="#cb17-41" aria-hidden="true" tabindex="-1"></a>    F <span class="op">=</span> F_from_params(opt.x)</span>
+<span id="cb17-42"><a href="#cb17-42" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> F <span class="op">/</span> np.linalg.norm(F), opt</span>
+<span id="cb17-43"><a href="#cb17-43" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-44"><a href="#cb17-44" aria-hidden="true" tabindex="-1"></a>F_refined, opt <span class="op">=</span> refine_sampson(F_dlt, xr, xpr)</span>
+<span id="cb17-45"><a href="#cb17-45" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"rank before / after:"</span>, np.linalg.matrix_rank(F_dlt),</span>
+<span id="cb17-46"><a href="#cb17-46" aria-hidden="true" tabindex="-1"></a>      np.linalg.matrix_rank(F_refined))</span>
+<span id="cb17-47"><a href="#cb17-47" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"LM function evaluations:"</span>, opt.nfev)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>rank before / after: 2 2
+LM function evaluations: 230</code></pre>
+</div>
+</div>
+<p>Because the cameras are known, we can judge the refinement in three different ways:</p>
+<ol type="1">
+<li>the Sampson RMS on the ten corresponding points – this is the objective and must go down;</li>
+<li>a <strong>pixel-valued hold-out test</strong> on many exact projections sampled along the Origami House edges – these points were not used by the optimiser. Only the edges joining two vertices we could actually see enter the test: an occluded vertex projects perfectly well on paper, but it is not something the photographs ever measured;</li>
+<li>the scale/sign-aligned Frobenius distance from the true <span class="math inline">\(\mathsf F\)</span> – useful only as a controlled ground-truth diagnostic, not as an image residual.</li>
+</ol>
+<p>The second quantity is the one that closes the loop: if we want a number with an image interpretation, evaluate what the model predicts in the image.</p>
+<div id="109eae43" class="cell" data-execution_count="18">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb19"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> sample_house_edges(n_per_edge<span class="op">=</span><span class="dv">10</span>, ids<span class="op">=</span>VIS):</span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""Points along the edges joining two visible vertices."""</span></span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>    Q <span class="op">=</span> []</span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> a, b <span class="kw">in</span> EDGES:</span>
+<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> a <span class="kw">not</span> <span class="kw">in</span> ids <span class="kw">or</span> b <span class="kw">not</span> <span class="kw">in</span> ids:</span>
+<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a>            <span class="cf">continue</span></span>
+<span id="cb19-7"><a href="#cb19-7" aria-hidden="true" tabindex="-1"></a>        A, B <span class="op">=</span> V3[a], V3[b]</span>
+<span id="cb19-8"><a href="#cb19-8" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> t <span class="kw">in</span> np.linspace(<span class="dv">0</span>, <span class="dv">1</span>, n_per_edge, endpoint<span class="op">=</span><span class="va">False</span>):</span>
+<span id="cb19-9"><a href="#cb19-9" aria-hidden="true" tabindex="-1"></a>            Q.append((<span class="dv">1</span><span class="op">-</span>t)<span class="op">*</span>A <span class="op">+</span> t<span class="op">*</span>B)</span>
+<span id="cb19-10"><a href="#cb19-10" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> np.asarray(Q)</span>
+<span id="cb19-11"><a href="#cb19-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-12"><a href="#cb19-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-13"><a href="#cb19-13" aria-hidden="true" tabindex="-1"></a>Qtest <span class="op">=</span> sample_house_edges(<span class="dv">12</span>)</span>
+<span id="cb19-14"><a href="#cb19-14" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"visible vertices used:"</span>, VIS)</span>
+<span id="cb19-15"><a href="#cb19-15" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"clicked but absent from the ideal model:"</span>, EXTRA)</span>
+<span id="cb19-16"><a href="#cb19-16" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"hold-out points sampled along visible edges: </span><span class="sc">{</span><span class="bu">len</span>(Qtest)<span class="sc">}</span><span class="ch">\n</span><span class="ss">"</span>)</span>
+<span id="cb19-17"><a href="#cb19-17" aria-hidden="true" tabindex="-1"></a>xtest <span class="op">=</span> h(project(P, Qtest))</span>
+<span id="cb19-18"><a href="#cb19-18" aria-hidden="true" tabindex="-1"></a>xptest <span class="op">=</span> h(project(Pp, Qtest))</span>
+<span id="cb19-19"><a href="#cb19-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-20"><a href="#cb19-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-21"><a href="#cb19-21" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> rms(v):</span>
+<span id="cb19-22"><a href="#cb19-22" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="bu">float</span>(np.sqrt(np.mean(np.asarray(v)<span class="op">**</span><span class="dv">2</span>)))</span>
+<span id="cb19-23"><a href="#cb19-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-24"><a href="#cb19-24" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"</span><span class="sc">{</span><span class="st">'matrix'</span><span class="sc">:16s}{</span><span class="st">'click Sampson'</span><span class="sc">:&gt;17s}{</span><span class="st">'edge test [px]'</span><span class="sc">:&gt;17s}{</span><span class="st">'||F-Ftrue||'</span><span class="sc">:&gt;15s}</span><span class="ss">"</span>)</span>
+<span id="cb19-25"><a href="#cb19-25" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> name, F <span class="kw">in</span> [(<span class="st">"DLT"</span>, F_dlt), (<span class="st">"refined"</span>, F_refined), (<span class="st">"true F"</span>, F_true)]:</span>
+<span id="cb19-26"><a href="#cb19-26" aria-hidden="true" tabindex="-1"></a>    click <span class="op">=</span> rms(sampson_residual(F, xr, xpr))</span>
+<span id="cb19-27"><a href="#cb19-27" aria-hidden="true" tabindex="-1"></a>    edge <span class="op">=</span> rms(euclidean_epipolar_residuals(F, xtest, xptest)[<span class="dv">1</span>])</span>
+<span id="cb19-28"><a href="#cb19-28" aria-hidden="true" tabindex="-1"></a>    gap <span class="op">=</span> projective_F_distance(F, F_true)</span>
+<span id="cb19-29"><a href="#cb19-29" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f"</span><span class="sc">{</span>name<span class="sc">:16s}{</span>click<span class="sc">:17.4f}{</span>edge<span class="sc">:17.4f}{</span>gap<span class="sc">:15.5f}</span><span class="ss">"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>visible vertices used: ['X0', 'X1', 'X4', 'X5', 'X8', 'X9']
+clicked but absent from the ideal model: ['D0', 'D1', 'D2', 'D3']
+hold-out points sampled along visible edges: 84
+
+matrix              click Sampson   edge test [px]    ||F-Ftrue||
+DLT                       10.8081          14.7672        0.00141
+refined                    0.5954           4.8435        0.00241
+true F                     1.5972           0.0000        0.00000</code></pre>
+</div>
+</div>
+<div id="cell-fig-refinement" class="cell page-columns page-full" data-execution_count="19">
+<div class="cell-output cell-output-display page-columns page-full">
+<div id="fig-refinement" class="quarto-float quarto-figure quarto-figure-center anchored page-columns page-full">
+<figure class="quarto-float quarto-float-fig figure page-columns page-full">
+<div aria-describedby="fig-refinement-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca" class="page-columns page-full">
+<img src="residuals_files/figure-html/fig-refinement-output-1.png" width="1131" height="702" class="figure-img column-page">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-refinement-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;5: Epipolar lines in view 2 for the visible house vertices, before and after refining on the Sampson residual. The hollow circles are the exact projections of those vertices, which the optimiser never saw.
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<div id="cell-fig-objective" class="cell" data-execution_count="20">
+<div class="cell-output cell-output-display">
+<div id="fig-objective" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-objective-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="residuals_files/figure-html/fig-objective-output-1.png" width="779" height="443" class="figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-objective-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;6: Distribution of <span class="math inline">\(|r_S|\)</span> over the correspondences, before and after the refinement, with the true matrix shown for comparison.
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<p>The refinement has one guaranteed effect and two empirical ones. It is guaranteed to reduce the Sampson least-squares objective on the points it sees. Whether it also moves closer to the true camera geometry is a statistical question, which is why the exact house projections are useful as an independent check.</p>
+<p>This also explains a result that can look paradoxical the first time one sees it: the refined model may fit the ten hand clicks <strong>better than the true matrix</strong>. There is nothing illegal about that. The clicks contain measurement error; the true matrix was not chosen to interpolate them.</p>
+<p>What matters is that we now know what every number means. The DLT gives a linear initial estimate, <span class="math inline">\(r_E\)</span> and <span class="math inline">\(r_{SE}\)</span> turn epipolar incidence into image-plane distances in simple ways, <span class="math inline">\(r_S\)</span> gives a first-order approximation of one joint geometric correction, and nonlinear refinement lets us optimise that quantity while staying on the rank-two model.</p>
+<section id="questions-to-leave-open" class="level3">
+<h3 class="anchored" data-anchor-id="questions-to-leave-open">Questions to leave open</h3>
+<p><strong>What is the exact geometric residual for a correspondence?</strong> It is the smallest joint correction of the two image points that satisfies the epipolar constraint exactly. For two-view geometry this is the optimal-triangulation problem; its classical exact solution leads to a degree-six univariate polynomial. That is a natural bridge to the triangulation notebook rather than something we need to hide inside Sampson.</p>
+<p><strong>What happens near the epipole?</strong> Since <span class="math inline">\(\mathsf F\mathbf e=\mathbf 0\)</span>, the epipolar line of a point approaching the epipole degenerates and the gradient of the constraint collapses. Take a correspondence whose second point sits a fixed number of pixels off its epipolar line and slide the first point towards <span class="math inline">\(\mathbf e\)</span>: <span class="math inline">\(r_E^{(2)}\)</span> stays exactly where it was, while <span class="math inline">\(|r_S|\)</span> falls towards zero. Which of the two is telling the truth, and what does the answer imply for a threshold on either of them? The configuration is easy to build with a pair of views whose camera moves along its own optical axis, so that the epipole falls inside the picture.</p>
+<p><strong>What if the two keypoints have different uncertainty?</strong> Then the Euclidean norm used in the Sampson derivation should be replaced by a Mahalanobis norm. The Jacobian stays, but the covariance enters the minimum-norm correction.</p>
+<p><strong>Which residual should RANSAC threshold?</strong> The answer depends on what the threshold is supposed to mean. A threshold in pixels belongs with a residual in pixel coordinates; a normalised or angular residual needs a threshold in those units instead.</p>
+<p><strong>Can the same idea be used for more than one constraint?</strong> Yes, but the scalar <span class="math inline">\(\lVert J\rVert^2\)</span> becomes a matrix involving the Jacobian of all independent constraints. Choosing redundant constraints carelessly changes the approximation and is one reason the multi-view case deserves its own treatment.</p>
+</section>
+</section>
+<section id="further-reading" class="level2">
+<h2 class="anchored" data-anchor-id="further-reading">Further reading</h2>
+<ul>
+<li>Sampson, P. D. “Fitting conic sections to very scattered data: an iterative refinement of the Bookstein algorithm”, <em>Computer Graphics and Image Processing</em> 18(1), 1982. The original first-order distance approximation, introduced for conics.</li>
+<li>Harker, M. and O’Leary, P. “First order geometric distance, or the myth of Sampsonus”, <em>BMVC</em>, 2006. A careful reading of what the approximation does and does not linearise.</li>
+<li>Hartley, R. and Zisserman, A. <em>Multiple View Geometry in Computer Vision</em>, 2nd ed., Cambridge University Press, 2004. Section 11.4 for epipolar residuals and Chapter 12 for triangulation.</li>
+<li>Hartley, R. and Sturm, P. “Triangulation”, <em>Computer Vision and Image Understanding</em> 68(2), 1997. The exact two-view geometric correction and its degree-six polynomial.</li>
+<li>Rydell, F., Torres, A. and Larsson, V. “Revisiting Sampson Approximations for Geometric Estimation Problems”, <em>CVPR</em>, 2024. Bounds on the approximation, calibrated two-view experiments, and the algebraic / cosine / symmetric-epipolar / Sampson comparison.</li>
+</ul>
+<hr>
+<p><strong>Luca Magri</strong> — Computer Vision Dojo<br>
+Code MIT · text and figures CC BY-NC-ND 4.0<br>
+<a href="https://magrilu.github.io/cv-dojo/" class="uri">https://magrilu.github.io/cv-dojo/</a></p>
+
+
+</section>
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+    const viewSource = window.document.getElementById('quarto-view-source') ||
+                       window.document.getElementById('quarto-code-tools-source');
+    if (viewSource) {
+      const sourceUrl = viewSource.getAttribute("data-quarto-source-url");
+      viewSource.addEventListener("click", function(e) {
+        if (sourceUrl) {
+          // rstudio viewer pane
+          if (/\bcapabilities=\b/.test(window.location)) {
+            window.open(sourceUrl);
+          } else {
+            window.location.href = sourceUrl;
+          }
+        } else {
+          const modal = new bootstrap.Modal(document.getElementById('quarto-embedded-source-code-modal'));
+          modal.show();
+        }
+        return false;
+      });
+    }
+    function toggleCodeHandler(show) {
+      return function(e) {
+        const cellDetails = window.document.querySelectorAll(".cell details.code-fold");
+        for (let i=0; i<cellDetails.length; i++) {
+          const details = cellDetails[i];
+          if (show) {
+            details.open = true;
+          } else {
+            details.removeAttribute("open");
+          }
+        }
+        const cellCodeDivs = window.document.querySelectorAll(".cell div.sourceCode.cell-code");
+        const fromCls = show ? "hidden" : "unhidden";
+        const toCls = show ? "unhidden" : "hidden";
+        for (let i=0; i<cellCodeDivs.length; i++) {
+          const codeDiv = cellCodeDivs[i];
+          if (codeDiv.classList.contains(fromCls)) {
+            codeDiv.classList.remove(fromCls);
+            codeDiv.classList.add(toCls);
+          } 
+        }
+        return false;
+      }
+    }
+    const hideAllCode = window.document.getElementById("quarto-hide-all-code");
+    if (hideAllCode) {
+      hideAllCode.addEventListener("click", toggleCodeHandler(false));
+    }
+    const showAllCode = window.document.getElementById("quarto-show-all-code");
+    if (showAllCode) {
+      showAllCode.addEventListener("click", toggleCodeHandler(true));
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp("https:\/\/magrilu\.github\.io\/cv-dojo\/");
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+</div> <!-- /content -->
+<footer class="footer">
+  <div class="nav-footer">
+    <div class="nav-footer-left">
+<p>© 2026 Luca Magri — CC BY-NC-ND 4.0 (text and figures) / MIT (code)</p>
+</div>   
+    <div class="nav-footer-center">
+      &nbsp;
+    <div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/magrilu/cv-dojo/issues/new" class="toc-action"><i class="bi bi-github"></i>Report an issue</a></li></ul></div></div>
+    <div class="nav-footer-right">
+      <ul class="footer-items list-unstyled">
+    <li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/magrilu/cv-dojo">
+      <i class="bi bi-github" role="img">
+</i> 
+    </a>
+  </li>  
+    <li class="nav-item">
+    <a class="nav-link" href="https://magrilu.github.io/">
+<p>magrilu.github.io</p>
+</a>
+  </li>  
+</ul>
+    </div>
+  </div>
+</footer>
+
+
+
+
+</body></html>

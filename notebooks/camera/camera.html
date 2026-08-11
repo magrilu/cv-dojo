@@ -181,7 +181,7 @@ window.Quarto = {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../notebooks/camera/camera.html">Camera</a></li><li class="breadcrumb-item"><a href="../../notebooks/camera/camera.html">The pinhole camera</a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../notebooks/camera/camera.html">Single-view geometry</a></li><li class="breadcrumb-item"><a href="../../notebooks/camera/camera.html">The pinhole camera</a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
@@ -216,7 +216,7 @@ window.Quarto = {
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
             <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true">
- <span class="menu-text">Camera</span></a>
+ <span class="menu-text">Geometry fundamentals</span></a>
           <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
@@ -224,8 +224,8 @@ window.Quarto = {
       <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../../notebooks/camera/camera.html" class="sidebar-item-text sidebar-link active">
- <span class="menu-text">The pinhole camera</span></a>
+  <a href="../../notebooks/geometry/fitting-a-conic.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Fitting a conic</span></a>
   </div>
 </li>
       </ul>
@@ -233,12 +233,18 @@ window.Quarto = {
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
             <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true">
- <span class="menu-text">Rectification</span></a>
+ <span class="menu-text">Single-view geometry</span></a>
           <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
       </div>
       <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../notebooks/camera/camera.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text">The pinhole camera</span></a>
+  </div>
+</li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../../notebooks/rectification/affine.html" class="sidebar-item-text sidebar-link">
@@ -250,7 +256,7 @@ window.Quarto = {
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
             <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true">
- <span class="menu-text">Two views</span></a>
+ <span class="menu-text">Two-view geometry</span></a>
           <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
@@ -264,14 +270,8 @@ window.Quarto = {
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../../notebooks/two-views/critical-configurations.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">When eight points are not enough</span></a>
-  </div>
-</li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../../notebooks/two-views/seven-point.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Seven points, up to three fundamental matrices</span></a>
+  <a href="../../notebooks/two-views/residuals.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Residuals for the fundamental matrix</span></a>
   </div>
 </li>
       </ul>
@@ -331,7 +331,7 @@ window.Quarto = {
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
-<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../notebooks/camera/camera.html">Camera</a></li><li class="breadcrumb-item"><a href="../../notebooks/camera/camera.html">The pinhole camera</a></li></ol></nav>
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../notebooks/camera/camera.html">Single-view geometry</a></li><li class="breadcrumb-item"><a href="../../notebooks/camera/camera.html">The pinhole camera</a></li></ol></nav>
 <div class="quarto-title">
 <h1 class="title">The pinhole camera</h1>
 </div>
@@ -471,7 +471,7 @@ window.Quarto = {
 <span id="cb2-28"><a href="#cb2-28" aria-hidden="true" tabindex="-1"></a>set_axes_equal(ax)</span>
 <span id="cb2-29"><a href="#cb2-29" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>{'long_side': 5.0, 'depth': 3.8, 'wall_height': 2.4, 'total_height': 4.2, 'roof_rise': 1.8000000000000003}
+<pre><code>{'long_side': 5.0, 'depth': 3.5355, 'wall_height': 2.5, 'total_height': 4.2678, 'roof_rise': 1.7678}
 Euclidean scene:   X  has shape (10, 3)
 Homogeneous scene: Xh has shape (10, 4)
 first homogeneous vertex: [0. 0. 0. 1.]</code></pre>
@@ -479,7 +479,7 @@ first homogeneous vertex: [0. 0. 0. 1.]</code></pre>
 <div class="cell-output cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="camera_files/figure-html/cell-3-output-2.png" width="488" height="493" class="figure-img"></p>
+<p><img src="camera_files/figure-html/cell-3-output-2.png" width="488" height="490" class="figure-img"></p>
 </figure>
 </div>
 </div>
@@ -719,7 +719,7 @@ R=
 <div class="cell-output cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="camera_files/figure-html/cell-5-output-1.png" width="1211" height="950" class="figure-img"></p>
+<p><img src="camera_files/figure-html/cell-5-output-1.png" width="1208" height="950" class="figure-img"></p>
 </figure>
 </div>
 </div>
@@ -790,14 +790,14 @@ Z_c
 <span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"pi(q)    ="</span>, np.<span class="bu">round</span>(dehomogenize(q), <span class="dv">4</span>))</span>
 <span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"pi(7 q)  ="</span>, np.<span class="bu">round</span>(dehomogenize(<span class="dv">7</span><span class="op">*</span>q), <span class="dv">4</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>camera-frame homogeneous point M_c = [ 2.4055 -1.9085 15.9756  1.    ]
-q = [I|0] M_c                  = [ 2.4055 -1.9085 15.9756]
-q / q_3                        = [ 0.1506 -0.1195  1.    ]
-normalized coordinates used in the plot = [ 0.1506 -0.1195]
+<pre><code>camera-frame homogeneous point M_c = [ 2.3695 -1.9366 15.8342  1.    ]
+q = [I|0] M_c                  = [ 2.3695 -1.9366 15.8342]
+q / q_3                        = [ 0.1496 -0.1223  1.    ]
+normalized coordinates used in the plot = [ 0.1496 -0.1223]
 
 Scaling q does not change the plotted point:
-pi(q)    = [ 0.1506 -0.1195]
-pi(7 q)  = [ 0.1506 -0.1195]</code></pre>
+pi(q)    = [ 0.1496 -0.1223]
+pi(7 q)  = [ 0.1496 -0.1223]</code></pre>
 </div>
 </div>
 <section id="perspective-vs-orthographic-projection" class="level3">
@@ -875,7 +875,7 @@ P_{\mathrm{ortho}}
 <div class="cell-output cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="camera_files/figure-html/cell-7-output-1.png" width="1117" height="479" class="figure-img"></p>
+<p><img src="camera_files/figure-html/cell-7-output-1.png" width="1104" height="474" class="figure-img"></p>
 </figure>
 </div>
 </div>
@@ -927,7 +927,7 @@ f_x&amp;s&amp;c_x\\
 <div class="cell-output cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="camera_files/figure-html/cell-8-output-1.png" width="1122" height="479" class="figure-img"></p>
+<p><img src="camera_files/figure-html/cell-8-output-1.png" width="1116" height="475" class="figure-img"></p>
 </figure>
 </div>
 </div>
@@ -976,9 +976,9 @@ P\begin{bmatrix}\mathbf C\\1\end{bmatrix}=\mathbf 0.
 
 P [C,1]^T = [0. 0. 0.]
 
-P X9_h = [9712.993 4128.965   15.976]
-dehomogenized pixel = [607.988 258.454]
-pixel from the staged pipeline = [607.988 258.454]</code></pre>
+P X9_h = [9614.526 4054.219   15.834]
+dehomogenized pixel = [607.198 256.041]
+pixel from the staged pipeline = [607.198 256.041]</code></pre>
 </div>
 </div>
 </section>
@@ -1115,11 +1115,11 @@ pixel from the staged pipeline = [607.988 258.454]</code></pre>
 <span id="cb15-29"><a href="#cb15-29" aria-hidden="true" tabindex="-1"></a>set_axes_equal(ax)</span>
 <span id="cb15-30"><a href="#cb15-30" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>pixel of X8: [361.666 246.714]
+<pre><code>pixel of X8: [358.904 244.388]
 pixels of three other points on the same ray:
- [[361.666 246.714]
- [361.666 246.714]
- [361.666 246.714]]</code></pre>
+ [[358.904 244.388]
+ [358.904 244.388]
+ [358.904 244.388]]</code></pre>
 </div>
 <div class="cell-output cell-output-display">
 <div>
