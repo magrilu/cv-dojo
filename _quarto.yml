@@ -36,15 +36,18 @@ website:
           - notebooks/geometry/fitting-a-conic.ipynb
       - section: "Single-view geometry"
         contents:
+          - notebooks/camera/projection.ipynb
           - notebooks/camera/camera.ipynb
           - notebooks/rectification/affine.ipynb
       - section: "Two-view geometry"
         contents:
+          - notebooks/two-views/fundamental-matrix.ipynb
           - notebooks/two-views/eight-point.ipynb
           - notebooks/two-views/residuals.ipynb
-      - section: "Triangulation"
+          - notebooks/two-views/seven-point.ipynb
+      - section: "Reconstruction"
         contents:
-          - notebooks/triangulation/triangulation.ipynb
+          - notebooks/reconstruction/triangulation.ipynb
 
 format:
   html:
