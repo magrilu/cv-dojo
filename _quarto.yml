@@ -36,7 +36,6 @@ website:
           - notebooks/geometry/fitting-a-conic.ipynb
       - section: "Single-view geometry"
         contents:
-          - notebooks/camera/projection.ipynb
           - notebooks/camera/camera.ipynb
           - notebooks/rectification/affine.ipynb
       - section: "Two-view geometry"
