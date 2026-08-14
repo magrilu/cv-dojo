@@ -2,54 +2,58 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://magrilu.github.io/cv-dojo/notebooks/geometry/fitting-a-conic.html</loc>
-    <lastmod>2026-08-11T20:56:34.816Z</lastmod>
+    <lastmod>2026-08-14T20:55:37.561Z</lastmod>
   </url>
   <url>
     <loc>https://magrilu.github.io/cv-dojo/notebooks/rectification/affine.html</loc>
-    <lastmod>2026-08-11T20:56:11.355Z</lastmod>
+    <lastmod>2026-08-14T20:52:18.449Z</lastmod>
   </url>
   <url>
     <loc>https://magrilu.github.io/cv-dojo/notebooks/two-views/residuals.html</loc>
-    <lastmod>2026-08-11T20:55:44.660Z</lastmod>
+    <lastmod>2026-08-14T20:51:56.774Z</lastmod>
   </url>
   <url>
-    <loc>https://magrilu.github.io/cv-dojo/notebooks/two-views/seven-point.html</loc>
-    <lastmod>2026-08-11T20:55:01.830Z</lastmod>
+    <loc>https://magrilu.github.io/cv-dojo/notebooks/two-views/critical-configurations.html</loc>
+    <lastmod>2026-08-14T20:51:12.107Z</lastmod>
   </url>
   <url>
-    <loc>https://magrilu.github.io/cv-dojo/origami-house.html</loc>
-    <lastmod>2026-08-10T08:09:00.497Z</lastmod>
-  </url>
-  <url>
-    <loc>https://magrilu.github.io/cv-dojo/index.html</loc>
-    <lastmod>2026-08-10T08:13:34.414Z</lastmod>
-  </url>
-  <url>
-    <loc>https://magrilu.github.io/cv-dojo/LICENSE.html</loc>
-    <lastmod>2026-08-07T06:48:07.552Z</lastmod>
-  </url>
-  <url>
-    <loc>https://magrilu.github.io/cv-dojo/SETUP.html</loc>
-    <lastmod>2026-08-07T15:32:59.929Z</lastmod>
+    <loc>https://magrilu.github.io/cv-dojo/notebooks/camera/camera.html</loc>
+    <lastmod>2026-08-14T20:32:03.449Z</lastmod>
   </url>
   <url>
     <loc>https://magrilu.github.io/cv-dojo/about.html</loc>
     <lastmod>2026-08-08T12:21:38.183Z</lastmod>
   </url>
   <url>
-    <loc>https://magrilu.github.io/cv-dojo/notebooks/camera/camera.html</loc>
-    <lastmod>2026-08-11T20:54:46.093Z</lastmod>
+    <loc>https://magrilu.github.io/cv-dojo/SETUP.html</loc>
+    <lastmod>2026-08-07T15:32:59.929Z</lastmod>
   </url>
   <url>
-    <loc>https://magrilu.github.io/cv-dojo/notebooks/two-views/critical-configurations.html</loc>
-    <lastmod>2026-08-11T20:55:20.967Z</lastmod>
+    <loc>https://magrilu.github.io/cv-dojo/LICENSE.html</loc>
+    <lastmod>2026-08-07T06:48:07.552Z</lastmod>
+  </url>
+  <url>
+    <loc>https://magrilu.github.io/cv-dojo/index.html</loc>
+    <lastmod>2026-08-10T08:13:34.414Z</lastmod>
+  </url>
+  <url>
+    <loc>https://magrilu.github.io/cv-dojo/origami-house.html</loc>
+    <lastmod>2026-08-10T08:09:00.497Z</lastmod>
+  </url>
+  <url>
+    <loc>https://magrilu.github.io/cv-dojo/notebooks/two-views/seven-point.html</loc>
+    <lastmod>2026-08-14T20:50:54.044Z</lastmod>
+  </url>
+  <url>
+    <loc>https://magrilu.github.io/cv-dojo/notebooks/two-views/fundamental-matrix.html</loc>
+    <lastmod>2026-08-14T20:51:28.411Z</lastmod>
   </url>
   <url>
     <loc>https://magrilu.github.io/cv-dojo/notebooks/two-views/eight-point.html</loc>
-    <lastmod>2026-08-11T20:56:01.910Z</lastmod>
+    <lastmod>2026-08-14T20:52:10.686Z</lastmod>
   </url>
   <url>
-    <loc>https://magrilu.github.io/cv-dojo/notebooks/triangulation/triangulation.html</loc>
-    <lastmod>2026-08-11T20:56:24.417Z</lastmod>
+    <loc>https://magrilu.github.io/cv-dojo/notebooks/reconstruction/triangulation.html</loc>
+    <lastmod>2026-08-14T20:55:25.362Z</lastmod>
   </url>
 </urlset>

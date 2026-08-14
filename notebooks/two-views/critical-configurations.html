@@ -242,13 +242,7 @@ window.Quarto = {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../../notebooks/camera/camera.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">The pinhole camera</span></a>
-  </div>
-</li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../../notebooks/rectification/affine.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Affine rectification</span></a>
+ <span class="menu-text">The perspective camera</span></a>
   </div>
 </li>
       </ul>
@@ -264,14 +258,26 @@ window.Quarto = {
       <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../../notebooks/two-views/eight-point.html" class="sidebar-item-text sidebar-link">
+  <a href="../../notebooks/two-views/fundamental-matrix.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">The fundamental matrix</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
+  <a href="../../notebooks/two-views/eight-point.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">The eight-point algorithm</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
   <a href="../../notebooks/two-views/residuals.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Residuals for the fundamental matrix</span></a>
+ <span class="menu-text">Epipolar residuals</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../notebooks/two-views/seven-point.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">The Seven-points algorithm</span></a>
   </div>
 </li>
       </ul>
@@ -279,7 +285,7 @@ window.Quarto = {
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
             <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="true">
- <span class="menu-text">Triangulation</span></a>
+ <span class="menu-text">Reconstruction</span></a>
           <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="true" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
@@ -287,8 +293,8 @@ window.Quarto = {
       <ul id="quarto-sidebar-section-4" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../../notebooks/triangulation/triangulation.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Triangulation from two views</span></a>
+  <a href="../../notebooks/reconstruction/triangulation.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Projective structure from two views</span></a>
   </div>
 </li>
       </ul>
@@ -339,7 +345,7 @@ window.Quarto = {
 
 <p>Eight correspondences do not automatically determine one fundamental matrix. The counting argument only works if the constraints are independent.</p>
 <p>We keep the same HZ notation as before: <span class="math inline">\(\mathbf{X}\)</span> for a 3D point and <span class="math inline">\(\mathbf{x},\mathbf{x}'\)</span> for its two image projections. The main diagnostic in this notebook is the <strong>design matrix <span class="math inline">\(\mathsf{A}\)</span></strong>, not the rank of <span class="math inline">\(\mathsf{F}\)</span>.</p>
-<div id="88a3bc7a" class="cell" data-execution_count="1">
+<div id="1" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># --- Colab bootstrap -------------------------------------------------------</span></span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> sys, subprocess</span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> pathlib <span class="im">import</span> Path</span>
@@ -444,7 +450,7 @@ window.Quarto = {
 <section id="a-generic-set-on-the-origami-house" class="level2">
 <h2 class="anchored" data-anchor-id="a-generic-set-on-the-origami-house">1. A generic set on the Origami House</h2>
 <p>Our eight real correspondences span more than one physical plane: six are on the front facade, while two are on the roof ridge. The normalized eight-point matrix has the expected generic rank.</p>
-<div id="4873d144" class="cell" data-execution_count="2">
+<div id="3" class="cell" data-execution_count="2">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>show_matches(<span class="st">'Generic house configuration: facade + roof'</span>)</span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>xn,_<span class="op">=</span>normalize_points(x)<span class="op">;</span> xpn,_<span class="op">=</span>normalize_points(xp)</span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>Agen<span class="op">=</span>design_matrix(xn,xpn)</span>
@@ -481,7 +487,7 @@ singular values = [8.01984131e+00 7.04196298e+00 4.79899279e+00 4.30723268e+00
 \mathsf{F}=[\mathbf{e}']_\times \mathsf{H}
 \]</span></p>
 <p>satisfies all the epipolar constraints. The epipole is therefore not determined by the planar matches.</p>
-<div id="a9cb5d2d" class="cell" data-execution_count="3">
+<div id="5" class="cell" data-execution_count="3">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> homography_dlt(x,xp):</span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>    xn,T<span class="op">=</span>normalize_points(x)<span class="op">;</span> xpn,Tp<span class="op">=</span>normalize_points(xp)</span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>    rows<span class="op">=</span>[]</span>
@@ -539,7 +545,7 @@ singular values = [1.02159381e+01 6.62739273e+00 3.98299975e+00 2.48955168e+00
  1.20259047e+00 5.96744287e-01 2.16174948e-15 2.45399668e-16]</code></pre>
 </div>
 </div>
-<div id="15e9c54f" class="cell" data-execution_count="4">
+<div id="6" class="cell" data-execution_count="4">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>fig, ax <span class="op">=</span> plt.subplots(figsize<span class="op">=</span>(<span class="dv">7</span>, <span class="fl">4.5</span>))</span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> S, lab <span class="kw">in</span> ((Sgen, <span class="st">'generic house points'</span>), (Spl, <span class="st">'all on facade'</span>)):</span>
 <span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>    S <span class="op">=</span> np.asarray(S, <span class="bu">float</span>)</span>
@@ -569,7 +575,7 @@ singular values = [1.02159381e+01 6.62739273e+00 3.98299975e+00 2.48955168e+00
 \mathsf{F}_b=[\mathbf{e}'_b]_\times \mathsf{H}.
 \]</span></p>
 <p>Both explain all eight facade matches, but they generate different pencils of epipolar lines.</p>
-<div id="d04520ce" class="cell" data-execution_count="5">
+<div id="9" class="cell" data-execution_count="5">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>epa<span class="op">=</span>np.array([<span class="fl">620.</span>,<span class="fl">1580.</span>,<span class="fl">1.</span>])<span class="op">;</span> epb<span class="op">=</span>np.array([<span class="fl">980.</span>,<span class="fl">980.</span>,<span class="fl">1.</span>])</span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>Fa<span class="op">=</span>skew(epa)<span class="op">@</span>Hfac<span class="op">;</span> Fb<span class="op">=</span>skew(epb)<span class="op">@</span>Hfac</span>
 <span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>Fa<span class="op">/=</span>np.linalg.norm(Fa)<span class="op">;</span> Fb<span class="op">/=</span>np.linalg.norm(Fb)</span>
@@ -608,7 +614,7 @@ b rank(F)= 2 max |x' F x|= 1.5543122344752192e-15</code></pre>
 \]</span></p>
 <p>for every 3D point, even when the points occupy the full Origami House.</p>
 <p>The following controlled experiment uses actual 3D house vertices and keeps the camera centre fixed while changing its orientation.</p>
-<div id="8f587c84" class="cell" data-execution_count="6">
+<div id="12" class="cell" data-execution_count="6">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 3D structural vertices of an idealized Origami House.</span></span>
 <span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>Xh<span class="op">=</span>np.array([</span>
 <span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>    [<span class="dv">0</span>,<span class="dv">0</span>,<span class="dv">0</span>],[<span class="dv">5</span>,<span class="dv">0</span>,<span class="dv">0</span>],[<span class="dv">5</span>,<span class="fl">3.8</span>,<span class="dv">0</span>],[<span class="dv">0</span>,<span class="fl">3.8</span>,<span class="dv">0</span>],</span>
@@ -648,7 +654,7 @@ singular values = [5.91710220e+00 5.20316753e+00 3.49232705e+00 2.55783870e+00
 <h2 class="anchored" data-anchor-id="near-a-critical-configuration">5. Near a critical configuration</h2>
 <p>Exact rank loss is an idealization. In real data we often see its numerical shadow: one or more singular values become very small, and the estimate becomes sensitive to tiny image perturbations.</p>
 <p>We start from pure rotation and gradually introduce translation while continuing to observe points on the 3D house.</p>
-<div id="cb99f430" class="cell" data-execution_count="7">
+<div id="15" class="cell" data-execution_count="7">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>baselines<span class="op">=</span>np.geomspace(<span class="fl">1e-4</span>,<span class="fl">3.0</span>,<span class="dv">45</span>)</span>
 <span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>s7<span class="op">=</span>[]<span class="op">;</span> s8<span class="op">=</span>[]</span>
 <span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>Rbase,tbase<span class="op">=</span>look_at(C0,np.array([<span class="fl">2.5</span>,<span class="fl">1.8</span>,<span class="fl">1.8</span>]))</span>

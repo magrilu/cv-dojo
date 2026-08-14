@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>Seven points, up to three fundamental matrices – Computer Vision Dojo: a geometric way</title>
+<title>seven-point – Computer Vision Dojo: a geometric way</title>
 <style>
 /* Default styles provided by pandoc.
 ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
@@ -181,7 +181,7 @@ window.Quarto = {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item">Seven points, up to three fundamental matrices</li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../notebooks/two-views/fundamental-matrix.html">Two-view geometry</a></li><li class="breadcrumb-item"><a href="../../notebooks/two-views/seven-point.html">The Seven-points algorithm</a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
@@ -242,13 +242,7 @@ window.Quarto = {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../../notebooks/camera/camera.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">The pinhole camera</span></a>
-  </div>
-</li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../../notebooks/rectification/affine.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Affine rectification</span></a>
+ <span class="menu-text">The perspective camera</span></a>
   </div>
 </li>
       </ul>
@@ -264,14 +258,26 @@ window.Quarto = {
       <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../../notebooks/two-views/eight-point.html" class="sidebar-item-text sidebar-link">
+  <a href="../../notebooks/two-views/fundamental-matrix.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">The fundamental matrix</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
+  <a href="../../notebooks/two-views/eight-point.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">The eight-point algorithm</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
   <a href="../../notebooks/two-views/residuals.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Residuals for the fundamental matrix</span></a>
+ <span class="menu-text">Epipolar residuals</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../notebooks/two-views/seven-point.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text">The Seven-points algorithm</span></a>
   </div>
 </li>
       </ul>
@@ -279,7 +285,7 @@ window.Quarto = {
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
             <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="true">
- <span class="menu-text">Triangulation</span></a>
+ <span class="menu-text">Reconstruction</span></a>
           <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="true" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
@@ -287,8 +293,8 @@ window.Quarto = {
       <ul id="quarto-sidebar-section-4" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../../notebooks/triangulation/triangulation.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Triangulation from two views</span></a>
+  <a href="../../notebooks/reconstruction/triangulation.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Projective structure from two views</span></a>
   </div>
 </li>
       </ul>
@@ -302,342 +308,506 @@ window.Quarto = {
         <nav id="TOC" role="doc-toc" class="toc-active">
    
   <ul>
-  <li><a href="#seven-correspondences-leave-two-null-directions" id="toc-seven-correspondences-leave-two-null-directions" class="nav-link active" data-scroll-target="#seven-correspondences-leave-two-null-directions">1. Seven correspondences leave two null directions</a></li>
-  <li><a href="#solve-the-cubic" id="toc-solve-the-cubic" class="nav-link" data-scroll-target="#solve-the-cubic">2. Solve the cubic</a></li>
-  <li><a href="#the-same-seven-house-points-support-three-different-line-pencils" id="toc-the-same-seven-house-points-support-three-different-line-pencils" class="nav-link" data-scroll-target="#the-same-seven-house-points-support-three-different-line-pencils">3. The same seven house points support three different line pencils</a></li>
-  <li><a href="#the-held-out-roof-point-breaks-the-ambiguity" id="toc-the-held-out-roof-point-breaks-the-ambiguity" class="nav-link" data-scroll-target="#the-held-out-roof-point-breaks-the-ambiguity">4. The held-out roof point breaks the ambiguity</a></li>
-  <li><a href="#the-seven-point-algorithm-in-one-box" id="toc-the-seven-point-algorithm-in-one-box" class="nav-link" data-scroll-target="#the-seven-point-algorithm-in-one-box">5. The seven-point algorithm in one box</a>
+  <li><a href="#the-seven-points-algorithm" id="toc-the-seven-points-algorithm" class="nav-link active" data-scroll-target="#the-seven-points-algorithm">The Seven-points algorithm</a>
   <ul class="collapse">
-  <li><a href="#connection-among-the-three-notebooks" id="toc-connection-among-the-three-notebooks" class="nav-link" data-scroll-target="#connection-among-the-three-notebooks">Connection among the three notebooks</a></li>
+  <li><a href="#seven-correspondences" id="toc-seven-correspondences" class="nav-link" data-scroll-target="#seven-correspondences">Seven correspondences</a></li>
+  <li><a href="#a-pencil-of-fundamental-matrix" id="toc-a-pencil-of-fundamental-matrix" class="nav-link" data-scroll-target="#a-pencil-of-fundamental-matrix">A pencil of fundamental matrix</a></li>
+  <li><a href="#whats-happening-in-mathbbp8" id="toc-whats-happening-in-mathbbp8" class="nav-link" data-scroll-target="#whats-happening-in-mathbbp8">What’s happening in <span class="math inline">\(\mathbb{P}^8\)</span></a></li>
+  <li><a href="#rank-two-turns-into-a-cubic" id="toc-rank-two-turns-into-a-cubic" class="nav-link" data-scroll-target="#rank-two-turns-into-a-cubic">Rank two turns into a cubic</a></li>
+  <li><a href="#which-of-the-three-solutions" id="toc-which-of-the-three-solutions" class="nav-link" data-scroll-target="#which-of-the-three-solutions">Which of the three solutions?</a>
+  <ul class="collapse">
+  <li><a href="#cheating-chordal-distance" id="toc-cheating-chordal-distance" class="nav-link" data-scroll-target="#cheating-chordal-distance">Cheating: chordal distance</a></li>
+  <li><a href="#cheating-a-little-less-compare-the-epipolar-lines" id="toc-cheating-a-little-less-compare-the-epipolar-lines" class="nav-link" data-scroll-target="#cheating-a-little-less-compare-the-epipolar-lines">Cheating a little less: compare the epipolar lines</a></li>
+  <li><a href="#in-practice-use-the-correspondences-kept-aside-no-cheating" id="toc-in-practice-use-the-correspondences-kept-aside-no-cheating" class="nav-link" data-scroll-target="#in-practice-use-the-correspondences-kept-aside-no-cheating">In practice use the correspondences kept aside (no cheating)</a></li>
+  </ul></li>
+  <li><a href="#the-algorithm" id="toc-the-algorithm" class="nav-link" data-scroll-target="#the-algorithm">The algorithm</a></li>
+  <li><a href="#one-root-or-three" id="toc-one-root-or-three" class="nav-link" data-scroll-target="#one-root-or-three">One root or three</a>
+  <ul class="collapse">
+  <li><a href="#where-the-seven-point-solver-is-used" id="toc-where-the-seven-point-solver-is-used" class="nav-link" data-scroll-target="#where-the-seven-point-solver-is-used">Where the seven-point solver is used</a></li>
+  <li><a href="#where-the-seven-point-solver-is-used-1" id="toc-where-the-seven-point-solver-is-used-1" class="nav-link" data-scroll-target="#where-the-seven-point-solver-is-used-1">Where the seven-point solver is used</a></li>
   </ul></li>
   <li><a href="#further-reading" id="toc-further-reading" class="nav-link" data-scroll-target="#further-reading">Further reading</a></li>
+  </ul></li>
   </ul>
 <div class="toc-actions"><ul><li><a href="https://github.com/magrilu/cv-dojo/issues/new" class="toc-action"><i class="bi bi-github"></i>Report an issue</a></li></ul></div></nav>
     </div>
 <!-- main -->
-<main class="content" id="quarto-document-content">
-
-<header id="title-block-header" class="quarto-title-block default">
-<div class="quarto-title">
-<h1 class="title">Seven points, up to three fundamental matrices</h1>
-</div>
+<main class="content page-columns page-full" id="quarto-document-content"><header id="title-block-header" class="quarto-title-block"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../notebooks/two-views/fundamental-matrix.html">Two-view geometry</a></li><li class="breadcrumb-item"><a href="../../notebooks/two-views/seven-point.html">The Seven-points algorithm</a></li></ol></nav></header>
 
 
 
-<div class="quarto-title-meta">
 
-    
-  
-    
-  </div>
-  
-
-
-</header>
-
-
-<p>With eight generic correspondences, the linear system leaves one null direction. With only seven,</p>
+<p><a href="https://colab.research.google.com/github/magrilu/cv-dojo/blob/main/notebooks/two-views/seven-point.ipynb"><img src="https://colab.research.google.com/assets/colab-badge.svg" class="img-fluid"></a></p>
+<section id="the-seven-points-algorithm" class="level1 page-columns page-full">
+<h1>The Seven-points algorithm</h1>
+<p>The fundamental matrix has seven degrees of freedom. In the previous notebook we paid for an eighth correspondence so that the estimation problem became <em>linear</em>. Here we go back and ask what happens if we use exactly seven.</p>
+<p>The answer is the reason the <strong>seven-point algorithm</strong> is a minimal solver: seven correspondences leave a two-dimensional null space, hence a pencil of matrices. The rank-two constraint then cuts that pencil with a cubic equation, leaving one or three real fundamental matrices.</p>
+<section id="seven-correspondences" class="level2 page-columns page-full">
+<h2 class="anchored" data-anchor-id="seven-correspondences">Seven correspondences</h2>
+<p>Each correspondence <span class="math inline">\(\{\mathbf{x}_i, \mathbf{x}_i'\}\)</span> still gives the same linear equation</p>
 <p><span class="math display">\[
-\mathsf{A}\in\mathbb{R}^{7\times9},\qquad \dim\ker \mathsf{A}=2.
+\mathbf{x}_i^{'\top} \mathsf F\mathbf{x}_{i}=0.
 \]</span></p>
-<p>So the linear epipolar constraints define a <strong>pencil of matrices</strong>. Imposing <span class="math inline">\(\det \mathsf{F}=0\)</span> selects up to three rank-two members of that pencil.</p>
-<p>We again use only points on the Origami House. Seven are used to fit the minimal problem and one roof point is held out to expose the ambiguity.</p>
-<div id="07b6a95c" class="cell" data-execution_count="1">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># --- Colab bootstrap -------------------------------------------------------</span></span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> sys, subprocess</span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> pathlib <span class="im">import</span> Path</span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="st">"google.colab"</span> <span class="kw">in</span> sys.modules <span class="kw">and</span> <span class="kw">not</span> Path(<span class="st">"cv-dojo"</span>).exists():</span>
-<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>    subprocess.run([<span class="st">"git"</span>, <span class="st">"clone"</span>, <span class="st">"-q"</span>, <span class="st">"--depth"</span>, <span class="st">"1"</span>,</span>
-<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>                    <span class="st">"https://github.com/magrilu/cv-dojo.git"</span>], check<span class="op">=</span><span class="va">True</span>)</span>
-<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>    <span class="im">import</span> os</span>
-<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>    os.chdir(<span class="st">"cv-dojo"</span>)</span>
-<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> parent <span class="kw">in</span> [Path.cwd(), <span class="op">*</span>Path.cwd().parents]:</span>
-<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> (parent <span class="op">/</span> <span class="st">"src"</span> <span class="op">/</span> <span class="st">"cvdojo"</span>).exists():</span>
-<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>        sys.path.insert(<span class="dv">0</span>, <span class="bu">str</span>(parent <span class="op">/</span> <span class="st">"src"</span>))</span>
-<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>        <span class="cf">break</span></span>
-<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a><span class="co"># --- Imports ---------------------------------------------------------------</span></span>
-<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
-<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
-<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> mpl_toolkits.mplot3d.art3d <span class="im">import</span> Poly3DCollection</span>
+<p>With seven correspondences the design matrix <span class="math inline">\(\mathsf A\)</span> has size <span class="math inline">\(7\times9\)</span>. For points in general position it has rank seven, so its right null space has dimension two (seven linear constraints cannot select a single point of <span class="math inline">\(\mathbb P^8\)</span>).</p>
+<p>We work with the same noisy image correspondences used on the real images in the eight-point notebook. Among them we pick a well-conditioned subset of seven.</p>
+<div id="3" class="cell" data-execution_count="2">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> design_matrix(x, xp):</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""One row per correspondence: (x' tensor x)^T vec(F) = 0."""</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>    u,  v  <span class="op">=</span> x[:, <span class="dv">0</span>],  x[:, <span class="dv">1</span>]</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>    up, vp <span class="op">=</span> xp[:, <span class="dv">0</span>], xp[:, <span class="dv">1</span>]</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> np.column_stack([up<span class="op">*</span>u, up<span class="op">*</span>v, up,</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>                            vp<span class="op">*</span>u, vp<span class="op">*</span>v, vp,</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>                            u,    v,    np.ones(<span class="bu">len</span>(x))])</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> normalize_points(x):</span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""Centroid to the origin, mean distance to the origin equal to sqrt(2)."""</span></span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>    c <span class="op">=</span> x[:, :<span class="dv">2</span>].mean(axis<span class="op">=</span><span class="dv">0</span>)</span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>    d <span class="op">=</span> np.linalg.norm(x[:, :<span class="dv">2</span>] <span class="op">-</span> c, axis<span class="op">=</span><span class="dv">1</span>).mean()</span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>    s <span class="op">=</span> np.sqrt(<span class="fl">2.0</span>) <span class="op">/</span> d</span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>    T <span class="op">=</span> np.array([[s, <span class="dv">0</span>, <span class="op">-</span>s<span class="op">*</span>c[<span class="dv">0</span>]],</span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>                  [<span class="dv">0</span>, s, <span class="op">-</span>s<span class="op">*</span>c[<span class="dv">1</span>]],</span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a>                  [<span class="dv">0</span>, <span class="dv">0</span>,  <span class="fl">1.0</span>]])</span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> (T <span class="op">@</span> x.T).T, T</span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> cvdojo.house <span class="im">import</span> load_image, load_model, load_two_view_matches</span>
-<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> cvdojo.plotting <span class="im">import</span> (clip_line_to_image, draw_line_in_image,</span>
-<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a>                             pairwise_intersections, show_matches <span class="im">as</span> _show_matches,</span>
-<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a>                             ACCENT)</span>
-<span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> cvdojo.scene <span class="im">import</span> (skew, look_at, camera_center, project_normalized,</span>
-<span id="cb1-26"><a href="#cb1-26" aria-hidden="true" tabindex="-1"></a>                          image_plane_world, image_uv_to_world, set_axes_equal)</span>
+<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> subset_score(c):</span>
+<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a>    idx <span class="op">=</span> <span class="bu">list</span>(c)</span>
+<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a>    xn, _  <span class="op">=</span> normalize_points(xr[idx])</span>
+<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a>    xpn, _ <span class="op">=</span> normalize_points(xpr[idx])</span>
+<span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a>    s <span class="op">=</span> np.linalg.svd(design_matrix(xn, xpn), compute_uv<span class="op">=</span><span class="va">False</span>)</span>
+<span id="cb1-26"><a href="#cb1-26" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> s[<span class="op">-</span><span class="dv">1</span>] <span class="op">/</span> s[<span class="dv">0</span>]</span>
 <span id="cb1-27"><a href="#cb1-27" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-28"><a href="#cb1-28" aria-hidden="true" tabindex="-1"></a>plt.rcParams[<span class="st">"figure.figsize"</span>] <span class="op">=</span> (<span class="dv">8</span>, <span class="dv">5</span>)</span>
-<span id="cb1-29"><a href="#cb1-29" aria-hidden="true" tabindex="-1"></a>plt.rcParams[<span class="st">"axes.grid"</span>] <span class="op">=</span> <span class="va">False</span></span>
-<span id="cb1-30"><a href="#cb1-30" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-31"><a href="#cb1-31" aria-hidden="true" tabindex="-1"></a><span class="co"># --- Data ------------------------------------------------------------------</span></span>
-<span id="cb1-32"><a href="#cb1-32" aria-hidden="true" tabindex="-1"></a><span class="co"># Two photographs of the Origami House and eight hand-annotated matches.</span></span>
-<span id="cb1-33"><a href="#cb1-33" aria-hidden="true" tabindex="-1"></a><span class="co"># Six lie on the front facade, two on the roof ridge. HZ naming: X is a 3D</span></span>
-<span id="cb1-34"><a href="#cb1-34" aria-hidden="true" tabindex="-1"></a><span class="co"># point, x and x' are its projections in the two views.</span></span>
-<span id="cb1-35"><a href="#cb1-35" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-36"><a href="#cb1-36" aria-hidden="true" tabindex="-1"></a>I  <span class="op">=</span> load_image(<span class="st">"IMG_4331.jpeg"</span>)</span>
-<span id="cb1-37"><a href="#cb1-37" aria-hidden="true" tabindex="-1"></a>Ip <span class="op">=</span> load_image(<span class="st">"IMG_4337.jpeg"</span>)</span>
-<span id="cb1-38"><a href="#cb1-38" aria-hidden="true" tabindex="-1"></a>H_IMG, W_IMG <span class="op">=</span> I.shape[:<span class="dv">2</span>]</span>
-<span id="cb1-39"><a href="#cb1-39" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-40"><a href="#cb1-40" aria-hidden="true" tabindex="-1"></a>x, xp, match_labels <span class="op">=</span> load_two_view_matches()</span>
-<span id="cb1-41"><a href="#cb1-41" aria-hidden="true" tabindex="-1"></a>x_xy, xp_xy <span class="op">=</span> x[:, :<span class="dv">2</span>], xp[:, :<span class="dv">2</span>]</span>
-<span id="cb1-42"><a href="#cb1-42" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-43"><a href="#cb1-43" aria-hidden="true" tabindex="-1"></a>CROP <span class="op">=</span> (<span class="dv">200</span>, <span class="dv">1120</span>, <span class="dv">820</span>, <span class="dv">1700</span>)   <span class="co"># region of interest shared by the two views</span></span>
-<span id="cb1-44"><a href="#cb1-44" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-45"><a href="#cb1-45" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> show_matches(title<span class="op">=</span><span class="st">"Eight correspondences on the Origami House"</span>, ids<span class="op">=</span><span class="va">None</span>):</span>
-<span id="cb1-46"><a href="#cb1-46" aria-hidden="true" tabindex="-1"></a>    _show_matches(I, Ip, x_xy, xp_xy, ids<span class="op">=</span>ids, title<span class="op">=</span>title, crop<span class="op">=</span>CROP)</span>
-<span id="cb1-47"><a href="#cb1-47" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-48"><a href="#cb1-48" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> plot_line(ax, l, <span class="op">**</span>kwargs):</span>
-<span id="cb1-49"><a href="#cb1-49" aria-hidden="true" tabindex="-1"></a>    draw_line_in_image(ax, l, W_IMG, H_IMG, <span class="op">**</span>kwargs)</span>
-<span id="cb1-50"><a href="#cb1-50" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-51"><a href="#cb1-51" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> line_box_segment(l, width<span class="op">=</span>W_IMG, height<span class="op">=</span>H_IMG):</span>
-<span id="cb1-52"><a href="#cb1-52" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> clip_line_to_image(l, width, height)</span>
-<span id="cb1-53"><a href="#cb1-53" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-54"><a href="#cb1-54" aria-hidden="true" tabindex="-1"></a><span class="co"># --- The eight-point algorithm ---------------------------------------------</span></span>
-<span id="cb1-55"><a href="#cb1-55" aria-hidden="true" tabindex="-1"></a><span class="co"># These stay in the notebook: they are the subject, not the scaffolding.</span></span>
-<span id="cb1-56"><a href="#cb1-56" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-57"><a href="#cb1-57" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> normalize_points(x):</span>
-<span id="cb1-58"><a href="#cb1-58" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""Hartley normalization: centroid at the origin, mean distance sqrt(2)."""</span></span>
-<span id="cb1-59"><a href="#cb1-59" aria-hidden="true" tabindex="-1"></a>    c <span class="op">=</span> x[:, :<span class="dv">2</span>].mean(axis<span class="op">=</span><span class="dv">0</span>)</span>
-<span id="cb1-60"><a href="#cb1-60" aria-hidden="true" tabindex="-1"></a>    d <span class="op">=</span> np.sqrt(((x[:, :<span class="dv">2</span>] <span class="op">-</span> c) <span class="op">**</span> <span class="dv">2</span>).<span class="bu">sum</span>(axis<span class="op">=</span><span class="dv">1</span>)).mean()</span>
-<span id="cb1-61"><a href="#cb1-61" aria-hidden="true" tabindex="-1"></a>    s <span class="op">=</span> np.sqrt(<span class="fl">2.0</span>) <span class="op">/</span> d</span>
-<span id="cb1-62"><a href="#cb1-62" aria-hidden="true" tabindex="-1"></a>    T <span class="op">=</span> np.array([[s, <span class="dv">0</span>, <span class="op">-</span>s <span class="op">*</span> c[<span class="dv">0</span>]], [<span class="dv">0</span>, s, <span class="op">-</span>s <span class="op">*</span> c[<span class="dv">1</span>]], [<span class="dv">0</span>, <span class="dv">0</span>, <span class="fl">1.0</span>]])</span>
-<span id="cb1-63"><a href="#cb1-63" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> (T <span class="op">@</span> x.T).T, T</span>
-<span id="cb1-64"><a href="#cb1-64" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-65"><a href="#cb1-65" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-66"><a href="#cb1-66" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> design_matrix(x, xp):</span>
-<span id="cb1-67"><a href="#cb1-67" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""One row per correspondence, expressing x'^T F x = 0."""</span></span>
-<span id="cb1-68"><a href="#cb1-68" aria-hidden="true" tabindex="-1"></a>    u, v <span class="op">=</span> x[:, <span class="dv">0</span>], x[:, <span class="dv">1</span>]</span>
-<span id="cb1-69"><a href="#cb1-69" aria-hidden="true" tabindex="-1"></a>    up, vp <span class="op">=</span> xp[:, <span class="dv">0</span>], xp[:, <span class="dv">1</span>]</span>
-<span id="cb1-70"><a href="#cb1-70" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> np.column_stack([up <span class="op">*</span> u, up <span class="op">*</span> v, up,</span>
-<span id="cb1-71"><a href="#cb1-71" aria-hidden="true" tabindex="-1"></a>                            vp <span class="op">*</span> u, vp <span class="op">*</span> v, vp,</span>
-<span id="cb1-72"><a href="#cb1-72" aria-hidden="true" tabindex="-1"></a>                            u, v, np.ones(<span class="bu">len</span>(x))])</span>
-<span id="cb1-73"><a href="#cb1-73" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-74"><a href="#cb1-74" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-75"><a href="#cb1-75" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> eight_point(x, xp, enforce_rank2<span class="op">=</span><span class="va">True</span>):</span>
-<span id="cb1-76"><a href="#cb1-76" aria-hidden="true" tabindex="-1"></a>    xn, T <span class="op">=</span> normalize_points(x)</span>
-<span id="cb1-77"><a href="#cb1-77" aria-hidden="true" tabindex="-1"></a>    xpn, Tp <span class="op">=</span> normalize_points(xp)</span>
-<span id="cb1-78"><a href="#cb1-78" aria-hidden="true" tabindex="-1"></a>    A <span class="op">=</span> design_matrix(xn, xpn)</span>
-<span id="cb1-79"><a href="#cb1-79" aria-hidden="true" tabindex="-1"></a>    _, S, Vt <span class="op">=</span> np.linalg.svd(A)</span>
-<span id="cb1-80"><a href="#cb1-80" aria-hidden="true" tabindex="-1"></a>    Fn <span class="op">=</span> Vt[<span class="op">-</span><span class="dv">1</span>].reshape(<span class="dv">3</span>, <span class="dv">3</span>)</span>
-<span id="cb1-81"><a href="#cb1-81" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> enforce_rank2:</span>
-<span id="cb1-82"><a href="#cb1-82" aria-hidden="true" tabindex="-1"></a>        U, s, VtF <span class="op">=</span> np.linalg.svd(Fn)</span>
-<span id="cb1-83"><a href="#cb1-83" aria-hidden="true" tabindex="-1"></a>        s[<span class="op">-</span><span class="dv">1</span>] <span class="op">=</span> <span class="fl">0.0</span></span>
-<span id="cb1-84"><a href="#cb1-84" aria-hidden="true" tabindex="-1"></a>        Fn <span class="op">=</span> U <span class="op">@</span> np.diag(s) <span class="op">@</span> VtF</span>
-<span id="cb1-85"><a href="#cb1-85" aria-hidden="true" tabindex="-1"></a>    F <span class="op">=</span> Tp.T <span class="op">@</span> Fn <span class="op">@</span> T</span>
-<span id="cb1-86"><a href="#cb1-86" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> F <span class="op">/</span> np.linalg.norm(F), A, S</span>
-<span id="cb1-87"><a href="#cb1-87" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-88"><a href="#cb1-88" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-89"><a href="#cb1-89" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> point_line_distance(x, l):</span>
-<span id="cb1-90"><a href="#cb1-90" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""Distance in pixels from a homogeneous point to a homogeneous line."""</span></span>
-<span id="cb1-91"><a href="#cb1-91" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="bu">abs</span>(x <span class="op">@</span> l) <span class="op">/</span> np.linalg.norm(l[:<span class="dv">2</span>])</span>
-<span id="cb1-92"><a href="#cb1-92" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-93"><a href="#cb1-93" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-94"><a href="#cb1-94" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> epipoles(F):</span>
-<span id="cb1-95"><a href="#cb1-95" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""e is the right null vector of F, e' the right null vector of F^T."""</span></span>
-<span id="cb1-96"><a href="#cb1-96" aria-hidden="true" tabindex="-1"></a>    _, _, Vt <span class="op">=</span> np.linalg.svd(F)</span>
-<span id="cb1-97"><a href="#cb1-97" aria-hidden="true" tabindex="-1"></a>    e <span class="op">=</span> Vt[<span class="op">-</span><span class="dv">1</span>] <span class="op">/</span> Vt[<span class="op">-</span><span class="dv">1</span>][<span class="dv">2</span>]</span>
-<span id="cb1-98"><a href="#cb1-98" aria-hidden="true" tabindex="-1"></a>    _, _, Vt <span class="op">=</span> np.linalg.svd(F.T)</span>
-<span id="cb1-99"><a href="#cb1-99" aria-hidden="true" tabindex="-1"></a>    ep <span class="op">=</span> Vt[<span class="op">-</span><span class="dv">1</span>] <span class="op">/</span> Vt[<span class="op">-</span><span class="dv">1</span>][<span class="dv">2</span>]</span>
-<span id="cb1-100"><a href="#cb1-100" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> e, ep</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</div>
-<div id="5f300ade" class="cell" data-execution_count="2">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Hold out x7 (a roof-ridge point); fit from the other seven house matches.</span></span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>test<span class="op">=</span><span class="dv">6</span></span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>train<span class="op">=</span>np.array([i <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">8</span>) <span class="cf">if</span> i<span class="op">!=</span>test])</span>
-<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>show_matches(<span class="st">'Seven-point experiment: all landmarks are on the house'</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-display">
-<div>
-<figure class="figure">
-<p><img src="seven-point_files/figure-html/cell-3-output-1.png" width="1238" height="645" class="figure-img"></p>
-</figure>
-</div>
-</div>
-</div>
-<section id="seven-correspondences-leave-two-null-directions" class="level2">
-<h2 class="anchored" data-anchor-id="seven-correspondences-leave-two-null-directions">1. Seven correspondences leave two null directions</h2>
-<p>Normalize the two point sets and build the <span class="math inline">\(7\times9\)</span> design matrix.</p>
-<div id="b3766987" class="cell" data-execution_count="3">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>xn,T<span class="op">=</span>normalize_points(x[train])</span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>xpn,Tp<span class="op">=</span>normalize_points(xp[train])</span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>A<span class="op">=</span>design_matrix(xn,xpn)</span>
-<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>U,S,Vt<span class="op">=</span>np.linalg.svd(A)</span>
-<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>rankA<span class="op">=</span>np.linalg.matrix_rank(A,tol<span class="op">=</span><span class="fl">1e-10</span>)</span>
-<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>F1n<span class="op">=</span>Vt[<span class="op">-</span><span class="dv">1</span>].reshape(<span class="dv">3</span>,<span class="dv">3</span>)</span>
-<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>F2n<span class="op">=</span>Vt[<span class="op">-</span><span class="dv">2</span>].reshape(<span class="dv">3</span>,<span class="dv">3</span>)</span>
-<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">'A shape:'</span>,A.shape)</span>
-<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">'rank(A) ='</span>,rankA)</span>
-<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">'nullity(A) ='</span>,<span class="dv">9</span><span class="op">-</span>rankA)</span>
-<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">'singular values ='</span>,S)</span>
-<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">'||A vec(F1)|| ='</span>,np.linalg.norm(A<span class="op">@</span>F1n.ravel()))</span>
-<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">'||A vec(F2)|| ='</span>,np.linalg.norm(A<span class="op">@</span>F2n.ravel()))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb1-28"><a href="#cb1-28" aria-hidden="true" tabindex="-1"></a>best7 <span class="op">=</span> <span class="bu">max</span>(itertools.combinations(<span class="bu">range</span>(<span class="bu">len</span>(rid)), <span class="dv">7</span>), key<span class="op">=</span>subset_score)</span>
+<span id="cb1-29"><a href="#cb1-29" aria-hidden="true" tabindex="-1"></a>idx7 <span class="op">=</span> <span class="bu">list</span>(best7)</span>
+<span id="cb1-30"><a href="#cb1-30" aria-hidden="true" tabindex="-1"></a>SEVEN_IDS <span class="op">=</span> [rid[i] <span class="cf">for</span> i <span class="kw">in</span> idx7]</span>
+<span id="cb1-31"><a href="#cb1-31" aria-hidden="true" tabindex="-1"></a>idx_rest  <span class="op">=</span> [i <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="bu">len</span>(rid)) <span class="cf">if</span> i <span class="kw">not</span> <span class="kw">in</span> idx7]</span>
+<span id="cb1-32"><a href="#cb1-32" aria-hidden="true" tabindex="-1"></a>REST_IDS  <span class="op">=</span> [rid[i] <span class="cf">for</span> i <span class="kw">in</span> idx_rest]</span>
+<span id="cb1-33"><a href="#cb1-33" aria-hidden="true" tabindex="-1"></a>x7,  xp7  <span class="op">=</span> xr[idx7],  xpr[idx7]</span>
+<span id="cb1-34"><a href="#cb1-34" aria-hidden="true" tabindex="-1"></a>x_rest,  xp_rest  <span class="op">=</span> xr[idx_rest], xpr[idx_rest]</span>
+<span id="cb1-35"><a href="#cb1-35" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"seven-point sample:"</span>, <span class="st">" "</span>.join(SEVEN_IDS))</span>
+<span id="cb1-36"><a href="#cb1-36" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"kept aside        :"</span>, <span class="st">" "</span>.join(REST_IDS))</span>
+<span id="cb1-37"><a href="#cb1-37" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"sigma_7 / sigma_1 = </span><span class="sc">{</span>subset_score(best7)<span class="sc">:.2e}</span><span class="ss">"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>A shape: (7, 9)
-rank(A) = 7
-nullity(A) = 2
-singular values = [5.2761026  4.60603697 3.95185786 3.26321317 1.25127466 0.73928377
- 0.01914989]
-||A vec(F1)|| = 5.825778956067941e-16
-||A vec(F2)|| = 6.391320217330162e-16</code></pre>
+<pre><code>seven-point sample: X1 X4 X5 X9 D1 D2 D3
+kept aside        : X0 X8 D0
+sigma_7 / sigma_1 = 4.49e-03</code></pre>
 </div>
 </div>
-<p>Every matrix in the pencil</p>
-<p><span class="math display">\[
-\mathsf{F}(\lambda)=\mathsf{F}_1+\lambda \mathsf{F}_2
-\]</span></p>
-<p>satisfies the seven linear equations. Rank two adds</p>
-<p><span class="math display">\[
-\det \mathsf{F}(\lambda)=0.
-\]</span></p>
-<p>Because each entry is linear in <span class="math inline">\(\lambda\)</span>, the determinant is a cubic polynomial.</p>
-</section>
-<section id="solve-the-cubic" class="level2">
-<h2 class="anchored" data-anchor-id="solve-the-cubic">2. Solve the cubic</h2>
-<p>We evaluate the determinant at four values of <span class="math inline">\(\lambda\)</span> and recover the cubic coefficients. This keeps the code transparent without hiding the geometry in a black-box solver.</p>
-<div id="852ee5c1" class="cell" data-execution_count="4">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> determinant_cubic(F1,F2):</span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>    lam<span class="op">=</span>np.array([<span class="fl">0.</span>,<span class="fl">1.</span>,<span class="op">-</span><span class="fl">1.</span>,<span class="fl">2.</span>])</span>
-<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>    y<span class="op">=</span>np.array([np.linalg.det(F1<span class="op">+</span>l<span class="op">*</span>F2) <span class="cf">for</span> l <span class="kw">in</span> lam])</span>
-<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>    V<span class="op">=</span>np.column_stack([lam<span class="op">**</span><span class="dv">3</span>,lam<span class="op">**</span><span class="dv">2</span>,lam,np.ones_like(lam)])</span>
-<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> np.linalg.solve(V,y)</span>
-<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>coef<span class="op">=</span>determinant_cubic(F1n,F2n)</span>
-<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>roots<span class="op">=</span>np.roots(coef)</span>
-<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>real_roots<span class="op">=</span><span class="bu">sorted</span>([r.real <span class="cf">for</span> r <span class="kw">in</span> roots <span class="cf">if</span> <span class="bu">abs</span>(r.imag)<span class="op">&lt;</span><span class="fl">1e-8</span>])</span>
-<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">'cubic coefficients ='</span>,coef)</span>
-<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">'roots ='</span>,roots)</span>
-<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">'real roots ='</span>,real_roots)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>cubic coefficients = [-0.00867453  0.01075467 -0.03192791  0.00998289]
-roots = [0.44936134+1.78106436j 0.44936134-1.78106436j 0.34107522+0.j        ]
-real roots = [np.float64(0.3410752168511428)]</code></pre>
+<div id="cell-fig-seven-correspondences" class="cell page-columns page-full" data-execution_count="3">
+<div class="cell-output cell-output-display page-columns page-full">
+<div id="fig-seven-correspondences" class="quarto-float quarto-figure quarto-figure-center anchored page-columns page-full">
+<figure class="quarto-float quarto-float-fig figure page-columns page-full">
+<div aria-describedby="fig-seven-correspondences-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca" class="page-columns page-full">
+<img src="seven-point_files/figure-html/fig-seven-correspondences-output-1.png" width="1259" height="648" class="figure-img column-page">
 </div>
-</div>
-<p>For this real house configuration the cubic has <strong>three real roots</strong>. Thus the correct minimal-solver output is three candidate epipolar geometries, not one.</p>
-<div id="f3581bfa" class="cell" data-execution_count="5">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>Fs<span class="op">=</span>[]</span>
-<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> lam <span class="kw">in</span> real_roots:</span>
-<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>    Fn<span class="op">=</span>F1n<span class="op">+</span>lam<span class="op">*</span>F2n</span>
-<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>    <span class="co"># det(Fn)=0 already; the SVD cleanup removes only floating-point residue.</span></span>
-<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>    Uq,sq,Vtq<span class="op">=</span>np.linalg.svd(Fn)<span class="op">;</span> sq[<span class="op">-</span><span class="dv">1</span>]<span class="op">=</span><span class="fl">0.</span><span class="op">;</span> Fn<span class="op">=</span>Uq<span class="op">@</span>np.diag(sq)<span class="op">@</span>Vtq</span>
-<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>    Fq<span class="op">=</span>Tp.T<span class="op">@</span>Fn<span class="op">@</span>T<span class="op">;</span> Fq<span class="op">/=</span>np.linalg.norm(Fq)</span>
-<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>    Fs.append(Fq)</span>
-<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> j,Fq <span class="kw">in</span> <span class="bu">enumerate</span>(Fs,<span class="dv">1</span>):</span>
-<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>    residuals<span class="op">=</span>np.array([xp[i]<span class="op">@</span>Fq<span class="op">@</span>x[i] <span class="cf">for</span> i <span class="kw">in</span> train])</span>
-<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f'candidate </span><span class="sc">{</span>j<span class="sc">}</span><span class="ss">: rank=</span><span class="sc">{</span>np<span class="sc">.</span>linalg<span class="sc">.</span>matrix_rank(Fq,tol<span class="op">=</span><span class="fl">1e-10</span>)<span class="sc">}</span><span class="ss">, max training residual=</span><span class="sc">{</span>np<span class="sc">.</span><span class="bu">max</span>(np.<span class="bu">abs</span>(residuals))<span class="sc">:.3e}</span><span class="ss">'</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>candidate 1: rank=2, max training residual=1.776e-15</code></pre>
-</div>
-</div>
-</section>
-<section id="the-same-seven-house-points-support-three-different-line-pencils" class="level2">
-<h2 class="anchored" data-anchor-id="the-same-seven-house-points-support-three-different-line-pencils">3. The same seven house points support three different line pencils</h2>
-<p>To make the ambiguity geometric, draw the epipolar lines in <strong>both photographs</strong> for every candidate. Each candidate explains the same seven training matches, but the epipoles and line pencils are different.</p>
-<div id="f5822867" class="cell" data-execution_count="6">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>fig,axes<span class="op">=</span>plt.subplots(<span class="dv">2</span>,<span class="bu">len</span>(Fs),figsize<span class="op">=</span>(<span class="dv">6</span><span class="op">*</span><span class="bu">len</span>(Fs),<span class="dv">11</span>),squeeze<span class="op">=</span><span class="va">False</span>)</span>
-<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> j,Fq <span class="kw">in</span> <span class="bu">enumerate</span>(Fs):</span>
-<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>    e,ep<span class="op">=</span>epipoles(Fq)</span>
-<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>    <span class="co"># image 1: l_i = F^T x'_i</span></span>
-<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>    ax<span class="op">=</span>axes[<span class="dv">0</span>,j]<span class="op">;</span> ax.imshow(I)</span>
-<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> i <span class="kw">in</span> train: plot_line(ax,Fq.T<span class="op">@</span>xp[i],lw<span class="op">=</span><span class="fl">1.15</span>,alpha<span class="op">=</span><span class="fl">.75</span>)</span>
-<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>    ax.scatter(x_xy[train,<span class="dv">0</span>],x_xy[train,<span class="dv">1</span>],s<span class="op">=</span><span class="dv">24</span>,facecolors<span class="op">=</span><span class="st">'none'</span>,edgecolors<span class="op">=</span><span class="st">'white'</span>)</span>
-<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>    ax.scatter(e[<span class="dv">0</span>],e[<span class="dv">1</span>],marker<span class="op">=</span><span class="st">'*'</span>,s<span class="op">=</span><span class="dv">180</span>,edgecolors<span class="op">=</span><span class="st">'k'</span>,linewidths<span class="op">=</span><span class="fl">.8</span>)</span>
-<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a>    ax.set_title(<span class="ss">f'candidate </span><span class="sc">{</span>j<span class="op">+</span><span class="dv">1</span><span class="sc">}</span><span class="ss">: first image'</span>)</span>
-<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a>    ax.set_xlim(<span class="dv">180</span>,<span class="dv">1130</span>)<span class="op">;</span> ax.set_ylim(<span class="dv">1710</span>,<span class="dv">820</span>)<span class="op">;</span> ax.axis(<span class="st">'off'</span>)</span>
-<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a>    <span class="co"># image 2: l'_i = F x_i</span></span>
-<span id="cb9-12"><a href="#cb9-12" aria-hidden="true" tabindex="-1"></a>    ax<span class="op">=</span>axes[<span class="dv">1</span>,j]<span class="op">;</span> ax.imshow(Ip)</span>
-<span id="cb9-13"><a href="#cb9-13" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> i <span class="kw">in</span> train: plot_line(ax,Fq<span class="op">@</span>x[i],lw<span class="op">=</span><span class="fl">1.15</span>,alpha<span class="op">=</span><span class="fl">.75</span>)</span>
-<span id="cb9-14"><a href="#cb9-14" aria-hidden="true" tabindex="-1"></a>    ax.scatter(xp_xy[train,<span class="dv">0</span>],xp_xy[train,<span class="dv">1</span>],s<span class="op">=</span><span class="dv">24</span>,facecolors<span class="op">=</span><span class="st">'none'</span>,edgecolors<span class="op">=</span><span class="st">'white'</span>)</span>
-<span id="cb9-15"><a href="#cb9-15" aria-hidden="true" tabindex="-1"></a>    ax.scatter(ep[<span class="dv">0</span>],ep[<span class="dv">1</span>],marker<span class="op">=</span><span class="st">'*'</span>,s<span class="op">=</span><span class="dv">180</span>,edgecolors<span class="op">=</span><span class="st">'k'</span>,linewidths<span class="op">=</span><span class="fl">.8</span>)</span>
-<span id="cb9-16"><a href="#cb9-16" aria-hidden="true" tabindex="-1"></a>    ax.set_title(<span class="ss">f'candidate </span><span class="sc">{</span>j<span class="op">+</span><span class="dv">1</span><span class="sc">}</span><span class="ss">: second image'</span>)</span>
-<span id="cb9-17"><a href="#cb9-17" aria-hidden="true" tabindex="-1"></a>    ax.set_xlim(<span class="dv">180</span>,<span class="dv">1130</span>)<span class="op">;</span> ax.set_ylim(<span class="dv">1710</span>,<span class="dv">820</span>)<span class="op">;</span> ax.axis(<span class="st">'off'</span>)</span>
-<span id="cb9-18"><a href="#cb9-18" aria-hidden="true" tabindex="-1"></a>plt.tight_layout()<span class="op">;</span> plt.show()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-display">
-<div>
-<figure class="figure">
-<p><img src="seven-point_files/figure-html/cell-7-output-1.png" width="538" height="1046" class="figure-img"></p>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-seven-correspondences-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;1: The seven noisy correspondences used to run the solver, in orange, and in blue the ones kept aside.
+</figcaption>
 </figure>
 </div>
 </div>
 </div>
 </section>
-<section id="the-held-out-roof-point-breaks-the-ambiguity" class="level2">
-<h2 class="anchored" data-anchor-id="the-held-out-roof-point-breaks-the-ambiguity">4. The held-out roof point breaks the ambiguity</h2>
-<p>Now use <span class="math inline">\(\mathbf{x}_7\leftrightarrow\mathbf{x}_7'\)</span> — a real point on the roof ridge that was <strong>not</strong> used to compute the three candidates.</p>
-<p>For each candidate, map the held-out point to its epipolar line and measure the point-to-line distance in both images.</p>
-<div id="23bf4e36" class="cell" data-execution_count="7">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>held<span class="op">=</span>[]</span>
-<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> j,Fq <span class="kw">in</span> <span class="bu">enumerate</span>(Fs,<span class="dv">1</span>):</span>
-<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>    l<span class="op">=</span>Fq.T<span class="op">@</span>xp[test]<span class="op">;</span> lp<span class="op">=</span>Fq<span class="op">@</span>x[test]</span>
-<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>    d<span class="op">=</span>point_line_distance(x[test],l)<span class="op">;</span> dp<span class="op">=</span>point_line_distance(xp[test],lp)</span>
-<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>    held.append((d,dp))</span>
-<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f'candidate </span><span class="sc">{</span>j<span class="sc">}</span><span class="ss">: held-out distances = </span><span class="sc">{</span>d<span class="sc">:.2f}</span><span class="ss"> px (image 1), </span><span class="sc">{</span>dp<span class="sc">:.2f}</span><span class="ss"> px (image 2)'</span>)</span>
-<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a>fig,axes<span class="op">=</span>plt.subplots(<span class="dv">2</span>,<span class="bu">len</span>(Fs),figsize<span class="op">=</span>(<span class="dv">6</span><span class="op">*</span><span class="bu">len</span>(Fs),<span class="dv">11</span>),squeeze<span class="op">=</span><span class="va">False</span>)</span>
-<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> j,(Fq,(d,dp)) <span class="kw">in</span> <span class="bu">enumerate</span>(<span class="bu">zip</span>(Fs,held)):</span>
-<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a>    ax<span class="op">=</span>axes[<span class="dv">0</span>,j]<span class="op">;</span> ax.imshow(I)<span class="op">;</span> plot_line(ax,Fq.T<span class="op">@</span>xp[test],lw<span class="op">=</span><span class="fl">2.6</span>)<span class="op">;</span> ax.scatter(<span class="op">*</span>x_xy[test],s<span class="op">=</span><span class="dv">90</span>)</span>
-<span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a>    ax.set_title(<span class="ss">f'candidate </span><span class="sc">{</span>j<span class="op">+</span><span class="dv">1</span><span class="sc">}</span><span class="ss">: </span><span class="sc">{</span>d<span class="sc">:.1f}</span><span class="ss"> px'</span>)</span>
-<span id="cb10-12"><a href="#cb10-12" aria-hidden="true" tabindex="-1"></a>    ax.set_xlim(<span class="dv">180</span>,<span class="dv">1130</span>)<span class="op">;</span> ax.set_ylim(<span class="dv">1710</span>,<span class="dv">820</span>)<span class="op">;</span> ax.axis(<span class="st">'off'</span>)</span>
-<span id="cb10-13"><a href="#cb10-13" aria-hidden="true" tabindex="-1"></a>    ax<span class="op">=</span>axes[<span class="dv">1</span>,j]<span class="op">;</span> ax.imshow(Ip)<span class="op">;</span> plot_line(ax,Fq<span class="op">@</span>x[test],lw<span class="op">=</span><span class="fl">2.6</span>)<span class="op">;</span> ax.scatter(<span class="op">*</span>xp_xy[test],s<span class="op">=</span><span class="dv">90</span>)</span>
-<span id="cb10-14"><a href="#cb10-14" aria-hidden="true" tabindex="-1"></a>    ax.set_title(<span class="ss">f'candidate </span><span class="sc">{</span>j<span class="op">+</span><span class="dv">1</span><span class="sc">}</span><span class="ss">: </span><span class="sc">{</span>dp<span class="sc">:.1f}</span><span class="ss"> px'</span>)</span>
-<span id="cb10-15"><a href="#cb10-15" aria-hidden="true" tabindex="-1"></a>    ax.set_xlim(<span class="dv">180</span>,<span class="dv">1130</span>)<span class="op">;</span> ax.set_ylim(<span class="dv">1710</span>,<span class="dv">820</span>)<span class="op">;</span> ax.axis(<span class="st">'off'</span>)</span>
-<span id="cb10-16"><a href="#cb10-16" aria-hidden="true" tabindex="-1"></a>plt.tight_layout()<span class="op">;</span> plt.show()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<section id="a-pencil-of-fundamental-matrix" class="level2">
+<h2 class="anchored" data-anchor-id="a-pencil-of-fundamental-matrix">A pencil of fundamental matrix</h2>
+<p>Normalize the points exactly as in the eight-point algorithm and look at the singular values of <span class="math inline">\(\mathsf A\)</span>. There are seven non-zero singular values. The two vectors corresponding to the two zero singual values span the null space:</p>
+<p><span class="math display">\[
+\ker\mathsf A = \operatorname{span}(\widehat{\mathsf F}_0,
+                                     \widehat{\mathsf F}_1).
+\]</span></p>
+<p>Every matrix</p>
+<p><span class="math display">\[
+\widehat{\mathsf F}(\lambda)
+   = \widehat{\mathsf F}_0 + \lambda\widehat{\mathsf F}_1
+\]</span></p>
+<p>therefore satisfies all seven epipolar equations. Most members of this pencil, however, have rank three and thus are not fundamental matrices.</p>
+<div id="6" class="cell" data-execution_count="4">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>x7n, T <span class="op">=</span> normalize_points(x7)</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>xp7n, Tp <span class="op">=</span> normalize_points(xp7)</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>A7 <span class="op">=</span> design_matrix(x7n, xp7n)</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>U, s7, Vt <span class="op">=</span> np.linalg.svd(A7)</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>F0h <span class="op">=</span> Vt[<span class="op">-</span><span class="dv">2</span>].reshape(<span class="dv">3</span>, <span class="dv">3</span>)</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>F1h <span class="op">=</span> Vt[<span class="op">-</span><span class="dv">1</span>].reshape(<span class="dv">3</span>, <span class="dv">3</span>)</span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"shape of A:"</span>, A7.shape)</span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"rank of A :"</span>, np.linalg.matrix_rank(A7))</span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"singular values:"</span>, np.<span class="bu">round</span>(s7, <span class="dv">5</span>))</span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"dimension of the right null space: 2"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>candidate 1: held-out distances = 6.96 px (image 1), 10.70 px (image 2)</code></pre>
+<pre><code>shape of A: (7, 9)
+rank of A : 7
+singular values: [7.4974 6.7286 3.4193 2.5073 1.3228 0.4769 0.0337]
+dimension of the right null space: 2</code></pre>
 </div>
-<div class="cell-output cell-output-display">
-<div>
-<figure class="figure">
-<p><img src="seven-point_files/figure-html/cell-8-output-2.png" width="538" height="1046" class="figure-img"></p>
+</div>
+</section>
+<section id="whats-happening-in-mathbbp8" class="level2 page-columns page-full">
+<h2 class="anchored" data-anchor-id="whats-happening-in-mathbbp8">What’s happening in <span class="math inline">\(\mathbb{P}^8\)</span></h2>
+<p>Let’s consider the whole construction at once in convenient higher dimensional spaces.</p>
+<p>A <span class="math inline">\(3\times3\)</span> matrix up to scale is a point of <span class="math inline">\(\mathbb P^8\)</span>. Not every point in this space is a fundamental matrix: it must also satisfy <span class="math inline">\(\det\mathsf F = 0\)</span>, a single equation, cubic in the entries of <span class="math inline">\(\mathsf F\)</span>. The fundamental matrices therefore form a <strong>cubic hypersurface</strong> in <span class="math inline">\(\mathbb P^8\)</span>, of dimension seven. The cartoon illustration in <a href="#fig-cartoon-variety" class="quarto-xref">Figure&nbsp;2</a> attempts to illustrate our high-dimensional setup on the plane.</p>
+<p>Each correspondence contributes one linear equation in the entries of <span class="math inline">\(\mathsf F\)</span>, that is, a <strong>hyperplane</strong> of <span class="math inline">\(\mathbb P^8\)</span>. Seven correspondences in general position give seven independent hyperplanes, and seven hyperplanes in <span class="math inline">\(\mathbb P^8\)</span> meet in a line, since <span class="math inline">\(8 - 7 = 1\)</span>. That line is exactly the pencil <span class="math inline">\(\widehat{\mathsf F}_0 + \lambda\widehat{\mathsf F}_1\)</span>, with <span class="math inline">\(\lambda\)</span> a coordinate along it.</p>
+<p>So the seven-point problem reads: <strong>intersect a line with a cubic hypersurface</strong>. A line meets a hypersurface of degree <span class="math inline">\(d\)</span> in <span class="math inline">\(d\)</span> points, counted with multiplicity and over the complex numbers. Here <span class="math inline">\(d = 3\)</span>. The cubic in <span class="math inline">\(\lambda\)</span> we are about to write down is the degree of the variety we are cutting.</p>
+<p>This also says something about the eight-points algorithm. Eight correspondences give eight hyperplanes, which meet in a single <em>point</em> of <span class="math inline">\(\mathbb P^8\)</span>, and a point singled out by linear conditions has no reason to lie on the cubic. That is precisely what the rank-two enforcement was doing there: the eight-point algorithm lands just off the variety, and the truncated SVD pushes it back on. Seven points land on a line that genuinely crosses the variety; eight points land beside it and have to be projected.</p>
+<div id="cell-fig-cartoon-variety" class="cell page-columns page-full" data-execution_count="5">
+<div class="cell-output cell-output-display page-columns page-full">
+<div id="fig-cartoon-variety" class="quarto-float quarto-figure quarto-figure-center anchored page-columns page-full">
+<figure class="quarto-float quarto-float-fig figure page-columns page-full">
+<div aria-describedby="fig-cartoon-variety-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca" class="page-columns page-full">
+<img src="seven-point_files/figure-html/fig-cartoon-variety-output-1.png" width="959" height="510" class="figure-img column-page">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-cartoon-variety-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;2: <strong>Cartoon illustration</strong>, drawn in the plane rather than in <span class="math inline">\(\mathbb P^8\)</span>: a cubic curve stands in for the cubic hypersurface <span class="math inline">\(\det\mathsf F = 0\)</span>, and lines stand in for hyperplanes. The counting is the same one dimension at a time: in <span class="math inline">\(\mathbb P^2\)</span> two lines meet in a point and one line meets a cubic in three points, exactly as in <span class="math inline">\(\mathbb P^8\)</span> seven hyperplanes meet in a in a line that cuts the variety three times, while eight hyperplanes meet in a point. Left: the seven-point algorithm lands on a line that crosses the variety, and every crossing is a candidate. Right: in presence of noise the eight-point algorithm lands beside the variety and the rank-two enforcement projects it back.
+</figcaption>
 </figure>
 </div>
 </div>
 </div>
-<p>The eighth match is therefore not merely “one more row”. In a generic configuration it selects among the finite solutions left by the seven-point minimal problem.</p>
-<p>With noisy feature matches we would not normally choose a model from one held-out point. The seven-point solver is instead useful inside RANSAC/MSAC: draw a minimal sample, generate one or three candidate <span class="math inline">\(\mathsf{F}\)</span>’s, and score them on the full correspondence set.</p>
 </section>
-<section id="the-seven-point-algorithm-in-one-box" class="level2">
-<h2 class="anchored" data-anchor-id="the-seven-point-algorithm-in-one-box">5. The seven-point algorithm in one box</h2>
-<p>Given seven correspondences <span class="math inline">\(\mathbf{x}_i\leftrightarrow\mathbf{x}_i'\)</span>:</p>
-<ol type="1">
-<li>Normalize the points in both images.</li>
-<li>Build the <span class="math inline">\(7\times9\)</span> matrix <span class="math inline">\(\mathsf{A}\)</span>.</li>
-<li>Find two nullspace basis matrices <span class="math inline">\(\mathsf{F}_1,\mathsf{F}_2\)</span>.</li>
-<li>Write <span class="math inline">\(\mathsf{F}(\lambda)=\mathsf{F}_1+\lambda \mathsf{F}_2\)</span>.</li>
-<li>Solve the cubic <span class="math inline">\(\det \mathsf{F}(\lambda)=0\)</span>.</li>
-<li>Keep the real roots.</li>
-<li>Undo the image normalizations.</li>
-</ol>
-<p>In the generic case the output is <strong>one or three real fundamental matrices</strong>.</p>
-<section id="connection-among-the-three-notebooks" class="level3">
-<h3 class="anchored" data-anchor-id="connection-among-the-three-notebooks">Connection among the three notebooks</h3>
+<section id="rank-two-turns-into-a-cubic" class="level2 page-columns page-full">
+<h2 class="anchored" data-anchor-id="rank-two-turns-into-a-cubic">Rank two turns into a cubic</h2>
+<p>The missing piece is the defining constraint of a fundamental matrix,</p>
+<p><span class="math display">\[\det\widehat{\mathsf F}=0.\]</span></p>
+<p>Substituting the pencil gives</p>
 <p><span class="math display">\[
-\begin{array}{ccl}
-8\text{ points} &amp;:&amp; \text{one linear null direction, then rank-two projection},\\[1mm]
-7\text{ points} &amp;:&amp; \text{two null directions + a cubic rank constraint},\\[1mm]
-\text{critical data} &amp;:&amp; \text{the nullspace grows because the geometry itself is ambiguous.}
-\end{array}
+\det\bigl(\widehat{\mathsf F}_0+
+           \lambda\widehat{\mathsf F}_1\bigr)=0.
 \]</span></p>
-<p>The number of points is only half of the story. Their <strong>geometric configuration on the scene</strong> decides how much two-view geometry they actually determine.</p>
+<p>Every entry is linear in <span class="math inline">\(\lambda\)</span>, so the determinant is a polynomial of degree at most three. This is the only nonlinear step of the seven-point algorithm.</p>
+<div id="10" class="cell" data-execution_count="6">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> det_cubic(F0, F1):</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""Coefficients c0..c3 of det(F0 + lambda F1), in ascending order."""</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>    p <span class="op">=</span> [[np.array([F0[i, j], F1[i, j]], <span class="bu">float</span>) <span class="cf">for</span> j <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">3</span>)]</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>         <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">3</span>)]</span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>    mul <span class="op">=</span> np.polynomial.polynomial.polymul</span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>    add <span class="op">=</span> np.polynomial.polynomial.polyadd</span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>    sub <span class="op">=</span> np.polynomial.polynomial.polysub</span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>    m00 <span class="op">=</span> sub(mul(p[<span class="dv">1</span>][<span class="dv">1</span>], p[<span class="dv">2</span>][<span class="dv">2</span>]), mul(p[<span class="dv">1</span>][<span class="dv">2</span>], p[<span class="dv">2</span>][<span class="dv">1</span>]))</span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>    m01 <span class="op">=</span> sub(mul(p[<span class="dv">1</span>][<span class="dv">0</span>], p[<span class="dv">2</span>][<span class="dv">2</span>]), mul(p[<span class="dv">1</span>][<span class="dv">2</span>], p[<span class="dv">2</span>][<span class="dv">0</span>]))</span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>    m02 <span class="op">=</span> sub(mul(p[<span class="dv">1</span>][<span class="dv">0</span>], p[<span class="dv">2</span>][<span class="dv">1</span>]), mul(p[<span class="dv">1</span>][<span class="dv">1</span>], p[<span class="dv">2</span>][<span class="dv">0</span>]))</span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a>    c <span class="op">=</span> add(sub(mul(p[<span class="dv">0</span>][<span class="dv">0</span>], m00), mul(p[<span class="dv">0</span>][<span class="dv">1</span>], m01)),</span>
+<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a>            mul(p[<span class="dv">0</span>][<span class="dv">2</span>], m02))</span>
+<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> np.pad(c, (<span class="dv">0</span>, <span class="bu">max</span>(<span class="dv">0</span>, <span class="dv">4</span><span class="op">-</span><span class="bu">len</span>(c))))[:<span class="dv">4</span>]</span>
+<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> pencil_roots(c, tol<span class="op">=</span><span class="fl">1e-12</span>):</span>
+<span id="cb5-17"><a href="#cb5-17" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""Roots of c0 + c1 L + c2 L^2 + c3 L^3, with the degenerate case.</span></span>
+<span id="cb5-18"><a href="#cb5-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-19"><a href="#cb5-19" aria-hidden="true" tabindex="-1"></a><span class="co">    When c3 vanishes the cubic drops degree: the missing root has run off to</span></span>
+<span id="cb5-20"><a href="#cb5-20" aria-hidden="true" tabindex="-1"></a><span class="co">    infinity, which in the pencil means F1 itself. A relative tolerance is</span></span>
+<span id="cb5-21"><a href="#cb5-21" aria-hidden="true" tabindex="-1"></a><span class="co">    essential — in floating point c3 comes out as 1e-18, never as exactly zero,</span></span>
+<span id="cb5-22"><a href="#cb5-22" aria-hidden="true" tabindex="-1"></a><span class="co">    and np.roots would happily return a root at 1e+17.</span></span>
+<span id="cb5-23"><a href="#cb5-23" aria-hidden="true" tabindex="-1"></a><span class="co">    """</span></span>
+<span id="cb5-24"><a href="#cb5-24" aria-hidden="true" tabindex="-1"></a>    scale <span class="op">=</span> np.<span class="bu">abs</span>(c).<span class="bu">max</span>()</span>
+<span id="cb5-25"><a href="#cb5-25" aria-hidden="true" tabindex="-1"></a>    at_infinity <span class="op">=</span> <span class="bu">abs</span>(c[<span class="dv">3</span>]) <span class="op">&lt;</span> tol <span class="op">*</span> scale</span>
+<span id="cb5-26"><a href="#cb5-26" aria-hidden="true" tabindex="-1"></a>    p <span class="op">=</span> c[:<span class="dv">3</span>] <span class="cf">if</span> at_infinity <span class="cf">else</span> c</span>
+<span id="cb5-27"><a href="#cb5-27" aria-hidden="true" tabindex="-1"></a>    p <span class="op">=</span> np.trim_zeros(np.asarray(p, <span class="bu">float</span>)[::<span class="op">-</span><span class="dv">1</span>], <span class="st">"f"</span>)</span>
+<span id="cb5-28"><a href="#cb5-28" aria-hidden="true" tabindex="-1"></a>    r <span class="op">=</span> np.roots(p) <span class="cf">if</span> <span class="bu">len</span>(p) <span class="op">&gt;</span> <span class="dv">1</span> <span class="cf">else</span> np.array([])</span>
+<span id="cb5-29"><a href="#cb5-29" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> r, at_infinity</span>
+<span id="cb5-30"><a href="#cb5-30" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-31"><a href="#cb5-31" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-32"><a href="#cb5-32" aria-hidden="true" tabindex="-1"></a>coeff <span class="op">=</span> det_cubic(F0h, F1h)</span>
+<span id="cb5-33"><a href="#cb5-33" aria-hidden="true" tabindex="-1"></a>roots, at_infinity <span class="op">=</span> pencil_roots(coeff)</span>
+<span id="cb5-34"><a href="#cb5-34" aria-hidden="true" tabindex="-1"></a>real_roots <span class="op">=</span> np.array([r.real <span class="cf">for</span> r <span class="kw">in</span> roots <span class="cf">if</span> <span class="bu">abs</span>(r.imag) <span class="op">&lt;</span> <span class="fl">1e-8</span>])</span>
+<span id="cb5-35"><a href="#cb5-35" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-36"><a href="#cb5-36" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"det(F0 + lambda F1) coefficients [c0,c1,c2,c3]:"</span>)</span>
+<span id="cb5-37"><a href="#cb5-37" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(coeff)</span>
+<span id="cb5-38"><a href="#cb5-38" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"root at infinity (det F1 = 0)? </span><span class="sc">{</span>at_infinity<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb5-39"><a href="#cb5-39" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"roots:"</span>)</span>
+<span id="cb5-40"><a href="#cb5-40" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> r <span class="kw">in</span> roots:</span>
+<span id="cb5-41"><a href="#cb5-41" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="st">"  "</span>, r)</span>
+<span id="cb5-42"><a href="#cb5-42" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"</span><span class="sc">{</span><span class="bu">len</span>(real_roots)<span class="sc">}</span><span class="ss"> of them are real"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>det(F0 + lambda F1) coefficients [c0,c1,c2,c3]:
+[ 0.0013  0.0165 -0.0456 -0.0042]
+root at infinity (det F1 = 0)? False
+roots:
+   -11.298578464274387
+   0.41381116680976665
+   -0.06598340132282624
+3 of them are real</code></pre>
+</div>
+</div>
+<div id="cell-fig-seven-cubic" class="cell page-columns page-full" data-execution_count="7">
+<div class="cell-output cell-output-display page-columns page-full">
+<div id="fig-seven-cubic" class="quarto-float quarto-figure quarto-figure-center anchored page-columns page-full">
+<figure class="quarto-float quarto-float-fig figure page-columns page-full">
+<div aria-describedby="fig-seven-cubic-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca" class="page-columns page-full">
+<img src="seven-point_files/figure-html/fig-seven-cubic-output-1.png" width="1115" height="472" class="figure-img column-page">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-seven-cubic-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;3: The determinant along the two-dimensional null space. The seven linear equations give the pencil; the rank-two constraint picks the intersections with det(F)=0. Depending on the data, one or three of the roots are real.
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<p>Each real root gives a rank-two matrix in normalized coordinates. We carry it back to pixels with the same contravariant transformation used by the normalized eight-point algorithm,</p>
+<p><span class="math display">\[
+\mathsf F = \mathsf T'^\top\widehat{\mathsf F}\mathsf T.
+\]</span></p>
+<p>On exact data every candidate must fit the seven chosen correspondences exactly. Only one of them, however, is the fundamental matrix of the cameras that made the images.</p>
+<div id="13" class="cell" data-execution_count="8">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> F_from_cameras(P, Pp):</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""Fundamental matrix induced by a pair of projective cameras."""</span></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>    Ch <span class="op">=</span> np.linalg.svd(P)[<span class="dv">2</span>][<span class="op">-</span><span class="dv">1</span>]</span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>    ep <span class="op">=</span> Pp <span class="op">@</span> Ch</span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> unit_F(skew(ep) <span class="op">@</span> Pp <span class="op">@</span> np.linalg.pinv(P))</span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>F_true <span class="op">=</span> F_from_cameras(P, Pp)</span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>Fs, lambdas <span class="op">=</span> [], []</span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> r <span class="kw">in</span> roots:</span>
+<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="bu">abs</span>(r.imag) <span class="op">&gt;</span> <span class="fl">1e-8</span>:</span>
+<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a>        <span class="cf">continue</span></span>
+<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a>    Fh <span class="op">=</span> F0h <span class="op">+</span> r.real <span class="op">*</span> F1h</span>
+<span id="cb7-15"><a href="#cb7-15" aria-hidden="true" tabindex="-1"></a>    Fs.append(unit_F(Tp.T <span class="op">@</span> Fh <span class="op">@</span> T))</span>
+<span id="cb7-16"><a href="#cb7-16" aria-hidden="true" tabindex="-1"></a>    lambdas.append(r.real)</span>
+<span id="cb7-17"><a href="#cb7-17" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> at_infinity:                      <span class="co"># the missing root: F1 on its own</span></span>
+<span id="cb7-18"><a href="#cb7-18" aria-hidden="true" tabindex="-1"></a>    Fs.append(unit_F(Tp.T <span class="op">@</span> F1h <span class="op">@</span> T))</span>
+<span id="cb7-19"><a href="#cb7-19" aria-hidden="true" tabindex="-1"></a>    lambdas.append(np.inf)</span>
+<span id="cb7-20"><a href="#cb7-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-21"><a href="#cb7-21" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> j, (F, lam) <span class="kw">in</span> <span class="bu">enumerate</span>(<span class="bu">zip</span>(Fs, lambdas), <span class="dv">1</span>):</span>
+<span id="cb7-22"><a href="#cb7-22" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f"solution </span><span class="sc">{</span>j<span class="sc">}</span><span class="ss">: lambda=</span><span class="sc">{</span>lam<span class="sc">: .6f}</span><span class="ss">   rank=</span><span class="sc">{</span>np<span class="sc">.</span>linalg<span class="sc">.</span>matrix_rank(F)<span class="sc">}</span><span class="ss">   "</span></span>
+<span id="cb7-23"><a href="#cb7-23" aria-hidden="true" tabindex="-1"></a>          <span class="ss">f"max residual on the seven=</span><span class="sc">{</span>symmetric_epipolar_residual(F, x7, xp7)<span class="sc">.</span><span class="bu">max</span>()<span class="sc">:.2e}</span><span class="ss"> px"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>solution 1: lambda=-11.298578   rank=2   max residual on the seven=2.87e-12 px
+solution 2: lambda= 0.413811   rank=2   max residual on the seven=9.52e-13 px
+solution 3: lambda=-0.065983   rank=2   max residual on the seven=3.29e-12 px</code></pre>
+</div>
+</div>
+<div id="cell-fig-seven-solutions" class="cell page-columns page-full" data-execution_count="9">
+<div class="cell-output cell-output-display page-columns page-full">
+<div id="fig-seven-solutions" class="quarto-float quarto-figure quarto-figure-center anchored page-columns page-full">
+<figure class="quarto-float quarto-float-fig figure page-columns page-full">
+<div aria-describedby="fig-seven-solutions-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca" class="page-columns page-full">
+<img src="seven-point_files/figure-html/fig-seven-solutions-output-1.png" width="1445" height="606" class="figure-img column-page">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-seven-solutions-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;4: Every real root gives a valid epipolar geometry: each pencil of lines passes exactly through the seven points it was built from, and they are the same seven points in all three panels. Only the epipole moves. On these seven correspondences the three candidates are indistinguishable, which is why no quality number is shown here — we need data they have not seen.
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="which-of-the-three-solutions" class="level2 page-columns page-full">
+<h2 class="anchored" data-anchor-id="which-of-the-three-solutions">Which of the three solutions?</h2>
+<p>Every candidate reproduces the seven correspondences exactly, so the residuals on those seven are zero for all of them and tell us nothing. We need a criterion from somewhere else. Let us take three, in order of how much they cheat.</p>
+<section id="cheating-chordal-distance" class="level3 page-columns page-full">
+<h3 class="anchored" data-anchor-id="cheating-chordal-distance">Cheating: chordal distance</h3>
+<p>We do know <span class="math inline">\(\mathsf F\)</span> here, so for a moment, we can cheat and use the chordal distance of each candidate from it.</p>
+<div id="17" class="cell" data-execution_count="10">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"</span><span class="sc">{</span><span class="st">''</span><span class="sc">:14s}{</span><span class="st">'chordal'</span><span class="sc">:&gt;12s}{</span><span class="st">'lines [px]'</span><span class="sc">:&gt;14s}</span><span class="ss">"</span>)</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> j, F <span class="kw">in</span> <span class="bu">enumerate</span>(Fs, <span class="dv">1</span>):</span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f"solution </span><span class="sc">{</span>j<span class="sc">:&lt;6d}{</span>projective_F_distance(F, F_true)<span class="sc">:12.2e}</span><span class="ss">"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>                   chordal    lines [px]
+solution 1         5.37e-03
+solution 2         3.37e-03
+solution 3         1.01e-02</code></pre>
+</div>
+</div>
+<p>The three chordal distances sit within a few per cent of one another, which would suggest the candidates are nearly equivalent.</p>
+<div id="cell-fig-candidate-entries" class="cell page-columns page-full" data-execution_count="11">
+<div class="cell-output cell-output-display page-columns page-full">
+<div id="fig-candidate-entries" class="quarto-float quarto-figure quarto-figure-center anchored page-columns page-full">
+<figure class="quarto-float quarto-float-fig figure page-columns page-full">
+<div aria-describedby="fig-candidate-entries-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca" class="page-columns page-full">
+<img src="seven-point_files/figure-html/fig-candidate-entries-output-1.png" width="1275" height="322" class="figure-img column-page">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-candidate-entries-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;5: The three candidates and the true matrix, each normalised to unit Frobenius norm and sign-aligned with the true one. Colour is the order of magnitude of each entry, one shade per decade. All four show the same three tiers: a top-left block around <span class="math inline">\(10^{-7}\)</span>, a last row and column around <span class="math inline">\(10^{-3}\)</span>, and a bottom-right entry of one. To the eye they are the same object — and to the Frobenius norm they very nearly are.
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<p>In pixel coordinates the entries of a fundamental matrix live on very different scales, for the same reason the design matrix did in the eight-point notebook: the homogeneous coordinate <span class="math inline">\(1\)</span> sits next to pixel values in the thousands, so the coefficient multiplying <span class="math inline">\(u\,u'\)</span> has to be some <span class="math inline">\(f^2\)</span> times smaller than the one multiplying <span class="math inline">\(1\cdot 1\)</span> for the two terms to balance. Once normalised, the top-left <span class="math inline">\(2\times2\)</span> block is of order <span class="math inline">\(10^{-7}\)</span>, the last row and column of order <span class="math inline">\(10^{-3}\)</span>, and the bottom-right entry is one. That hierarchy is the same for every fundamental matrix of this pair of images, whatever epipolar geometry it describes — which is why, entry by entry, the four matrices look like the same object.</p>
+<p>The Frobenius norm knows nothing of that hierarchy: it weights every entry alike. So the chordal distance is decided almost entirely by the last row and column, and is essentially blind to the <span class="math inline">\(2\times2\)</span> block — which is precisely what sets the <em>direction</em> of the epipolar lines. A small chordal distance therefore does not certify a good epipolar geometry, and the ranking it induces is not one to rely on.</p>
+<p>None of this is an argument against <span class="math inline">\(\mathsf F\)</span> being a point of <span class="math inline">\(\mathbb{P}^8\)</span>. It is an argument against <em>measuring</em> there. It is better to consider distances defined in the images.</p>
+</section>
+<section id="cheating-a-little-less-compare-the-epipolar-lines" class="level3 page-columns page-full">
+<h3 class="anchored" data-anchor-id="cheating-a-little-less-compare-the-epipolar-lines">Cheating a little less: compare the epipolar lines</h3>
+<p>Still using the true matrix, but asking the question in the images. Both matrices predict an epipolar line for the same point <span class="math inline">\(\mathbf{x}\)</span>; how far apart are those two lines, where the data actually is?</p>
+<div id="22" class="cell" data-execution_count="12">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> line_gap(F, G, x, xp):</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""How far apart, in pixels, are the epipolar lines of two matrices —</span></span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a><span class="co">    measured at the correspondences, which is where the data is.</span></span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a><span class="co">    For each pair, walk from the measured point x' onto the line that G predicts</span></span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a><span class="co">    (that is the foot q), then ask how far q lies from the line that F predicts.</span></span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a><span class="co">    One perpendicular segment per correspondence; the figure below draws it.</span></span>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a><span class="co">    """</span></span>
+<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a>    Lg <span class="op">=</span> (G <span class="op">@</span> x.T).T</span>
+<span id="cb11-10"><a href="#cb11-10" aria-hidden="true" tabindex="-1"></a>    Lg <span class="op">=</span> Lg <span class="op">/</span> np.linalg.norm(Lg[:, :<span class="dv">2</span>], axis<span class="op">=</span><span class="dv">1</span>, keepdims<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb11-11"><a href="#cb11-11" aria-hidden="true" tabindex="-1"></a>    q <span class="op">=</span> xp.copy()</span>
+<span id="cb11-12"><a href="#cb11-12" aria-hidden="true" tabindex="-1"></a>    q[:, :<span class="dv">2</span>] <span class="op">=</span> xp[:, :<span class="dv">2</span>] <span class="op">-</span> np.<span class="bu">sum</span>(xp <span class="op">*</span> Lg, axis<span class="op">=</span><span class="dv">1</span>)[:, <span class="va">None</span>] <span class="op">*</span> Lg[:, :<span class="dv">2</span>]</span>
+<span id="cb11-13"><a href="#cb11-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-14"><a href="#cb11-14" aria-hidden="true" tabindex="-1"></a>    Lf <span class="op">=</span> (F <span class="op">@</span> x.T).T</span>
+<span id="cb11-15"><a href="#cb11-15" aria-hidden="true" tabindex="-1"></a>    Lf <span class="op">=</span> Lf <span class="op">/</span> np.linalg.norm(Lf[:, :<span class="dv">2</span>], axis<span class="op">=</span><span class="dv">1</span>, keepdims<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb11-16"><a href="#cb11-16" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> np.<span class="bu">abs</span>(np.<span class="bu">sum</span>(q <span class="op">*</span> Lf, axis<span class="op">=</span><span class="dv">1</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div id="cell-fig-line-gap" class="cell page-columns page-full" data-execution_count="13">
+<div class="cell-output cell-output-display page-columns page-full">
+<div id="fig-line-gap" class="quarto-float quarto-figure quarto-figure-center anchored page-columns page-full">
+<figure class="quarto-float quarto-float-fig figure page-columns page-full">
+<div aria-describedby="fig-line-gap-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca" class="page-columns page-full">
+<img src="seven-point_files/figure-html/fig-line-gap-output-1.png" width="1433" height="492" class="figure-img column-screen-inset">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-line-gap-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;6: How two epipolar geometries are compared, for one correspondence, at the pixel scale. The white dashed line is what the true matrix predicts for <span class="math inline">\(\mathbf{x}\)</span>, the orange line is what the candidate predicts, and the dot is the foot of the measured <span class="math inline">\(\mathbf{x}'\)</span> on the true line — the two are a pixel or two apart, which is the annotation error. The blue segment is what we measure: how far that foot lies from the candidate’s line. All three panels are at the same scale, so the segments can be compared directly.
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<p>Now the three candidates separate clearly, and in an order that the chordal distance did not give. But we are still using <span class="math inline">\(\mathsf F\)</span>, which in any real situation we do not have.</p>
+</section>
+<section id="in-practice-use-the-correspondences-kept-aside-no-cheating" class="level3 page-columns page-full">
+<h3 class="anchored" data-anchor-id="in-practice-use-the-correspondences-kept-aside-no-cheating">In practice use the correspondences kept aside (no cheating)</h3>
+<p>The correspondences kept aside played no part in the estimate. They can speak now: the true fundamental matrix must fit them too, while a spurious root of the cubic has no reason to. This is the criterion that survives outside a notebook, and it is what a robust estimator does with hundreds of matches instead of three.</p>
+<p><strong>Seven points create candidates; further correspondences disambiguate and stabilise the estimate.</strong></p>
+<div id="26" class="cell" data-execution_count="14">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="co"># One quantity throughout this section: how far each of the correspondences</span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="co"># kept aside lies, in view 2, from the epipolar line a candidate predicts.</span></span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>rest_res <span class="op">=</span> np.array([euclidean_epipolar_residuals(F, x_rest, xp_rest)[<span class="dv">1</span>] <span class="cf">for</span> F <span class="kw">in</span> Fs])</span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>rest_mean <span class="op">=</span> rest_res.mean(axis<span class="op">=</span><span class="dv">1</span>)</span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>hdr <span class="op">=</span> <span class="st">""</span>.join(<span class="ss">f"</span><span class="sc">{</span>k<span class="sc">:&gt;10s}</span><span class="ss">"</span> <span class="cf">for</span> k <span class="kw">in</span> REST_IDS)</span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"</span><span class="sc">{</span><span class="st">''</span><span class="sc">:12s}{</span>hdr<span class="sc">}{</span><span class="st">'mean'</span><span class="sc">:&gt;10s}</span><span class="ss">"</span>)</span>
+<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> j, row <span class="kw">in</span> <span class="bu">enumerate</span>(rest_res, <span class="dv">1</span>):</span>
+<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f"solution </span><span class="sc">{</span>j<span class="sc">:&lt;3d}</span><span class="ss">"</span> <span class="op">+</span> <span class="st">""</span>.join(<span class="ss">f"</span><span class="sc">{</span>v<span class="sc">:10.2f}</span><span class="ss">"</span> <span class="cf">for</span> v <span class="kw">in</span> row) <span class="op">+</span> <span class="ss">f"</span><span class="sc">{</span>row<span class="sc">.</span>mean()<span class="sc">:10.2f}</span><span class="ss">"</span>)</span>
+<span id="cb12-10"><a href="#cb12-10" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"</span><span class="ch">\n</span><span class="st">distances from the epipolar line in view 2, in pixels"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>                    X0        X8        D0      mean
+solution 1        0.83     36.30      3.43     13.52
+solution 2       34.93      3.59      0.30     12.94
+solution 3        3.83     12.95      4.01      6.93
+
+distances from the epipolar line in view 2, in pixels</code></pre>
+</div>
+</div>
+<div id="cell-fig-seven-unused-point" class="cell page-columns page-full" data-execution_count="15">
+<div class="cell-output cell-output-display page-columns page-full">
+<div id="fig-seven-unused-point" class="quarto-float quarto-figure quarto-figure-center anchored page-columns page-full">
+<figure class="quarto-float quarto-float-fig figure page-columns page-full">
+<div aria-describedby="fig-seven-unused-point-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca" class="page-columns page-full">
+<img src="seven-point_files/figure-html/fig-seven-unused-point-output-1.png" width="1569" height="510" class="figure-img column-screen-inset">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-seven-unused-point-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;7: What a correspondence kept aside says about each candidate. The blue circle is the point <span class="math inline">\(\mathbf{x}'_i\)</span> in view 2, and the blue segment is its distance from the epipolar line that the candidate predicts for it. The shading is that same distance evaluated at every position of view 2, with contours at 1, 2, 5, 10 and 20 pixels. Black dots are the seven seven points used for the estimate, which every candidate fits exactly.
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<div id="cell-fig-seven-unused-bars" class="cell" data-execution_count="16">
+<div class="cell-output cell-output-display">
+<div id="fig-seven-unused-bars" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-seven-unused-bars-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="seven-point_files/figure-html/fig-seven-unused-bars-output-1.png" width="827" height="376" class="figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-seven-unused-bars-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;8: The same distances for every correspondence kept aside, on a logarithmic scale, with the black ticks marking the mean of each candidate. One candidate sits at the level of the annotation noise on all of them; the others miss at least one badly.
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<p>With exact data one candidate would fit the unused correspondences perfectly and the others would not fit them at all. With clicked points the separation is not between zero and something, but between the annotation noise and something much larger, which is all a robust estimator ever gets to work with. Note also that a single correspondence is not always decisive: read the whole group, not one bar.</p>
+</section>
+</section>
+<section id="the-algorithm" class="level2">
+<h2 class="anchored" data-anchor-id="the-algorithm">The algorithm</h2>
+<p>All the pieces can now be wrapped in a minimal solver. There is one important difference from the eight-point algorithm: the output is a <strong>list</strong>. A minimal solver is allowed to return several models.</p>
+<div id="31" class="cell" data-execution_count="17">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> seven_point(x, xp, imag_tol<span class="op">=</span><span class="fl">1e-8</span>, dedup_tol<span class="op">=</span><span class="fl">1e-7</span>):</span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""Return all real fundamental matrices from exactly seven correspondences."""</span></span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="bu">len</span>(x) <span class="op">!=</span> <span class="dv">7</span> <span class="kw">or</span> <span class="bu">len</span>(xp) <span class="op">!=</span> <span class="dv">7</span>:</span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>        <span class="cf">raise</span> <span class="pp">ValueError</span>(<span class="st">"the seven-point solver needs exactly seven correspondences"</span>)</span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a>    xn, T <span class="op">=</span> normalize_points(x)</span>
+<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a>    xpn, Tp <span class="op">=</span> normalize_points(xp)</span>
+<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a>    _, _, Vt <span class="op">=</span> np.linalg.svd(design_matrix(xn, xpn))</span>
+<span id="cb14-9"><a href="#cb14-9" aria-hidden="true" tabindex="-1"></a>    F0, F1 <span class="op">=</span> Vt[<span class="op">-</span><span class="dv">2</span>].reshape(<span class="dv">3</span>, <span class="dv">3</span>), Vt[<span class="op">-</span><span class="dv">1</span>].reshape(<span class="dv">3</span>, <span class="dv">3</span>)</span>
+<span id="cb14-10"><a href="#cb14-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-11"><a href="#cb14-11" aria-hidden="true" tabindex="-1"></a>    roots, at_infinity <span class="op">=</span> pencil_roots(det_cubic(F0, F1))</span>
+<span id="cb14-12"><a href="#cb14-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-13"><a href="#cb14-13" aria-hidden="true" tabindex="-1"></a>    candidates <span class="op">=</span> [F0 <span class="op">+</span> r.real <span class="op">*</span> F1 <span class="cf">for</span> r <span class="kw">in</span> roots <span class="cf">if</span> <span class="bu">abs</span>(r.imag) <span class="op">&lt;=</span> imag_tol]</span>
+<span id="cb14-14"><a href="#cb14-14" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> at_infinity:</span>
+<span id="cb14-15"><a href="#cb14-15" aria-hidden="true" tabindex="-1"></a>        candidates.append(F1)</span>
+<span id="cb14-16"><a href="#cb14-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-17"><a href="#cb14-17" aria-hidden="true" tabindex="-1"></a>    solutions <span class="op">=</span> []</span>
+<span id="cb14-18"><a href="#cb14-18" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> Fh <span class="kw">in</span> candidates:</span>
+<span id="cb14-19"><a href="#cb14-19" aria-hidden="true" tabindex="-1"></a>        F <span class="op">=</span> unit_F(Tp.T <span class="op">@</span> Fh <span class="op">@</span> T)</span>
+<span id="cb14-20"><a href="#cb14-20" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> <span class="kw">not</span> <span class="bu">any</span>(projective_F_distance(F, G) <span class="op">&lt;</span> dedup_tol <span class="cf">for</span> G <span class="kw">in</span> solutions):</span>
+<span id="cb14-21"><a href="#cb14-21" aria-hidden="true" tabindex="-1"></a>            solutions.append(F)</span>
+<span id="cb14-22"><a href="#cb14-22" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> solutions</span>
+<span id="cb14-23"><a href="#cb14-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-24"><a href="#cb14-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-25"><a href="#cb14-25" aria-hidden="true" tabindex="-1"></a>Fs_check <span class="op">=</span> seven_point(x7, xp7)</span>
+<span id="cb14-26"><a href="#cb14-26" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"returned </span><span class="sc">{</span><span class="bu">len</span>(Fs_check)<span class="sc">}</span><span class="ss"> real solution(s)"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>returned 3 real solution(s)</code></pre>
+</div>
+</div>
+</section>
+<section id="one-root-or-three" class="level2">
+<h2 class="anchored" data-anchor-id="one-root-or-three">One root or three</h2>
+<p>The cubic has three roots over <span class="math inline">\(\mathbb C\)</span>, but a real cubic can have either one real root or three. Both cases occur, and we do not need to invent data to see it: among all the ways of choosing seven of the clicked correspondences, some give three real fundamental matrices and some give a single one.</p>
+<p>When there is only one real root the minimal solver is, in a sense, lucky: the ambiguity is there over the complex numbers, but the two spurious candidates are not available to confuse a real algorithm.</p>
+<div id="33" class="cell" data-execution_count="18">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb16"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>counts <span class="op">=</span> {}</span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> c <span class="kw">in</span> itertools.combinations(<span class="bu">range</span>(<span class="bu">len</span>(rid)), <span class="dv">7</span>):</span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>    idx <span class="op">=</span> <span class="bu">list</span>(c)</span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>    xn, _  <span class="op">=</span> normalize_points(xr[idx])</span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a>    xpn, _ <span class="op">=</span> normalize_points(xpr[idx])</span>
+<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a>    Vt <span class="op">=</span> np.linalg.svd(design_matrix(xn, xpn))[<span class="dv">2</span>]</span>
+<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a>    r, _ <span class="op">=</span> pencil_roots(det_cubic(Vt[<span class="op">-</span><span class="dv">2</span>].reshape(<span class="dv">3</span>, <span class="dv">3</span>), Vt[<span class="op">-</span><span class="dv">1</span>].reshape(<span class="dv">3</span>, <span class="dv">3</span>)))</span>
+<span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a>    k <span class="op">=</span> <span class="bu">sum</span>(<span class="dv">1</span> <span class="cf">for</span> z <span class="kw">in</span> r <span class="cf">if</span> <span class="bu">abs</span>(z.imag) <span class="op">&lt;</span> <span class="fl">1e-8</span>)</span>
+<span id="cb16-9"><a href="#cb16-9" aria-hidden="true" tabindex="-1"></a>    counts[k] <span class="op">=</span> counts.get(k, <span class="dv">0</span>) <span class="op">+</span> <span class="dv">1</span></span>
+<span id="cb16-10"><a href="#cb16-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-11"><a href="#cb16-11" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> k <span class="kw">in</span> <span class="bu">sorted</span>(counts):</span>
+<span id="cb16-12"><a href="#cb16-12" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f"</span><span class="sc">{</span>counts[k]<span class="sc">:4d}</span><span class="ss"> of the </span><span class="sc">{</span><span class="bu">sum</span>(counts.values())<span class="sc">}</span><span class="ss"> seven-point subsets "</span></span>
+<span id="cb16-13"><a href="#cb16-13" aria-hidden="true" tabindex="-1"></a>          <span class="ss">f"give </span><span class="sc">{</span>k<span class="sc">}</span><span class="ss"> real solution(s)"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>  26 of the 120 seven-point subsets give 1 real solution(s)
+  94 of the 120 seven-point subsets give 3 real solution(s)</code></pre>
+</div>
+</div>
+<section id="where-the-seven-point-solver-is-used" class="level3">
+<h3 class="anchored" data-anchor-id="where-the-seven-point-solver-is-used">Where the seven-point solver is used</h3>
+</section>
+<section id="where-the-seven-point-solver-is-used-1" class="level3">
+<h3 class="anchored" data-anchor-id="where-the-seven-point-solver-is-used-1">Where the seven-point solver is used</h3>
+<p>With noisy data, seven correspondences should not be treated as a statistically complete estimate of <span class="math inline">\(\mathsf F\)</span>. The solver is most useful as a <strong>minimal hypothesis generator</strong> inside a robust estimator: sample seven matches, generate one or three candidates, score each candidate on all the data, and keep the one with the best support.</p>
+<p>That is why the count of points matters so much in practice. A robust estimator has to draw a sample in which <em>every</em> point is an inlier, and the probability of that decays exponentially with the sample size — so seven points instead of eight is not a curiosity, it is a smaller exponent. The same idea has produced solvers that shrink the sample further by exploiting whatever is known in advance: a vertical direction from an IMU, planar motion, a shared focal length, a known rotation axis.</p>
+<p>Each of those variants is a different system of polynomial equations, and here the subject stops being about images. Building a fast solver means eliminating variables from a polynomial system, and a substantial line of work has grown around doing that automatically: Gröbner-basis and action-matrix generators, the choice of a good linear basis, syzygy-based reduction, sparse resultants, numerical homotopy continuation, and most recently learning which homotopy path to follow so that the spurious solutions are never computed at all. There is also work on the prior question of <em>which</em> configurations of points and lines constitute a minimal problem in the first place: a classification problem in algebraic geometry.</p>
+<p>So the seven-point algorithm is a small instance of a large family of method that are still investigated by the computer vision community.</p>
 </section>
 </section>
 <section id="further-reading" class="level2">
 <h2 class="anchored" data-anchor-id="further-reading">Further reading</h2>
 <ul>
-<li>Hartley, R. “Projective reconstruction and invariants from multiple images”, <em>IEEE TPAMI</em> 16(10), 1994.</li>
-<li>Torr, P. H. S. and Murray, D. W. “The development and comparison of robust methods for estimating the fundamental matrix”, <em>IJCV</em> 24(3), 1997. Where the seven-point solver earns its keep, inside RANSAC.</li>
-<li>Hartley, R. and Zisserman, A. <em>Multiple View Geometry in Computer Vision</em>, 2nd ed., Cambridge University Press, 2004. Chapter 9 (epipolar geometry) and Chapter 11 (computation of <span class="math inline">\(\mathsf{F}\)</span>).</li>
-<li>Fusiello, A. <em>Visione Computazionale: tecniche di ricostruzione tridimensionale</em>, Franco Angeli, 2018. Chapter 5.</li>
+<li>Hartley, R. and Zisserman, A. <em>Multiple View Geometry in Computer Vision</em>, 2nd ed., Cambridge University Press, 2004. Section 11.1 for the seven- and eight-point algorithms.</li>
+<li>Hartley, R. “In defense of the eight-point algorithm”, <em>IEEE TPAMI</em> 19(6),
+<ol start="1997" type="1">
+<li>The normalisation used here is the same one used in the previous notebook.</li>
+</ol></li>
 </ul>
+<p>On minimal solvers at large:<br>
+- Kukelova, Z., Bujnak, M. and Pajdla, T. “Automatic generator of minimal problem solvers”, <em>ECCV</em>, 2008. The idea that solvers can be produced by a machine rather than by hand. - Hrubý, P., Duff, T., Leykin, A. and Pajdla, T. “Learning to solve hard minimal problems”, <em>CVPR</em>, 2022. Homotopy continuation with a learned starting point, so that the spurious solutions are never followed. - PoseLib, <a href="https://github.com/PoseLib/PoseLib" class="uri">https://github.com/PoseLib/PoseLib</a>. A collection of the solvers in current use, worth reading as an atlas of the family.</p>
 <hr>
 <p><strong>Luca Magri</strong> — Computer Vision Dojo<br>
 Code MIT · text and figures CC BY-NC-ND 4.0<br>
 <a href="https://magrilu.github.io/cv-dojo/" class="uri">https://magrilu.github.io/cv-dojo/</a></p>
 
 
+</section>
 </section>
 
 </main> <!-- /main -->

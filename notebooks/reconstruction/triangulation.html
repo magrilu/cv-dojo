@@ -1,0 +1,1652 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.10.18">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>triangulation – Computer Vision Dojo: a geometric way</title>
+<style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: 1.5em;}
+div.column{flex: auto;}
+@media screen {
+div.columns{gap: min(4vw, 1.5em);}
+div.column{overflow-x: auto;}
+}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../">
+<link href="../../assets/favicon.png" rel="icon" type="image/png">
+<script src="../../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-d92e8767f1f42d56076cabe937f4151b.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap-4c6d3fea03ba38a75d48a1a26a094d32.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-chtml.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+</head>
+
+<body class="nav-sidebar docked nav-fixed quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a class="navbar-brand" href="../../index.html">
+    <span class="navbar-title">Computer Vision Dojo: a geometric way</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../../about.html"> 
+<span class="menu-text">About</span></a>
+  </li>  
+</ul>
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/magrilu/cv-dojo"> <i class="bi bi-github" role="img">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../notebooks/reconstruction/triangulation.html">Reconstruction</a></li><li class="breadcrumb-item"><a href="../../notebooks/reconstruction/triangulation.html">Projective structure from two views</a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+      <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation docked overflow-auto">
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Preface</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../origami-house.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">The Origami house</span></a>
+  </div>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true">
+ <span class="menu-text">Geometry fundamentals</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../notebooks/geometry/fitting-a-conic.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Fitting a conic</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true">
+ <span class="menu-text">Single-view geometry</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../notebooks/camera/camera.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">The perspective camera</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true">
+ <span class="menu-text">Two-view geometry</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../notebooks/two-views/fundamental-matrix.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">The fundamental matrix</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../notebooks/two-views/eight-point.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">The eight-point algorithm</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../notebooks/two-views/residuals.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Epipolar residuals</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../notebooks/two-views/seven-point.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">The Seven-points algorithm</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="true">
+ <span class="menu-text">Reconstruction</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-4" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../notebooks/reconstruction/triangulation.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text">Projective structure from two views</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+   
+  <ul>
+  <li><a href="#projective-structure-from-two-views" id="toc-projective-structure-from-two-views" class="nav-link active" data-scroll-target="#projective-structure-from-two-views">Projective structure from two views</a>
+  <ul class="collapse">
+  <li><a href="#our-input" id="toc-our-input" class="nav-link" data-scroll-target="#our-input">Our input</a></li>
+  <li><a href="#preprocessing" id="toc-preprocessing" class="nav-link" data-scroll-target="#preprocessing">Preprocessing</a>
+  <ul class="collapse">
+  <li><a href="#recover-the-epipolar-geometry" id="toc-recover-the-epipolar-geometry" class="nav-link" data-scroll-target="#recover-the-epipolar-geometry">Recover the epipolar geometry</a></li>
+  <li><a href="#recovery-of-a-pair-of-projective-cameras" id="toc-recovery-of-a-pair-of-projective-cameras" class="nav-link" data-scroll-target="#recovery-of-a-pair-of-projective-cameras">Recovery of a pair of projective cameras</a></li>
+  </ul></li>
+  <li><a href="#triangulation-with-dlt" id="toc-triangulation-with-dlt" class="nav-link" data-scroll-target="#triangulation-with-dlt">Triangulation with DLT</a></li>
+  <li><a href="#the-first-3d-reconstruction" id="toc-the-first-3d-reconstruction" class="nav-link" data-scroll-target="#the-first-3d-reconstruction">The first 3D reconstruction</a></li>
+  <li><a href="#projective-structure" id="toc-projective-structure" class="nav-link" data-scroll-target="#projective-structure">Projective structure</a>
+  <ul class="collapse">
+  <li><a href="#a-glimpse-of-euclidean-structure" id="toc-a-glimpse-of-euclidean-structure" class="nav-link" data-scroll-target="#a-glimpse-of-euclidean-structure">A glimpse of Euclidean structure</a></li>
+  <li><a href="#same-images-different-3d-worlds" id="toc-same-images-different-3d-worlds" class="nav-link" data-scroll-target="#same-images-different-3d-worlds">Same images, “different” 3D worlds</a></li>
+  </ul></li>
+  <li><a href="#reprojection-error" id="toc-reprojection-error" class="nav-link" data-scroll-target="#reprojection-error">Reprojection error</a></li>
+  <li><a href="#geometric-refinement" id="toc-geometric-refinement" class="nav-link" data-scroll-target="#geometric-refinement">Geometric refinement</a></li>
+  <li><a href="#baseline-and-triangulation-accuracy" id="toc-baseline-and-triangulation-accuracy" class="nav-link" data-scroll-target="#baseline-and-triangulation-accuracy">Baseline and triangulation accuracy</a>
+  <ul class="collapse">
+  <li><a href="#questions-to-leave-open" id="toc-questions-to-leave-open" class="nav-link" data-scroll-target="#questions-to-leave-open">Questions to leave open</a></li>
+  </ul></li>
+  <li><a href="#further-reading" id="toc-further-reading" class="nav-link" data-scroll-target="#further-reading">Further reading</a></li>
+  </ul></li>
+  </ul>
+<div class="toc-actions"><ul><li><a href="https://github.com/magrilu/cv-dojo/issues/new" class="toc-action"><i class="bi bi-github"></i>Report an issue</a></li></ul></div></nav>
+    </div>
+<!-- main -->
+<main class="content page-columns page-full" id="quarto-document-content"><header id="title-block-header" class="quarto-title-block"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../notebooks/reconstruction/triangulation.html">Reconstruction</a></li><li class="breadcrumb-item"><a href="../../notebooks/reconstruction/triangulation.html">Projective structure from two views</a></li></ol></nav></header>
+
+
+
+
+<p><a href="https://colab.research.google.com/github/magrilu/cv-dojo/blob/main/notebooks/reconstruction/triangulation.ipynb"><img src="https://colab.research.google.com/assets/colab-badge.svg" class="img-fluid"></a></p>
+<section id="projective-structure-from-two-views" class="level1 page-columns page-full">
+<h1>Projective structure from two views</h1>
+<p>In this notebook we will build our first 3D reconstruction from real images.</p>
+<p>Starting from a pair of cameras and a set of corresponding image points, we will introduce <strong>DLT triangulation</strong> to recover the 3D points that generated those observations. As in the previous fitting problems, the linear solution will only be our starting point: we will then measure a geometrically meaningful quantity — the <strong>reprojection error</strong> — and use it to refine the reconstructed points.</p>
+<p>Our scene is the familiar Origami House, but we should already adjust our expectations a little.</p>
+<p>First, with only two images we can reconstruct only the points that are visible and matched in both views. In our case, this means just a handful of vertices on the visible part of the house, together with the four corners of the small door. We are therefore building a super sparse reconstruction.</p>
+<p>Second, our cameras come from the fundamental matrix and are not calibrated. The resulting reconstruction will therefore be determined only <strong>up to a 3D projective transformation</strong>. The reconstructed house may consequently look rather different from the neat Euclidean object we have in mind: lengths, angles, and parallelism are not yet part of the geometry we have recovered.</p>
+<section id="our-input" class="level2">
+<h2 class="anchored" data-anchor-id="our-input">Our input</h2>
+<p>The ten correspondences are real noisy image measurements. Six labels, <span class="math inline">\(X_0,X_1,X_4,X_5,X_8,X_9\)</span>, belong to the structural wireframe of the Origami House. The four labels <span class="math inline">\(D_0,\ldots,D_3\)</span> are the corners of the door.</p>
+<div id="cell-fig-input-correspondences" class="cell" data-execution_count="2">
+<div class="cell-output cell-output-display">
+<div id="fig-input-correspondences" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-input-correspondences-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="triangulation_files/figure-html/fig-input-correspondences-output-1.png" width="1259" height="650" class="figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-input-correspondences-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;1: The ten noisy correspondences used throughout the notebook. The four <span class="math inline">\(D_i\)</span> points are the corners of the small door; they were not part of the ideal 3D house model used in some of the previous controlled experiments.
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="preprocessing" class="level2">
+<h2 class="anchored" data-anchor-id="preprocessing">Preprocessing</h2>
+<p>To improve the results slightly, before starting our analysis we undistort the images, so that from this point on we can assume a pinhole camera model</p>
+<div id="5" class="cell" data-execution_count="3">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># The lens distorsion parameters are already stored with the Origami House data. They have been estimated using COLMAP using a hundred of images.</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="cf">with</span> <span class="bu">open</span>(ROOT <span class="op">/</span> <span class="st">"data/dojo_house/annotations/triangulation.json"</span>) <span class="im">as</span> f:</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>    camera_data <span class="op">=</span> json.load(f)</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>cam <span class="op">=</span> camera_data[<span class="st">"camera"</span>]</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>f, cx, cy, k1 <span class="op">=</span> cam[<span class="st">"f"</span>], cam[<span class="st">"cx"</span>], cam[<span class="st">"cy"</span>], cam[<span class="st">"k1"</span>]</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>scale <span class="op">=</span> camera_data[<span class="st">"display_to_colmap_mapping"</span>][<span class="st">"uniform_scale"</span>]</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> display_to_colmap(xy):</span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""Displayed clockwise-rotated JPEG -&gt; original COLMAP pixel coordinates."""</span></span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>    u, v <span class="op">=</span> np.asarray(xy, <span class="bu">float</span>)</span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> np.array([scale <span class="op">*</span> v, scale <span class="op">*</span> (W_IMG <span class="op">-</span> u)])</span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> colmap_to_display(xy):</span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""Original COLMAP pixel coordinates -&gt; displayed JPEG coordinates."""</span></span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a>    u, v <span class="op">=</span> np.asarray(xy, <span class="bu">float</span>)</span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> np.array([W_IMG <span class="op">-</span> v <span class="op">/</span> scale, u <span class="op">/</span> scale])</span>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> undistort_display_point(xy):</span>
+<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""Invert COLMAP SIMPLE_RADIAL, but return an undistorted DISPLAY-pixel point."""</span></span>
+<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a>    ud, vd <span class="op">=</span> display_to_colmap(xy)</span>
+<span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a>    xd, yd <span class="op">=</span> (ud <span class="op">-</span> cx) <span class="op">/</span> f, (vd <span class="op">-</span> cy) <span class="op">/</span> f</span>
+<span id="cb1-26"><a href="#cb1-26" aria-hidden="true" tabindex="-1"></a>    x, y <span class="op">=</span> xd, yd</span>
+<span id="cb1-27"><a href="#cb1-27" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> _ <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">12</span>):</span>
+<span id="cb1-28"><a href="#cb1-28" aria-hidden="true" tabindex="-1"></a>        fac <span class="op">=</span> <span class="fl">1.0</span> <span class="op">+</span> k1 <span class="op">*</span> (x<span class="op">*</span>x <span class="op">+</span> y<span class="op">*</span>y)</span>
+<span id="cb1-29"><a href="#cb1-29" aria-hidden="true" tabindex="-1"></a>        x, y <span class="op">=</span> xd <span class="op">/</span> fac, yd <span class="op">/</span> fac</span>
+<span id="cb1-30"><a href="#cb1-30" aria-hidden="true" tabindex="-1"></a>    uu, vu <span class="op">=</span> f<span class="op">*</span>x <span class="op">+</span> cx, f<span class="op">*</span>y <span class="op">+</span> cy</span>
+<span id="cb1-31"><a href="#cb1-31" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> colmap_to_display([uu, vu])</span>
+<span id="cb1-32"><a href="#cb1-32" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-33"><a href="#cb1-33" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-34"><a href="#cb1-34" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> undistort_points(x):</span>
+<span id="cb1-35"><a href="#cb1-35" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> h(np.array([undistort_display_point(p[:<span class="dv">2</span>]) <span class="cf">for</span> p <span class="kw">in</span> x]))</span>
+<span id="cb1-36"><a href="#cb1-36" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-37"><a href="#cb1-37" aria-hidden="true" tabindex="-1"></a>x  <span class="op">=</span> undistort_points(x_raw)</span>
+<span id="cb1-38"><a href="#cb1-38" aria-hidden="true" tabindex="-1"></a>xp <span class="op">=</span> undistort_points(xp_raw)</span>
+<span id="cb1-39"><a href="#cb1-39" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-40"><a href="#cb1-40" aria-hidden="true" tabindex="-1"></a>shift <span class="op">=</span> np.r_[np.linalg.norm(x[:,:<span class="dv">2</span>]<span class="op">-</span>x_raw[:,:<span class="dv">2</span>], axis<span class="op">=</span><span class="dv">1</span>),</span>
+<span id="cb1-41"><a href="#cb1-41" aria-hidden="true" tabindex="-1"></a>              np.linalg.norm(xp[:,:<span class="dv">2</span>]<span class="op">-</span>xp_raw[:,:<span class="dv">2</span>], axis<span class="op">=</span><span class="dv">1</span>)]</span>
+<span id="cb1-42"><a href="#cb1-42" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"maximum radial correction: </span><span class="sc">{</span>shift<span class="sc">.</span><span class="bu">max</span>()<span class="sc">:.2f}</span><span class="ss"> px"</span>)</span>
+<span id="cb1-43"><a href="#cb1-43" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"median radial correction:  </span><span class="sc">{</span>np<span class="sc">.</span>median(shift)<span class="sc">:.2f}</span><span class="ss"> px"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>maximum radial correction: 0.46 px
+median radial correction:  0.16 px</code></pre>
+</div>
+</div>
+<div id="cell-fig-undistortion" class="cell" data-execution_count="4">
+<div class="cell-output cell-output-display">
+<div id="fig-undistortion" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-undistortion-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="triangulation_files/figure-html/fig-undistortion-output-1.png" width="1259" height="650" class="figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-undistortion-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;2: Original points before (hollow circles) and after (filled dots) radial undistortion. The connecting segments show the image displacement induced by the lens correction. The distortion is particularly visible at the borders of the images
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<section id="recover-the-epipolar-geometry" class="level3">
+<h3 class="anchored" data-anchor-id="recover-the-epipolar-geometry">Recover the epipolar geometry</h3>
+<p>We now repeat, compactly, the fundamental-matrix estimation pipeline, from DLT to non-linear refinement.</p>
+<ol type="1">
+<li>Hartley-normalize the undistorted correspondences;</li>
+<li>estimate <span class="math inline">\(\mathsf F\)</span> with the normalized eight-point algorithm and enforce rank two;</li>
+<li>use that result to initialize a nonlinear minimization of the <strong>Sampson residual</strong>.</li>
+</ol>
+<p>The refined matrix is the object we carry into reconstruction.</p>
+<div id="8" class="cell" data-execution_count="5">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> normalize_points(x):</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>    c <span class="op">=</span> x[:, :<span class="dv">2</span>].mean(axis<span class="op">=</span><span class="dv">0</span>)</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>    d <span class="op">=</span> np.linalg.norm(x[:, :<span class="dv">2</span>] <span class="op">-</span> c, axis<span class="op">=</span><span class="dv">1</span>).mean()</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>    s <span class="op">=</span> np.sqrt(<span class="fl">2.0</span>) <span class="op">/</span> d</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>    T <span class="op">=</span> np.array([[s, <span class="dv">0</span>, <span class="op">-</span>s<span class="op">*</span>c[<span class="dv">0</span>]], [<span class="dv">0</span>, s, <span class="op">-</span>s<span class="op">*</span>c[<span class="dv">1</span>]], [<span class="dv">0</span>, <span class="dv">0</span>, <span class="fl">1.0</span>]])</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> (T <span class="op">@</span> x.T).T, T</span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> design_matrix(x, xp):</span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>    u, v <span class="op">=</span> x[:,<span class="dv">0</span>], x[:,<span class="dv">1</span>]</span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>    up, vp <span class="op">=</span> xp[:,<span class="dv">0</span>], xp[:,<span class="dv">1</span>]</span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> np.column_stack([up<span class="op">*</span>u, up<span class="op">*</span>v, up,</span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a>                            vp<span class="op">*</span>u, vp<span class="op">*</span>v, vp,</span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a>                            u, v, np.ones(<span class="bu">len</span>(x))])</span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> eight_point(x, xp):</span>
+<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a>    xn, T <span class="op">=</span> normalize_points(x)</span>
+<span id="cb3-19"><a href="#cb3-19" aria-hidden="true" tabindex="-1"></a>    xpn, Tp <span class="op">=</span> normalize_points(xp)</span>
+<span id="cb3-20"><a href="#cb3-20" aria-hidden="true" tabindex="-1"></a>    Fh <span class="op">=</span> np.linalg.svd(design_matrix(xn, xpn))[<span class="dv">2</span>][<span class="op">-</span><span class="dv">1</span>].reshape(<span class="dv">3</span>,<span class="dv">3</span>)</span>
+<span id="cb3-21"><a href="#cb3-21" aria-hidden="true" tabindex="-1"></a>    U, s, Vt <span class="op">=</span> np.linalg.svd(Fh)</span>
+<span id="cb3-22"><a href="#cb3-22" aria-hidden="true" tabindex="-1"></a>    s[<span class="op">-</span><span class="dv">1</span>] <span class="op">=</span> <span class="fl">0.0</span></span>
+<span id="cb3-23"><a href="#cb3-23" aria-hidden="true" tabindex="-1"></a>    Fh <span class="op">=</span> U <span class="op">@</span> np.diag(s) <span class="op">@</span> Vt</span>
+<span id="cb3-24"><a href="#cb3-24" aria-hidden="true" tabindex="-1"></a>    F <span class="op">=</span> Tp.T <span class="op">@</span> Fh <span class="op">@</span> T</span>
+<span id="cb3-25"><a href="#cb3-25" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> F <span class="op">/</span> np.linalg.norm(F)</span>
+<span id="cb3-26"><a href="#cb3-26" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-27"><a href="#cb3-27" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-28"><a href="#cb3-28" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> sampson_residual(F, x, xp):</span>
+<span id="cb3-29"><a href="#cb3-29" aria-hidden="true" tabindex="-1"></a>    Fx <span class="op">=</span> (F <span class="op">@</span> x.T).T</span>
+<span id="cb3-30"><a href="#cb3-30" aria-hidden="true" tabindex="-1"></a>    Ftxp <span class="op">=</span> (F.T <span class="op">@</span> xp.T).T</span>
+<span id="cb3-31"><a href="#cb3-31" aria-hidden="true" tabindex="-1"></a>    C <span class="op">=</span> np.<span class="bu">sum</span>(xp <span class="op">*</span> Fx, axis<span class="op">=</span><span class="dv">1</span>)</span>
+<span id="cb3-32"><a href="#cb3-32" aria-hidden="true" tabindex="-1"></a>    den <span class="op">=</span> Fx[:,<span class="dv">0</span>]<span class="op">**</span><span class="dv">2</span> <span class="op">+</span> Fx[:,<span class="dv">1</span>]<span class="op">**</span><span class="dv">2</span> <span class="op">+</span> Ftxp[:,<span class="dv">0</span>]<span class="op">**</span><span class="dv">2</span> <span class="op">+</span> Ftxp[:,<span class="dv">1</span>]<span class="op">**</span><span class="dv">2</span></span>
+<span id="cb3-33"><a href="#cb3-33" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> C <span class="op">/</span> np.sqrt(np.maximum(den, <span class="fl">1e-15</span>))</span>
+<span id="cb3-34"><a href="#cb3-34" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-35"><a href="#cb3-35" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-36"><a href="#cb3-36" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> rodrigues(w):</span>
+<span id="cb3-37"><a href="#cb3-37" aria-hidden="true" tabindex="-1"></a>    th <span class="op">=</span> np.linalg.norm(w)</span>
+<span id="cb3-38"><a href="#cb3-38" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> th <span class="op">&lt;</span> <span class="fl">1e-12</span>:</span>
+<span id="cb3-39"><a href="#cb3-39" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> np.eye(<span class="dv">3</span>)</span>
+<span id="cb3-40"><a href="#cb3-40" aria-hidden="true" tabindex="-1"></a>    K <span class="op">=</span> skew(w <span class="op">/</span> th)</span>
+<span id="cb3-41"><a href="#cb3-41" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> np.eye(<span class="dv">3</span>) <span class="op">+</span> np.sin(th)<span class="op">*</span>K <span class="op">+</span> (<span class="dv">1</span><span class="op">-</span>np.cos(th))<span class="op">*</span>(K<span class="op">@</span>K)</span>
+<span id="cb3-42"><a href="#cb3-42" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-43"><a href="#cb3-43" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-44"><a href="#cb3-44" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> log_SO3(R):</span>
+<span id="cb3-45"><a href="#cb3-45" aria-hidden="true" tabindex="-1"></a>    c <span class="op">=</span> np.clip((np.trace(R)<span class="op">-</span><span class="dv">1</span>)<span class="op">/</span><span class="dv">2</span>, <span class="op">-</span><span class="fl">1.0</span>, <span class="fl">1.0</span>)</span>
+<span id="cb3-46"><a href="#cb3-46" aria-hidden="true" tabindex="-1"></a>    th <span class="op">=</span> np.arccos(c)</span>
+<span id="cb3-47"><a href="#cb3-47" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> th <span class="op">&lt;</span> <span class="fl">1e-9</span>:</span>
+<span id="cb3-48"><a href="#cb3-48" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> np.zeros(<span class="dv">3</span>)</span>
+<span id="cb3-49"><a href="#cb3-49" aria-hidden="true" tabindex="-1"></a>    w <span class="op">=</span> np.array([R[<span class="dv">2</span>,<span class="dv">1</span>]<span class="op">-</span>R[<span class="dv">1</span>,<span class="dv">2</span>], R[<span class="dv">0</span>,<span class="dv">2</span>]<span class="op">-</span>R[<span class="dv">2</span>,<span class="dv">0</span>], R[<span class="dv">1</span>,<span class="dv">0</span>]<span class="op">-</span>R[<span class="dv">0</span>,<span class="dv">1</span>]])</span>
+<span id="cb3-50"><a href="#cb3-50" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> th <span class="op">*</span> w <span class="op">/</span> (<span class="dv">2</span><span class="op">*</span>np.sin(th))</span>
+<span id="cb3-51"><a href="#cb3-51" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-52"><a href="#cb3-52" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-53"><a href="#cb3-53" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> F_from_params(p):</span>
+<span id="cb3-54"><a href="#cb3-54" aria-hidden="true" tabindex="-1"></a>    U, V <span class="op">=</span> rodrigues(p[:<span class="dv">3</span>]), rodrigues(p[<span class="dv">3</span>:<span class="dv">6</span>])</span>
+<span id="cb3-55"><a href="#cb3-55" aria-hidden="true" tabindex="-1"></a>    q <span class="op">=</span> np.clip(p[<span class="dv">6</span>], <span class="op">-</span><span class="dv">30</span>, <span class="dv">30</span>)</span>
+<span id="cb3-56"><a href="#cb3-56" aria-hidden="true" tabindex="-1"></a>    s <span class="op">=</span> <span class="fl">1.0</span> <span class="op">/</span> (<span class="fl">1.0</span> <span class="op">+</span> np.exp(<span class="op">-</span>q))</span>
+<span id="cb3-57"><a href="#cb3-57" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> U <span class="op">@</span> np.diag([<span class="fl">1.0</span>, s, <span class="fl">0.0</span>]) <span class="op">@</span> V.T</span>
+<span id="cb3-58"><a href="#cb3-58" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-59"><a href="#cb3-59" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-60"><a href="#cb3-60" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> params_from_F(F):</span>
+<span id="cb3-61"><a href="#cb3-61" aria-hidden="true" tabindex="-1"></a>    U, s, Vt <span class="op">=</span> np.linalg.svd(F)</span>
+<span id="cb3-62"><a href="#cb3-62" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> np.linalg.det(U) <span class="op">&lt;</span> <span class="dv">0</span>:</span>
+<span id="cb3-63"><a href="#cb3-63" aria-hidden="true" tabindex="-1"></a>        U[:,<span class="dv">2</span>] <span class="op">*=</span> <span class="op">-</span><span class="dv">1</span></span>
+<span id="cb3-64"><a href="#cb3-64" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> np.linalg.det(Vt) <span class="op">&lt;</span> <span class="dv">0</span>:</span>
+<span id="cb3-65"><a href="#cb3-65" aria-hidden="true" tabindex="-1"></a>        Vt[<span class="dv">2</span>,:] <span class="op">*=</span> <span class="op">-</span><span class="dv">1</span></span>
+<span id="cb3-66"><a href="#cb3-66" aria-hidden="true" tabindex="-1"></a>    ratio <span class="op">=</span> np.clip(s[<span class="dv">1</span>] <span class="op">/</span> s[<span class="dv">0</span>], <span class="fl">1e-6</span>, <span class="dv">1</span><span class="op">-</span><span class="fl">1e-6</span>)</span>
+<span id="cb3-67"><a href="#cb3-67" aria-hidden="true" tabindex="-1"></a>    q <span class="op">=</span> np.log(ratio <span class="op">/</span> (<span class="dv">1</span><span class="op">-</span>ratio))</span>
+<span id="cb3-68"><a href="#cb3-68" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> np.r_[log_SO3(U), log_SO3(Vt.T), q]</span>
+<span id="cb3-69"><a href="#cb3-69" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-70"><a href="#cb3-70" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-71"><a href="#cb3-71" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> refine_sampson(F0, x, xp):</span>
+<span id="cb3-72"><a href="#cb3-72" aria-hidden="true" tabindex="-1"></a>    p0 <span class="op">=</span> params_from_F(F0)</span>
+<span id="cb3-73"><a href="#cb3-73" aria-hidden="true" tabindex="-1"></a>    opt <span class="op">=</span> least_squares(<span class="kw">lambda</span> p: sampson_residual(F_from_params(p), x, xp),</span>
+<span id="cb3-74"><a href="#cb3-74" aria-hidden="true" tabindex="-1"></a>                        p0, method<span class="op">=</span><span class="st">"lm"</span>, xtol<span class="op">=</span><span class="fl">1e-12</span>, ftol<span class="op">=</span><span class="fl">1e-12</span>,</span>
+<span id="cb3-75"><a href="#cb3-75" aria-hidden="true" tabindex="-1"></a>                        gtol<span class="op">=</span><span class="fl">1e-12</span>, max_nfev<span class="op">=</span><span class="dv">5000</span>)</span>
+<span id="cb3-76"><a href="#cb3-76" aria-hidden="true" tabindex="-1"></a>    F <span class="op">=</span> F_from_params(opt.x)</span>
+<span id="cb3-77"><a href="#cb3-77" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> F <span class="op">/</span> np.linalg.norm(F), opt</span>
+<span id="cb3-78"><a href="#cb3-78" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-79"><a href="#cb3-79" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-80"><a href="#cb3-80" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> rms(v):</span>
+<span id="cb3-81"><a href="#cb3-81" aria-hidden="true" tabindex="-1"></a>    v <span class="op">=</span> np.asarray(v, <span class="bu">float</span>)</span>
+<span id="cb3-82"><a href="#cb3-82" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="bu">float</span>(np.sqrt(np.mean(v<span class="op">*</span>v)))</span>
+<span id="cb3-83"><a href="#cb3-83" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-84"><a href="#cb3-84" aria-hidden="true" tabindex="-1"></a>F_dlt <span class="op">=</span> eight_point(x, xp)</span>
+<span id="cb3-85"><a href="#cb3-85" aria-hidden="true" tabindex="-1"></a>F, optF <span class="op">=</span> refine_sampson(F_dlt, x, xp)</span>
+<span id="cb3-86"><a href="#cb3-86" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-87"><a href="#cb3-87" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Sampson RMS, DLT:     </span><span class="sc">{</span>rms(sampson_residual(F_dlt, x, xp))<span class="sc">:.3f}</span><span class="ss"> px"</span>)</span>
+<span id="cb3-88"><a href="#cb3-88" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Sampson RMS, refined: </span><span class="sc">{</span>rms(sampson_residual(F, x, xp))<span class="sc">:.3f}</span><span class="ss"> px"</span>)</span>
+<span id="cb3-89"><a href="#cb3-89" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"rank(F) ="</span>, np.linalg.matrix_rank(F))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Sampson RMS, DLT:     10.806 px
+Sampson RMS, refined: 0.594 px
+rank(F) = 2</code></pre>
+</div>
+</div>
+</section>
+<section id="recovery-of-a-pair-of-projective-cameras" class="level3">
+<h3 class="anchored" data-anchor-id="recovery-of-a-pair-of-projective-cameras">Recovery of a pair of projective cameras</h3>
+<p>Since the fundamental matrix does not determine a unique physical stereo rig, it cannot recover a unique pair of Euclidean cameras. Instead, it determines a pair of cameras only <strong>up to a 3D projective transformation</strong>. For our purposes, we can therefore choose a convenient <strong>canonical projective realization</strong>.</p>
+<p>We fix the world reference frame by choosing the first camera as</p>
+<p><span class="math display">\[
+\mathsf P=[I\mid\mathbf 0].
+\]</span></p>
+<p>If <span class="math inline">\(\mathbf e'\)</span> denotes the epipole in the second image, a compatible second camera is</p>
+<p><span class="math display">\[
+\mathsf P'
+=
+\left[
+[\mathbf e']_\times \mathsf F
+\;\middle|\;
+\mathbf e'
+\right].
+\]</span></p>
+<p>This canonical pair reproduces exactly the epipolar geometry encoded by <span class="math inline">\(\mathsf F\)</span>. However, these cameras should <strong>not be interpreted as the physical Euclidean cameras</strong> <span class="math inline">\(K[R\mid t]\)</span> that acquired the images. Consequently, the 3D coordinates defined by this reconstruction are <strong>projective coordinates</strong>, rather than Euclidean ones.</p>
+<div id="10" class="cell" data-execution_count="6">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> canonical_cameras(F):</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>    U, _, _ <span class="op">=</span> np.linalg.svd(F)</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>    ep <span class="op">=</span> U[:, <span class="op">-</span><span class="dv">1</span>]                    <span class="co"># left null vector: e'^T F = 0</span></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>    ep <span class="op">/=</span> np.linalg.norm(ep)</span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>    P <span class="op">=</span> np.c_[np.eye(<span class="dv">3</span>), np.zeros(<span class="dv">3</span>)]</span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>    Pp <span class="op">=</span> np.c_[skew(ep) <span class="op">@</span> F, ep]</span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> P, Pp, ep</span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> unit_F(F):</span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> F <span class="op">/</span> np.linalg.norm(F)</span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> F_from_cameras(P, Pp):</span>
+<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a>    C <span class="op">=</span> np.linalg.svd(P)[<span class="dv">2</span>][<span class="op">-</span><span class="dv">1</span>]</span>
+<span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a>    ep <span class="op">=</span> Pp <span class="op">@</span> C</span>
+<span id="cb5-17"><a href="#cb5-17" aria-hidden="true" tabindex="-1"></a>    Fc <span class="op">=</span> skew(ep) <span class="op">@</span> Pp <span class="op">@</span> np.linalg.pinv(P)</span>
+<span id="cb5-18"><a href="#cb5-18" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> unit_F(Fc)</span>
+<span id="cb5-19"><a href="#cb5-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-20"><a href="#cb5-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-21"><a href="#cb5-21" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> projective_F_distance(F1, F2):</span>
+<span id="cb5-22"><a href="#cb5-22" aria-hidden="true" tabindex="-1"></a>    A, B <span class="op">=</span> unit_F(F1), unit_F(F2)</span>
+<span id="cb5-23"><a href="#cb5-23" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="bu">min</span>(np.linalg.norm(A<span class="op">-</span>B), np.linalg.norm(A<span class="op">+</span>B))</span>
+<span id="cb5-24"><a href="#cb5-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-25"><a href="#cb5-25" aria-hidden="true" tabindex="-1"></a>P, Pp, ep <span class="op">=</span> canonical_cameras(F)</span>
+<span id="cb5-26"><a href="#cb5-26" aria-hidden="true" tabindex="-1"></a>F_check <span class="op">=</span> F_from_cameras(P, Pp)</span>
+<span id="cb5-27"><a href="#cb5-27" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-28"><a href="#cb5-28" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"epipole in view 2 ~"</span>, np.<span class="bu">round</span>(ep, <span class="dv">4</span>))</span>
+<span id="cb5-29"><a href="#cb5-29" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"distance between input F and F induced by (P,P'):"</span>,</span>
+<span id="cb5-30"><a href="#cb5-30" aria-hidden="true" tabindex="-1"></a>      <span class="ss">f"</span><span class="sc">{</span>projective_F_distance(F, F_check)<span class="sc">:.2e}</span><span class="ss">"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>epipole in view 2 ~ [0.2464 0.9692 0.0006]
+distance between input F and F induced by (P,P'): 1.11e-16</code></pre>
+</div>
+</div>
+</section>
+</section>
+<section id="triangulation-with-dlt" class="level2">
+<h2 class="anchored" data-anchor-id="triangulation-with-dlt">Triangulation with DLT</h2>
+<p>Now that we have recovered a pair of cameras from the fundamental matrix, we can get to the heart of this notebook: <strong>triangulation</strong>.</p>
+<p>For one correspondence <span class="math inline">\(\mathbf x \leftrightarrow \mathbf x'\)</span>, we seek a homogeneous 3D point <span class="math inline">\(\widetilde{\mathbf X}\)</span> such that</p>
+<p><span class="math display">\[
+\lambda \mathbf x = P\widetilde{\mathbf X},
+\qquad
+\lambda' \mathbf x' = P'\widetilde{\mathbf X},
+\]</span></p>
+<p>where <span class="math inline">\(\lambda\)</span> and <span class="math inline">\(\lambda'\)</span> are the unknown depths of the point in the two views.</p>
+<p>We can eliminate these unknown scale factors by taking a cross product:</p>
+<p><span class="math display">\[
+\mathbf x \times P\widetilde{\mathbf X}=0,
+\qquad
+\mathbf x' \times P'\widetilde{\mathbf X}=0.
+\]</span></p>
+<p>Equivalently, using the skew-symmetric matrix associated with the cross product,</p>
+<p><span class="math display">\[
+[\mathbf x]_\times P\widetilde{\mathbf X}=0,
+\qquad
+[\mathbf x']_\times P'\widetilde{\mathbf X}=0.
+\]</span></p>
+<p>Since a <span class="math inline">\(3\times3\)</span> cross-product matrix has rank two, each view provides only <strong>two independent equations</strong>. Writing the rows of <span class="math inline">\(P\)</span> as <span class="math inline">\(P_1^\top,P_2^\top,P_3^\top\)</span>, and similarly for <span class="math inline">\(P'\)</span>, we obtain the homogeneous linear system</p>
+<p><span class="math display">\[
+A\widetilde{\mathbf X}=0,
+\]</span></p>
+<p>with</p>
+<p><span class="math display">\[
+A=
+\begin{bmatrix}
+uP_3^\top-P_1^\top\\
+vP_3^\top-P_2^\top\\
+u'P_3'^\top-P_1'^\top\\
+v'P_3'^\top-P_2'^\top
+\end{bmatrix}.
+\]</span></p>
+<p>With perfect measurements, these four equations admit a common solution. With real, noisy correspondences, however, they generally do not. <strong>DLT triangulation</strong> therefore looks for the unit homogeneous vector that minimizes</p>
+<p><span class="math display">\[
+\|A\widetilde{\mathbf X}\|,
+\]</span></p>
+<p>which is simply the right singular vector of <span class="math inline">\(A\)</span> associated with its smallest singular value.</p>
+<p>Notice that <strong>nothing in this derivation requires camera calibration</strong>. The same construction works for the projective cameras recovered from the fundamental matrix, and therefore produces a projective 3D reconstruction.</p>
+<div id="12" class="cell" data-execution_count="7">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> triangulate_dlt(P, Pp, x, xp):</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>    u, v <span class="op">=</span> x[:<span class="dv">2</span>]</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>    up, vp <span class="op">=</span> xp[:<span class="dv">2</span>]</span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>    A <span class="op">=</span> np.vstack([</span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>        u  <span class="op">*</span> P[<span class="dv">2</span>]  <span class="op">-</span> P[<span class="dv">0</span>],</span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>        v  <span class="op">*</span> P[<span class="dv">2</span>]  <span class="op">-</span> P[<span class="dv">1</span>],</span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>        up <span class="op">*</span> Pp[<span class="dv">2</span>] <span class="op">-</span> Pp[<span class="dv">0</span>],</span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>        vp <span class="op">*</span> Pp[<span class="dv">2</span>] <span class="op">-</span> Pp[<span class="dv">1</span>],</span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>    ])</span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Row scaling changes the algebraic weighting but not the exact equations;</span></span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a>    <span class="co"># it keeps the small 4x4 system numerically better balanced in pixel coordinates.</span></span>
+<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a>    A <span class="op">=</span> A <span class="op">/</span> np.maximum(np.linalg.norm(A, axis<span class="op">=</span><span class="dv">1</span>, keepdims<span class="op">=</span><span class="va">True</span>), <span class="fl">1e-15</span>)</span>
+<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a>    _, _, Vt <span class="op">=</span> np.linalg.svd(A)</span>
+<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a>    Xh <span class="op">=</span> Vt[<span class="op">-</span><span class="dv">1</span>]</span>
+<span id="cb7-15"><a href="#cb7-15" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> Xh <span class="op">/</span> np.linalg.norm(Xh), A</span>
+<span id="cb7-16"><a href="#cb7-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-17"><a href="#cb7-17" aria-hidden="true" tabindex="-1"></a>X_dlt <span class="op">=</span> {}</span>
+<span id="cb7-18"><a href="#cb7-18" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> k, xi, xpi <span class="kw">in</span> <span class="bu">zip</span>(rid, x, xp):</span>
+<span id="cb7-19"><a href="#cb7-19" aria-hidden="true" tabindex="-1"></a>    Xh, _ <span class="op">=</span> triangulate_dlt(P, Pp, xi, xpi)</span>
+<span id="cb7-20"><a href="#cb7-20" aria-hidden="true" tabindex="-1"></a>    X_dlt[k] <span class="op">=</span> Xh</span>
+<span id="cb7-21"><a href="#cb7-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-22"><a href="#cb7-22" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"one homogeneous reconstructed point:"</span>)</span>
+<span id="cb7-23"><a href="#cb7-23" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"X9 ~"</span>, np.<span class="bu">round</span>(X_dlt[<span class="st">"X9"</span>], <span class="dv">5</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>one homogeneous reconstructed point:
+X9 ~ [-0.6242 -0.7813 -0.0007  0.0015]</code></pre>
+</div>
+</div>
+</section>
+<section id="the-first-3d-reconstruction" class="level2">
+<h2 class="anchored" data-anchor-id="the-first-3d-reconstruction">The first 3D reconstruction</h2>
+<p>To make the reconstruction easier to visualize, we connect the reconstructed vertices using the connectivity of the Origami House model. In other words, the model only tells us which points should be connected. The 3D coordinates shown below are entirely those obtained from triangulation.</p>
+<p>Do not expect the reconstructed house to look perfectly regular. There are two reasons for this. First, we are reconstructing a real origami model, which was not folded with perfect geometric accuracy. More importantly, even if the physical house had been perfectly constructed, our reconstruction would still be determined only <strong>up to a 3D projective transformation</strong>. Angles, lengths, parallelism, and the overall shape are therefore not expected to be preserved.</p>
+<p>To make the result a little easier to inspect, we apply a simple 3D similarity transformation: we center the reconstructed points, use PCA to choose a convenient orientation, and apply a uniform scale.</p>
+<p>This does not change the nature of the reconstruction. A similarity is itself a projective transformation, and the composition of two projective transformations is still a projective transformation. So do not be alarmed by what comes next: we do not expect to get the 3D origami house that our “euclidean eyes” are used to see.</p>
+<div id="14" class="cell" data-execution_count="8">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> dehom(Xh):</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>    Xh <span class="op">=</span> np.asarray(Xh, <span class="bu">float</span>)</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> Xh[:<span class="dv">3</span>] <span class="op">/</span> Xh[<span class="dv">3</span>]</span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> plotting_similarity(Xdict):</span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>    Q <span class="op">=</span> np.vstack([dehom(Xdict[k]) <span class="cf">for</span> k <span class="kw">in</span> rid])</span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>    c <span class="op">=</span> Q.mean(axis<span class="op">=</span><span class="dv">0</span>)</span>
+<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a>    _, _, Vt <span class="op">=</span> np.linalg.svd(Q <span class="op">-</span> c, full_matrices<span class="op">=</span><span class="va">False</span>)</span>
+<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a>    R <span class="op">=</span> Vt.copy()</span>
+<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> np.linalg.det(R) <span class="op">&lt;</span> <span class="dv">0</span>:</span>
+<span id="cb9-12"><a href="#cb9-12" aria-hidden="true" tabindex="-1"></a>        R[<span class="op">-</span><span class="dv">1</span>] <span class="op">*=</span> <span class="op">-</span><span class="dv">1</span></span>
+<span id="cb9-13"><a href="#cb9-13" aria-hidden="true" tabindex="-1"></a>    Y <span class="op">=</span> (R <span class="op">@</span> (Q<span class="op">-</span>c).T).T</span>
+<span id="cb9-14"><a href="#cb9-14" aria-hidden="true" tabindex="-1"></a>    s <span class="op">=</span> np.<span class="bu">max</span>(np.linalg.norm(Y, axis<span class="op">=</span><span class="dv">1</span>))</span>
+<span id="cb9-15"><a href="#cb9-15" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> c, R, <span class="bu">max</span>(s, <span class="fl">1e-12</span>)</span>
+<span id="cb9-16"><a href="#cb9-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-17"><a href="#cb9-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-18"><a href="#cb9-18" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> apply_plot_similarity(Xdict, sim):</span>
+<span id="cb9-19"><a href="#cb9-19" aria-hidden="true" tabindex="-1"></a>    c, R, s <span class="op">=</span> sim</span>
+<span id="cb9-20"><a href="#cb9-20" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> {k: R <span class="op">@</span> (dehom(Xdict[k])<span class="op">-</span>c) <span class="op">/</span> s <span class="cf">for</span> k <span class="kw">in</span> Xdict}</span>
+<span id="cb9-21"><a href="#cb9-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-22"><a href="#cb9-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-23"><a href="#cb9-23" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> draw_wireframe(ax, Xdict, labels_on<span class="op">=</span><span class="va">True</span>):</span>
+<span id="cb9-24"><a href="#cb9-24" aria-hidden="true" tabindex="-1"></a>    house_edges <span class="op">=</span> [(a,b) <span class="cf">for</span> a,b <span class="kw">in</span> EDGES <span class="cf">if</span> a <span class="kw">in</span> Xdict <span class="kw">and</span> b <span class="kw">in</span> Xdict]</span>
+<span id="cb9-25"><a href="#cb9-25" aria-hidden="true" tabindex="-1"></a>    door_edges <span class="op">=</span> [(<span class="st">"D0"</span>,<span class="st">"D1"</span>), (<span class="st">"D1"</span>,<span class="st">"D2"</span>), (<span class="st">"D2"</span>,<span class="st">"D3"</span>), (<span class="st">"D3"</span>,<span class="st">"D0"</span>)]</span>
+<span id="cb9-26"><a href="#cb9-26" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-27"><a href="#cb9-27" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> a,b <span class="kw">in</span> house_edges:</span>
+<span id="cb9-28"><a href="#cb9-28" aria-hidden="true" tabindex="-1"></a>        q <span class="op">=</span> np.vstack([Xdict[a], Xdict[b]])</span>
+<span id="cb9-29"><a href="#cb9-29" aria-hidden="true" tabindex="-1"></a>        ax.plot(q[:,<span class="dv">0</span>], q[:,<span class="dv">1</span>], q[:,<span class="dv">2</span>], color<span class="op">=</span>ACCENT, lw<span class="op">=</span><span class="fl">2.2</span>)</span>
+<span id="cb9-30"><a href="#cb9-30" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> a,b <span class="kw">in</span> door_edges:</span>
+<span id="cb9-31"><a href="#cb9-31" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> a <span class="kw">in</span> Xdict <span class="kw">and</span> b <span class="kw">in</span> Xdict:</span>
+<span id="cb9-32"><a href="#cb9-32" aria-hidden="true" tabindex="-1"></a>            q <span class="op">=</span> np.vstack([Xdict[a], Xdict[b]])</span>
+<span id="cb9-33"><a href="#cb9-33" aria-hidden="true" tabindex="-1"></a>            ax.plot(q[:,<span class="dv">0</span>], q[:,<span class="dv">1</span>], q[:,<span class="dv">2</span>], color<span class="op">=</span>DOOR, lw<span class="op">=</span><span class="fl">2.6</span>)</span>
+<span id="cb9-34"><a href="#cb9-34" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-35"><a href="#cb9-35" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> k,p <span class="kw">in</span> Xdict.items():</span>
+<span id="cb9-36"><a href="#cb9-36" aria-hidden="true" tabindex="-1"></a>        col <span class="op">=</span> DOOR <span class="cf">if</span> k.startswith(<span class="st">"D"</span>) <span class="cf">else</span> BLUE</span>
+<span id="cb9-37"><a href="#cb9-37" aria-hidden="true" tabindex="-1"></a>        ax.scatter(<span class="op">*</span>p, s<span class="op">=</span><span class="dv">34</span>, color<span class="op">=</span>col)</span>
+<span id="cb9-38"><a href="#cb9-38" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> labels_on:</span>
+<span id="cb9-39"><a href="#cb9-39" aria-hidden="true" tabindex="-1"></a>            ax.text(<span class="op">*</span>(p <span class="op">+</span> np.array([<span class="fl">.025</span>,<span class="fl">.025</span>,<span class="fl">.025</span>])), k, fontsize<span class="op">=</span><span class="dv">8</span>)</span>
+<span id="cb9-40"><a href="#cb9-40" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-41"><a href="#cb9-41" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-42"><a href="#cb9-42" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> set_axes_equal(ax, pad<span class="op">=</span><span class="fl">.08</span>):</span>
+<span id="cb9-43"><a href="#cb9-43" aria-hidden="true" tabindex="-1"></a>    lim <span class="op">=</span> np.array([ax.get_xlim3d(), ax.get_ylim3d(), ax.get_zlim3d()], <span class="bu">float</span>)</span>
+<span id="cb9-44"><a href="#cb9-44" aria-hidden="true" tabindex="-1"></a>    cen <span class="op">=</span> lim.mean(axis<span class="op">=</span><span class="dv">1</span>)</span>
+<span id="cb9-45"><a href="#cb9-45" aria-hidden="true" tabindex="-1"></a>    rad <span class="op">=</span> <span class="fl">.5</span><span class="op">*</span>np.<span class="bu">max</span>(lim[:,<span class="dv">1</span>]<span class="op">-</span>lim[:,<span class="dv">0</span>])<span class="op">*</span>(<span class="dv">1</span><span class="op">+</span>pad)</span>
+<span id="cb9-46"><a href="#cb9-46" aria-hidden="true" tabindex="-1"></a>    ax.set_xlim(cen[<span class="dv">0</span>]<span class="op">-</span>rad, cen[<span class="dv">0</span>]<span class="op">+</span>rad)</span>
+<span id="cb9-47"><a href="#cb9-47" aria-hidden="true" tabindex="-1"></a>    ax.set_ylim(cen[<span class="dv">1</span>]<span class="op">-</span>rad, cen[<span class="dv">1</span>]<span class="op">+</span>rad)</span>
+<span id="cb9-48"><a href="#cb9-48" aria-hidden="true" tabindex="-1"></a>    ax.set_zlim(cen[<span class="dv">2</span>]<span class="op">-</span>rad, cen[<span class="dv">2</span>]<span class="op">+</span>rad)</span>
+<span id="cb9-49"><a href="#cb9-49" aria-hidden="true" tabindex="-1"></a>    ax.set_box_aspect((<span class="dv">1</span>,<span class="dv">1</span>,<span class="dv">1</span>))</span>
+<span id="cb9-50"><a href="#cb9-50" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-51"><a href="#cb9-51" aria-hidden="true" tabindex="-1"></a>plot_sim <span class="op">=</span> plotting_similarity(X_dlt)</span>
+<span id="cb9-52"><a href="#cb9-52" aria-hidden="true" tabindex="-1"></a>Xd <span class="op">=</span> apply_plot_similarity(X_dlt, plot_sim)</span>
+<span id="cb9-53"><a href="#cb9-53" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-54"><a href="#cb9-54" aria-hidden="true" tabindex="-1"></a>fig <span class="op">=</span> plt.figure(figsize<span class="op">=</span>(<span class="dv">9</span>,<span class="dv">7</span>))</span>
+<span id="cb9-55"><a href="#cb9-55" aria-hidden="true" tabindex="-1"></a>ax <span class="op">=</span> fig.add_subplot(<span class="dv">111</span>, projection<span class="op">=</span><span class="st">"3d"</span>)</span>
+<span id="cb9-56"><a href="#cb9-56" aria-hidden="true" tabindex="-1"></a>draw_wireframe(ax, Xd)</span>
+<span id="cb9-57"><a href="#cb9-57" aria-hidden="true" tabindex="-1"></a>ax.set_xlabel(<span class="st">"projective x"</span>)</span>
+<span id="cb9-58"><a href="#cb9-58" aria-hidden="true" tabindex="-1"></a>ax.set_ylabel(<span class="st">"projective y"</span>)</span>
+<span id="cb9-59"><a href="#cb9-59" aria-hidden="true" tabindex="-1"></a>ax.set_zlabel(<span class="st">"projective z"</span>)</span>
+<span id="cb9-60"><a href="#cb9-60" aria-hidden="true" tabindex="-1"></a>ax.set_title(<span class="st">"Projective reconstruction from the refined fundamental matrix"</span>)</span>
+<span id="cb9-61"><a href="#cb9-61" aria-hidden="true" tabindex="-1"></a>ax.view_init(elev<span class="op">=</span><span class="dv">19</span>, azim<span class="op">=-</span><span class="dv">63</span>)</span>
+<span id="cb9-62"><a href="#cb9-62" aria-hidden="true" tabindex="-1"></a>set_axes_equal(ax)</span>
+<span id="cb9-63"><a href="#cb9-63" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="triangulation_files/figure-html/cell-9-output-1.png" width="544" height="557" class="figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="projective-structure" class="level2 page-columns page-full">
+<h2 class="anchored" data-anchor-id="projective-structure">Projective structure</h2>
+<p>What we have recovered is not a Euclidean model of the Origami House, but a <strong>projective reconstruction</strong>:</p>
+<p>The scene is reconstructed up to a projective transformation of the world. This ambiguity is not a numerical artifact of the triangulation. It is intrinsic to uncalibrated two-view geometry.</p>
+<p>Indeed, let <span class="math inline">\(H\)</span> be any invertible <span class="math inline">\(4\times4\)</span> matrix. If we transform the reconstructed points and cameras as</p>
+<p><span class="math display">\[
+\widetilde{\mathbf X}_i' = H\widetilde{\mathbf X}_i,
+\qquad
+P_j' = P_jH^{-1},
+\]</span></p>
+<p>their image projections do not change:</p>
+<p><span class="math display">\[
+P_j'\widetilde{\mathbf X}_i'
+=
+P_jH^{-1}H\widetilde{\mathbf X}_i
+=
+P_j\widetilde{\mathbf X}_i.
+\]</span></p>
+<p>Therefore, infinitely many different-looking 3D reconstructions are perfectly compatible with exactly the same image measurements.</p>
+<p>What survives this ambiguity is <strong>projective geometry</strong>: incidence relations are preserved, so points remain on the corresponding lines and edges still meet at the same vertices. Euclidean properties, however, are not available yet: <strong>lengths, angles, parallelism, and physical camera baselines are not preserved by a general projective transformation</strong>.</p>
+<p>So the somewhat distorted house we obtained above is a representative of the whole family of projectively equivalent reconstructions.</p>
+<section id="a-glimpse-of-euclidean-structure" class="level3 page-columns page-full">
+<h3 class="anchored" data-anchor-id="a-glimpse-of-euclidean-structure">A glimpse of Euclidean structure</h3>
+<p>Somewhere in this family of projectively equivalent reconstruction there is also a reconstruction expressed in the <strong>Euclidean reference frame</strong> of the real scene.</p>
+<p>In principle, a projective reconstruction can be <strong>upgraded to a Euclidean one</strong> by finding the appropriate 3D projective transformation <span class="math inline">\(\mathsf H\)</span>. When this transformation is recovered from constraints on the cameras themselves, without relying on a known 3D reference object, the process is termed <strong>self-calibration</strong> (a.k.a. autocalibration).</p>
+<p>Here instead we cheat, and will do something much easier since we happen to know an idealized 3D model of the Origami House. We can therefore look for the projective transformation <span class="math inline">\(\mathsf H\)</span> that maps our reconstructed vertices as closely as possible onto the corresponding vertices of the ideal model:</p>
+<p><span class="math display">\[
+\widetilde{\mathbf X}_{\text{ideal}}
+\sim
+\mathsf H\widetilde{\mathbf X}_{\text{rec}}.
+\]</span></p>
+<p>Estimating <span class="math inline">\(H\)</span> is again a DLT problem, this time in <span class="math inline">\(\mathbb P^3\)</span>. Since two corresponding homogeneous 3D points must be <strong>proportional</strong>, each point correspondence provides three independent constraints on the <span class="math inline">\(4\times4\)</span> matrix <span class="math inline">\(H\)</span>.</p>
+<p>Again, this is <strong>not self-calibration</strong>: we are explicitly using a known 3D reference model, whereas genuine self-calibration tries to recover the Euclidean structure from properties of the cameras and images alone. Still, the spirit is similar: we are searching within the family of projectively equivalent reconstructions for one that looks more Euclidean.</p>
+<div id="17" class="cell" data-execution_count="9">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> homography_3d(Xa, Xb):</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""The 4x4 projectivity taking each Xa onto the corresponding Xb.</span></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a><span class="co">    Both sets are homogeneous 4-vectors. Each correspondence gives three</span></span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a><span class="co">    independent equations, from the fact that Xb and H Xa must be *proportional*</span></span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a><span class="co">    rather than equal — so we ask their cross products to vanish, pair of</span></span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a><span class="co">    coordinates by pair of coordinates.</span></span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a><span class="co">    """</span></span>
+<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a>    rows <span class="op">=</span> []</span>
+<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> a, b <span class="kw">in</span> <span class="bu">zip</span>(np.asarray(Xa, <span class="bu">float</span>), np.asarray(Xb, <span class="bu">float</span>)):</span>
+<span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> i, j <span class="kw">in</span> ((<span class="dv">0</span>, <span class="dv">3</span>), (<span class="dv">1</span>, <span class="dv">3</span>), (<span class="dv">2</span>, <span class="dv">3</span>)):</span>
+<span id="cb10-12"><a href="#cb10-12" aria-hidden="true" tabindex="-1"></a>            r <span class="op">=</span> np.zeros(<span class="dv">16</span>)</span>
+<span id="cb10-13"><a href="#cb10-13" aria-hidden="true" tabindex="-1"></a>            r[<span class="dv">4</span><span class="op">*</span>i:<span class="dv">4</span><span class="op">*</span>i<span class="op">+</span><span class="dv">4</span>] <span class="op">=</span>  b[j] <span class="op">*</span> a</span>
+<span id="cb10-14"><a href="#cb10-14" aria-hidden="true" tabindex="-1"></a>            r[<span class="dv">4</span><span class="op">*</span>j:<span class="dv">4</span><span class="op">*</span>j<span class="op">+</span><span class="dv">4</span>] <span class="op">=</span> <span class="op">-</span>b[i] <span class="op">*</span> a</span>
+<span id="cb10-15"><a href="#cb10-15" aria-hidden="true" tabindex="-1"></a>            rows.append(r)</span>
+<span id="cb10-16"><a href="#cb10-16" aria-hidden="true" tabindex="-1"></a>    H <span class="op">=</span> np.linalg.svd(np.array(rows))[<span class="dv">2</span>][<span class="op">-</span><span class="dv">1</span>].reshape(<span class="dv">4</span>, <span class="dv">4</span>)</span>
+<span id="cb10-17"><a href="#cb10-17" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> H <span class="op">/</span> np.linalg.norm(H)</span>
+<span id="cb10-18"><a href="#cb10-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-19"><a href="#cb10-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-20"><a href="#cb10-20" aria-hidden="true" tabindex="-1"></a><span class="co"># the ideal model, for comparison only — it plays no part in the reconstruction</span></span>
+<span id="cb10-21"><a href="#cb10-21" aria-hidden="true" tabindex="-1"></a>V3 <span class="op">=</span> {k: np.array(v, <span class="bu">float</span>) <span class="cf">for</span> k, v <span class="kw">in</span> model[<span class="st">"vertices"</span>].items()}</span>
+<span id="cb10-22"><a href="#cb10-22" aria-hidden="true" tabindex="-1"></a>shared <span class="op">=</span> [k <span class="cf">for</span> k <span class="kw">in</span> rid <span class="cf">if</span> k <span class="kw">in</span> V3]</span>
+<span id="cb10-23"><a href="#cb10-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-24"><a href="#cb10-24" aria-hidden="true" tabindex="-1"></a><span class="co"># Fifteen parameters, three equations per point: with ten vertices the fit is</span></span>
+<span id="cb10-25"><a href="#cb10-25" aria-hidden="true" tabindex="-1"></a><span class="co"># comfortably overdetermined. It is worth knowing that fewer would not do — see</span></span>
+<span id="cb10-26"><a href="#cb10-26" aria-hidden="true" tabindex="-1"></a><span class="co"># the questions at the end.</span></span>
+<span id="cb10-27"><a href="#cb10-27" aria-hidden="true" tabindex="-1"></a>Hp <span class="op">=</span> homography_3d(np.array([X_dlt[k] <span class="cf">for</span> k <span class="kw">in</span> shared]),</span>
+<span id="cb10-28"><a href="#cb10-28" aria-hidden="true" tabindex="-1"></a>                   np.array([np.append(V3[k], <span class="fl">1.0</span>) <span class="cf">for</span> k <span class="kw">in</span> shared]))</span>
+<span id="cb10-29"><a href="#cb10-29" aria-hidden="true" tabindex="-1"></a>X_metric <span class="op">=</span> {k: Hp <span class="op">@</span> X_dlt[k] <span class="cf">for</span> k <span class="kw">in</span> rid}</span>
+<span id="cb10-30"><a href="#cb10-30" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-31"><a href="#cb10-31" aria-hidden="true" tabindex="-1"></a>res <span class="op">=</span> np.array([np.linalg.norm(dehom(X_metric[k]) <span class="op">-</span> V3[k]) <span class="cf">for</span> k <span class="kw">in</span> shared])</span>
+<span id="cb10-32"><a href="#cb10-32" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"the projectivity was fitted on all </span><span class="sc">{</span><span class="bu">len</span>(shared)<span class="sc">}</span><span class="ss"> house vertices</span><span class="ch">\n</span><span class="ss">"</span>)</span>
+<span id="cb10-33"><a href="#cb10-33" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"   distance from the ideal model: </span><span class="sc">{</span>res<span class="sc">.</span>mean()<span class="sc">:.3f}</span><span class="ss"> cm on average, "</span></span>
+<span id="cb10-34"><a href="#cb10-34" aria-hidden="true" tabindex="-1"></a>      <span class="ss">f"</span><span class="sc">{</span>res<span class="sc">.</span><span class="bu">max</span>()<span class="sc">:.3f}</span><span class="ss"> cm at worst"</span>)</span>
+<span id="cb10-35"><a href="#cb10-35" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"</span><span class="ch">\n</span><span class="ss">for scale, the house is </span><span class="sc">{</span>np<span class="sc">.</span>ptp(np.array(<span class="bu">list</span>(V3.values())), axis<span class="op">=</span><span class="dv">0</span>)<span class="sc">.</span><span class="bu">round</span>(<span class="dv">1</span>)<span class="sc">}</span><span class="ss"> cm"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>the projectivity was fitted on all 6 house vertices
+
+   distance from the ideal model: 0.340 cm on average, 0.713 cm at worst
+
+for scale, the house is [5.  3.5 4.3] cm</code></pre>
+</div>
+</div>
+<div id="cell-fig-projectivity" class="cell page-columns page-full" data-execution_count="10">
+<div class="cell-output cell-output-display page-columns page-full">
+<div id="fig-projectivity" class="quarto-float quarto-figure quarto-figure-center anchored page-columns page-full">
+<figure class="quarto-float quarto-float-fig figure page-columns page-full">
+<div aria-describedby="fig-projectivity-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca" class="page-columns page-full">
+<img src="triangulation_files/figure-html/fig-projectivity-output-1.png" width="1108" height="482" class="figure-img column-page">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-projectivity-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;3: <strong>Left:</strong> the reconstruction as it comes out of triangulation, in the arbitrary projective frame of the canonical cameras. Angles and lengths mean nothing there; the house looks sheared. <strong>Right:</strong> the same points after the <span class="math inline">\(4\times4\)</span> projectivity fitted to the ideal model, with the model itself in grey. The two now sit on top of each other — which is the statement that the reconstruction was correct all along, up to a projectivity.
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="same-images-different-3d-worlds" class="level3">
+<h3 class="anchored" data-anchor-id="same-images-different-3d-worlds">Same images, “different” 3D worlds</h3>
+<p>We can now make the projective ambiguity completely explicit.</p>
+<p>If at the same time we transform the cameras by the corresponding inverse transformation,</p>
+<p><span class="math display">\[
+P_j' = P_jH^{-1},
+\]</span></p>
+<p>then the image projections remain exactly the same:</p>
+<p><span class="math display">\[
+P_j'\widetilde{\mathbf X}_i'
+=
+P_jH^{-1}H\widetilde{\mathbf X}_i
+=
+P_j\widetilde{\mathbf X}_i.
+\]</span></p>
+<p>So we may change the 3D shape of the reconstruction, provided that we transform the cameras consistently, and <strong>nothing changes in the images</strong>.</p>
+<p>This is the key point behind projective ambiguity: from the two images alone, there is no way to distinguish between these different 3D descriptions. They are all equally valid reconstructions of the same image measurements.</p>
+<p>Let us use the projectivity <span class="math inline">\(H\)</span> estimated above, transform both the reconstructed points and the cameras, and reproject everything back into the two images. If the reasoning is correct, the projected points should fall in exactly the same locations as before.</p>
+<div id="20" class="cell" data-execution_count="11">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> project_point(Pj, Xh):</span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>    q <span class="op">=</span> Pj <span class="op">@</span> Xh</span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> q[:<span class="dv">2</span>] <span class="op">/</span> q[<span class="dv">2</span>]</span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Undo the projectivity on the cameras instead of the points, and the images</span></span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a><span class="co"># cannot tell the difference: P H^-1 . H X = P X.</span></span>
+<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a>Hinv <span class="op">=</span> np.linalg.inv(Hp)</span>
+<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a>P_metric, Pp_metric <span class="op">=</span> P <span class="op">@</span> Hinv, Pp <span class="op">@</span> Hinv</span>
+<span id="cb12-10"><a href="#cb12-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-11"><a href="#cb12-11" aria-hidden="true" tabindex="-1"></a>before <span class="op">=</span> np.array([[np.linalg.norm(project_point(P,  X_dlt[k])    <span class="op">-</span> xi[:<span class="dv">2</span>]),</span>
+<span id="cb12-12"><a href="#cb12-12" aria-hidden="true" tabindex="-1"></a>                    np.linalg.norm(project_point(Pp, X_dlt[k])    <span class="op">-</span> xpi[:<span class="dv">2</span>])]</span>
+<span id="cb12-13"><a href="#cb12-13" aria-hidden="true" tabindex="-1"></a>                   <span class="cf">for</span> k, xi, xpi <span class="kw">in</span> <span class="bu">zip</span>(rid, x, xp)])</span>
+<span id="cb12-14"><a href="#cb12-14" aria-hidden="true" tabindex="-1"></a>after  <span class="op">=</span> np.array([[np.linalg.norm(project_point(P_metric,  X_metric[k]) <span class="op">-</span> xi[:<span class="dv">2</span>]),</span>
+<span id="cb12-15"><a href="#cb12-15" aria-hidden="true" tabindex="-1"></a>                    np.linalg.norm(project_point(Pp_metric, X_metric[k]) <span class="op">-</span> xpi[:<span class="dv">2</span>])]</span>
+<span id="cb12-16"><a href="#cb12-16" aria-hidden="true" tabindex="-1"></a>                   <span class="cf">for</span> k, xi, xpi <span class="kw">in</span> <span class="bu">zip</span>(rid, x, xp)])</span>
+<span id="cb12-17"><a href="#cb12-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-18"><a href="#cb12-18" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"reprojection RMS before the change of frame: </span><span class="sc">{</span>np<span class="sc">.</span>sqrt((before<span class="op">**</span><span class="dv">2</span>).mean())<span class="sc">:.4f}</span><span class="ss"> px"</span>)</span>
+<span id="cb12-19"><a href="#cb12-19" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"reprojection RMS after  the change of frame: </span><span class="sc">{</span>np<span class="sc">.</span>sqrt((after<span class="op">**</span><span class="dv">2</span>).mean())<span class="sc">:.4f}</span><span class="ss"> px"</span>)</span>
+<span id="cb12-20"><a href="#cb12-20" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"largest difference between the two: </span><span class="sc">{</span>np<span class="sc">.</span><span class="bu">abs</span>(before <span class="op">-</span> after)<span class="sc">.</span><span class="bu">max</span>()<span class="sc">:.2e}</span><span class="ss"> px"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>reprojection RMS before the change of frame: 0.4421 px
+reprojection RMS after  the change of frame: 0.4421 px
+largest difference between the two: 6.60e-13 px</code></pre>
+</div>
+</div>
+</section>
+</section>
+<section id="reprojection-error" class="level2 page-columns page-full">
+<h2 class="anchored" data-anchor-id="reprojection-error">Reprojection error</h2>
+<p>As usual, an <strong>algebraic error</strong> should be accompanied by a quantity with a clear geometric meaning.</p>
+<p>DLT triangulation minimizes the algebraic residual</p>
+<p><span class="math display">\[
+\|A\widetilde{\mathbf X}\|,
+\]</span></p>
+<p>but this quantity does not have a direct interpretation in the images. A more natural way to assess the quality of a reconstructed point is to project it back into both views and compare the reprojections with the measured image points.</p>
+<p>For one reconstructed point, we define the <strong>reprojection error</strong></p>
+<p><span class="math display">\[
+E(\widetilde{\mathbf X})=
+\left\|\mathbf x-\pi(P\widetilde{\mathbf X})\right\|^2+
+\left\|\mathbf x'-\pi(P'\widetilde{\mathbf X})\right\|^2,
+\]</span></p>
+<p>where <span class="math inline">\(\pi\)</span> denotes dehomogenization.</p>
+<p>Unlike the algebraic DLT residual, this error has an immediate geometric interpretation: it measures, in pixels, how far the reconstructed 3D point reprojects from the observed correspondence in the two images.</p>
+<p>Notice that this criterion remains perfectly meaningful even though our 3D reconstruction is only projective. The distances are measured in the <strong>undistorted image planes</strong>, not in the reconstructed 3D space.</p>
+<div id="22" class="cell" data-execution_count="12">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> project_point(P, Xh):</span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>    q <span class="op">=</span> P <span class="op">@</span> Xh</span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> q[:<span class="dv">2</span>] <span class="op">/</span> q[<span class="dv">2</span>]</span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> reprojection_errors(Xdict):</span>
+<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a>    e1, e2 <span class="op">=</span> [], []</span>
+<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> k, xi, xpi <span class="kw">in</span> <span class="bu">zip</span>(rid, x, xp):</span>
+<span id="cb14-9"><a href="#cb14-9" aria-hidden="true" tabindex="-1"></a>        Xh <span class="op">=</span> Xdict[k]</span>
+<span id="cb14-10"><a href="#cb14-10" aria-hidden="true" tabindex="-1"></a>        e1.append(np.linalg.norm(project_point(P, Xh)  <span class="op">-</span> xi[:<span class="dv">2</span>]))</span>
+<span id="cb14-11"><a href="#cb14-11" aria-hidden="true" tabindex="-1"></a>        e2.append(np.linalg.norm(project_point(Pp, Xh) <span class="op">-</span> xpi[:<span class="dv">2</span>]))</span>
+<span id="cb14-12"><a href="#cb14-12" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> np.asarray(e1), np.asarray(e2)</span>
+<span id="cb14-13"><a href="#cb14-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-14"><a href="#cb14-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-15"><a href="#cb14-15" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> reprojection_rms(Xdict):</span>
+<span id="cb14-16"><a href="#cb14-16" aria-hidden="true" tabindex="-1"></a>    e1, e2 <span class="op">=</span> reprojection_errors(Xdict)</span>
+<span id="cb14-17"><a href="#cb14-17" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="bu">float</span>(np.sqrt(np.mean(np.r_[e1<span class="op">**</span><span class="dv">2</span>, e2<span class="op">**</span><span class="dv">2</span>])))</span>
+<span id="cb14-18"><a href="#cb14-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-19"><a href="#cb14-19" aria-hidden="true" tabindex="-1"></a>e1_dlt, e2_dlt <span class="op">=</span> reprojection_errors(X_dlt)</span>
+<span id="cb14-20"><a href="#cb14-20" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"DLT reprojection RMS over the 20 image observations: </span><span class="sc">{</span>reprojection_rms(X_dlt)<span class="sc">:.3f}</span><span class="ss"> px"</span>)</span>
+<span id="cb14-21"><a href="#cb14-21" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"largest one-view reprojection error: </span><span class="sc">{</span><span class="bu">max</span>(e1_dlt.<span class="bu">max</span>(), e2_dlt.<span class="bu">max</span>())<span class="sc">:.3f}</span><span class="ss"> px"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>DLT reprojection RMS over the 20 image observations: 0.442 px
+largest one-view reprojection error: 0.768 px</code></pre>
+</div>
+</div>
+<div id="cell-fig-dlt-reprojection" class="cell page-columns page-full" data-execution_count="13">
+<div class="cell-output cell-output-display page-columns page-full">
+<div id="fig-dlt-reprojection" class="quarto-float quarto-figure quarto-figure-center anchored page-columns page-full">
+<figure class="quarto-float quarto-float-fig figure page-columns page-full">
+<div aria-describedby="fig-dlt-reprojection-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca" class="page-columns page-full">
+<img src="triangulation_files/figure-html/fig-dlt-reprojection-output-1.png" width="1147" height="1115" class="figure-img column-page">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-dlt-reprojection-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;4: <strong>Top:</strong> the undistorted measurements (hollow circles) and the image points obtained by reprojecting the DLT reconstruction (filled dots), in both views. At this scale the two are on top of each other. <strong>Bottom:</strong> the point with the largest residual, magnified until the gap is visible — a fraction of a pixel, joined by the segment that the DLT never set out to shorten.
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="geometric-refinement" class="level2">
+<h2 class="anchored" data-anchor-id="geometric-refinement">Geometric refinement</h2>
+<p>Now that we have a geometric error, we can also use it to <strong>refine the triangulated points</strong>.</p>
+<p>The DLT solution provides a convenient initial estimate. Keeping the two cameras fixed, we refine each reconstructed point independently by minimizing its reprojection error:</p>
+<p><span class="math display">\[
+\min_{\widetilde{\mathbf X}_i}
+\left\|\mathbf x_i-\pi(P\widetilde{\mathbf X}_i)\right\|^2
++
+\left\|\mathbf x_i'-\pi(P'\widetilde{\mathbf X}_i)\right\|^2.
+\]</span></p>
+<p>We initialize the optimization with the DLT solution and optimize the three inhomogeneous coordinates of the point in the current projective frame.</p>
+<p>In this way, DLT plays its usual role as a <strong>linear initialization</strong>, while the final estimate is obtained by minimizing a quantity with a direct geometric meaning in the images.</p>
+<p>Since the cameras are fixed, each 3D point can be refined independently of all the others.</p>
+<div id="25" class="cell" data-execution_count="14">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb16"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> refine_triangulation(Xh0, P, Pp, x, xp):</span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>    X0 <span class="op">=</span> dehom(Xh0)</span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> residual(X):</span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a>        Xh <span class="op">=</span> np.r_[X, <span class="fl">1.0</span>]</span>
+<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> np.r_[project_point(P, Xh)  <span class="op">-</span> x[:<span class="dv">2</span>],</span>
+<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a>                     project_point(Pp, Xh) <span class="op">-</span> xp[:<span class="dv">2</span>]]</span>
+<span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-9"><a href="#cb16-9" aria-hidden="true" tabindex="-1"></a>    opt <span class="op">=</span> least_squares(residual, X0, method<span class="op">=</span><span class="st">"lm"</span>,</span>
+<span id="cb16-10"><a href="#cb16-10" aria-hidden="true" tabindex="-1"></a>                        xtol<span class="op">=</span><span class="fl">1e-12</span>, ftol<span class="op">=</span><span class="fl">1e-12</span>, gtol<span class="op">=</span><span class="fl">1e-12</span>,</span>
+<span id="cb16-11"><a href="#cb16-11" aria-hidden="true" tabindex="-1"></a>                        max_nfev<span class="op">=</span><span class="dv">2000</span>)</span>
+<span id="cb16-12"><a href="#cb16-12" aria-hidden="true" tabindex="-1"></a>    Xh <span class="op">=</span> np.r_[opt.x, <span class="fl">1.0</span>]</span>
+<span id="cb16-13"><a href="#cb16-13" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> Xh <span class="op">/</span> np.linalg.norm(Xh), opt</span>
+<span id="cb16-14"><a href="#cb16-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-15"><a href="#cb16-15" aria-hidden="true" tabindex="-1"></a>X_refined <span class="op">=</span> {}</span>
+<span id="cb16-16"><a href="#cb16-16" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> k, xi, xpi <span class="kw">in</span> <span class="bu">zip</span>(rid, x, xp):</span>
+<span id="cb16-17"><a href="#cb16-17" aria-hidden="true" tabindex="-1"></a>    X_refined[k], _ <span class="op">=</span> refine_triangulation(X_dlt[k], P, Pp, xi, xpi)</span>
+<span id="cb16-18"><a href="#cb16-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-19"><a href="#cb16-19" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"DLT       reprojection RMS: </span><span class="sc">{</span>reprojection_rms(X_dlt)<span class="sc">:.4f}</span><span class="ss"> px"</span>)</span>
+<span id="cb16-20"><a href="#cb16-20" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"nonlinear reprojection RMS: </span><span class="sc">{</span>reprojection_rms(X_refined)<span class="sc">:.4f}</span><span class="ss"> px"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>DLT       reprojection RMS: 0.4421 px
+nonlinear reprojection RMS: 0.4200 px</code></pre>
+</div>
+</div>
+<div id="cell-fig-triangulation-refinement" class="cell" data-execution_count="15">
+<div class="cell-output cell-output-display">
+<div id="fig-triangulation-refinement" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-triangulation-refinement-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="triangulation_files/figure-html/fig-triangulation-refinement-output-1.png" width="1302" height="587" class="figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-triangulation-refinement-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;5: Left: one RMS reprojection error per correspondence, before and after nonlinear point refinement. Right: the refined projective wireframe, using the same display similarity as the DLT reconstruction; the door is shown in red.
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<blockquote class="blockquote">
+<p><strong>A geometric-algebraic aside: optimal triangulation</strong></p>
+<p>There is another way to look at the refinement above.</p>
+<p>As you know, a noisy correspondence <span class="math inline">\((\widetilde{\mathbf x},\widetilde{\mathbf x}')\)</span> does not, in general, satisfy the epipolar constraint exactly. Optimal two-view triangulation asks for the closest corrected correspondence <span class="math inline">\((\mathbf x,\mathbf x')\)</span> that does:</p>
+<p><span class="math display">\[
+\min_{\mathbf x,\mathbf x'}
+\|\mathbf x-\widetilde{\mathbf x}\|^2
++
+\|\mathbf x'-\widetilde{\mathbf x}'\|^2
+\qquad
+\text{subject to}
+\qquad
+\mathbf x'^\top F\mathbf x=0.
+\]</span></p>
+<p>Geometrically, we are projecting the noisy measurement onto the set of image correspondences that can actually arise from a common 3D point.</p>
+<p>This also gives a useful perspective on the different approximations we have encountered:</p>
+<ul>
+<li><strong>DLT triangulation</strong> minimizes an algebraic residual;</li>
+<li><strong>Sampson correction</strong> replaces the epipolar constraint by its first-order approximation around the measurement to estimate the fundamental matrix;</li>
+<li><strong>optimal triangulation</strong> minimizes the true geometric distance to the epipolar variety.</li>
+</ul>
+<p>The last problem is genuinely nonlinear. In fact, for a generic two-view configuration it has <strong>six complex critical points</strong>. In algebraic geometry, this number is an instance of the <strong>Euclidean distance degree (ED degree)</strong>: it measures the algebraic complexity of finding the nearest point on a variety.</p>
+<p>Our nonlinear reprojection refinement approaches the same geometric problem from the 3D side: instead of correcting the two image points explicitly, we parametrize consistent correspondences through a 3D point <span class="math inline">\(\mathbf X\)</span> and minimize</p>
+<p><span class="math display">\[
+\|\widetilde{\mathbf x}-\pi(P\mathbf X)\|^2+
+\|\widetilde{\mathbf x}'-\pi(P'\mathbf X)\|^2.
+\]</span></p>
+</blockquote>
+</section>
+<section id="baseline-and-triangulation-accuracy" class="level2 page-columns page-full">
+<h2 class="anchored" data-anchor-id="baseline-and-triangulation-accuracy">Baseline and triangulation accuracy</h2>
+<p>So far, our reconstruction has been judged mainly through the <strong>reprojection error</strong>, which turned out to be comfortably small. But does a small error in the images necessarily imply an accurate reconstruction in 3D?</p>
+<p>Not quite. Triangulation also depends strongly on the geometry of the two views, and in particular on the distance between the cameras: the <strong>baseline</strong>.</p>
+<p>To isolate this effect, we now switch to a synthetic experiment. We place the ideal Origami House in front of two virtual cameras, project its vertices, add the same amount of image noise to every experiment, and reconstruct the scene while progressively reducing the baseline.</p>
+<p>Here we know the exact 3D structure, so we can directly compare the reconstruction with the ground truth. Moreover, the house is perfectly regular by construction: if the recovered 3D geometry deteriorates, we cannot blame the folding this time.</p>
+<p>The intuition is simple. As the cameras move closer together, the two viewing rays corresponding to the same 3D point become increasingly similar. Their intersection is then much less constrained: a small displacement in the image can produce a large displacement along depth.</p>
+<p>In other words, <strong>the same image noise can lead to very different 3D errors depending on the baseline</strong>.</p>
+<p>Let us see this happen.</p>
+<div id="29" class="cell" data-execution_count="16">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb18"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> synthetic_pair(baseline_deg, sigma<span class="op">=</span><span class="fl">0.5</span>, seed<span class="op">=</span><span class="dv">0</span>, f<span class="op">=</span><span class="fl">3187.6</span>, W<span class="op">=</span><span class="dv">4032</span>, H<span class="op">=</span><span class="dv">3024</span>):</span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""Two virtual cameras looking at the ideal house from an angular separation</span></span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a><span class="co">    of baseline_deg, with Gaussian pixel noise on the projections."""</span></span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a>    rng <span class="op">=</span> np.random.default_rng(seed)</span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a>    V <span class="op">=</span> np.array([V3[k] <span class="cf">for</span> k <span class="kw">in</span> HOUSE_IDS])</span>
+<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a>    ctr, dist <span class="op">=</span> V.mean(axis<span class="op">=</span><span class="dv">0</span>), <span class="fl">40.0</span></span>
+<span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-8"><a href="#cb18-8" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> camera(az):</span>
+<span id="cb18-9"><a href="#cb18-9" aria-hidden="true" tabindex="-1"></a>        el <span class="op">=</span> np.deg2rad(<span class="fl">28.0</span>)</span>
+<span id="cb18-10"><a href="#cb18-10" aria-hidden="true" tabindex="-1"></a>        Cc <span class="op">=</span> ctr <span class="op">+</span> dist<span class="op">*</span>np.array([np.cos(el)<span class="op">*</span>np.cos(np.deg2rad(az)),</span>
+<span id="cb18-11"><a href="#cb18-11" aria-hidden="true" tabindex="-1"></a>                                  np.cos(el)<span class="op">*</span>np.sin(np.deg2rad(az)),</span>
+<span id="cb18-12"><a href="#cb18-12" aria-hidden="true" tabindex="-1"></a>                                  np.sin(el)])</span>
+<span id="cb18-13"><a href="#cb18-13" aria-hidden="true" tabindex="-1"></a>        z <span class="op">=</span> ctr <span class="op">-</span> Cc<span class="op">;</span> z <span class="op">/=</span> np.linalg.norm(z)</span>
+<span id="cb18-14"><a href="#cb18-14" aria-hidden="true" tabindex="-1"></a>        xa <span class="op">=</span> np.cross([<span class="fl">0.</span>, <span class="fl">0.</span>, <span class="op">-</span><span class="fl">1.</span>], z)<span class="op">;</span> xa <span class="op">/=</span> np.linalg.norm(xa)</span>
+<span id="cb18-15"><a href="#cb18-15" aria-hidden="true" tabindex="-1"></a>        R <span class="op">=</span> np.vstack([xa, np.cross(z, xa), z])</span>
+<span id="cb18-16"><a href="#cb18-16" aria-hidden="true" tabindex="-1"></a>        K <span class="op">=</span> np.array([[f, <span class="dv">0</span>, W<span class="op">/</span><span class="dv">2</span>], [<span class="dv">0</span>, f, H<span class="op">/</span><span class="dv">2</span>], [<span class="dv">0</span>, <span class="dv">0</span>, <span class="fl">1.</span>]])</span>
+<span id="cb18-17"><a href="#cb18-17" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> K <span class="op">@</span> np.hstack([R, (<span class="op">-</span>R <span class="op">@</span> Cc).reshape(<span class="dv">3</span>, <span class="dv">1</span>)]), Cc</span>
+<span id="cb18-18"><a href="#cb18-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-19"><a href="#cb18-19" aria-hidden="true" tabindex="-1"></a>    Pa, Ca <span class="op">=</span> camera(<span class="op">-</span><span class="dv">90</span> <span class="op">-</span> baseline_deg<span class="op">/</span><span class="dv">2</span>)</span>
+<span id="cb18-20"><a href="#cb18-20" aria-hidden="true" tabindex="-1"></a>    Pb, Cb <span class="op">=</span> camera(<span class="op">-</span><span class="dv">90</span> <span class="op">+</span> baseline_deg<span class="op">/</span><span class="dv">2</span>)</span>
+<span id="cb18-21"><a href="#cb18-21" aria-hidden="true" tabindex="-1"></a>    pr <span class="op">=</span> <span class="kw">lambda</span> M: (<span class="kw">lambda</span> q: q[:, :<span class="dv">2</span>]<span class="op">/</span>q[:, <span class="dv">2</span>:<span class="dv">3</span>])(np.c_[V, np.ones(<span class="bu">len</span>(V))] <span class="op">@</span> M.T)</span>
+<span id="cb18-22"><a href="#cb18-22" aria-hidden="true" tabindex="-1"></a>    a <span class="op">=</span> h(pr(Pa) <span class="op">+</span> rng.normal(<span class="dv">0</span>, sigma, (<span class="bu">len</span>(V), <span class="dv">2</span>)))</span>
+<span id="cb18-23"><a href="#cb18-23" aria-hidden="true" tabindex="-1"></a>    b <span class="op">=</span> h(pr(Pb) <span class="op">+</span> rng.normal(<span class="dv">0</span>, sigma, (<span class="bu">len</span>(V), <span class="dv">2</span>)))</span>
+<span id="cb18-24"><a href="#cb18-24" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> a, b, np.linalg.norm(Ca <span class="op">-</span> Cb)</span>
+<span id="cb18-25"><a href="#cb18-25" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-26"><a href="#cb18-26" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-27"><a href="#cb18-27" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> run_pipeline(a, b):</span>
+<span id="cb18-28"><a href="#cb18-28" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""The whole notebook, from correspondences to a metric comparison."""</span></span>
+<span id="cb18-29"><a href="#cb18-29" aria-hidden="true" tabindex="-1"></a>    Fs <span class="op">=</span> refine_sampson(eight_point(a, b), a, b)</span>
+<span id="cb18-30"><a href="#cb18-30" aria-hidden="true" tabindex="-1"></a>    Fs <span class="op">=</span> Fs[<span class="dv">0</span>] <span class="cf">if</span> <span class="bu">isinstance</span>(Fs, <span class="bu">tuple</span>) <span class="cf">else</span> Fs</span>
+<span id="cb18-31"><a href="#cb18-31" aria-hidden="true" tabindex="-1"></a>    Pa, Pb, _ <span class="op">=</span> canonical_cameras(Fs)</span>
+<span id="cb18-32"><a href="#cb18-32" aria-hidden="true" tabindex="-1"></a>    Xs <span class="op">=</span> {k: triangulate_dlt(Pa, Pb, ai, bi)[<span class="dv">0</span>]</span>
+<span id="cb18-33"><a href="#cb18-33" aria-hidden="true" tabindex="-1"></a>          <span class="cf">for</span> k, ai, bi <span class="kw">in</span> <span class="bu">zip</span>(HOUSE_IDS, a, b)}</span>
+<span id="cb18-34"><a href="#cb18-34" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-35"><a href="#cb18-35" aria-hidden="true" tabindex="-1"></a>    rms <span class="op">=</span> np.sqrt(np.mean([np.linalg.norm(project_point(M, Xs[k]) <span class="op">-</span> q[:<span class="dv">2</span>])<span class="op">**</span><span class="dv">2</span></span>
+<span id="cb18-36"><a href="#cb18-36" aria-hidden="true" tabindex="-1"></a>                           <span class="cf">for</span> M, obs <span class="kw">in</span> ((Pa, a), (Pb, b))</span>
+<span id="cb18-37"><a href="#cb18-37" aria-hidden="true" tabindex="-1"></a>                           <span class="cf">for</span> k, q <span class="kw">in</span> <span class="bu">zip</span>(HOUSE_IDS, obs)]))</span>
+<span id="cb18-38"><a href="#cb18-38" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-39"><a href="#cb18-39" aria-hidden="true" tabindex="-1"></a>    Hp <span class="op">=</span> homography_3d(np.array([Xs[k] <span class="cf">for</span> k <span class="kw">in</span> HOUSE_IDS]),</span>
+<span id="cb18-40"><a href="#cb18-40" aria-hidden="true" tabindex="-1"></a>                       np.array([np.append(V3[k], <span class="fl">1.0</span>) <span class="cf">for</span> k <span class="kw">in</span> HOUSE_IDS]))</span>
+<span id="cb18-41"><a href="#cb18-41" aria-hidden="true" tabindex="-1"></a>    err <span class="op">=</span> np.mean([np.linalg.norm(dehom(Hp <span class="op">@</span> Xs[k]) <span class="op">-</span> V3[k]) <span class="cf">for</span> k <span class="kw">in</span> HOUSE_IDS])</span>
+<span id="cb18-42"><a href="#cb18-42" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> rms, err, {k: dehom(Hp <span class="op">@</span> Xs[k]) <span class="cf">for</span> k <span class="kw">in</span> HOUSE_IDS}, Xs</span>
+<span id="cb18-43"><a href="#cb18-43" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-44"><a href="#cb18-44" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-45"><a href="#cb18-45" aria-hidden="true" tabindex="-1"></a>HOUSE_IDS <span class="op">=</span> [k <span class="cf">for</span> k <span class="kw">in</span> V3]</span>
+<span id="cb18-46"><a href="#cb18-46" aria-hidden="true" tabindex="-1"></a>angles <span class="op">=</span> np.array([<span class="dv">20</span>, <span class="dv">13</span>, <span class="dv">8</span>, <span class="dv">5</span>, <span class="dv">3</span>, <span class="dv">2</span>, <span class="fl">1.4</span>, <span class="fl">1.0</span>])</span>
+<span id="cb18-47"><a href="#cb18-47" aria-hidden="true" tabindex="-1"></a>N_TRIALS <span class="op">=</span> <span class="dv">7</span>                        <span class="co"># one draw of noise says very little</span></span>
+<span id="cb18-48"><a href="#cb18-48" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-49"><a href="#cb18-49" aria-hidden="true" tabindex="-1"></a>rows <span class="op">=</span> []</span>
+<span id="cb18-50"><a href="#cb18-50" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> ang <span class="kw">in</span> angles:</span>
+<span id="cb18-51"><a href="#cb18-51" aria-hidden="true" tabindex="-1"></a>    trials <span class="op">=</span> [run_pipeline(<span class="op">*</span>synthetic_pair(ang, seed<span class="op">=</span>s)[:<span class="dv">2</span>])[:<span class="dv">2</span>]</span>
+<span id="cb18-52"><a href="#cb18-52" aria-hidden="true" tabindex="-1"></a>              <span class="cf">for</span> s <span class="kw">in</span> <span class="bu">range</span>(N_TRIALS)]</span>
+<span id="cb18-53"><a href="#cb18-53" aria-hidden="true" tabindex="-1"></a>    r, e <span class="op">=</span> np.median(np.array(trials), axis<span class="op">=</span><span class="dv">0</span>)</span>
+<span id="cb18-54"><a href="#cb18-54" aria-hidden="true" tabindex="-1"></a>    rows.append((ang, r, e))</span>
+<span id="cb18-55"><a href="#cb18-55" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-56"><a href="#cb18-56" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"</span><span class="sc">{</span><span class="st">'separation'</span><span class="sc">:&gt;12s}{</span><span class="st">'reprojection RMS'</span><span class="sc">:&gt;19s}{</span><span class="st">'3D error'</span><span class="sc">:&gt;21s}</span><span class="ss">"</span>)</span>
+<span id="cb18-57"><a href="#cb18-57" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> ang, r, e <span class="kw">in</span> rows:</span>
+<span id="cb18-58"><a href="#cb18-58" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f"</span><span class="sc">{</span>ang<span class="sc">:11.1f}</span><span class="ss">°</span><span class="sc">{</span>r<span class="sc">:19.3f}{</span>e<span class="sc">:21.3f}</span><span class="ss">"</span>)</span>
+<span id="cb18-59"><a href="#cb18-59" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"</span><span class="ch">\n</span><span class="ss">medians over </span><span class="sc">{</span>N_TRIALS<span class="sc">}</span><span class="ss"> noise draws; pixels and centimetres, "</span></span>
+<span id="cb18-60"><a href="#cb18-60" aria-hidden="true" tabindex="-1"></a>      <span class="ss">f"and the house is 5 cm across"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>  separation   reprojection RMS             3D error
+       20.0°              1.679                0.136
+       13.0°              0.767                0.097
+        8.0°              0.535                0.101
+        5.0°              0.268                0.151
+        3.0°              0.220                0.215
+        2.0°              0.210                0.346
+        1.4°              0.249                0.798
+        1.0°              0.385                0.606
+
+medians over 7 noise draws; pixels and centimetres, and the house is 5 cm across</code></pre>
+</div>
+</div>
+<p>Before running the experiment, it is worth seeing why the angle should matter at all. A measured image point is known only to within a pixel or so, so a camera does not hand us a ray but a thin wedge of rays. The reconstruction is whatever the two wedges have in common — and how big that region is depends entirely on the angle at which they cross.</p>
+<div id="cell-fig-triangulation-wedge" class="cell page-columns page-full" data-execution_count="17">
+<div class="cell-output cell-output-display page-columns page-full">
+<div id="fig-triangulation-wedge" class="quarto-float quarto-figure quarto-figure-center anchored page-columns page-full">
+<figure class="quarto-float quarto-float-fig figure page-columns page-full">
+<div aria-describedby="fig-triangulation-wedge-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca" class="page-columns page-full">
+<img src="triangulation_files/figure-html/fig-triangulation-wedge-output-1.png" width="1259" height="471" class="figure-img column-page">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-triangulation-wedge-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;6: Why the angle matters, seen from above. A measured image point is only known to within a pixel or so, so each camera does not give a ray but a thin wedge of possible rays. The reconstruction is what the two wedges have in common. <strong>Left:</strong> rays crossing at a healthy angle, and the ambiguity is a compact patch. <strong>Right:</strong> the same uncertainty in the images, the same object, but nearly parallel rays — the patch stretches into a sliver along the line of sight, and depth is barely determined at all.
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<div id="cell-fig-baseline" class="cell page-columns page-full" data-execution_count="18">
+<div class="cell-output cell-output-display page-columns page-full">
+<div id="fig-baseline" class="quarto-float quarto-figure quarto-figure-center anchored page-columns page-full">
+<figure class="quarto-float quarto-float-fig figure page-columns page-full">
+<div aria-describedby="fig-baseline-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca" class="page-columns page-full">
+<img src="triangulation_files/figure-html/fig-baseline-output-1.png" width="1276" height="420" class="figure-img column-page">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-baseline-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;7: What a small baseline does. <strong>Left:</strong> as the two cameras close in on each other, the reprojection error barely moves — the points still land where they were measured — while the reconstruction itself falls apart. <strong>Centre and right:</strong> the recovered house, after the projectivity, for a wide and a narrow baseline, against the ideal model in grey. Here the house is the ideal one, so nothing is crooked because the paper was folded badly.
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<p>The two curves move in opposite directions.</p>
+<p>As the baseline becomes smaller, the <strong>reprojection error decreases</strong>, while the <strong>3D reconstruction error grows</strong>. The reason is geometric: when the two viewing rays intersect at a very small angle, depth becomes poorly constrained. A reconstructed point can move substantially along depth while producing only a tiny change in its image projections.</p>
+<p>Therefore, a small reprojection error does <strong>not</strong> necessarily imply an accurate 3D reconstruction. It only tells us that the reconstructed point is consistent with the image measurements. When the triangulation angle is small, this consistency is relatively easy to achieve even for a poorly localized 3D point.</p>
+<p>This suggests that larger baselines are preferable for triangulation — but only up to a point. As the viewpoint separation increases, the two images typically share a smaller common field of view, more points become occluded, and finding reliable correspondences becomes harder. The resulting reconstruction may therefore be more accurate for the points that can be triangulated, but also <strong>sparser and less complete</strong>.</p>
+<p>In practice, there is a trade-off: we would like a baseline large enough to provide a healthy triangulation angle, but not so large that the overlap between the two views becomes too small.</p>
+<p>This is why a structure-from-motion pipeline should not judge a triangulated point from reprojection error alone. The <strong>geometry of the views and their overlap both matter</strong>.</p>
+<section id="questions-to-leave-open" class="level3">
+<h3 class="anchored" data-anchor-id="questions-to-leave-open">Questions to leave open</h3>
+<p><strong>The projectivity was fitted on six vertices and checked on four. Why not five?</strong> Fifteen degrees of freedom, three equations per point — five ought to be exactly enough. Try it and watch it fail, then look at which five were drawn: among the ten vertices of the house there are twenty-four coplanar quadruples, and four coplanar points leave a three-dimensional homography undetermined.</p>
+<p><strong>Everything was measured on the same ten points that produced it.</strong> They estimated <span class="math inline">\(\mathsf F\)</span>, they defined the cameras, they were triangulated, and then they reported the reprojection error. What would it take to obtain a number that measures accuracy rather than fit?</p>
+<p><strong>Nonlinear refinement lowered the reprojection RMS by about a tenth of a pixel.</strong> On ten hand-clicked points, is that a better reconstruction or a closer fit to the annotation noise? What experiment would tell the two apart?</p>
+<p><strong>The reconstruction is fixed up to fifteen degrees of freedom, and a rigid motion with a scale accounts for seven of them.</strong> The remaining eight are the distance between a projective and a metric reconstruction. What would we need to know — about the scene, or about the cameras — to spend them?</p>
+</section>
+</section>
+<section id="further-reading" class="level2">
+<h2 class="anchored" data-anchor-id="further-reading">Further reading</h2>
+<ul>
+<li>Hartley, R. and Zisserman, A. <em>Multiple View Geometry in Computer Vision</em>, 2nd ed., Cambridge University Press, 2004. Chapter 9 for projective camera recovery from <span class="math inline">\(\mathsf F\)</span> and Chapter 12 for triangulation.</li>
+<li>The same book develops optimal two-view triangulation and bundle adjustment as geometric least-squares problems. The nonlinear point refinement above is the small, two-view version of that general reprojection-error principle.</li>
+<li>Hartley, R. I. and Sturm, P. <em>Triangulation</em>. Computer Vision and Image Understanding, 68(2):146–157, 1997.<br>
+The classical reference for <em>optimal two-view triangulation</em>: instead of minimizing the algebraic DLT residual, the measured image points are corrected so as to minimize their geometric displacement while satisfying the epipolar constraint exactly.</li>
+<li>Rydell, F., Bökman, G., Kahl, F. and Kohn, K. <em>A Framework for Reducing the Complexity of Geometric Vision Problems and its Application to Two-View Triangulation with Approximation Bounds</em>. International Conference on 3D Vision (3DV), 2026.<br>
+The standard two-view geometric triangulation problem has generically six complex critical points. This work shows that, by modifying the image-space metric through suitable weights, the algebraic complexity can be reduced in the two-view case, from six critical points to two.</li>
+</ul>
+
+
+</section>
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+    const viewSource = window.document.getElementById('quarto-view-source') ||
+                       window.document.getElementById('quarto-code-tools-source');
+    if (viewSource) {
+      const sourceUrl = viewSource.getAttribute("data-quarto-source-url");
+      viewSource.addEventListener("click", function(e) {
+        if (sourceUrl) {
+          // rstudio viewer pane
+          if (/\bcapabilities=\b/.test(window.location)) {
+            window.open(sourceUrl);
+          } else {
+            window.location.href = sourceUrl;
+          }
+        } else {
+          const modal = new bootstrap.Modal(document.getElementById('quarto-embedded-source-code-modal'));
+          modal.show();
+        }
+        return false;
+      });
+    }
+    function toggleCodeHandler(show) {
+      return function(e) {
+        const cellDetails = window.document.querySelectorAll(".cell details.code-fold");
+        for (let i=0; i<cellDetails.length; i++) {
+          const details = cellDetails[i];
+          if (show) {
+            details.open = true;
+          } else {
+            details.removeAttribute("open");
+          }
+        }
+        const cellCodeDivs = window.document.querySelectorAll(".cell div.sourceCode.cell-code");
+        const fromCls = show ? "hidden" : "unhidden";
+        const toCls = show ? "unhidden" : "hidden";
+        for (let i=0; i<cellCodeDivs.length; i++) {
+          const codeDiv = cellCodeDivs[i];
+          if (codeDiv.classList.contains(fromCls)) {
+            codeDiv.classList.remove(fromCls);
+            codeDiv.classList.add(toCls);
+          } 
+        }
+        return false;
+      }
+    }
+    const hideAllCode = window.document.getElementById("quarto-hide-all-code");
+    if (hideAllCode) {
+      hideAllCode.addEventListener("click", toggleCodeHandler(false));
+    }
+    const showAllCode = window.document.getElementById("quarto-show-all-code");
+    if (showAllCode) {
+      showAllCode.addEventListener("click", toggleCodeHandler(true));
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp("https:\/\/magrilu\.github\.io\/cv-dojo\/");
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+</div> <!-- /content -->
+<footer class="footer">
+  <div class="nav-footer">
+    <div class="nav-footer-left">
+<p>© 2026 Luca Magri — CC BY-NC-ND 4.0 (text and figures) / MIT (code)</p>
+</div>   
+    <div class="nav-footer-center">
+      &nbsp;
+    <div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/magrilu/cv-dojo/issues/new" class="toc-action"><i class="bi bi-github"></i>Report an issue</a></li></ul></div></div>
+    <div class="nav-footer-right">
+      <ul class="footer-items list-unstyled">
+    <li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/magrilu/cv-dojo">
+      <i class="bi bi-github" role="img">
+</i> 
+    </a>
+  </li>  
+    <li class="nav-item">
+    <a class="nav-link" href="https://magrilu.github.io/">
+<p>magrilu.github.io</p>
+</a>
+  </li>  
+</ul>
+    </div>
+  </div>
+</footer>
+
+
+
+
+</body></html>
