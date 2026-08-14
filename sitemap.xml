@@ -2,19 +2,19 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://magrilu.github.io/cv-dojo/notebooks/geometry/fitting-a-conic.html</loc>
-    <lastmod>2026-08-14T21:25:19.505Z</lastmod>
+    <lastmod>2026-08-14T21:33:47.801Z</lastmod>
   </url>
   <url>
     <loc>https://magrilu.github.io/cv-dojo/notebooks/rectification/affine.html</loc>
-    <lastmod>2026-08-14T21:30:59.468Z</lastmod>
+    <lastmod>2026-08-14T21:33:48.031Z</lastmod>
   </url>
   <url>
     <loc>https://magrilu.github.io/cv-dojo/notebooks/two-views/residuals.html</loc>
-    <lastmod>2026-08-14T21:30:59.475Z</lastmod>
+    <lastmod>2026-08-14T21:33:48.596Z</lastmod>
   </url>
   <url>
     <loc>https://magrilu.github.io/cv-dojo/notebooks/two-views/critical-configurations.html</loc>
-    <lastmod>2026-08-14T21:30:59.470Z</lastmod>
+    <lastmod>2026-08-14T21:33:48.193Z</lastmod>
   </url>
   <url>
     <loc>https://magrilu.github.io/cv-dojo/notebooks/camera/camera.html</loc>
@@ -42,18 +42,18 @@
   </url>
   <url>
     <loc>https://magrilu.github.io/cv-dojo/notebooks/two-views/seven-point.html</loc>
-    <lastmod>2026-08-14T21:30:59.476Z</lastmod>
+    <lastmod>2026-08-14T21:33:48.776Z</lastmod>
   </url>
   <url>
     <loc>https://magrilu.github.io/cv-dojo/notebooks/two-views/fundamental-matrix.html</loc>
-    <lastmod>2026-08-14T21:30:59.473Z</lastmod>
+    <lastmod>2026-08-14T21:33:48.382Z</lastmod>
   </url>
   <url>
     <loc>https://magrilu.github.io/cv-dojo/notebooks/two-views/eight-point.html</loc>
-    <lastmod>2026-08-14T21:30:59.471Z</lastmod>
+    <lastmod>2026-08-14T21:33:48.276Z</lastmod>
   </url>
   <url>
     <loc>https://magrilu.github.io/cv-dojo/notebooks/reconstruction/triangulation.html</loc>
-    <lastmod>2026-08-14T21:25:19.508Z</lastmod>
+    <lastmod>2026-08-14T21:33:47.989Z</lastmod>
   </url>
 </urlset>

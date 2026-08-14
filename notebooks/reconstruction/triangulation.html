@@ -369,7 +369,7 @@ Figure&nbsp;1: The ten noisy correspondences used throughout the notebook. The f
 <section id="preprocessing" class="level2">
 <h2 class="anchored" data-anchor-id="preprocessing">Preprocessing</h2>
 <p>To improve the results slightly, before starting our analysis we undistort the images, so that from this point on we can assume a pinhole camera model</p>
-<div id="d582ccdb" class="cell" data-execution_count="3">
+<div id="5" class="cell" data-execution_count="3">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># The lens distorsion parameters are already stored with the Origami House data. They have been estimated using COLMAP using a hundred of images.</span></span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="cf">with</span> <span class="bu">open</span>(ROOT <span class="op">/</span> <span class="st">"data/dojo_house/annotations/triangulation.json"</span>) <span class="im">as</span> f:</span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>    camera_data <span class="op">=</span> json.load(f)</span>
@@ -441,7 +441,7 @@ Figure&nbsp;2: Original points before (hollow circles) and after (filled dots) r
 <li>use that result to initialize a nonlinear minimization of the <strong>Sampson residual</strong>.</li>
 </ol>
 <p>The refined matrix is the object we carry into reconstruction.</p>
-<div id="6d22449e" class="cell" data-execution_count="5">
+<div id="8" class="cell" data-execution_count="5">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> normalize_points(x):</span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>    c <span class="op">=</span> x[:, :<span class="dv">2</span>].mean(axis<span class="op">=</span><span class="dv">0</span>)</span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>    d <span class="op">=</span> np.linalg.norm(x[:, :<span class="dv">2</span>] <span class="op">-</span> c, axis<span class="op">=</span><span class="dv">1</span>).mean()</span>
@@ -556,7 +556,7 @@ rank(F) = 2</code></pre>
 \right].
 \]</span></p>
 <p>This canonical pair reproduces exactly the epipolar geometry encoded by <span class="math inline">\(\mathsf F\)</span>. However, these cameras should <strong>not be interpreted as the physical Euclidean cameras</strong> <span class="math inline">\(K[R\mid t]\)</span> that acquired the images. Consequently, the 3D coordinates defined by this reconstruction are <strong>projective coordinates</strong>, rather than Euclidean ones.</p>
-<div id="3333fbdd" class="cell" data-execution_count="6">
+<div id="10" class="cell" data-execution_count="6">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> canonical_cameras(F):</span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>    U, _, _ <span class="op">=</span> np.linalg.svd(F)</span>
 <span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>    ep <span class="op">=</span> U[:, <span class="op">-</span><span class="dv">1</span>]                    <span class="co"># left null vector: e'^T F = 0</span></span>
@@ -589,7 +589,7 @@ rank(F) = 2</code></pre>
 <span id="cb5-30"><a href="#cb5-30" aria-hidden="true" tabindex="-1"></a>      <span class="ss">f"</span><span class="sc">{</span>projective_F_distance(F, F_check)<span class="sc">:.2e}</span><span class="ss">"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>epipole in view 2 ~ [0.2464 0.9692 0.0006]
-distance between input F and F induced by (P,P'): 2.03e-18</code></pre>
+distance between input F and F induced by (P,P'): 1.11e-16</code></pre>
 </div>
 </div>
 </section>
@@ -636,7 +636,7 @@ v'P_3'^\top-P_2'^\top
 \]</span></p>
 <p>which is simply the right singular vector of <span class="math inline">\(A\)</span> associated with its smallest singular value.</p>
 <p>Notice that <strong>nothing in this derivation requires camera calibration</strong>. The same construction works for the projective cameras recovered from the fundamental matrix, and therefore produces a projective 3D reconstruction.</p>
-<div id="47f46549" class="cell" data-execution_count="7">
+<div id="12" class="cell" data-execution_count="7">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> triangulate_dlt(P, Pp, x, xp):</span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>    u, v <span class="op">=</span> x[:<span class="dv">2</span>]</span>
 <span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>    up, vp <span class="op">=</span> xp[:<span class="dv">2</span>]</span>
@@ -672,7 +672,7 @@ X9 ~ [-0.6242 -0.7813 -0.0007  0.0015]</code></pre>
 <p>Do not expect the reconstructed house to look perfectly regular. There are two reasons for this. First, we are reconstructing a real origami model, which was not folded with perfect geometric accuracy. More importantly, even if the physical house had been perfectly constructed, our reconstruction would still be determined only <strong>up to a 3D projective transformation</strong>. Angles, lengths, parallelism, and the overall shape are therefore not expected to be preserved.</p>
 <p>To make the result a little easier to inspect, we apply a simple 3D similarity transformation: we center the reconstructed points, use PCA to choose a convenient orientation, and apply a uniform scale.</p>
 <p>This does not change the nature of the reconstruction. A similarity is itself a projective transformation, and the composition of two projective transformations is still a projective transformation. So do not be alarmed by what comes next: we do not expect to get the 3D origami house that our “euclidean eyes” are used to see.</p>
-<div id="905adc79" class="cell" data-execution_count="8">
+<div id="14" class="cell" data-execution_count="8">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> dehom(Xh):</span>
 <span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>    Xh <span class="op">=</span> np.asarray(Xh, <span class="bu">float</span>)</span>
 <span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> Xh[:<span class="dv">3</span>] <span class="op">/</span> Xh[<span class="dv">3</span>]</span>
@@ -778,7 +778,7 @@ P_j\widetilde{\mathbf X}_i.
 \]</span></p>
 <p>Estimating <span class="math inline">\(H\)</span> is again a DLT problem, this time in <span class="math inline">\(\mathbb P^3\)</span>. Since two corresponding homogeneous 3D points must be <strong>proportional</strong>, each point correspondence provides three independent constraints on the <span class="math inline">\(4\times4\)</span> matrix <span class="math inline">\(H\)</span>.</p>
 <p>Again, this is <strong>not self-calibration</strong>: we are explicitly using a known 3D reference model, whereas genuine self-calibration tries to recover the Euclidean structure from properties of the cameras and images alone. Still, the spirit is similar: we are searching within the family of projectively equivalent reconstructions for one that looks more Euclidean.</p>
-<div id="04d9959c" class="cell" data-execution_count="9">
+<div id="17" class="cell" data-execution_count="9">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> homography_3d(Xa, Xb):</span>
 <span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""The 4x4 projectivity taking each Xa onto the corresponding Xb.</span></span>
 <span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -855,7 +855,7 @@ P_j\widetilde{\mathbf X}_i.
 <p>So we may change the 3D shape of the reconstruction, provided that we transform the cameras consistently, and <strong>nothing changes in the images</strong>.</p>
 <p>This is the key point behind projective ambiguity: from the two images alone, there is no way to distinguish between these different 3D descriptions. They are all equally valid reconstructions of the same image measurements.</p>
 <p>Let us use the projectivity <span class="math inline">\(H\)</span> estimated above, transform both the reconstructed points and the cameras, and reproject everything back into the two images. If the reasoning is correct, the projected points should fall in exactly the same locations as before.</p>
-<div id="4aa687a2" class="cell" data-execution_count="11">
+<div id="20" class="cell" data-execution_count="11">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> project_point(Pj, Xh):</span>
 <span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>    q <span class="op">=</span> Pj <span class="op">@</span> Xh</span>
 <span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> q[:<span class="dv">2</span>] <span class="op">/</span> q[<span class="dv">2</span>]</span>
@@ -901,7 +901,7 @@ E(\widetilde{\mathbf X})=
 <p>where <span class="math inline">\(\pi\)</span> denotes dehomogenization.</p>
 <p>Unlike the algebraic DLT residual, this error has an immediate geometric interpretation: it measures, in pixels, how far the reconstructed 3D point reprojects from the observed correspondence in the two images.</p>
 <p>Notice that this criterion remains perfectly meaningful even though our 3D reconstruction is only projective. The distances are measured in the <strong>undistorted image planes</strong>, not in the reconstructed 3D space.</p>
-<div id="4543946d" class="cell" data-execution_count="12">
+<div id="22" class="cell" data-execution_count="12">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> project_point(P, Xh):</span>
 <span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>    q <span class="op">=</span> P <span class="op">@</span> Xh</span>
 <span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> q[:<span class="dv">2</span>] <span class="op">/</span> q[<span class="dv">2</span>]</span>
@@ -956,7 +956,7 @@ Figure&nbsp;4: <strong>Top:</strong> the undistorted measurements (hollow circle
 <p>We initialize the optimization with the DLT solution and optimize the three inhomogeneous coordinates of the point in the current projective frame.</p>
 <p>In this way, DLT plays its usual role as a <strong>linear initialization</strong>, while the final estimate is obtained by minimizing a quantity with a direct geometric meaning in the images.</p>
 <p>Since the cameras are fixed, each 3D point can be refined independently of all the others.</p>
-<div id="f1a8a8e0" class="cell" data-execution_count="14">
+<div id="25" class="cell" data-execution_count="14">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb16"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> refine_triangulation(Xh0, P, Pp, x, xp):</span>
 <span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>    X0 <span class="op">=</span> dehom(Xh0)</span>
 <span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -1034,7 +1034,7 @@ Figure&nbsp;5: Left: one RMS reprojection error per correspondence, before and a
 <p>The intuition is simple. As the cameras move closer together, the two viewing rays corresponding to the same 3D point become increasingly similar. Their intersection is then much less constrained: a small displacement in the image can produce a large displacement along depth.</p>
 <p>In other words, <strong>the same image noise can lead to very different 3D errors depending on the baseline</strong>.</p>
 <p>Let us see this happen.</p>
-<div id="c0ca363f" class="cell" data-execution_count="16">
+<div id="29" class="cell" data-execution_count="16">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb18"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> synthetic_pair(baseline_deg, sigma<span class="op">=</span><span class="fl">0.5</span>, seed<span class="op">=</span><span class="dv">0</span>, f<span class="op">=</span><span class="fl">3187.6</span>, W<span class="op">=</span><span class="dv">4032</span>, H<span class="op">=</span><span class="dv">3024</span>):</span>
 <span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""Two virtual cameras looking at the ideal house from an angular separation</span></span>
 <span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a><span class="co">    of baseline_deg, with Gaussian pixel noise on the projections."""</span></span>
@@ -1100,7 +1100,7 @@ Figure&nbsp;5: Left: one RMS reprojection error per correspondence, before and a
        20.0°              1.679                0.136
        13.0°              0.767                0.097
         8.0°              0.535                0.101
-        5.0°              0.262                0.151
+        5.0°              0.268                0.151
         3.0°              0.220                0.215
         2.0°              0.210                0.346
         1.4°              0.249                0.798

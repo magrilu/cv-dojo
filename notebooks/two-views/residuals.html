@@ -359,13 +359,13 @@ d_{\mathbb P}(\mathsf F_1,\mathsf F_2)
 <p>Before moving to image residuals, let us make the matrix comparison above a little more precise.</p>
 <p>A fundamental matrix is defined only up to a non-zero scale factor, so its nine entries represent a point of <span class="math inline">\(\mathbb P^8\)</span>, not an ordinary point of <span class="math inline">\(\mathbb R^9\)</span>. After Frobenius normalisation, one projective matrix is represented by two antipodal points on the unit sphere: <span class="math inline">\(\widehat{\mathsf F}\)</span> and <span class="math inline">\(-\widehat{\mathsf F}\)</span>.</p>
 <p>This is why the sign matters in the formula above. The matrices <span class="math inline">\(\mathsf F\)</span> and <span class="math inline">\(-\mathsf F\)</span> describe exactly the same epipolar geometry, so we keep the smaller of the two Euclidean distances on the sphere.</p>
-<div id="d419f199" class="cell" data-execution_count="2">
+<div id="3" class="cell" data-execution_count="2">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> projective_F_distance(F1, F2):</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""Chordal distance between two projective matrix classes."""</span></span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>    A, B <span class="op">=</span> unit_F(F1), unit_F(F2)</span>
 <span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="bu">min</span>(np.linalg.norm(A <span class="op">-</span> B), np.linalg.norm(A <span class="op">+</span> B))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<div id="f14aaa65" class="cell" data-execution_count="3">
+<div id="4" class="cell" data-execution_count="3">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>matrix_gap <span class="op">=</span> projective_F_distance(F_dlt, F_true)</span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Projective Frobenius distance:"</span>, <span class="ss">f"</span><span class="sc">{</span>matrix_gap<span class="sc">:.5f}</span><span class="ss">"</span>)</span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"</span><span class="ch">\n</span><span class="st">And now the only question that matters:"</span>)</span>
@@ -396,7 +396,7 @@ C(\mathbf x,\mathbf x') = \mathbf x'^\top \mathsf F\mathbf x,
 r_A = \mathbf x'^\top\mathsf F\mathbf x.
 \]</span></p>
 <p>This is the quantity minimised by the linear DLT inside the eight-point algorithm. It is convenient algebraically, but its scale is arbitrary because <span class="math inline">\(\mathsf F\)</span> itself is defined only up to scale, and <span class="math inline">\(r_A\)</span> is not a distance in either image.</p>
-<div id="res-alg-code" class="cell" data-execution_count="4">
+<div id="8" class="cell" data-execution_count="4">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> algebraic_residual(F, x, xp):</span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> np.<span class="bu">sum</span>(xp <span class="op">*</span> (F <span class="op">@</span> x.T).T, axis<span class="op">=</span><span class="dv">1</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
@@ -411,7 +411,7 @@ r_E^{(1)} =
 \frac{|C|}{\sqrt{\ell_1^2+\ell_2^2}}.
 \]</span></p>
 <p>These residuals are measured in pixels, but each of them consider only one image point at time.</p>
-<div id="res-one-code" class="cell" data-execution_count="5">
+<div id="10" class="cell" data-execution_count="5">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> euclidean_epipolar_residuals(F, x, xp):</span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""One-sided point-to-epipolar-line residuals in views 1 and 2."""</span></span>
 <span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>    C <span class="op">=</span> algebraic_residual(F, x, xp)</span>
@@ -435,7 +435,7 @@ r_E^{(1)} =
 r_{SE} = \sqrt{\left(r_E^{(1)}\right)^2+\left(r_E^{(2)}\right)^2}.
 \]</span></p>
 <p>This treats the two views symmetrically. The catch is that each term is evaluated while pretending that the point in the other image is exact. The two perpendicular corrections are therefore not, in general, one jointly consistent correction of the correspondence.</p>
-<div id="res-sym-code" class="cell" data-execution_count="6">
+<div id="12" class="cell" data-execution_count="6">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> symmetric_epipolar_residual(F, x, xp):</span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>    rE1, rE2 <span class="op">=</span> euclidean_epipolar_residuals(F, x, xp)</span>
 <span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> np.hypot(rE1, rE2)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
@@ -446,7 +446,7 @@ r_S = \frac{C}{\sqrt{
 \ell_1^2+\ell_2^2+\ell_1'^2+\ell_2'^2}}.
 \]</span></p>
 <p>We keep the sign of <span class="math inline">\(r_S\)</span> in code because nonlinear least squares wants a residual vector; plots and tables will usually show <span class="math inline">\(|r_S|\)</span>. Squaring it gives the classical Sampson error.</p>
-<div id="res-sam-code" class="cell" data-execution_count="7">
+<div id="14" class="cell" data-execution_count="7">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> sampson_residual(F, x, xp):</span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>    C <span class="op">=</span> algebraic_residual(F, x, xp)</span>
 <span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>    lp <span class="op">=</span> (F <span class="op">@</span> x.T).T</span>
@@ -525,7 +525,7 @@ Figure&nbsp;3: The same four panels at the pixel scale, where the segments are a
 <p>It is worth pausing again on what changes between the two rows.</p>
 <p>In the top row we reason <strong>one view at a time</strong>. The point in the other view is held fixed, so the epipolar line it induces is fixed too, and the question has an elementary answer: how far must this point travel to reach that line? That is <span class="math inline">\(r_E^{(1)}\)</span> on the left and <span class="math inline">\(r_E^{(2)}\)</span> on the right, and the two are computed independently of each other.</p>
 <p>In the bottom row we reason <strong>jointly</strong>, and the lines are no longer fixed, because they depend on the points. Moving a point in one view swings the epipolar line it induces in the other. that is why each panel now carries two orange lines, the faint solid one from the measured partner and the white dashed one from the corrected partner. So the question becomes: how far must <em>both</em> points move, together, for the pair to satisfy the epipolar constraint? The two displacements are shorter than the one-sided residuals, and their target is a line that has moved to meet them halfway.</p>
-<div id="sampson-gap" class="cell" data-execution_count="11">
+<div id="21" class="cell" data-execution_count="11">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>xc1, xpc1 <span class="op">=</span> sampson_correction(F_true, x0[<span class="va">None</span>, :], xp0[<span class="va">None</span>, :])</span>
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>before <span class="op">=</span> <span class="bu">abs</span>(algebraic_residual(F_true, x0[<span class="va">None</span>, :],  xp0[<span class="va">None</span>, :])[<span class="dv">0</span>])</span>
@@ -544,7 +544,7 @@ distance of the corrected point from the dashed line: 4.34e-05 px</code></pre>
 </div>
 </div>
 <p>The constraint drops by several orders of magnitude in one step, and the leftover gap is a small fraction of a pixel. One linear step does not land exactly on a curved surface — it just lands close enough that nobody minds.</p>
-<div id="c52d7abc" class="cell" data-execution_count="12">
+<div id="23" class="cell" data-execution_count="12">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"</span><span class="sc">{</span><span class="st">'matrix'</span><span class="sc">:16s}{</span><span class="st">'r_A RMS'</span><span class="sc">:&gt;13s}{</span><span class="st">'r_E^(2) RMS [px]'</span><span class="sc">:&gt;19s}{</span><span class="st">'r_SE RMS [px]'</span><span class="sc">:&gt;16s}{</span><span class="st">'r_S RMS [px]'</span><span class="sc">:&gt;15s}</span><span class="ss">"</span>)</span>
 <span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> name, F <span class="kw">in</span> [(<span class="st">"DLT"</span>, F_dlt), (<span class="st">"true F"</span>, F_true)]:</span>
 <span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>    rA <span class="op">=</span> algebraic_residual(unit_F(F), xr, xpr)</span>
@@ -626,7 +626,7 @@ C(\mathbf z+\Delta\mathbf z)
 <p>Let us now visualise each residual as a function over the whole image. We fix one Origami House point <span class="math inline">\(\mathbf x\)</span> in view 1 and pretend that its match could be <strong>anywhere</strong> in view 2. At every candidate pixel <span class="math inline">\(\mathbf x'\)</span> we evaluate the four residuals.</p>
 <p>Here knowing the true <span class="math inline">\(\mathsf F\)</span> is especially useful. The maps below inherit no estimation error: they show only the geometry of the residuals themselves.</p>
 <p>The same convention holds: the orange line is the epipolar line of the fixed <span class="math inline">\(\mathbf x\)</span>, and the hollow circle is the match that was actually clicked. Everything else is the residual evaluated at candidate positions that no measurement ever occupied.</p>
-<div id="7196ec89" class="cell" data-execution_count="13">
+<div id="27" class="cell" data-execution_count="13">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> residual_maps(F, x0, W, H, step<span class="op">=</span><span class="dv">7</span>):</span>
 <span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>    gx, gy <span class="op">=</span> np.meshgrid(np.arange(<span class="dv">0</span>, W, step), np.arange(<span class="dv">0</span>, H, step))</span>
 <span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>    G <span class="op">=</span> np.column_stack([gx.ravel(), gy.ravel(), np.ones(gx.size)])</span>
@@ -685,7 +685,7 @@ r_S^2 = \tfrac12\,\mathrm{HM}\!\left(r_1^2, r_2^2\right).
 \]</span></p>
 <p>by AM <span class="math inline">\(\ge\)</span> HM, with equality exactly when <span class="math inline">\(r_1 = r_2\)</span>.</p>
 <p>So the <strong>symmetric epipolar residual is always at least twice the Sampson residual</strong> for the same correspondence; in squared form the factor is at least four.</p>
-<div id="7447710c" class="cell" data-execution_count="15">
+<div id="31" class="cell" data-execution_count="15">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>xc_all, xpc_all <span class="op">=</span> sampson_correction(F_true, xr, xpr)</span>
 <span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>move1 <span class="op">=</span> np.linalg.norm(xc_all[:, :<span class="dv">2</span>]  <span class="op">-</span> xr[:, :<span class="dv">2</span>],  axis<span class="op">=</span><span class="dv">1</span>)</span>
 <span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>move2 <span class="op">=</span> np.linalg.norm(xpc_all[:, :<span class="dv">2</span>] <span class="op">-</span> xpr[:, :<span class="dv">2</span>], axis<span class="op">=</span><span class="dv">1</span>)</span>
@@ -731,7 +731,7 @@ smallest r_SE / |r_S| observed      : 2.0542</code></pre>
 \]</span></p>
 <p>so the equation <span class="math inline">\(\mathbf x'^\top\mathsf F\mathbf x=0\)</span> describes exactly the same correspondences. But Euclidean lengths need not survive the coordinate change.</p>
 <p>Let us make this visible by stretching only view 2: horizontal pixels become <span class="math inline">\(1.35\)</span> times larger, vertical pixels <span class="math inline">\(0.72\)</span> times larger. This is deliberately <strong>not</strong> a similarity.</p>
-<div id="a3c15488" class="cell" data-execution_count="16">
+<div id="34" class="cell" data-execution_count="16">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>Tp <span class="op">=</span> np.diag([<span class="fl">1.35</span>, <span class="fl">0.72</span>, <span class="fl">1.0</span>])</span>
 <span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>T <span class="op">=</span> np.eye(<span class="dv">3</span>)</span>
 <span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>F_stretch <span class="op">=</span> np.linalg.inv(Tp).T <span class="op">@</span> F_true <span class="op">@</span> np.linalg.inv(T)</span>
@@ -800,7 +800,7 @@ Figure&nbsp;5: The same four maps after view 2 has been stretched by <span class
 \qquad \mathsf U,\mathsf V\in SO(3),\quad 0&lt;s&lt;1.
 \]</span></p>
 <p>The two rotations contribute three parameters each, <span class="math inline">\(s\)</span> contributes one, the zero singular value enforces rank two, and fixing the largest singular value to one removes the projective scale.</p>
-<div id="1ac58f59" class="cell" data-execution_count="18">
+<div id="38" class="cell" data-execution_count="18">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb17"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> rodrigues(w):</span>
 <span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>    th <span class="op">=</span> np.linalg.norm(w)</span>
 <span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> th <span class="op">&lt;</span> <span class="fl">1e-12</span>:</span>
@@ -860,7 +860,7 @@ LM function evaluations: 230</code></pre>
 <li>the scale/sign-aligned Frobenius distance from the true <span class="math inline">\(\mathsf F\)</span> – useful only as a controlled ground-truth diagnostic, not as an image residual.</li>
 </ol>
 <p>The second quantity is the one that closes the loop: if we want a number with an image interpretation, evaluate what the model predicts in the image.</p>
-<div id="109eae43" class="cell" data-execution_count="19">
+<div id="40" class="cell" data-execution_count="19">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb19"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> sample_house_edges(n_per_edge<span class="op">=</span><span class="dv">10</span>, ids<span class="op">=</span>VIS):</span>
 <span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""Points along the edges joining two visible vertices."""</span></span>
 <span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>    Q <span class="op">=</span> []</span>
@@ -942,7 +942,7 @@ r \;\le\; \lVert \mathbf{x}' - \mathbf{e}' \rVert .
 \]</span></p>
 <p>A point ten pixels from the epipole cannot score worse than ten pixels, however wrong the correspondence is. With an inlier threshold of a few pixels, anything that lands near the epipole is accepted unconditionally, not because it is right, but because the constraint has nothing to say there.</p>
 <p>The uncomfortable part is where that blind spot sits. The epipole of an estimate is a badly determined quantity.</p>
-<div id="9d9cdc9c" class="cell" data-execution_count="22">
+<div id="45" class="cell" data-execution_count="22">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb21"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>INLIER_TOL <span class="op">=</span> <span class="fl">3.0</span>        <span class="co"># the threshold this section argues about, in pixels</span></span>
 <span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>epipole_of <span class="op">=</span> <span class="kw">lambda</span> F: (<span class="kw">lambda</span> e: e[:<span class="dv">2</span>] <span class="op">/</span> e[<span class="dv">2</span>])(np.linalg.svd(F)[<span class="dv">2</span>][<span class="op">-</span><span class="dv">1</span>])</span>

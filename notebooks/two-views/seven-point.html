@@ -350,7 +350,7 @@ window.Quarto = {
 \]</span></p>
 <p>With seven correspondences the design matrix <span class="math inline">\(\mathsf A\)</span> has size <span class="math inline">\(7\times9\)</span>. For points in general position it has rank seven, so its right null space has dimension two (seven linear constraints cannot select a single point of <span class="math inline">\(\mathbb P^8\)</span>).</p>
 <p>We work with the same noisy image correspondences used on the real images in the eight-point notebook. Among them we pick a well-conditioned subset of seven.</p>
-<div id="14be2d6c" class="cell" data-execution_count="2">
+<div id="3" class="cell" data-execution_count="2">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> design_matrix(x, xp):</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""One row per correspondence: (x' tensor x)^T vec(F) = 0."""</span></span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>    u,  v  <span class="op">=</span> x[:, <span class="dv">0</span>],  x[:, <span class="dv">1</span>]</span>
@@ -422,7 +422,7 @@ Figure&nbsp;1: The seven noisy correspondences used to run the solver, in orange
    = \widehat{\mathsf F}_0 + \lambda\widehat{\mathsf F}_1
 \]</span></p>
 <p>therefore satisfies all seven epipolar equations. Most members of this pencil, however, have rank three and thus are not fundamental matrices.</p>
-<div id="e3634b11" class="cell" data-execution_count="4">
+<div id="6" class="cell" data-execution_count="4">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>x7n, T <span class="op">=</span> normalize_points(x7)</span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>xp7n, Tp <span class="op">=</span> normalize_points(xp7)</span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>A7 <span class="op">=</span> design_matrix(x7n, xp7n)</span>
@@ -474,7 +474,7 @@ Figure&nbsp;2: <strong>Cartoon illustration</strong>, drawn in the plane rather 
            \lambda\widehat{\mathsf F}_1\bigr)=0.
 \]</span></p>
 <p>Every entry is linear in <span class="math inline">\(\lambda\)</span>, so the determinant is a polynomial of degree at most three. This is the only nonlinear step of the seven-point algorithm.</p>
-<div id="abf55254" class="cell" data-execution_count="6">
+<div id="10" class="cell" data-execution_count="6">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> det_cubic(F0, F1):</span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""Coefficients c0..c3 of det(F0 + lambda F1), in ascending order."""</span></span>
 <span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>    p <span class="op">=</span> [[np.array([F0[i, j], F1[i, j]], <span class="bu">float</span>) <span class="cf">for</span> j <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">3</span>)]</span>
@@ -547,7 +547,7 @@ Figure&nbsp;3: The determinant along the two-dimensional null space. The seven l
 \mathsf F = \mathsf T'^\top\widehat{\mathsf F}\mathsf T.
 \]</span></p>
 <p>On exact data every candidate must fit the seven chosen correspondences exactly. Only one of them, however, is the fundamental matrix of the cameras that made the images.</p>
-<div id="753b7ce5" class="cell" data-execution_count="8">
+<div id="13" class="cell" data-execution_count="8">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> F_from_cameras(P, Pp):</span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""Fundamental matrix induced by a pair of projective cameras."""</span></span>
 <span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>    Ch <span class="op">=</span> np.linalg.svd(P)[<span class="dv">2</span>][<span class="op">-</span><span class="dv">1</span>]</span>
@@ -598,7 +598,7 @@ Figure&nbsp;4: Every real root gives a valid epipolar geometry: each pencil of l
 <section id="cheating-chordal-distance" class="level3 page-columns page-full">
 <h3 class="anchored" data-anchor-id="cheating-chordal-distance">Cheating: chordal distance</h3>
 <p>We do know <span class="math inline">\(\mathsf F\)</span> here, so for a moment, we can cheat and use the chordal distance of each candidate from it.</p>
-<div id="801b817a" class="cell" data-execution_count="10">
+<div id="17" class="cell" data-execution_count="10">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"</span><span class="sc">{</span><span class="st">''</span><span class="sc">:14s}{</span><span class="st">'chordal'</span><span class="sc">:&gt;12s}{</span><span class="st">'lines [px]'</span><span class="sc">:&gt;14s}</span><span class="ss">"</span>)</span>
 <span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> j, F <span class="kw">in</span> <span class="bu">enumerate</span>(Fs, <span class="dv">1</span>):</span>
@@ -632,7 +632,7 @@ Figure&nbsp;5: The three candidates and the true matrix, each normalised to unit
 <section id="cheating-a-little-less-compare-the-epipolar-lines" class="level3 page-columns page-full">
 <h3 class="anchored" data-anchor-id="cheating-a-little-less-compare-the-epipolar-lines">Cheating a little less: compare the epipolar lines</h3>
 <p>Still using the true matrix, but asking the question in the images. Both matrices predict an epipolar line for the same point <span class="math inline">\(\mathbf{x}\)</span>; how far apart are those two lines, where the data actually is?</p>
-<div id="3015ca3f" class="cell" data-execution_count="12">
+<div id="22" class="cell" data-execution_count="12">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> line_gap(F, G, x, xp):</span>
 <span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""How far apart, in pixels, are the epipolar lines of two matrices —</span></span>
 <span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a><span class="co">    measured at the correspondences, which is where the data is.</span></span>
@@ -670,7 +670,7 @@ Figure&nbsp;6: How two epipolar geometries are compared, for one correspondence,
 <h3 class="anchored" data-anchor-id="in-practice-use-the-correspondences-kept-aside-no-cheating">In practice use the correspondences kept aside (no cheating)</h3>
 <p>The correspondences kept aside played no part in the estimate. They can speak now: the true fundamental matrix must fit them too, while a spurious root of the cubic has no reason to. This is the criterion that survives outside a notebook, and it is what a robust estimator does with hundreds of matches instead of three.</p>
 <p><strong>Seven points create candidates; further correspondences disambiguate and stabilise the estimate.</strong></p>
-<div id="fbf5eb0a" class="cell" data-execution_count="14">
+<div id="26" class="cell" data-execution_count="14">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="co"># One quantity throughout this section: how far each of the correspondences</span></span>
 <span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="co"># kept aside lies, in view 2, from the epipolar line a candidate predicts.</span></span>
 <span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>rest_res <span class="op">=</span> np.array([euclidean_epipolar_residuals(F, x_rest, xp_rest)[<span class="dv">1</span>] <span class="cf">for</span> F <span class="kw">in</span> Fs])</span>
@@ -724,7 +724,7 @@ Figure&nbsp;8: The same distances for every correspondence kept aside, on a loga
 <section id="the-algorithm" class="level2">
 <h2 class="anchored" data-anchor-id="the-algorithm">The algorithm</h2>
 <p>All the pieces can now be wrapped in a minimal solver. There is one important difference from the eight-point algorithm: the output is a <strong>list</strong>. A minimal solver is allowed to return several models.</p>
-<div id="93e46680" class="cell" data-execution_count="17">
+<div id="31" class="cell" data-execution_count="17">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> seven_point(x, xp, imag_tol<span class="op">=</span><span class="fl">1e-8</span>, dedup_tol<span class="op">=</span><span class="fl">1e-7</span>):</span>
 <span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""Return all real fundamental matrices from exactly seven correspondences."""</span></span>
 <span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="bu">len</span>(x) <span class="op">!=</span> <span class="dv">7</span> <span class="kw">or</span> <span class="bu">len</span>(xp) <span class="op">!=</span> <span class="dv">7</span>:</span>
@@ -760,7 +760,7 @@ Figure&nbsp;8: The same distances for every correspondence kept aside, on a loga
 <h2 class="anchored" data-anchor-id="one-root-or-three">One root or three</h2>
 <p>The cubic has three roots over <span class="math inline">\(\mathbb C\)</span>, but a real cubic can have either one real root or three. Both cases occur, and we do not need to invent data to see it: among all the ways of choosing seven of the clicked correspondences, some give three real fundamental matrices and some give a single one.</p>
 <p>When there is only one real root the minimal solver is, in a sense, lucky: the ambiguity is there over the complex numbers, but the two spurious candidates are not available to confuse a real algorithm.</p>
-<div id="bd57b382" class="cell" data-execution_count="18">
+<div id="33" class="cell" data-execution_count="18">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb16"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>counts <span class="op">=</span> {}</span>
 <span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> c <span class="kw">in</span> itertools.combinations(<span class="bu">range</span>(<span class="bu">len</span>(rid)), <span class="dv">7</span>):</span>
 <span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>    idx <span class="op">=</span> <span class="bu">list</span>(c)</span>
