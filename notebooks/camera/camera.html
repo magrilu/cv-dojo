@@ -388,11 +388,9 @@ z_c=f .
 \]</span></p>
 <p>Consider now a scene point <span class="math inline">\(\mathbf{X}_c=(X_c,Y_c,Z_c)^\top\)</span>. The visual ray joining <span class="math inline">\(\mathbf C\)</span> to <span class="math inline">\(\mathbf{X}_c\)</span> meets the image plane at <span class="math inline">\(\mathbf{x}=(x,y,f)^\top\)</span>, and similar triangles in the two coordinate planes give the coordinates of that intersection:</p>
 <p><span class="math display">\[
-\boxed{
 x=f\frac{X_c}{Z_c},
 \qquad
 y=f\frac{Y_c}{Z_c}
-}
 \]</span></p>
 <p>These are the <strong>perspective projection equations</strong>.</p>
 <div id="cell-fig-camera-frame" class="cell page-columns page-full" data-execution_count="5">
@@ -530,7 +528,7 @@ Figure&nbsp;4: One point, two descriptions. The <strong>world frame</strong> (da
 \]</span></p>
 <p>so that</p>
 <p><span class="math display">\[
-\boxed{\mathbf t=-\mathsf R\mathbf C} .
+\mathbf t=-\mathsf R\mathbf C .
 \]</span></p>
 <p>The vector <span class="math inline">\(\mathbf t\)</span> is therefore <strong>not the position of the camera</strong> in the world frame. That position is <span class="math inline">\(\mathbf C\)</span>. Mixing up the two is one of the most reliable ways to spend an afternoon.</p>
 <div id="99e0d614" class="cell" data-execution_count="9">
@@ -569,12 +567,10 @@ translation t    : [-2.8891  2.0721 16.7738]
 \]</span></p>
 <p>and therefore</p>
 <p><span class="math display">\[
-\boxed{
 \lambda\mathbf x
 =
 \begin{bmatrix} f&amp;0&amp;0\\ 0&amp;f&amp;0\\ 0&amp;0&amp;1 \end{bmatrix}
 [\mathsf R\mid\mathbf t]\,\mathbf X_w .
-}
 \]</span></p>
 <p>The pair <span class="math inline">\((\mathsf R,\mathbf t)\)</span> tells us <strong>where the camera is and how it is oriented with respect to the scene</strong>. These are the <strong>extrinsic parameters</strong>.</p>
 <section id="seeing-the-extrinsics" class="level3 page-columns page-full">
@@ -691,13 +687,11 @@ Figure&nbsp;7: The principal point, with the focal length fixed. The orange cros
 \]</span></p>
 <p>with the calibration transformation gives <span class="math inline">\(\lambda\mathbf x=\mathsf K[\mathsf I\mid\mathbf 0]\mathbf{X}_c\)</span>, and if the scene is expressed in world coordinates,</p>
 <p><span class="math display">\[
-\boxed{
 \lambda\mathbf x
 =
 \mathsf K[\mathsf R\mid\mathbf t]\,\mathbf X_w ,
 \qquad
 \mathsf P=\mathsf K[\mathsf R\mid\mathbf t] .
-}
 \]</span></p>
 <p>The two factors have different roles: <span class="math inline">\(\mathsf K\)</span> describes the <strong>internal geometry of the camera</strong>, while <span class="math inline">\(\mathsf R\)</span> and <span class="math inline">\(\mathbf t\)</span> describe its <strong>pose in the world</strong>. Counting parameters, five for <span class="math inline">\(\mathsf K\)</span> and six for the pose makes eleven, which is exactly the number of degrees of freedom of a <span class="math inline">\(3\times4\)</span> matrix defined up to scale.</p>
 <div id="cell-fig-three-maps" class="cell page-columns page-full" data-execution_count="14">
@@ -727,10 +721,8 @@ Figure&nbsp;8: The same house at the four stages of the chain. <strong>Top left:
 \]</span></p>
 <p>Rotating that direction back into the world and starting from the camera centre gives the whole ray:</p>
 <p><span class="math display">\[
-\boxed{
 \mathbf X_w(\mu)=\mathbf C+\mu\,\mathsf R^\top\mathsf K^{-1}\mathbf x ,
 \qquad \mu&gt;0 .
-}
 \]</span></p>
 <p>So the extrinsics contribute two different things: <span class="math inline">\(\mathbf C\)</span> says where the ray starts, <span class="math inline">\(\mathsf R\)</span> says which way it points. And calibration turns a pixel into a <strong>direction</strong> — not into a point. Where the scene lies along the ray is exactly the information the projection destroyed, and no amount of calibration will bring it back.</p>
 <p>A useful consequence is that a calibrated camera measures angles. The angle between the rays of two pixels is</p>
@@ -788,18 +780,6 @@ Figure&nbsp;9: The model running backwards. <strong>Left:</strong> three chosen 
 </div>
 </div>
 </div>
-<div class="callout callout-style-default callout-note callout-titled" title="The same thing without a calibration">
-<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-1-contents" aria-controls="callout-1" aria-expanded="false" aria-label="Toggle callout">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Note</span>The same thing without a calibration
-</div>
-<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
-</div>
-<div id="callout-1" class="callout-1-contents callout-collapse collapse">
-<div class="callout-body-container callout-body">
 <p>If only the matrix <span class="math inline">\(\mathsf P\)</span> is known, the ray can still be recovered, but it comes out as a projective line rather than as a Euclidean ray with an origin and a direction.</p>
 <p>The centre is the right null space, <span class="math inline">\(\mathsf P\mathbf C=\mathbf 0\)</span>. The pseudoinverse supplies one preimage of the pixel, <span class="math inline">\(\mathbf X_0=\mathsf
 P^{+}\mathbf x\)</span>, and since adding any multiple of the centre leaves the image unchanged, the full back-projection is the line</p>
@@ -807,9 +787,6 @@ P^{+}\mathbf x\)</span>, and since adding any multiple of the centre leaves the 
 \mathbf X\sim\alpha\,\mathsf P^{+}\mathbf x+\beta\,\mathbf C .
 \]</span></p>
 <p>The pseudoinverse is not an inverse camera: it picks one point on the line, and the null space supplies the rest.</p>
-</div>
-</div>
-</div>
 </section>
 <section id="reading-the-camera-back-out-of-mathsf-p" class="level2">
 <h2 class="anchored" data-anchor-id="reading-the-camera-back-out-of-mathsf-p">Reading the camera back out of <span class="math inline">\(\mathsf P\)</span></h2>
@@ -818,19 +795,7 @@ P^{+}\mathbf x\)</span>, and since adding any multiple of the centre leaves the 
 \mathsf M=\mathsf K\mathsf R ,
 \]</span></p>
 <p>recovering intrinsics and rotation up to the usual sign conventions; then <span class="math inline">\(\mathbf t\)</span> follows from the fourth column. With <span class="math inline">\(K_{33}=1\)</span>, <span class="math inline">\(K_{11},K_{22}&gt;0\)</span> and <span class="math inline">\(\det\mathsf R=1\)</span> the factorisation is unique.</p>
-<div class="callout callout-style-default callout-note callout-titled" title="RQ is not a calibration algorithm">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Note</span>RQ is not a calibration algorithm
-</div>
-</div>
-<div class="callout-body-container callout-body">
-<p>RQ only decomposes the matrix it is given. If <span class="math inline">\(\mathsf P\)</span> has been estimated poorly, its factors will be poor as well. Calibration procedures estimate the camera while enforcing its structure during the estimation, and using many measurements.</p>
-</div>
-</div>
+<p>RQ is not a calibration algorithm: it only decomposes the matrix it is given. If <span class="math inline">\(\mathsf P\)</span> has been estimated poorly, its factors will be poor as well. Calibration procedures estimate the camera while enforcing its structure during the estimation, and using many measurements.</p>
 <div id="f13b2881" class="cell" data-execution_count="17">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> rq3(A):</span>
 <span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""RQ decomposition A = R_upper @ Q_orthogonal, built from NumPy's QR."""</span></span>

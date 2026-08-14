@@ -391,7 +391,7 @@ Figure&nbsp;2: The ideal house in space, and its two exact perspective projectio
 \mathbf{0}\)</span> is not a point of <span class="math inline">\(\mathbb{P}^3\)</span>. A genuine world point exists exactly when the system has a <strong>non-trivial</strong> solution, that is, <span class="math inline">\(\mathbf{x}\)</span> and <span class="math inline">\(\mathbf{x}'\)</span> are corresponding points if</p>
 <p><span id="eq-detL"><span class="math display">\[\det \mathsf{L} = 0 \tag{1}\]</span></span></p>
 <p>Let us observe what happens, when, for example, we substitute <span class="math inline">\(\mathbf{x}_9\)</span> and <span class="math inline">\(\mathbf{x}'_9\)</span> in <a href="#eq-detL" class="quarto-xref">Equation&nbsp;1</a>:</p>
-<div id="6" class="cell" data-execution_count="4">
+<div id="e752a153" class="cell" data-execution_count="4">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> L_matrix(P, Pp, x, xp):</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""The 6x6 system expressing that x and x' are images of a common point."""</span></span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>    L <span class="op">=</span> np.zeros((<span class="dv">6</span>, <span class="dv">6</span>))</span>
@@ -412,7 +412,7 @@ det L     : -7.218e-06</code></pre>
 </div>
 </div>
 <p>The rank of <span class="math inline">\(\mathsf L\)</span> is five, and its determinant zero: the null space is one-dimensional, and it holds the homogeneous coordinates of a single world point. Let us extract it and see what it is.</p>
-<div id="8" class="cell" data-execution_count="5">
+<div id="80439767" class="cell" data-execution_count="5">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>sol <span class="op">=</span> np.linalg.svd(L)[<span class="dv">2</span>][<span class="op">-</span><span class="dv">1</span>]</span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>X_rec, lam, lamp <span class="op">=</span> sol[:<span class="dv">4</span>], sol[<span class="dv">4</span>], sol[<span class="dv">5</span>]</span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>X_rec <span class="op">=</span> X_rec[:<span class="dv">3</span>] <span class="op">/</span> X_rec[<span class="dv">3</span>]</span>
@@ -428,7 +428,7 @@ difference  : 1.00e-12 cm</code></pre>
 </div>
 <p>So, as expected, <span class="math inline">\(\mathbf{X}_9\)</span> is indeed the solution of the system.</p>
 <p>Now, you can carry out the same computation with a pair of points that are <strong>not</strong> corresponding points. We keep <span class="math inline">\(\mathbf{x}\)</span> where it is, and take for <span class="math inline">\(\mathbf{x}'\)</span> the image of a different vertex, the <em>left</em> end of the ridge instead of the right one.</p>
-<div id="10" class="cell" data-execution_count="6">
+<div id="d5b3c4cc" class="cell" data-execution_count="6">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>xp_wrong <span class="op">=</span> h(xps[IDS.index(<span class="st">"X8"</span>)])[<span class="dv">0</span>]        <span class="co"># image of a different vertex</span></span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>L_bad <span class="op">=</span> L_matrix(P, Pp, x, xp_wrong)</span>
@@ -498,7 +498,7 @@ Figure&nbsp;4: The whole vocabulary of epipolar geometry. The <strong>baseline</
 \underbrace{[\mathbf{e}']_\times \mathsf{P}'\mathsf{P}^{+}}_{\textstyle \mathsf{F}}\;
 \mathbf{x}.\]</span></p>
 <p>There is <span class="math inline">\(\mathsf{F}\)</span> again, and this time we have a geometric interpretation: it takes a point in the first image and returns its <strong>epipolar line</strong> in the second view. We can check that the correspondences really do lie on the lines it predicts.</p>
-<div id="17" class="cell" data-execution_count="9">
+<div id="73c05586" class="cell" data-execution_count="9">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>Pplus <span class="op">=</span> np.linalg.pinv(P)</span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>e_p <span class="op">=</span> Pp <span class="op">@</span> np.append(C, <span class="fl">1.0</span>)                 <span class="co"># the second epipole</span></span>
 <span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>F_geo <span class="op">=</span> skew(e_p) <span class="op">@</span> Pp <span class="op">@</span> Pplus</span>
@@ -525,7 +525,7 @@ Figure&nbsp;4: The whole vocabulary of epipolar geometry. The <strong>baseline</
 </div>
 <p>Zero to machine precision, as it must be on exact data.</p>
 <p>Now an important property. The map <span class="math inline">\(\mathbf{x} \mapsto \mathsf{F}\mathbf{x}\)</span> goes from <span class="math inline">\(\mathbb{P}^2\)</span> to <span class="math inline">\(\mathbb{P}^{2*}\)</span>, it transforms points to lines. Moreover, <strong>it is not injective.</strong> Take any two points of the first image that lie on a common line through the epipole: they belong to the same epipolar plane, so they must produce the same epipolar line.</p>
-<div id="19" class="cell" data-execution_count="10">
+<div id="58b5168e" class="cell" data-execution_count="10">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>e <span class="op">=</span> np.linalg.svd(F_geo)[<span class="dv">2</span>][<span class="op">-</span><span class="dv">1</span>]<span class="op">;</span> e <span class="op">=</span> e <span class="op">/</span> e[<span class="dv">2</span>]     <span class="co"># first epipole</span></span>
 <span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>x_a <span class="op">=</span> X_h[IDS.index(<span class="st">"X9"</span>)]</span>
 <span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>x_b <span class="op">=</span> e <span class="op">+</span> <span class="fl">0.35</span> <span class="op">*</span> (x_a <span class="op">-</span> e)                        <span class="co"># another point of the same ray</span></span>
@@ -548,7 +548,7 @@ their epipolar lines differ by: 2.49e-10</code></pre>
 [\mathbf{e}']_\times \mathsf{P}'\mathsf{P}^{+}\)</span> contains a skew-symmetric <span class="math inline">\(3\times 3\)</span> factor, and those always have rank two.</p>
 <p>The rank deficiency also tells us what the kernel is. <span class="math inline">\(\mathsf{F}\mathbf{e} =
 \mathbf{0}\)</span>: the epipole is the one point of the first image that has no epipolar line, because its ray <em>is</em> the baseline and its epipolar plane is not determined. So the epipoles are the null vectors of <span class="math inline">\(\mathsf{F}\)</span>.</p>
-<div id="21" class="cell" data-execution_count="11">
+<div id="8fa620a1" class="cell" data-execution_count="11">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> epipoles(F):</span>
 <span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""e spans the right null space of F, e' the right null space of F^T."""</span></span>
 <span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>    e  <span class="op">=</span> np.linalg.svd(F)[<span class="dv">2</span>][<span class="op">-</span><span class="dv">1</span>]<span class="op">;</span>   e  <span class="op">=</span> e <span class="op">/</span> e[<span class="dv">2</span>]</span>
@@ -577,7 +577,7 @@ check: e is the image of the other camera centre
 <h2 class="anchored" data-anchor-id="special-configurations">Special configurations</h2>
 <p>Everything so far holds for any pair of cameras. But some kind of relative motions reflect on the structure of <span class="math inline">\(\mathsf F\)</span> itself.</p>
 <p>We leave the real images for a moment. We have our 3D model of the origami house, so we can put it in front of any pair of virtual cameras we like and read off what happens to the fundamental matrix.</p>
-<div id="23" class="cell" data-execution_count="12">
+<div id="7ce482b9" class="cell" data-execution_count="12">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> virtual_pair(direction, baseline<span class="op">=</span><span class="fl">6.0</span>, distance<span class="op">=</span><span class="fl">34.0</span>, f<span class="op">=</span><span class="fl">1800.0</span>,</span>
 <span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>                 W<span class="op">=</span><span class="dv">1400</span>, H<span class="op">=</span><span class="dv">1050</span>):</span>
 <span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""Two synthetic cameras with the *same* orientation, displaced along one</span></span>
@@ -654,7 +654,7 @@ Figure&nbsp;5: Two motions, in synthetic views of the same house. <strong>Left:<
 <p><span id="eq-linehomography"><span class="math display">\[\boldsymbol\ell' \;=\; \mathsf H^{-\top}\boldsymbol\ell . \tag{3}\]</span></span></p>
 <p>One plane is enough to see this. The wall carrying the red door has four vertices we know, so its homography can be estimated by DLT — and once we have it, we can check both statements against the geometry we built from the cameras.</p>
 <p>The second one is the more telling of the two. Take the epipolar lines of the <em>second</em> view and carry them back to the first, once through <span class="math inline">\(\mathsf F^\top\)</span> and once through <span class="math inline">\(\mathsf H^\top\)</span>. The wall is a small quadrilateral in the corner of the picture and almost nothing else in the scene lies on it — yet its homography knows where every epipolar line goes.</p>
-<div id="27" class="cell" data-execution_count="14">
+<div id="084e435e" class="cell" data-execution_count="14">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> homography_from_four(a, b):</span>
 <span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""The plane homography carried by four coplanar correspondences (DLT)."""</span></span>
 <span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>    A <span class="op">=</span> []</span>
@@ -743,7 +743,7 @@ Figure&nbsp;7: Transposing <span class="math inline">\(\mathsf F\)</span> swaps 
 \det\!\begin{bmatrix} \widetilde{\mathsf{P}}_i \\ \widetilde{\mathsf{P}}'_j
 \end{bmatrix},\]</span></p>
 <p>where <span class="math inline">\(\widetilde{\mathsf{P}}_i\)</span> is <span class="math inline">\(\mathsf P\)</span> with row <span class="math inline">\(i\)</span> removed. So <span class="math inline">\(\mathsf F\)</span> is computable from the cameras alone, with no correspondences and no pseudo-inverse — and the rank-two property, which an estimate has to be <em>forced</em> to satisfy, comes out of this construction on its own.</p>
-<div id="33" class="cell" data-execution_count="17">
+<div id="eb7c7f73" class="cell" data-execution_count="17">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb17"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> F_from_cameras(P, Pp):</span>
 <span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""Each entry of F is a 4x4 minor of the two stacked camera matrices."""</span></span>
 <span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>    F <span class="op">=</span> np.zeros((<span class="dv">3</span>, <span class="dv">3</span>))</span>
@@ -794,7 +794,7 @@ agreement with the geometric construction: 2.82e-18
 <p><span class="math display">\[\mathsf P = [\mathsf I \mid \mathbf 0], \qquad
 \mathsf P' = [\,[\mathbf e']_\times \mathsf F \mid \mathbf e'\,]\]</span></p>
 <p>is a pair with the right fundamental matrix — the <strong>canonical pair</strong>. Note the shape of <span class="math inline">\(\mathsf P'\)</span>: its left block is <span class="math inline">\([\mathbf e']_\times\mathsf F\)</span>, which by <a href="#eq-fromH" class="quarto-xref">2</a> is one of the plane homographies. Choosing a canonical pair is choosing a plane to call the plane at infinity, and getting that choice wrong is exactly what makes a projective reconstruction look sheared.</p>
-<div id="35" class="cell" data-execution_count="18">
+<div id="7a24d021" class="cell" data-execution_count="18">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb19"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>F_c <span class="op">=</span> F_geo</span>
 <span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>_, ep_c <span class="op">=</span> epipoles(F_c)</span>
 <span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a></span>

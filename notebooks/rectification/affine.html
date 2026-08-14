@@ -378,7 +378,7 @@ window.Quarto = {
 </tr>
 </tbody>
 </table>
-<div id="1" class="cell" data-execution_count="1">
+<div id="e20bd413" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-08-06T09:03:17.975327Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-08-06T09:03:17.975095Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-08-06T09:03:18.922282Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-08-06T09:03:18.920862Z&quot;}}" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># On Colab, fetch the repository. Locally this is a no-op.</span></span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> os, sys, subprocess</span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="st">"COLAB_GPU"</span> <span class="kw">in</span> os.environ <span class="kw">or</span> <span class="st">"COLAB_RELEASE_TAG"</span> <span class="kw">in</span> os.environ:</span>
@@ -399,7 +399,7 @@ window.Quarto = {
 <section id="the-image" class="level2">
 <h2 class="anchored" data-anchor-id="the-image">The image</h2>
 <p><code>load_facade</code> picks up <code>data/facade.jpg</code> if you have put one there, and otherwise synthesises a facade under a known homography. Start with the synthetic one: the ground truth is available, so you can check the answer rather than eyeball it.</p>
-<div id="3" class="cell" data-execution_count="2">
+<div id="e54e9b70" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-08-06T09:03:18.924572Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-08-06T09:03:18.924303Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-08-06T09:03:19.344902Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-08-06T09:03:19.343844Z&quot;}}" data-execution_count="2">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>img, H_gt <span class="op">=</span> cv.load_facade()</span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>cv.show(img, title<span class="op">=</span><span class="st">"input image"</span>)</span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"synthetic"</span> <span class="cf">if</span> H_gt <span class="kw">is</span> <span class="kw">not</span> <span class="va">None</span> <span class="cf">else</span> <span class="st">"photograph"</span>, <span class="st">"-"</span>, img.shape)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
@@ -419,7 +419,7 @@ window.Quarto = {
 <h2 class="anchored" data-anchor-id="the-four-segments">The four segments</h2>
 <p>Here is the design decision worth flagging. The notebook ships with <strong>precomputed endpoints</strong>, so it runs top to bottom on any machine, including Colab, with nothing to click. The interactive selection lives in the next cell and is optional — that is the one to use in the lecture room.</p>
 <p>The naming follows the book: <span class="math inline">\(\{\mathbf{a}', \mathbf{c}'\}\)</span> are the images of one family of parallel world lines, <span class="math inline">\(\{\mathbf{b}', \mathbf{d}'\}\)</span> of a second family.</p>
-<div id="5" class="cell" data-execution_count="3">
+<div id="1a147ba6" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-08-06T09:03:19.346912Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-08-06T09:03:19.346696Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-08-06T09:03:19.479464Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-08-06T09:03:19.478343Z&quot;}}" data-execution_count="3">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>seg <span class="op">=</span> <span class="bu">dict</span>(cv.DEFAULT_SEGMENTS)   <span class="co"># keys: 'a', 'c' (first family), 'b', 'd' (second)</span></span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>ax <span class="op">=</span> cv.show(img, title<span class="op">=</span><span class="st">"the two families of parallel lines"</span>)</span>
@@ -437,7 +437,7 @@ window.Quarto = {
 <section id="optional-pick-them-yourself" class="level3">
 <h3 class="anchored" data-anchor-id="optional-pick-them-yourself">Optional: pick them yourself</h3>
 <p>Uncomment and run to click the eight endpoints (<code>a</code> then <code>c</code> in red, <code>b</code> then <code>d</code> in blue). Needs <code>%matplotlib widget</code> and <code>ipympl</code>, which works locally but not on Colab — there, edit the numbers in <code>seg</code> by hand instead.</p>
-<div id="7" class="cell" data-execution_count="4">
+<div id="f12d8870" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-08-06T09:03:19.482124Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-08-06T09:03:19.481379Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-08-06T09:03:19.485309Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-08-06T09:03:19.484468Z&quot;}}" data-execution_count="4">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># %matplotlib widget</span></span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="co"># ax = cv.show(img, title="click 8 points: a1 a2 c1 c2 b1 b2 d1 d2")</span></span>
 <span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="co"># pts = plt.ginput(8, timeout=0)</span></span>
@@ -450,7 +450,7 @@ window.Quarto = {
 <h2 class="anchored" data-anchor-id="steps-1-3-the-vanishing-line">Steps 1-3: the vanishing line</h2>
 <p>Each segment gives a line through its endpoints, <span class="math inline">\(\ell = \mathbf{x}_1 \times \mathbf{x}_2\)</span>. Intersecting lines within a family gives a vanishing point; joining the two vanishing points gives <span class="math inline">\(\ell'_\infty\)</span>.</p>
 <p>The normalisation on line 3 of the algorithm is not cosmetic. Vanishing points often land thousands of pixels outside the frame, so <span class="math inline">\(\ell'_\infty\)</span> comes out with a third coordinate several orders of magnitude larger than the first two. Left alone, that imbalance propagates straight into the bottom row of <span class="math inline">\(H_P\)</span>.</p>
-<div id="9" class="cell" data-execution_count="5">
+<div id="36c5b79f" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-08-06T09:03:19.486865Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-08-06T09:03:19.486701Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-08-06T09:03:19.494866Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-08-06T09:03:19.493901Z&quot;}}" data-execution_count="5">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>a, c <span class="op">=</span> cv.seg_to_line(seg[<span class="st">"a"</span>]), cv.seg_to_line(seg[<span class="st">"c"</span>])</span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>b, d <span class="op">=</span> cv.seg_to_line(seg[<span class="st">"b"</span>]), cv.seg_to_line(seg[<span class="st">"d"</span>])</span>
 <span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -467,7 +467,7 @@ V' = [  307.81257809 -2790.46772178]
 l'_inf = [ 9.43065754e-01 -3.32606350e-01 -1.21841479e+03]</code></pre>
 </div>
 </div>
-<div id="10" class="cell" data-execution_count="6">
+<div id="73695b6c" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-08-06T09:03:19.496518Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-08-06T09:03:19.496356Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-08-06T09:03:19.720749Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-08-06T09:03:19.719631Z&quot;}}" data-execution_count="6">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Both vanishing points usually fall well outside the image: widen the axes.</span></span>
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>u, v <span class="op">=</span> cv.cartesian(U).ravel(), cv.cartesian(V).ravel()</span>
 <span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>xs <span class="op">=</span> [<span class="dv">0</span>, img.shape[<span class="dv">1</span>], u[<span class="dv">0</span>], v[<span class="dv">0</span>]]</span>
@@ -503,7 +503,7 @@ H_P = \begin{bmatrix} 1 &amp; 0 &amp; 0 \\ 0 &amp; 1 &amp; 0 \\ \ell_1 &amp; \el
 \]</span></p>
 <p>The top two rows are a free choice — any affinity there would do, since the result is only defined up to one. All the work is in the bottom row.</p>
 <p>Lines transform by the inverse transpose, so the check is <span class="math inline">\(H_P^{-\top} \ell'_\infty = (0:0:1)^\top\)</span>.</p>
-<div id="12" class="cell" data-execution_count="7">
+<div id="ea727bd6" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-08-06T09:03:19.723036Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-08-06T09:03:19.722312Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-08-06T09:03:19.728228Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-08-06T09:03:19.727290Z&quot;}}" data-execution_count="7">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>H_P <span class="op">=</span> cv.H_from_vanishing_line(l_inf)</span>
 <span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(H_P, <span class="st">"</span><span class="ch">\n</span><span class="st">"</span>)</span>
 <span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -521,7 +521,7 @@ H_P^-T l'_inf = [-0.  0.  1.]</code></pre>
 <section id="warping" class="level2">
 <h2 class="anchored" data-anchor-id="warping">Warping</h2>
 <p>One practical note that costs an afternoon if you meet it cold: <code>skimage.transform.warp</code> pulls each output pixel from the input, so it wants the <strong>inverse</strong> map, and it keeps the original canvas — unlike MATLAB’s <code>imwarp</code>, which sizes the output for you. <code>cv.warp_image</code> handles both, and fits the canvas to the region of interest rather than to the image corners, which after rectification are usually far away.</p>
-<div id="14" class="cell" data-execution_count="8">
+<div id="877459e3" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-08-06T09:03:19.729993Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-08-06T09:03:19.729839Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-08-06T09:03:20.230570Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-08-06T09:03:20.229569Z&quot;}}" data-execution_count="8">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>roi <span class="op">=</span> np.vstack([seg[k] <span class="cf">for</span> k <span class="kw">in</span> (<span class="st">"a"</span>, <span class="st">"c"</span>, <span class="st">"b"</span>, <span class="st">"d"</span>)])</span>
 <span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>rect <span class="op">=</span> cv.warp_image(img, H_P, roi<span class="op">=</span>roi, max_side<span class="op">=</span><span class="dv">900</span>)</span>
 <span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -541,7 +541,7 @@ H_P^-T l'_inf = [-0.  0.  1.]</code></pre>
 <section id="checking-it-worked" class="level2">
 <h2 class="anchored" data-anchor-id="checking-it-worked">Checking it worked</h2>
 <p>Eyeballing parallel lines is unreliable. Transform the lines themselves and read off the vanishing points: if the rectification is right, they have moved to infinity, so their third coordinate should be zero (to numerical precision).</p>
-<div id="17" class="cell" data-execution_count="9">
+<div id="6ecbbaaa" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-08-06T09:03:20.232496Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-08-06T09:03:20.232307Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-08-06T09:03:20.237776Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-08-06T09:03:20.236889Z&quot;}}" data-execution_count="9">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>Hinv_T <span class="op">=</span> np.linalg.inv(H_P).T</span>
 <span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>a_r, c_r <span class="op">=</span> Hinv_T <span class="op">@</span> a, Hinv_T <span class="op">@</span> c</span>
 <span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>b_r, d_r <span class="op">=</span> Hinv_T <span class="op">@</span> b, Hinv_T <span class="op">@</span> d</span>
@@ -558,7 +558,7 @@ b x d: third coordinate = +2.28e-17</code></pre>
 <section id="where-it-breaks" class="level2">
 <h2 class="anchored" data-anchor-id="where-it-breaks">Where it breaks</h2>
 <p>Worth running before trusting this on a photograph. Nudge one endpoint by a few pixels and watch what happens to <span class="math inline">\(\ell'_\infty\)</span>: the more nearly parallel the segments look in the image, the further out the vanishing point goes, and the worse conditioned everything downstream becomes. This is the failure mode behind the bitangent construction in Section 1.7.</p>
-<div id="19" class="cell" data-execution_count="10">
+<div id="8bf5d294" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-08-06T09:03:20.239954Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-08-06T09:03:20.239233Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-08-06T09:03:20.425037Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-08-06T09:03:20.423944Z&quot;}}" data-execution_count="10">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>rng <span class="op">=</span> np.random.default_rng(<span class="dv">0</span>)</span>
 <span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>base <span class="op">=</span> cv.normalize_line(cv.join(cv.meet(a, c), cv.meet(b, d)))</span>
 <span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a></span>

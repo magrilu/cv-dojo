@@ -351,7 +351,7 @@ window.Quarto = {
 <p>How many do we need? <span class="math inline">\(\mathsf{F}\)</span> has nine entries, but it is defined only up to scale — multiplying it by any non-zero constant leaves the constraint unchanged — and it must have rank two. That is nine minus one minus one:</p>
 <p><span class="math display">\[\text{7 degrees of freedom.}\]</span></p>
 <p>Seven correspondences ought to be enough, and they are, but the rank condition is cubic, so the solution is not unique and the problem stops being linear. At the moment, we prefer dropping the rank condition and treating <span class="math inline">\(\mathsf{F}\)</span> as an arbitrary matrix defined up to scale costs one more point and buys a linear problem: hence we need <strong>eight</strong> points.</p>
-<div id="3" class="cell" data-execution_count="2">
+<div id="cd969218" class="cell" data-execution_count="2">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> design_matrix(x, xp):</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""One row per correspondence: the Kronecker product x' (x) x."""</span></span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>    u,  v  <span class="op">=</span> x[:, <span class="dv">0</span>],  x[:, <span class="dv">1</span>]</span>
@@ -388,7 +388,7 @@ Figure&nbsp;1: Hartley normalisation as a change of coordinates: precondition th
 <p>The diagram is the whole idea: we cannot solve well upstairs, so we push the points down with <span class="math inline">\(\mathsf{T}\)</span> and <span class="math inline">\(\mathsf{T}'\)</span>, solve there for <span class="math inline">\(\widehat{\mathsf{F}}\)</span>, and carry the result back with</p>
 <p><span class="math display">\[\mathsf{F} = \mathsf{T}'^\top \widehat{\mathsf{F}}\, \mathsf{T}.\]</span></p>
 <p>The transpose on <span class="math inline">\(\mathsf{T}'\)</span> is not a typo: lines transform contravariantly to points, which is exactly what the right-hand arrow of the diagram says.</p>
-<div id="7" class="cell" data-execution_count="4">
+<div id="bebc13a1" class="cell" data-execution_count="4">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> normalize_points(x):</span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""Centroid to the origin, mean distance to the origin equal to sqrt(2)."""</span></span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>    c <span class="op">=</span> x[:, :<span class="dv">2</span>].mean(axis<span class="op">=</span><span class="dv">0</span>)</span>
@@ -425,7 +425,7 @@ spread of the informative singular values, s1/s8:
 \sigma_3)\mathsf{V}^\top\)</span> and set <span class="math inline">\(\sigma_3\)</span> to zero.</p>
 <p>We also need a way to say how well an estimate fits the data. Above we measured the distance of <span class="math inline">\(\mathbf{x}'\)</span> from the line <span class="math inline">\(\mathsf{F}\mathbf{x}\)</span>; from here on we average it with the distance of <span class="math inline">\(\mathbf{x}\)</span> from <span class="math inline">\(\mathsf{F}^\top\mathbf{x}'\)</span>, because <span class="math inline">\(\mathsf{F}\)</span> defines epipolar lines in both directions and on noisy data there is no reason to measure the error in one image and not the other.</p>
 <p>This is a choice, not a definition handed down. The algebraic residual <span class="math inline">\(\mathbf{x}'^\top\mathsf{F}\mathbf{x}\)</span> is easier to compute but has no units and no geometric meaning; the symmetric distance is in pixels, which is what we can judge; and there is a third quantity, the Sampson distance, that approximates the reprojection error better than either.</p>
-<div id="10" class="cell" data-execution_count="5">
+<div id="edeaa7a2" class="cell" data-execution_count="5">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> epipolar_distance(F, x, xp):</span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""Symmetric point-to-epipolar-line distance, in pixels."""</span></span>
 <span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>    l  <span class="op">=</span> (F <span class="op">@</span> x.T).T</span>
@@ -435,7 +435,7 @@ spread of the informative singular values, s1/s8:
 <span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> (d1 <span class="op">+</span> d2) <span class="op">/</span> <span class="dv">2</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>All in all the eight-point algorithm can be implemented as follows:</p>
-<div id="12" class="cell" data-execution_count="6">
+<div id="2c8c1b02" class="cell" data-execution_count="6">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> eight_point(x, xp, enforce_rank2<span class="op">=</span><span class="va">True</span>):</span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""Estimate F from n &gt;= 8 correspondences, in homogeneous pixel coordinates."""</span></span>
 <span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>    <span class="co"># normalize the correspondences</span></span>
@@ -457,7 +457,7 @@ spread of the informative singular values, s1/s8:
 <span id="cb6-19"><a href="#cb6-19" aria-hidden="true" tabindex="-1"></a></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>Time to try it on data. Since, we know the projections matrices, we can compare the fundamental matrix computed from the cameras, with the one obtained via the eight-point algorithm.</p>
-<div id="14" class="cell" data-execution_count="7">
+<div id="5a943307" class="cell" data-execution_count="7">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>F_est <span class="op">=</span> eight_point(X_h, Xp_h)</span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>sgn <span class="op">=</span> np.sign((F_est <span class="op">*</span> F_geo).<span class="bu">sum</span>())</span>
 <span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -472,7 +472,7 @@ largest entrywise difference from the true F: 1.47e-17</code></pre>
 </div>
 <p>The small residuals show that we were able to recover the fundamental matrix up to machine precision. In practice, however, we have noise, and to improve the statistical efficiency of our estimation, instead of considering just 8 points, we can increase the number of matches. We just used ten correspondences, and the extra two do no harm, the system becomes overdetermined and the null vector becomes a least-squares fit, which is exactly what we want when the data is noisy. More points, better estimate.</p>
 <p>And a warning: eight points in a <em>bad configuration</em> are worse than useless. Here is the same estimate run on every subset of eight, sorted by how far it lands from the truth.</p>
-<div id="16" class="cell" data-execution_count="8">
+<div id="854eaf95" class="cell" data-execution_count="8">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> itertools</span>
 <span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>scores <span class="op">=</span> []</span>
 <span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> c <span class="kw">in</span> itertools.combinations(<span class="bu">range</span>(<span class="bu">len</span>(IDS)), <span class="dv">8</span>):</span>
@@ -507,7 +507,7 @@ Figure&nbsp;2: Different subsets of eight correspondences might give different e
 <section id="on-images" class="level3">
 <h3 class="anchored" data-anchor-id="on-images">On images</h3>
 <p>Let us now use real correspondences clicked by hand on the two photographs, ten of them, the six house corners and the four corners of the door. Their mean distance from the true epipolar lines is about 1.7 pixels, which is what careful annotation looks like.</p>
-<div id="20" class="cell" data-execution_count="10">
+<div id="2f12efb8" class="cell" data-execution_count="10">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>ann <span class="op">=</span> load_annotation(<span class="st">"two_view_matches"</span>)</span>
 <span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>xr  <span class="op">=</span> h(np.array([m[<span class="st">"x"</span>]  <span class="cf">for</span> m <span class="kw">in</span> ann[<span class="st">"matches"</span>]]))</span>
 <span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>xpr <span class="op">=</span> h(np.array([m[<span class="st">"xp"</span>] <span class="cf">for</span> m <span class="kw">in</span> ann[<span class="st">"matches"</span>]]))</span>
@@ -532,7 +532,7 @@ Figure&nbsp;2: Different subsets of eight correspondences might give different e
   mean 1.70   median 1.38   max 5.44</code></pre>
 </div>
 </div>
-<div id="21" class="cell" data-execution_count="11">
+<div id="750f195f" class="cell" data-execution_count="11">
 <div class="cell-output cell-output-display">
 <div>
 <figure class="figure">
@@ -542,7 +542,7 @@ Figure&nbsp;2: Different subsets of eight correspondences might give different e
 </div>
 </div>
 <p>Now estimate <span class="math inline">\(\mathsf{F}\)</span> from these, twice: once letting the null vector stand as it comes out of the linear system, once forcing rank two. The difference is barely visible in the numbers and evident in the picture.</p>
-<div id="23" class="cell" data-execution_count="12">
+<div id="be928330" class="cell" data-execution_count="12">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>F_free <span class="op">=</span> eight_point(xr, xpr, enforce_rank2<span class="op">=</span><span class="va">False</span>)</span>
 <span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>F_rank2 <span class="op">=</span> eight_point(xr, xpr, enforce_rank2<span class="op">=</span><span class="va">True</span>)</span>
 <span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -554,7 +554,7 @@ Figure&nbsp;2: Different subsets of eight correspondences might give different e
 rank two enforced     numerical rank 2   residuals: mean  9.50 px</code></pre>
 </div>
 </div>
-<div id="24" class="cell" data-execution_count="13">
+<div id="d67a13f4" class="cell" data-execution_count="13">
 <div class="cell-output cell-output-display">
 <div>
 <figure class="figure">
