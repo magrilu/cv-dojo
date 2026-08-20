@@ -37,6 +37,7 @@ website:
       - section: "Single-view geometry"
         contents:
           - notebooks/camera/camera.ipynb
+          - notebooks/camera/resection.ipynb
       - section: "Two-view geometry"
         contents:
           - notebooks/two-views/fundamental-matrix.ipynb
