@@ -245,6 +245,12 @@ window.Quarto = {
  <span class="menu-text">The perspective camera</span></a>
   </div>
 </li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../notebooks/camera/resection.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Resection</span></a>
+  </div>
+</li>
       </ul>
   </li>
         <li class="sidebar-item sidebar-item-section">
@@ -277,7 +283,7 @@ window.Quarto = {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../../notebooks/two-views/seven-point.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">The Seven-points algorithm</span></a>
+ <span class="menu-text">The seven-points algorithm</span></a>
   </div>
 </li>
       </ul>
@@ -463,7 +469,7 @@ Z_c\,\mathbf x ,
 <p>The matrix <span class="math inline">\(\mathsf P_f\)</span> is <span class="math inline">\(3\times4\)</span>, so it has a non-trivial null space, and it is worth asking what lives there. A vector in the kernel is mapped to <span class="math inline">\(\mathbf 0\)</span>, which is not a point of <span class="math inline">\(\mathbb P^2\)</span> — so a point of the kernel has no image at all.</p>
 <p>For <span class="math inline">\(\mathsf P_f\)</span> the kernel is spanned by <span class="math inline">\((0,0,0,1)^\top\)</span>: the origin of the camera frame, which is the centre of projection itself. That is exactly right. Every other point of space determines a visual ray, but the centre determines no direction, and a camera cannot photograph its own centre.</p>
 <p>This is the algebraic shadow of a geometric fact, and it holds for any camera matrix: the centre is the right null space of <span class="math inline">\(\mathsf P\)</span>.</p>
-<div id="5304d777" class="cell" data-execution_count="7">
+<div id="13" class="cell" data-execution_count="7">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>f_demo <span class="op">=</span> <span class="fl">1.4</span></span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>P_f <span class="op">=</span> np.array([[f_demo, <span class="fl">0.0</span>, <span class="fl">0.0</span>, <span class="fl">0.0</span>],</span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>                [<span class="fl">0.0</span>, f_demo, <span class="fl">0.0</span>, <span class="fl">0.0</span>],</span>
@@ -531,7 +537,7 @@ Figure&nbsp;4: One point, two descriptions. The <strong>world frame</strong> (da
 \mathbf t=-\mathsf R\mathbf C .
 \]</span></p>
 <p>The vector <span class="math inline">\(\mathbf t\)</span> is therefore <strong>not the position of the camera</strong> in the world frame. That position is <span class="math inline">\(\mathbf C\)</span>. Mixing up the two is one of the most reliable ways to spend an afternoon.</p>
-<div id="99e0d614" class="cell" data-execution_count="9">
+<div id="17" class="cell" data-execution_count="9">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>key <span class="op">=</span> IDS[<span class="bu">len</span>(IDS)<span class="op">//</span><span class="dv">2</span>]</span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>Xw_pt <span class="op">=</span> X[index[key]]</span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>Xc_pt <span class="op">=</span> R <span class="op">@</span> Xw_pt <span class="op">+</span> t</span>
@@ -592,7 +598,7 @@ Figure&nbsp;5: The two extrinsic motions, with the original camera drawn in grey
 </div>
 </div>
 </div>
-<div id="6ef56027" class="cell" data-execution_count="11">
+<div id="21" class="cell" data-execution_count="11">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"</span><span class="sc">{</span><span class="st">''</span><span class="sc">:22s}{</span><span class="st">'centre C'</span><span class="sc">:&gt;34s}{</span><span class="st">'translation t'</span><span class="sc">:&gt;34s}</span><span class="ss">"</span>)</span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> name, R_, C_ <span class="kw">in</span> [(<span class="st">"original"</span>, R, C), (<span class="st">"rotated about C"</span>, R_rot, C),</span>
 <span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>                     (<span class="st">"translated"</span>, R, C_tr)]:</span>
@@ -733,7 +739,7 @@ Figure&nbsp;8: The same house at the four stages of the chain. <strong>Top left:
 \mathbf d_i=\mathsf K^{-1}\mathbf x_i ,
 \]</span></p>
 <p>and the pose never enters, because a rotation does not change angles.</p>
-<div id="c7f8922d" class="cell" data-execution_count="15">
+<div id="29" class="cell" data-execution_count="15">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> backproject(pixels, K, R, t):</span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""World-frame origin and unit directions of the rays of a set of pixels."""</span></span>
 <span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>    x_h <span class="op">=</span> np.c_[np.asarray(pixels, <span class="bu">float</span>), np.ones(<span class="bu">len</span>(pixels))]</span>
@@ -796,7 +802,7 @@ P^{+}\mathbf x\)</span>, and since adding any multiple of the centre leaves the 
 \]</span></p>
 <p>recovering intrinsics and rotation up to the usual sign conventions; then <span class="math inline">\(\mathbf t\)</span> follows from the fourth column. With <span class="math inline">\(K_{33}=1\)</span>, <span class="math inline">\(K_{11},K_{22}&gt;0\)</span> and <span class="math inline">\(\det\mathsf R=1\)</span> the factorisation is unique.</p>
 <p>RQ is not a calibration algorithm: it only decomposes the matrix it is given. If <span class="math inline">\(\mathsf P\)</span> has been estimated poorly, its factors will be poor as well. Calibration procedures estimate the camera while enforcing its structure during the estimation, and using many measurements.</p>
-<div id="f13b2881" class="cell" data-execution_count="17">
+<div id="33" class="cell" data-execution_count="17">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> rq3(A):</span>
 <span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""RQ decomposition A = R_upper @ Q_orthogonal, built from NumPy's QR."""</span></span>
 <span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>    Q, R_up <span class="op">=</span> np.linalg.qr(np.flipud(A).T)</span>

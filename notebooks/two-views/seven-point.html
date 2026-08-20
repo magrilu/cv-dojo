@@ -181,7 +181,7 @@ window.Quarto = {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../notebooks/two-views/fundamental-matrix.html">Two-view geometry</a></li><li class="breadcrumb-item"><a href="../../notebooks/two-views/seven-point.html">The Seven-points algorithm</a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../notebooks/two-views/fundamental-matrix.html">Two-view geometry</a></li><li class="breadcrumb-item"><a href="../../notebooks/two-views/seven-point.html">The seven-points algorithm</a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
@@ -245,6 +245,12 @@ window.Quarto = {
  <span class="menu-text">The perspective camera</span></a>
   </div>
 </li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../notebooks/camera/resection.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Resection</span></a>
+  </div>
+</li>
       </ul>
   </li>
         <li class="sidebar-item sidebar-item-section">
@@ -277,7 +283,7 @@ window.Quarto = {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../../notebooks/two-views/seven-point.html" class="sidebar-item-text sidebar-link active">
- <span class="menu-text">The Seven-points algorithm</span></a>
+ <span class="menu-text">The seven-points algorithm</span></a>
   </div>
 </li>
       </ul>
@@ -308,7 +314,7 @@ window.Quarto = {
         <nav id="TOC" role="doc-toc" class="toc-active">
    
   <ul>
-  <li><a href="#the-seven-points-algorithm" id="toc-the-seven-points-algorithm" class="nav-link active" data-scroll-target="#the-seven-points-algorithm">The Seven-points algorithm</a>
+  <li><a href="#the-seven-points-algorithm" id="toc-the-seven-points-algorithm" class="nav-link active" data-scroll-target="#the-seven-points-algorithm">The seven-points algorithm</a>
   <ul class="collapse">
   <li><a href="#seven-correspondences" id="toc-seven-correspondences" class="nav-link" data-scroll-target="#seven-correspondences">Seven correspondences</a></li>
   <li><a href="#a-pencil-of-fundamental-matrix" id="toc-a-pencil-of-fundamental-matrix" class="nav-link" data-scroll-target="#a-pencil-of-fundamental-matrix">A pencil of fundamental matrix</a></li>
@@ -332,14 +338,14 @@ window.Quarto = {
 <div class="toc-actions"><ul><li><a href="https://github.com/magrilu/cv-dojo/issues/new" class="toc-action"><i class="bi bi-github"></i>Report an issue</a></li></ul></div></nav>
     </div>
 <!-- main -->
-<main class="content page-columns page-full" id="quarto-document-content"><header id="title-block-header" class="quarto-title-block"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../notebooks/two-views/fundamental-matrix.html">Two-view geometry</a></li><li class="breadcrumb-item"><a href="../../notebooks/two-views/seven-point.html">The Seven-points algorithm</a></li></ol></nav></header>
+<main class="content page-columns page-full" id="quarto-document-content"><header id="title-block-header" class="quarto-title-block"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../notebooks/two-views/fundamental-matrix.html">Two-view geometry</a></li><li class="breadcrumb-item"><a href="../../notebooks/two-views/seven-point.html">The seven-points algorithm</a></li></ol></nav></header>
 
 
 
 
 <p><a href="https://colab.research.google.com/github/magrilu/cv-dojo/blob/main/notebooks/two-views/seven-point.ipynb"><img src="https://colab.research.google.com/assets/colab-badge.svg" class="img-fluid"></a></p>
 <section id="the-seven-points-algorithm" class="level1 page-columns page-full">
-<h1>The Seven-points algorithm</h1>
+<h1>The seven-points algorithm</h1>
 <p>The fundamental matrix has seven degrees of freedom. In the previous notebook we paid for an eighth correspondence so that the estimation problem became <em>linear</em>. Here we go back and ask what happens if we use exactly seven.</p>
 <p>The answer is the reason the <strong>seven-point algorithm</strong> is a minimal solver: seven correspondences leave a two-dimensional null space, hence a pencil of matrices. The rank-two constraint then cuts that pencil with a cubic equation, leaving one or three real fundamental matrices.</p>
 <section id="seven-correspondences" class="level2 page-columns page-full">

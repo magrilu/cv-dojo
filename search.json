@@ -304,7 +304,7 @@
     "href": "notebooks/two-views/critical-configurations.html#two-different-epipoles-same-facade-correspondences",
     "title": "When eight points are not enough",
     "section": "3. Two different epipoles, same facade correspondences",
-    "text": "3. Two different epipoles, same facade correspondences\nWe can make the ambiguity visible directly on the second photograph. Choose two different epipoles \\(\\mathbf{e}'_a\\) and \\(\\mathbf{e}'_b\\) and build\n\\[\n\\mathsf{F}_a=[\\mathbf{e}'_a]_\\times \\mathsf{H},\\qquad\n\\mathsf{F}_b=[\\mathbf{e}'_b]_\\times \\mathsf{H}.\n\\]\nBoth explain all eight facade matches, but they generate different pencils of epipolar lines.\n\nepa=np.array([620.,1580.,1.]); epb=np.array([980.,980.,1.])\nFa=skew(epa)@Hfac; Fb=skew(epb)@Hfac\nFa/=np.linalg.norm(Fa); Fb/=np.linalg.norm(Fb)\n\nfig,axes=plt.subplots(1,2,figsize=(14,7))\nfor ax,Fq,epq,title in [(axes[0],Fa,epa,\"one compatible $F_a$\"),(axes[1],Fb,epb,\"another compatible $F_b$\")]:\n    ax.imshow(Ip)\n    for q in xf: plot_line(ax,Fq@q,lw=1.25,alpha=.75)\n    ax.scatter(xpf_xy[:,0],xpf_xy[:,1],s=30,facecolors='none',edgecolors='white')\n    ax.scatter(epq[0],epq[1],marker='*',s=220,edgecolors='k',linewidths=.8)\n    ax.set_xlim(180,1130); ax.set_ylim(1710,820); ax.axis('off'); ax.set_title(title)\nplt.tight_layout(); plt.show()\n\nfor tag,Fq in [('a',Fa),('b',Fb)]:\n    r=np.array([xpf[i]@Fq@xf[i] for i in range(8)])\n    print(tag,'rank(F)=',np.linalg.matrix_rank(Fq),'max |x\\' F x|=',np.max(np.abs(r)))\n\n\n\n\n\n\n\n\na rank(F)= 2 max |x' F x|= 1.1102230246251565e-15\nb rank(F)= 2 max |x' F x|= 1.5543122344752192e-15\n\n\nAdding more points on the same facade does not resolve this ambiguity. They still obey the same homography."
+    "text": "3. Two different epipoles, same facade correspondences\nWe can make the ambiguity visible directly on the second photograph. Choose two different epipoles \\(\\mathbf{e}'_a\\) and \\(\\mathbf{e}'_b\\) and build\n\\[\n\\mathsf{F}_a=[\\mathbf{e}'_a]_\\times \\mathsf{H},\\qquad\n\\mathsf{F}_b=[\\mathbf{e}'_b]_\\times \\mathsf{H}.\n\\]\nBoth explain all eight facade matches, but they generate different pencils of epipolar lines.\n\nepa=np.array([620.,1580.,1.]); epb=np.array([980.,980.,1.])\nFa=skew(epa)@Hfac; Fb=skew(epb)@Hfac\nFa/=np.linalg.norm(Fa); Fb/=np.linalg.norm(Fb)\n\nfig,axes=plt.subplots(1,2,figsize=(14,7))\nfor ax,Fq,epq,title in [(axes[0],Fa,epa,\"one compatible $F_a$\"),(axes[1],Fb,epb,\"another compatible $F_b$\")]:\n    ax.imshow(Ip)\n    for q in xf: plot_line(ax,Fq@q,lw=1.25,alpha=.75)\n    ax.scatter(xpf_xy[:,0],xpf_xy[:,1],s=30,facecolors='none',edgecolors='white')\n    ax.scatter(epq[0],epq[1],marker='*',s=220,edgecolors='k',linewidths=.8)\n    ax.set_xlim(180,1130); ax.set_ylim(1710,820); ax.axis('off'); ax.set_title(title)\nplt.tight_layout(); plt.show()\n\nfor tag,Fq in [('a',Fa),('b',Fb)]:\n    r=np.array([xpf[i]@Fq@xf[i] for i in range(8)])\n    print(tag,'rank(F)=',np.linalg.matrix_rank(Fq),'max |x\\' F x|=',np.max(np.abs(r)))\n\n\n\n\n\n\n\n\na rank(F)= 2 max |x' F x|= 1.1102230246251565e-15\nb rank(F)= 2 max |x' F x|= 1.9984014443252818e-15\n\n\nAdding more points on the same facade does not resolve this ambiguity. They still obey the same homography."
   },
   {
     "objectID": "notebooks/two-views/critical-configurations.html#pure-rotation-a-homography-without-a-planar-scene",
@@ -333,6 +333,362 @@
     "title": "When eight points are not enough",
     "section": "Further reading",
     "text": "Further reading\n\nMaybank, S. J. Theory of Reconstruction from Image Motion, Springer, 1993. Critical surfaces and ambiguous reconstructions.\nHartley, R. “Ambiguous configurations for 3-view projective reconstruction”, ECCV, 2000.\nTorr, P. H. S., Fitzgibbon, A. W. and Zisserman, A. “The problem of degeneracy in structure and motion recovery from uncalibrated image sequences”, IJCV 32(1), 1999.\nHartley, R. and Zisserman, A. Multiple View Geometry in Computer Vision, 2nd ed., Cambridge University Press, 2004. Chapter 9 (epipolar geometry) and Chapter 11 (computation of \\(\\mathsf{F}\\)).\nFusiello, A. Visione Computazionale: tecniche di ricostruzione tridimensionale, Franco Angeli, 2018. Chapter 5.\n\n\nLuca Magri — Computer Vision Dojo\nCode MIT · text and figures CC BY-NC-ND 4.0\nhttps://magrilu.github.io/cv-dojo/"
+  },
+  {
+    "objectID": "notebooks/camera/resection.html#a-synthetic-image",
+    "href": "notebooks/camera/resection.html#a-synthetic-image",
+    "title": "Resection",
+    "section": "A synthetic image",
+    "text": "A synthetic image\nBefore turning to a real photograph, let’s start with a controlled synthetic case.\nWe already know the 3D coordinates of the ideal origami house. Choose a camera \\(\\mathsf P_{\\mathrm{syn}}\\) and use it to project the house vertices into an image,\n\\[\n\\mathbf x_i \\sim \\mathsf P_{\\mathrm{syn}} \\mathbf X_i.\n\\]\nWe then keep only the resulting 3D–2D correspondences \\(\\mathbf X_i \\leftrightarrow \\mathbf x_i\\).\nThe resection problem is now simple to state: recover \\(\\mathsf P_{\\mathrm{syn}}\\) from these correspondences alone.\nTo manufacture our synthetic image, we must choose three things:\n\nwhere the camera is, given by its centre \\(\\mathbf C_{\\mathrm{syn}}\\);\nwhere it looks, encoded by its orientation \\(\\mathsf R_{\\mathrm{syn}}\\);\nhow it forms the image, encoded by its intrinsic matrix \\(\\mathsf K_{\\mathrm{syn}}\\).\n\nTogether they determine the camera matrix\n\\[\n\\mathsf P_{\\mathrm{syn}}\n=\n\\mathsf K_{\\mathrm{syn}}\n\\begin{bmatrix}\n\\mathsf R_{\\mathrm{syn}} &\n-\\mathsf R_{\\mathrm{syn}}\\mathbf C_{\\mathrm{syn}}\n\\end{bmatrix}.\n\\]\nWe can then project the vertices of the house,\n\\[\n\\mathbf x_i \\sim \\mathsf P_{\\mathrm{syn}}\\mathbf X_i,\n\\]\nto obtain the synthetic 3D–2D correspondences that will serve as input to the resection problem.\n\n# Where the camera is?\n# Place the synthetic camera away from the house.\n# Its position is expressed in the same 3D coordinate system as the house.\nhouse_centre = X_ALL.mean(axis=0)\nC_syn = house_centre + np.array([9.0, -16.0, 11.0])\n\n# Where the camera looks?\ndef look_at(centre, target, up=np.array([0.0, 0.0, 1.0])):\n    \"\"\"Build a rotation for a camera located at `centre` and looking at `target`.\"\"\"\n\n    # Camera z-axis: viewing direction.\n    z = np.asarray(target, float) - np.asarray(centre, float)\n    z /= np.linalg.norm(z)\n\n    # Camera x-axis: perpendicular to the viewing direction and world vertical.\n    x = np.cross(z, up)\n    x /= np.linalg.norm(x)\n\n    # Camera y-axis completes the orthonormal frame.\n    # With this convention it points downwards in the image.\n    y = np.cross(z, x)\n\n    return np.vstack([x, y, z])\n\n\nR_syn = look_at(C_syn, house_centre)\n\n# What are the intrinsics?\n# Choose simple intrinsics: square pixels, no skew,\n# and the principal point at the centre of the image.\ndef K_matrix(f, cx, cy):\n    return np.array([\n        [f, 0.0, cx],\n        [0.0, f, cy],\n        [0.0, 0.0, 1.0],\n    ])\n\n\nK_syn = K_matrix(2900.0, W_PIX / 2, H_PIX / 2)\n\n# We can assemble the camera projection matrix:\n#\n#                    P = K [ R | -RC ].\n#\n# C_syn is the camera centre in world coordinates;\n# R_syn expresses world points in the camera coordinate frame.\nP_syn = K_syn @ np.c_[R_syn, -R_syn @ C_syn]\n\n\ndef project(P, pts):\n    \"\"\"Project 3D points and return ordinary image coordinates.\"\"\"\n    q = (P @ np.c_[pts, np.ones(len(pts))].T).T\n    return q[:, :2] / q[:, 2, None]\n\n\n# These image points are the synthetic measurements that will\n# be the input of the resection algorithm.\nx_syn = project(P_syn, X_ALL)\n\nprint(\"the synthetic camera stands at\", np.round(C_syn, 2), \"cm\")\nprint(\n    \"and its picture of the house spans\",\n    np.round(np.ptp(x_syn, axis=0)).astype(int),\n    f\"px inside a {W_PIX} x {H_PIX} frame\",\n)\n\nthe synthetic camera stands at [ 11.5  -14.23  12.85] cm\nand its picture of the house spans [839 806] px inside a 1536 x 2048 frame\n\n\n\n\n\n\n\n\n\n\nFigure 1: The synthetic photograph. Ten vertices, projected by a camera whose position, orientation and focal length we chose ourselves; this and the metric model are the only inputs the estimator gets.",
+    "crumbs": [
+      "About",
+      "Single-view geometry",
+      "Resection"
+    ]
+  },
+  {
+    "objectID": "notebooks/camera/resection.html#from-one-correspondence-to-two-equations",
+    "href": "notebooks/camera/resection.html#from-one-correspondence-to-two-equations",
+    "title": "Resection",
+    "section": "From one correspondence to two equations",
+    "text": "From one correspondence to two equations\nA single 3D–2D correspondence satisfies\n\\[\n\\mathbf x_i \\sim \\mathsf P \\mathbf X_i.\n\\]\nMore explicitly, there exists a non-zero scalar \\(\\lambda_i\\) such that\n\\[\n\\mathsf P \\mathbf X_i = \\lambda_i \\mathbf x_i.\n\\]\nInstead of dealing with such scale factors for every correspondence we can eliminate them. Two homogeneous vectors represent the same image point precisely when they are parallel, hence\n\\[\n\\mathbf x_i \\times \\mathsf P\\mathbf X_i = \\mathbf 0,\n\\]\nor, using the skew-symmetric matrix of \\(\\mathbf x_i\\),\n\\[\n[\\mathbf x_i]_\\times \\mathsf P\\mathbf X_i = \\mathbf 0.\n\\]\nThe unknown scale \\(\\lambda_i\\) has disappeared.\nNow write the rows of \\(\\mathsf P\\) as \\(\\mathbf p^{1\\top},\\mathbf p^{2\\top},\\mathbf p^{3\\top}\\) and stack them into\n\\[\n\\mathbf p\n=\n\\begin{bmatrix}\n\\mathbf p^1\\\\\n\\mathbf p^2\\\\\n\\mathbf p^3\n\\end{bmatrix}\n=\n\\operatorname{vec}(\\mathsf P^\\top).\n\\]\nSince\n\\[\n\\mathsf P\\mathbf X_i\n=\n(\\mathsf I_3\\otimes\\mathbf X_i^\\top)\\mathbf p,\n\\]\none correspondence gives the homogeneous linear system\n\\[\n\\underbrace{\n\\left(\n[\\mathbf x_i]_\\times\\otimes\\mathbf X_i^\\top\n\\right)\n}_{\\mathsf A_i}\n\\mathbf p\n=\n\\mathbf 0.\n\\]\nThis is a \\(3\\times12\\) system, but it contains only two independent equations. Indeed, for every non-zero image point,\n\\[\n\\operatorname{rank}[\\mathbf x_i]_\\times=2,\n\\]\nand therefore\n\\[\n\\operatorname{rank}\\mathsf A_i=2.\n\\]\nFor \\(\\mathbf x_i=(u_i,v_i,1)^\\top\\), the three rows are\n\\[\n\\begin{bmatrix}\n\\mathbf 0^\\top & -\\mathbf X_i^\\top & v_i\\mathbf X_i^\\top\\\\\n\\mathbf X_i^\\top & \\mathbf 0^\\top & -u_i\\mathbf X_i^\\top\\\\\n-v_i\\mathbf X_i^\\top & u_i\\mathbf X_i^\\top & \\mathbf 0^\\top\n\\end{bmatrix}\n\\mathbf p\n=\n\\mathbf 0.\n\\]\nThese three equations are not independent. If we call the rows \\(\\mathbf R_1,\\mathbf R_2,\\mathbf R_3\\), then\n\\[\n\\mathbf R_3\n=\n-u_i\\,\\mathbf R_1\n-v_i\\,\\mathbf R_2.\n\\]\nIndeed,\n\\[\n-u_i\n\\begin{bmatrix}\n\\mathbf 0^\\top & -\\mathbf X_i^\\top & v_i\\mathbf X_i^\\top\n\\end{bmatrix}\n-\nv_i\n\\begin{bmatrix}\n\\mathbf X_i^\\top & \\mathbf 0^\\top & -u_i\\mathbf X_i^\\top\n\\end{bmatrix}\n=\n\\begin{bmatrix}\n-v_i\\mathbf X_i^\\top &\nu_i\\mathbf X_i^\\top &\n\\mathbf 0^\\top\n\\end{bmatrix}.\n\\]\nSo a single 3D–2D correspondence contributes only two independent linear constraints.\nWe can therefore keep, for example, the first two independent equations:\n\\[\n\\begin{bmatrix}\n\\mathbf X_i^\\top & \\mathbf 0^\\top & -u_i\\mathbf X_i^\\top\\\\\n\\mathbf 0^\\top & \\mathbf X_i^\\top & -v_i\\mathbf X_i^\\top\n\\end{bmatrix}\n\\mathbf p\n=\n\\mathbf 0.\n\\]\nFor each 3D–2D correspondence we now have two linear equations in the twelve entries of the camera matrix. The following function simply writes those two rows for every correspondence and stacks them into a single matrix \\(\\mathsf A\\).\n\ndef camera_design_matrix(pts, xy):\n    \"\"\"Build the 2n x 12 design matrix A for camera resection.\"\"\"\n    Q = np.c_[np.asarray(pts, float), np.ones(len(pts))]  # homogeneous X_i\n    xy = np.asarray(xy, float)\n\n    A = np.zeros((2 * len(Q), 12))\n\n    for i, (Xi, (u, v)) in enumerate(zip(Q, xy)):\n        A[2*i]     = np.r_[Xi, np.zeros(4), -u * Xi]\n        A[2*i + 1] = np.r_[np.zeros(4), Xi, -v * Xi]\n\n    return A",
+    "crumbs": [
+      "About",
+      "Single-view geometry",
+      "Resection"
+    ]
+  },
+  {
+    "objectID": "notebooks/camera/resection.html#the-direct-linear-transform",
+    "href": "notebooks/camera/resection.html#the-direct-linear-transform",
+    "title": "Resection",
+    "section": "The direct linear transform",
+    "text": "The direct linear transform\nStacking all correspondences gives\n\\[\n\\mathsf A\\mathbf p=\\mathbf 0,\n\\qquad\n\\mathsf A\\in\\mathbb R^{2n\\times12}.\n\\]\nAt this point the geometry has been converted into a linear algebra problem.\nThere is one important detail: this is a homogeneous system. The zero vector would of course satisfy it, but it does not represent a valid camera that must have rank 3. What we want is a non-zero vector solution \\(\\mathbf p\\), and we only need it up to scale because\n\\[\n\\mathsf P\n\\quad\\text{and}\\quad\n\\alpha\\mathsf P,\n\\qquad \\alpha\\neq0,\n\\]\nrepresent the same projective camera.\nWith exact correspondences in general position, \\(\\mathsf A\\) has rank \\(11\\). Its null space is therefore one-dimensional, and any non-zero vector spanning that null space gives the camera matrix up to scale.\nWith noisy measurements there is generally no exact null vector. We therefore look for the solution that comes closest:\n\\[\n\\min_{\\|\\mathbf p\\|=1}\n\\|\\mathsf A\\mathbf p\\|^2.\n\\]\nThe unit-norm constraint simply fixes the otherwise arbitrary scale and rules out the trivial solution \\(\\mathbf p=\\mathbf 0\\). The solution is the right singular vector of \\(\\mathsf A\\) associated with its smallest singular value.\nThis is the direct linear transform, or DLT.\n\ndef dlt_camera(pts, xy):\n    \"\"\"Estimate the camera matrix from n &gt;= 6 3D--2D correspondences.\"\"\"\n    A = camera_design_matrix(pts, xy)\n\n    # The solution of min ||A p|| subject to ||p|| = 1\n    # is the right singular vector associated with the smallest singular value.\n    _, _, Vt = np.linalg.svd(A)\n    p = Vt[-1]\n\n    P = p.reshape(3, 4)\n\n    # Choose one representative of the projective camera P ~ alpha P.\n    return P / np.linalg.norm(P)\n\n\nA_syn = camera_design_matrix(X_ALL, x_syn)\nP_hat = dlt_camera(X_ALL, x_syn)\n\nprint(\n    f\"A has shape {A_syn.shape} \"\n    f\"and rank {np.linalg.matrix_rank(A_syn)}.\"\n)\n\nprint(\n    f\"largest reprojection error: \"\n    f\"{reprojection_error(P_hat, X_ALL, x_syn).max():.2e} px\"\n)\n\n\nA has shape (20, 12) and rank 11.\nlargest reprojection error: 4.26e-10 px\n\n\nFor our exact synthetic correspondences, \\(\\mathsf A\\) has rank \\(11\\), so its null space is one-dimensional, exactly as expected. The recovered matrix reprojects the points essentially to machine precision.\n\nWhere does the name come from?\nThe DLT was introduced by Y. I. Abdel-Aziz and H. M. Karara in 1971, in close-range photogrammetry. Their problem already looks remarkably familiar: given the known 3D coordinates of control points and their measured 2D positions in a photograph, estimate the camera that relates them.\nDirect meant estimating this 3D-to-2D mapping in one step, rather than first recovering several intermediate photogrammetric calibration and orientation parameters. Linear meant that the unknown coefficients could be obtained from linear equations. In modern computer-vision notation, these coefficients are the entries of the projective camera matrix \\(\\mathsf P\\), determined up to scale.",
+    "crumbs": [
+      "About",
+      "Single-view geometry",
+      "Resection"
+    ]
+  },
+  {
+    "objectID": "notebooks/camera/resection.html#how-many-correspondences",
+    "href": "notebooks/camera/resection.html#how-many-correspondences",
+    "title": "Resection",
+    "section": "How many correspondences?",
+    "text": "How many correspondences?\nWe can now count the number of 2D-3D correspondences needed to get the perspective camera matrix.\nA \\(3\\times4\\) camera matrix has twelve entries, but its global scale is irrelevant:\n\\[\n12-1=11\n\\qquad\\text{degrees of freedom.}\n\\]\nEach 3D–2D correspondence contributes two independent linear constraints, so\n\\[\n2n\\geq11.\n\\]\nThus at least\n\\[\nn=6\n\\]\ncomplete correspondences are required.\nAll of this assumes that the correspondences are in general position. In particular, points lying on a single plane cannot determine a general \\(3\\times4\\) camera matrix.\nThere is no additional rank constraint to enforce here. A non-degenerate projective camera is simply a \\(3\\times4\\) matrix of rank three, and a generic DLT estimate already has rank three.\nThis is different from, for example, the fundamental matrix, whose rank-two constraint must be explicitly restored after a linear estimate.\nAt this stage we are making no Euclidean assumptions about the camera: we do not require a calibration matrix \\(\\mathsf K\\), an orthogonal rotation \\(\\mathsf R\\), or a decomposition of \\(\\mathsf P\\). We have recovered a projective camera.\nThere is, however, one geometric object that can be read directly from any projective camera: its camera centre.\n\ndef camera_centre(P):\n    \"\"\"Return the finite camera centre in 3D coordinates.\"\"\"\n    _, _, Vt = np.linalg.svd(np.asarray(P, float))\n\n    # The last right singular vector spans null(P).\n    C = Vt[-1]\n\n    # Convert the homogeneous point C ~ (X, Y, Z, W) to Euclidean coordinates.\n    return C[:3] / C[3]\n\n\nC_hat = camera_centre(P_hat)\n\nprint(\"true camera centre:     \", np.round(C_syn, 6), \"cm\")\nprint(\"recovered camera centre:\", np.round(C_hat, 6), \"cm\")\nprint(\n    f\"error on the camera centre: \"\n    f\"{np.linalg.norm(C_hat - C_syn):.2e} cm\"\n)\n\ntrue camera centre:      [ 11.5    -14.2322  12.8536] cm\nrecovered camera centre: [ 11.5    -14.2322  12.8536] cm\nerror on the camera centre: 1.49e-11 cm\n\n\nThis closes the synthetic experiment. We started from a camera centre \\(\\mathbf C_{\\mathrm{syn}}\\), used it to manufacture image measurements, then discarded the camera. From the 3D–2D correspondences alone, the DLT recovered a projective camera whose null space brings us back to the original viewpoint.",
+    "crumbs": [
+      "About",
+      "Single-view geometry",
+      "Resection"
+    ]
+  },
+  {
+    "objectID": "notebooks/camera/resection.html#from-a-projective-matrix-to-a-camera",
+    "href": "notebooks/camera/resection.html#from-a-projective-matrix-to-a-camera",
+    "title": "Resection",
+    "section": "From a projective matrix to a camera",
+    "text": "From a projective matrix to a camera\nThe DLT treated \\(\\mathsf P\\) simply as a projective \\(3\\times4\\) matrix. It did not exploit during the estimation of \\(\\mathsf P\\) any structure on its entries involving the calibration matrix, or the rotation.\nBut the coordinates used in our synthetic experiment were not arbitrary projective coordinates: the house was described in a Euclidean 3D reference frame, and its image points were expressed in pixel coordinates. We can therefore ask for the usual Euclidean interpretation of the recovered camera.\nWrite\n\\[\n\\mathsf P\n=\n\\begin{bmatrix}\n\\mathsf M & \\mathbf p_4\n\\end{bmatrix},\n\\]\nwhere \\(\\mathsf M\\) is the left \\(3\\times3\\) block. For a finite perspective camera,\n\\[\n\\mathsf P\n=\n\\mathsf K\n\\begin{bmatrix}\n\\mathsf R & \\mathbf t\n\\end{bmatrix},\n\\]\nso in particular\n\\[\n\\mathsf M = \\mathsf K\\mathsf R.\n\\]\nHere \\(\\mathsf K\\) is upper triangular and contains the intrinsic parameters, while \\(\\mathsf R\\) is a rotation. This is exactly the structure produced by an RQ decomposition of \\(\\mathsf M\\):\n\\[\n\\mathsf M = \\mathsf K\\mathsf R.\n\\]\nThe factorization is not quite unique: signs can be moved between \\(\\mathsf K\\) and \\(\\mathsf R\\), and the whole camera is still defined only up to scale. We therefore choose the usual convention of a positive diagonal for \\(\\mathsf K\\), enforce \\(\\det\\mathsf R=+1\\), and normalize \\(\\mathsf K_{33}=1\\).\nOnce \\(\\mathsf K\\) is known, the last column of \\(\\mathsf P\\) gives the translation,\n\\[\n\\mathbf t\n=\n\\mathsf K^{-1}\\mathbf p_4.\n\\]\n\ndef rq3(A):\n    \"\"\"Factor A = K R, with K upper triangular and R orthogonal.\"\"\"\n    Q, R = np.linalg.qr(np.flipud(np.asarray(A, float)).T)\n    K = np.fliplr(np.flipud(R.T))\n    R = np.flipud(Q.T)\n    return K, R\n\n\ndef decompose_camera(P):\n    \"\"\"Decompose a finite camera as P ~ K [R | t].\"\"\"\n    P = np.asarray(P, float).copy()\n\n    # Choose the global sign so that the left 3x3 block\n    # can have a positive-determinant calibration matrix.\n    if np.linalg.det(P[:, :3]) &lt; 0:\n        P = -P\n\n    K, R = rq3(P[:, :3])\n\n    # Move signs from K into R so that diag(K) is positive.\n    D = np.diag(np.where(np.diag(K) &lt; 0, -1.0, 1.0))\n    K = K @ D\n    R = D @ R\n\n    # Fix the remaining projective scale by setting K[2,2] = 1.\n    scale = K[2, 2]\n    K = K / scale\n    P = P / scale\n\n    t = np.linalg.solve(K, P[:, 3])\n\n    return K, R, t\n\n\nK_rec, R_rec, t_rec = decompose_camera(P_hat)\n\nprint(\"K recovered:\\n\", K_rec)\n\nprint(\n    f\"\\nlargest deviation from the synthetic K: \"\n    f\"{np.abs(K_rec - K_syn).max():.2e}\"\n)\n\nprint(\n    f\"largest deviation from the synthetic R: \"\n    f\"{np.abs(R_rec - R_syn).max():.2e}\"\n)\n\nK recovered:\n [[2900.   -0.  768.]\n [   0. 2900. 1024.]\n [   0.    0.    1.]]\n\nlargest deviation from the synthetic K: 3.41e-09\nlargest deviation from the synthetic R: 3.93e-13",
+    "crumbs": [
+      "About",
+      "Single-view geometry",
+      "Resection"
+    ]
+  },
+  {
+    "objectID": "notebooks/camera/resection.html#normalising-the-coordinates",
+    "href": "notebooks/camera/resection.html#normalising-the-coordinates",
+    "title": "Resection",
+    "section": "Normalising the coordinates",
+    "text": "Normalising the coordinates\nBefore adding noise, it is worth looking at the linear system itself. The non-zero entries of \\(\\mathsf A\\) do not all have the same numerical scale.\n\nA_syn = camera_design_matrix(X_ALL, x_syn)\n\nfor name, block in [\n    (r\"p1\", A_syn[:, 0:4]),\n    (r\"p2\", A_syn[:, 4:8]),\n    (r\"p3\", A_syn[:, 8:12]),\n]:\n    values = np.abs(block)\n    values = values[values &gt; 0]\n    print(f\"{name}: {values.min():.2g}  to  {values.max():.2g}\")\n\np1: 1  to  5\np2: 1  to  5\np3: 3.4e+02  to  7.3e+03\n\n\nThe design matrix depends on the coordinate systems in which the points are expressed. In our example, the 3D coordinates of the house are a few units across, while the image coordinates are measured in thousands of pixels. Consequently, terms such as \\(u_i\\mathbf X_i\\) and \\(v_i\\mathbf X_i\\) can be much larger than the coordinates \\(\\mathbf X_i\\) that appear in the other columns of \\(\\mathsf A\\).\nThis does not change the projective geometry, but it can make the linear system unnecessarily sensitive to numerical errors.\nA standard remedy is to change coordinates before building the system. Let\n\\[\n\\widehat{\\mathbf X}_i = \\mathsf U\\,\\mathbf X_i\n\\]\nbe a similarity transformation that recentres and rescales the 3D points, and\n\\[\n\\widehat{\\mathbf x}_i = \\mathsf T\\,\\mathbf x_i\n\\]\nthe corresponding normalization of the image points.\nThe camera relating the normalized coordinates is not \\(\\mathsf P\\). Starting from\n\\[\n\\mathbf x_i \\sim \\mathsf P\\mathbf X_i,\n\\]\nwe obtain\n\\[\n\\widehat{\\mathbf x}_i\n\\sim\n\\mathsf T\\,\\mathsf P\\,\\mathsf U^{-1}\n\\widehat{\\mathbf X}_i.\n\\]\nTherefore\n\\[\n\\widehat{\\mathsf P}\n=\n\\mathsf T\\,\\mathsf P\\,\\mathsf U^{-1}.\n\\]\nWe estimate \\(\\widehat{\\mathsf P}\\) from the normalized correspondences and then return to the original coordinates with\n\\[\n\\mathsf P\n=\n\\mathsf T^{-1}\\widehat{\\mathsf P}\\,\\mathsf U.\n\\]\nThe two normalizations act in different spaces: \\(\\mathsf U\\) is a \\(4\\times4\\) transformation of the 3D world coordinates, whereas \\(\\mathsf T\\) is a \\(3\\times3\\) transformation of the image coordinates.\n\n\n\n\n\n\n\n\nFigure 2: Normalisation as a change of coordinates. The camera is estimated along the bottom edge, where the numbers are well behaved, and carried back to pixels and centimetres along the sides.\n\n\n\n\n\nWe use the standard isotropic normalization: translate each point set so that its centroid is at the origin, then rescale it so that the mean distance from the origin is \\(\\sqrt{2}\\) in the image and \\(\\sqrt{3}\\) in space.\n\ndef normalise_2d(xy):\n    \"\"\"Centroid at the origin, mean distance equal to sqrt(2).\"\"\"\n    xy = np.asarray(xy, float)\n\n    c = xy.mean(axis=0)\n    s = np.sqrt(2) / np.linalg.norm(xy - c, axis=1).mean()\n\n    T = np.array([\n        [s, 0, -s * c[0]],\n        [0, s, -s * c[1]],\n        [0, 0, 1.0],\n    ])\n\n    return (xy - c) * s, T\n\n\ndef normalise_3d(pts):\n    \"\"\"Centroid at the origin, mean distance equal to sqrt(3).\"\"\"\n    pts = np.asarray(pts, float)\n\n    c = pts.mean(axis=0)\n    s = np.sqrt(3) / np.linalg.norm(pts - c, axis=1).mean()\n\n    U = np.array([\n        [s, 0, 0, -s * c[0]],\n        [0, s, 0, -s * c[1]],\n        [0, 0, s, -s * c[2]],\n        [0, 0, 0, 1.0],\n    ])\n\n    return (pts - c) * s, U\n\n\ndef resection(pts, xy):\n    \"\"\"Normalized DLT, carried back to the original coordinates.\"\"\"\n    Xn, U = normalise_3d(pts)\n    xn, T = normalise_2d(xy)\n\n    Pn = dlt_camera(Xn, xn)\n    P = np.linalg.inv(T) @ Pn @ U\n\n    return P / np.linalg.norm(P)\n\nThe geometry has not changed: we have only changed coordinates before solving the linear system. What does change is its numerical scale.\nTo see this, we can move the origin of the world farther and farther away from the house. This describes exactly the same scene in increasingly inconvenient coordinates.\n\ndef conditioning(A):\n    \"\"\"Spread of the singular values that are not forced to vanish.\"\"\"\n    s = np.linalg.svd(A, compute_uv=False)\n    return s[0] / s[-2]\n\n\nprint(\n    f\"{'world offset':&gt;14s}\"\n    f\"{'raw system':&gt;14s}\"\n    f\"{'normalised':&gt;14s}\"\n    f\"{'error, raw':&gt;16s}\"\n    f\"{'error, normalised':&gt;20s}\"\n)\n\nfor offset in [0.0, 1e2, 1e4, 1e6]:\n    Xs = X_ALL + offset\n    C_expected = C_syn + offset\n\n    Xn, _ = normalise_3d(Xs)\n    xn, _ = normalise_2d(x_syn)\n\n    e_raw = np.linalg.norm(camera_centre(dlt_camera(Xs, x_syn)) - C_expected)\n    e_norm = np.linalg.norm(camera_centre(resection(Xs, x_syn)) - C_expected)\n\n    print(\n        f\"{offset:14.0e}\"\n        f\"{conditioning(camera_design_matrix(Xs, x_syn)):14.1e}\"\n        f\"{conditioning(camera_design_matrix(Xn, xn)):14.1e}\"\n        f\"{e_raw:16.2e}\"\n        f\"{e_norm:20.2e}\"\n    )\n\n  world offset    raw system    normalised      error, raw   error, normalised\n         0e+00       2.1e+04       3.8e+00        1.49e-11            7.26e-14\n         1e+02       9.3e+07       3.8e+00        2.07e-09            2.43e-12\n         1e+04       9.0e+11       3.8e+00        2.02e-07            8.54e-09\n         1e+06       9.0e+15       3.8e+00        1.95e-03            2.54e-04\n\n\n\n\n\n\n\n\n\n\nFigure 3: Orders of magnitude of the non-zero entries of the design matrix, before and after normalisation. The block structure is identical; only the numerical scale changes.\n\n\n\n\n\nThe block structure is unchanged, as it should be: normalization does not change the DLT equations, it changes just their numerical scale.\nIn the original coordinates, terms involving image coordinates, such as \\(u_i\\mathbf X_i\\) and \\(v_i\\mathbf X_i\\), can be much larger than the other entries of \\(\\mathsf A\\). After normalization, the non-zero coefficients are brought to more comparable scales.\nThe heatmap gives a visual indication of this balancing. The singular values make the effect quantitative: as the world coordinates become poorly scaled, the conditioning of the unnormalised system deteriorates, while the normalised system remains much more stable.\nIn this synthetic example the recovered camera itself changes very little. The main role of normalization is therefore numerical: it reduces the dependence of the linear estimate on the particular coordinate systems in which the problem is expressed.",
+    "crumbs": [
+      "About",
+      "Single-view geometry",
+      "Resection"
+    ]
+  },
+  {
+    "objectID": "notebooks/camera/resection.html#are-six-points-always-enough",
+    "href": "notebooks/camera/resection.html#are-six-points-always-enough",
+    "title": "Resection",
+    "section": "Are six points always enough?",
+    "text": "Are six points always enough?\nSix correspondences are sufficient to determine a projective camera in general position. That is a statement about uniqueness with exact data, not about accuracy in the presence of noise.\nWe can test the difference while the true camera is still known. Add a few pixels of noise to the image measurements, estimate the camera from subsets of increasing size, and ask two questions:\n\nhow accurately is the camera centre recovered?\nhow well does the estimated camera predict the noise-free image points?\n\nIf additional correspondences provide useful redundancy, both errors should decrease as more points are used.\n\nrng = np.random.default_rng(7)\n\n\ndef degeneracy(sel):\n    \"\"\"Smallest singular value that should not vanish, relative to the largest.\"\"\"\n    Xn, _ = normalise_3d(X_ALL[sel])\n    xn, _ = normalise_2d(x_syn[sel])\n    s = np.linalg.svd(camera_design_matrix(Xn, xn), compute_uv=False)\n    return s[-2] / s[0]\n\n\nUSABLE = 1e-8          # below this value the configuration is critical, not merely awkward\n\nnoise_sigma = 3.0\nn_trials = 300\n\nprint(\n    f\"{'points':&gt;8s}\"\n    f\"{'equations':&gt;12s}\"\n    f\"{'RMS on all vertices':&gt;22s}\"\n    f\"{'centre error':&gt;18s}\"\n)\n\nfor k in range(6, len(X_ALL) + 1):\n\n    image_errors = []\n    centre_errors = []\n\n    while len(centre_errors) &lt; n_trials:\n\n        sel = rng.choice(len(X_ALL), k, replace=False)\n\n        if degeneracy(sel) &lt; USABLE:\n            continue\n\n        x_noisy = x_syn + rng.normal(0.0, noise_sigma, x_syn.shape)\n\n        P = resection(X_ALL[sel], x_noisy[sel])\n\n        image_errors.append(rms(reprojection_error(P, X_ALL, x_syn)))\n        centre_errors.append(np.linalg.norm(camera_centre(P) - C_syn))\n\n    print(\n        f\"{k:8d}\"\n        f\"{2*k:12d}\"\n        f\"{np.median(image_errors):19.2f} px\"\n        f\"{np.median(centre_errors):15.2f} cm\"\n    )\n\n  points   equations   RMS on all vertices      centre error\n       6          12               6.99 px           1.58 cm\n       7          14               4.75 px           1.13 cm\n       8          16               3.78 px           0.85 cm\n       9          18               3.41 px           0.73 cm\n      10          20               3.10 px           0.66 cm\n\n\nThe distinction between minimal and well constrained is now visible. Six points determine the camera, but leave almost no redundancy with which to average measurement noise. Adding correspondences does not change the model: it only gives the same eleven camera degrees of freedom more evidence.\nThis is why practical resection is normally solved from more than the minimum number of correspondences whenever they are available.",
+    "crumbs": [
+      "About",
+      "Single-view geometry",
+      "Resection"
+    ]
+  },
+  {
+    "objectID": "notebooks/camera/resection.html#on-real-images",
+    "href": "notebooks/camera/resection.html#on-real-images",
+    "title": "Resection",
+    "section": "On real images",
+    "text": "On real images\nLet us now try the DLT on real photographs.\nFor each image, the house corners have been annotated by hand, giving us the 2D image measurements \\(\\mathbf x_i\\). Their corresponding 3D coordinates \\(\\mathbf X_i\\) come from the ideal metric model of the origami house.\nUnlike the synthetic experiment, neither side of these correspondences is exact.\nThe image points are affected by annotation noise: a corner can only be located to within a few pixels. But the 3D model is approximate as well. It describes the nominal geometry of the folded house, not a careful metrological measurement of the particular paper model in the photograph. Small folding errors, bends, and deformations therefore appear as errors in the 3D points.\nWe should therefore not expect an exact camera. The question is instead how well a single projective matrix can explain these imperfect 3D–2D correspondences.\n\nmatches = [\n    m for m in load_annotation(\"two_view_matches\")[\"matches\"]\n    if m[\"id\"] in V3\n]\n\nids = [m[\"id\"] for m in matches]\n\nX  = np.array([V3[i] for i in ids], float)\nx1 = np.array([m[\"x\"]  for m in matches], float)\nx2 = np.array([m[\"xp\"] for m in matches], float)\n\nI1 = load_image(\"IMG_4331.jpeg\")\nI2 = load_image(\"IMG_4337.jpeg\")\n\nviews = [\n    (\"IMG_4331\", I1, x1),\n    (\"IMG_4337\", I2, x2),\n]\n\nprint(f\"using {len(ids)} annotated vertices:\", \", \".join(ids))\n\n\nP1 = resection(X, x1)\nP2 = resection(X, x2)\n\nfor (name, _, x), P in zip(views, [P1, P2]):\n\n    e = reprojection_error(P, X, x)\n    C = camera_centre(P)\n\n    print(f\"\\n{name}\")\n    print(f\"  RMS reprojection error: {rms(e):.2f} px\")\n    print(f\"  largest error:          {e.max():.2f} px\")\n    print(f\"  estimated camera centre: {np.round(C, 2)} cm\")\n\nusing 6 annotated vertices: X0, X1, X4, X5, X8, X9\n\nIMG_4331\n  RMS reprojection error: 4.42 px\n  largest error:          6.36 px\n  estimated camera centre: [  2.15 -11.97  18.98] cm\n\nIMG_4337\n  RMS reprojection error: 7.07 px\n  largest error:          10.80 px\n  estimated camera centre: [-1.55 -8.66 13.76] cm\n\n\n\n\n\n\n\n\n\n\nFigure 4: The recovered cameras reproject the nominal 3D house onto the two photographs. White circles mark the image points used for resection.\n\n\n\n\n\nThe reprojected wireframes follow the house reasonably well, with residuals of a few pixels. To see what the two recovered cameras mean geometrically, let us place them in the 3D scene at their estimated centres and with their recovered orientations.\n\n\n\n\n\n\n\n\nFigure 5: The two recovered viewpoints. Left and centre: each photograph on its own. Right: both together, which is the pair of positions the two-view notebooks call a baseline — recovered here one camera at a time, from the model alone.\n\n\n\n\n\nThe recovered viewpoints agree with what the photographs suggest: one is higher and farther back, while the other is lower and turned towards the gable.",
+    "crumbs": [
+      "About",
+      "Single-view geometry",
+      "Resection"
+    ]
+  },
+  {
+    "objectID": "notebooks/camera/resection.html#algebraic-and-geometric-error",
+    "href": "notebooks/camera/resection.html#algebraic-and-geometric-error",
+    "title": "Resection",
+    "section": "Algebraic and geometric error",
+    "text": "Algebraic and geometric error\nThe DLT estimates the camera by solving\n\\[\n\\min_{\\|\\mathbf p\\|=1}\\|\\mathsf A\\mathbf p\\|^2.\n\\]\nThis is an algebraic error: it measures how well the entries of \\(\\mathbf p\\) satisfy the homogeneous linear equations. Its main advantage is precisely that it leads to a linear solution.\nWhat we ultimately care about, however, is what happens in the image. Let\n\\[\n\\pi(X,Y,Z)^\\top\n=\n\\left(\\frac{X}{Z},\\frac{Y}{Z}\\right)^\\top\n\\]\ndenote conversion from homogeneous to ordinary image coordinates. The reprojection error of one correspondence is\n\\[\n\\left\\|\n\\mathbf x_i -\n\\pi(\\mathsf P\\mathbf X_i)\n\\right\\|,\n\\]\nand a natural refinement of the camera is therefore\n\\[\n\\min_{\\mathsf P}\n\\sum_{i=1}^n\n\\left\\|\n\\mathbf x_i -\n\\pi(\\mathsf P\\mathbf X_i)\n\\right\\|^2.\n\\]\nHere the observed image points \\(\\mathbf x_i\\) and the 3D points \\(\\mathbf X_i\\) are held fixed; only the camera is varied. The problem is no longer linear because of the division by the third coordinate in \\(\\pi\\).\nUnlike the algebraic residual, the reprojection error has a direct unit and interpretation: pixels. Under the usual model in which the 3D points are exact and the image measurements are affected by isotropic Gaussian noise, minimizing squared reprojection error is also the natural statistical objective.\nThere is no closed-form solution in general. A common strategy is therefore to use the DLT estimate as an initial camera and refine it with a nonlinear least-squares method.\nA small technicality remains. Reprojection is unchanged if we replace \\(\\mathsf P\\) by \\(\\alpha\\mathsf P\\), so the nonlinear problem still has the same projective scale ambiguity.\nTo remove it, we scale the initial camera so that one of its entries is equal to one, keep that entry fixed, and optimize the remaining eleven parameters. The DLT estimate provides the starting point.\n\nfrom scipy.optimize import least_squares\n\n\ndef refine_camera(P0, pts, xy):\n    \"\"\"Refine a projective camera by minimising reprojection error.\"\"\"\n    P0 = np.asarray(P0, float)\n\n    # Fix the projective scale using the largest entry of the DLT estimate.\n    fixed = np.argmax(np.abs(P0))\n    P0 = P0 / P0.flat[fixed]\n\n    free = np.ones(12, dtype=bool)\n    free[fixed] = False\n\n    def unpack(theta):\n        p = np.empty(12)\n        p[fixed] = 1.0\n        p[free] = theta\n        return p.reshape(3, 4)\n\n    def residuals(theta):\n        P = unpack(theta)\n        return (project(P, pts) - xy).ravel()\n\n    result = least_squares(\n        residuals,\n        P0.ravel()[free],\n    )\n\n    return unpack(result.x)\n\n\nP1_ref = refine_camera(P1, X, x1)\nP2_ref = refine_camera(P2, X, x2)\n\nfor (name, _, x), P_dlt, P_ref in zip(\n    views, [P1, P2], [P1_ref, P2_ref]\n):\n    before = rms(reprojection_error(P_dlt, X, x))\n    after  = rms(reprojection_error(P_ref, X, x))\n\n    print(f\"{name}: {before:.2f} px  -&gt;  {after:.2f} px\")\n\nIMG_4331: 4.42 px  -&gt;  4.41 px\nIMG_4337: 7.07 px  -&gt;  6.95 px\n\n\nWhile the DLT found a projective camera by minimising an algebraic residual, nonlinear least squares instead starts from that estimate and moves the same eleven projective degrees of freedom to reduce reprojection error directly.\nOn the real house, a smaller reprojection error should not be interpreted as recovering a physically exact camera: the image annotations are noisy and the 3D model itself is only nominal.",
+    "crumbs": [
+      "About",
+      "Single-view geometry",
+      "Resection"
+    ]
+  },
+  {
+    "objectID": "notebooks/camera/resection.html#when-the-points-are-coplanar",
+    "href": "notebooks/camera/resection.html#when-the-points-are-coplanar",
+    "title": "Resection",
+    "section": "When the points are coplanar",
+    "text": "When the points are coplanar\nThere was one qualification in the six-point count: the 3D points must be in general position. The most important failure case is when they all lie on a plane.\nTake, for example, the front wall of the house, \\(Y=0\\). A point on that plane has coordinates\n\\[\n\\mathbf X=(X,0,Z,1)^\\top.\n\\]\nWriting the camera by columns,\n\\[\n\\mathsf P=\n\\begin{bmatrix}\n\\mathbf p_1 & \\mathbf p_2 & \\mathbf p_3 & \\mathbf p_4\n\\end{bmatrix},\n\\]\nits projection becomes\n\\[\n\\mathsf P\\mathbf X\n=\n\\begin{bmatrix}\n\\mathbf p_1 & \\mathbf p_3 & \\mathbf p_4\n\\end{bmatrix}\n\\begin{bmatrix}\nX\\\\\nZ\\\\\n1\n\\end{bmatrix}.\n\\]\nThe column \\(\\mathbf p_2\\) has disappeared completely. No number of observations on this plane can tell us how the camera acts in the direction away from it.\nWhat the correspondences determine instead is the plane-to-image homography\n\\[\n\\mathsf H=\n\\begin{bmatrix}\n\\mathbf p_1 & \\mathbf p_3 & \\mathbf p_4\n\\end{bmatrix}.\n\\]\nThus planar correspondences can determine how that particular plane appears in the image, but they cannot determine a unique projective camera in 3D.\nFor sufficiently many generic points on the plane, the homography has eight degrees of freedom. The remaining camera column contributes three completely unconstrained parameters. Accordingly, the \\(12\\) camera coefficients are constrained only up to a four-dimensional null space, and the design matrix has rank at most \\(8\\).\nThere is one small trap when trying to demonstrate this numerically. With only four points, any \\(8\\times12\\) design matrix has a null space of dimension at least four simply by counting, whether the points are planar or not. To expose the degeneracy we must use enough correspondences that a non-coplanar configuration would determine the camera, at least six.\n\nrng = np.random.default_rng(0)\n\n\ndef sample_on_wall(n):\n    \"\"\"Points on the front wall Y = 0 of the house.\"\"\"\n    lo, hi = X_ALL.min(axis=0), X_ALL.max(axis=0)\n    return np.c_[\n        rng.uniform(lo[0], hi[0], n),\n        np.zeros(n),\n        rng.uniform(lo[2], hi[2], n),\n    ]\n\n\ndef sample_in_space(n):\n    \"\"\"Points inside the bounding box of the house.\"\"\"\n    lo, hi = X_ALL.min(axis=0), X_ALL.max(axis=0)\n    return rng.uniform(lo, hi, size=(n, 3))\n\n\ndef camera_rank(pts):\n    xy = project(P_syn, pts)\n    Xn, _ = normalise_3d(pts)\n    xn, _ = normalise_2d(xy)\n    return np.linalg.matrix_rank(camera_design_matrix(Xn, xn), tol=1e-9)\n\n\nprint(f\"{'points':&gt;8s}{'planar rank':&gt;15s}{'spatial rank':&gt;15s}\")\n\nfor n in [4, 6, 8, 12, 30]:\n    rp = camera_rank(sample_on_wall(n))\n    rs = camera_rank(sample_in_space(n))\n\n    print(f\"{n:8d}{rp:15d}{rs:15d}\")\n\n  points    planar rank   spatial rank\n       4              8              8\n       6              8             11\n       8              8             11\n      12              8             11\n      30              8             11\n\n\nOnce enough points are available, the difference is unambiguous. Points spread through space give the expected rank \\(11\\), while points confined to one plane stop at rank \\(8\\): three additional camera parameters remain completely unobservable.\n\n\n\n\n\n\n\n\nFigure 6: A planar configuration cannot determine a general projective camera. Left: among the annotated house corners, four lie on the front wall while the others provide information away from that plane. Right: singular values of the normalized DLT system for twelve points spread through space and twelve points confined to a plane. The generic 3D configuration has one null direction, corresponding to the global scale of the camera; the planar configuration has four.\n\n\n\n\n\nThe difference is also visible in the singular values of the design matrix. With exact generic 3D points, only one singular value vanishes: the camera is determined up to its global scale. With planar points, four singular values vanish, leaving a four-dimensional null space.\nThe extra three null directions are exactly the three coefficients of the camera column that never appears when all points lie on the plane. What the data determine is only the plane-to-image homography.",
+    "crumbs": [
+      "About",
+      "Single-view geometry",
+      "Resection"
+    ]
+  },
+  {
+    "objectID": "notebooks/camera/resection.html#beyond-coplanarity-the-twisted-cubic",
+    "href": "notebooks/camera/resection.html#beyond-coplanarity-the-twisted-cubic",
+    "title": "Resection",
+    "section": "Beyond coplanarity: the twisted cubic",
+    "text": "Beyond coplanarity: the twisted cubic\nCoplanarity is the most familiar degeneracy in camera resection, but it is not the only one.\nA classical critical configuration occurs when the 3D points and the camera centre lie on the same twisted cubic. In projective coordinates, such a curve can be written as\n\\[\n\\Gamma(t)\n\\sim\n\\mathsf A\n\\begin{bmatrix}\n1 & t & t^2 & t^3\n\\end{bmatrix}^{\\mathsf T},\n\\]\nfor some invertible \\(4\\times4\\) matrix \\(\\mathsf A\\).\nFor points on such a configuration, the image correspondences do not determine a unique projective camera. Instead of the usual one-dimensional null space corresponding only to global scale, the DLT system has an additional null direction. Projectively, this gives a one-parameter family of cameras that reproject the same data exactly.\nThere are also reducible critical cubics. One simple case is already visible from the planar degeneracy discussed above. Points confined to a plane can constrain the design matrix only up to rank eight. If five generic points lie on that plane, adding a sixth point outside it contributes at most two further independent equations:\n\\[\n8+2=10.\n\\]\nThe camera therefore remains underdetermined: a minimal six-point set with five coplanar points is degenerate even though the six points together span \\(\\mathbb P^3\\).\nThis is a useful warning about the phrase general position. Merely checking that the 3D points are not all coplanar is not enough to guarantee a valid minimal resection configuration.\n\n\n\n\n\n\n\n\nFigure 7: Three critical configurations for projective camera resection. Grey points show the centres of different cameras that reproject the data exactly. Left: when all control points lie on a plane, the design matrix has nullity four; after accounting for global scale, three degrees of camera ambiguity remain, and the possible centres fill a three-dimensional set. Centre: when the points and the camera centre lie on a twisted cubic, the nullity is two and the resulting one-parameter family of camera centres lies on the same cubic. Right: with five coplanar points and one point off the plane, the nullity is again two; the ambiguous centres lie on the line through the original camera centre and the off-plane point.\n\n\n\n\n\nThe three cases differ in how much freedom remains after the image correspondences have been fixed.\nFor points on the plane \\(Y=0\\), the column \\(\\mathbf p_2\\) of the camera never appears in the projection equations. It can therefore be changed by an arbitrary three-vector without affecting any image point. This gives the four-dimensional null space seen above: one dimension is the usual global scale of \\(\\mathsf P\\), while the other three correspond to genuine camera ambiguity.\nAdding one point \\(\\mathbf X_6\\) away from the plane removes two of those three degrees of freedom. One ambiguity remains. If\n\\[\n\\mathbf q_6=\\mathsf P\\mathbf X_6,\n\\]\nthen the family\n\\[\n\\mathsf P(\\alpha)\n=\n\\mathsf P\n+\n\\alpha\\,\\mathbf q_6\\,\\mathbf e_2^\\top\n\\]\nproduces exactly the same image measurements. For every planar point, \\(\\mathbf e_2^\\top\\mathbf X=Y=0\\), so its projection is unchanged. For the sixth point,\n\\[\n\\mathsf P(\\alpha)\\mathbf X_6\n=\n\\bigl(1+\\alpha Y_6\\bigr)\\,\n\\mathsf P\\mathbf X_6,\n\\]\nwhich differs only by homogeneous scale.\nThe corresponding camera centres lie on the projective line through the original centre \\(\\mathbf C\\) and the off-plane point \\(\\mathbf X_6\\). Thus the remaining one-parameter ambiguity has a simple geometric form: the viewpoint can move along that line without changing any of the six image measurements.\nThe twisted-cubic case has the same nullity, but a different geometry. The one-parameter family of ambiguous camera centres is no longer a line: it lies on the twisted cubic containing the control points and the original camera centre.\nIn all three cases the reprojection error is exactly zero. The ambiguity is therefore not caused by noise or by the estimation algorithm: the image data themselves do not determine a unique camera.\nThe last two configurations have the same algebraic nullity, but not the same geometry: in one case the ambiguous centres trace a cubic, in the other a line.",
+    "crumbs": [
+      "About",
+      "Single-view geometry",
+      "Resection"
+    ]
+  },
+  {
+    "objectID": "notebooks/camera/resection.html#questions-to-leave-open",
+    "href": "notebooks/camera/resection.html#questions-to-leave-open",
+    "title": "Resection",
+    "section": "Questions to leave open",
+    "text": "Questions to leave open\nFive and a half. The counting suggests that five complete correspondences plus one additional scalar constraint should be enough. Build the system using five image points and only the \\(u\\) coordinate of a sixth, and check that its null space is generically one-dimensional.\nWhat does that last constraint mean geometrically? Can you rewrite it as saying that the projection of the sixth 3D point must lie on a known image line?\nWhich six? With ten vertices available there are \\(\\binom{10}{6}=210\\) minimal subsets. Compute the rank of the normalized design matrix for each one. Are all six-point subsets usable?\nAmong the non-degenerate subsets, use the second-smallest singular value \\(\\sigma_{11}\\) as a measure of distance from degeneracy. Does it predict which subsets are most sensitive to a few pixels of image noise?\nNear a critical configuration. On an exact twisted cubic the DLT has a two-dimensional null space. Perturb the 3D points slightly away from the curve and recompute the normalized design matrix.\nHow does the second-smallest singular value \\(\\sigma_{11}\\) change as the perturbation grows? What happens to the sensitivity of the recovered camera centre to small image noise?\nWhose error is it? On the real photographs, reprojection error mixes two effects: uncertainty in the annotated image points and mismatch between the ideal 3D model and the folded paper house.\nCan these two sources of error be separated from the images alone? What additional assumptions or measurements would make the problem identifiable?\nAs a more constrained experiment, allow only a small number of physically meaningful deformations of the house — for example its fold angles — and test whether the resulting model improves reprojection on views that were not used for fitting.",
+    "crumbs": [
+      "About",
+      "Single-view geometry",
+      "Resection"
+    ]
+  },
+  {
+    "objectID": "notebooks/camera/resection.html#further-reading",
+    "href": "notebooks/camera/resection.html#further-reading",
+    "title": "Resection",
+    "section": "Further reading",
+    "text": "Further reading\n\nFusiello, A. Elements of Computer Vision. Resection as the DLT one dimension up, and §7.2 on algebraic versus geometric error, which this notebook follows.\nHartley, R. and Zisserman, A. Multiple View Geometry in Computer Vision, 2nd ed., Cambridge University Press, 2004. See Chapter 7 for camera resection and normalization, Chapter 22 for degenerate configurations, and Chapter 6 for camera models and the decomposition of the camera matrix.\nAbdel-Aziz, Y. I. and Karara, H. M. “Direct linear transformation from comparator coordinates into object space coordinates in close-range photogrammetry”, Proceedings of the ASP Symposium on Close-Range Photogrammetry, 1971. Where the DLT comes from, and it is photogrammetry rather than computer vision.\n\n\nLuca Magri — Computer Vision Dojo\nCode MIT · text and figures CC BY-NC-ND 4.0\nhttps://magrilu.github.io/cv-dojo/",
+    "crumbs": [
+      "About",
+      "Single-view geometry",
+      "Resection"
+    ]
+  },
+  {
+    "objectID": "origami-house.html",
+    "href": "origami-house.html",
+    "title": "The Origami house",
+    "section": "",
+    "text": "The origami house, its pink sibling, and the caliper that keeps them honest. The red door marks the front wall.\nMost of the examples on this site revolve around the same object: a small origami house folded from a single sheet of paper. It stands about four centimetres tall, it sits on a table without being held, and, if you start from a standard 15 × 15 cm origami sheet, its measurements are roughly those recorded here.\nRoughly, because a folded object is only as accurate as the person folding it, and I am no master. The model below is an idealization of a real piece of paper, and the two do not agree to the last millimetre.",
+    "crumbs": [
+      "About",
+      "The Origami house"
+    ]
+  },
+  {
+    "objectID": "origami-house.html#folding-one",
+    "href": "origami-house.html#folding-one",
+    "title": "The Origami house",
+    "section": "Folding one",
+    "text": "Folding one\nThe model is Easy Origami House by Leyla Torres, whose video tutorial is the place to learn it.\nThree practical suggestions when you fold your own model. Use matte paper rather than glossy, because specular highlights are unkind to feature matching. Press the creases firmly: a rounded edge is a vertex that shifts by a few pixels between views, and that error propagates all the way to the reconstruction. And prefer paper with some texture to it.\nThen break the symmetry. A few pen marks, a scribble on one wall or a door will do the job, and it will help disambiguate the 3D reconstruction.",
+    "crumbs": [
+      "About",
+      "The Origami house"
+    ]
+  },
+  {
+    "objectID": "origami-house.html#the-geometric-model",
+    "href": "origami-house.html#the-geometric-model",
+    "title": "The Origami house",
+    "section": "The geometric model",
+    "text": "The geometric model\nThe fold divides the sheet into a grid of six, so every dimension is a multiple of a single unit:\n\\[u = \\frac{\\text{sheet side}}{6} = 2.5\\ \\text{cm}\\]\nThree of the four faces sit directly on that grid. The long wall spans two squares, so it is \\(2u\\) wide and \\(u\\) tall; each roof slope is one square, so it measures \\(u\\) from eave to ridge.\nThe depth is the interesting one. It is not on the grid at all: the two roof slopes meet at right angles, so the gable is an isosceles right triangle with legs \\(u\\), and the depth is its hypotenuse.\n\\[\\text{depth} = u\\sqrt2 \\approx 3.54\\ \\text{cm}\\]\nThe ridge then rises by half the depth — that is, \\(u/\\sqrt2\\) — and the total height is the wall plus that rise.\n\n\n\n\n\n\n\n\nQuantity\nIn units of \\(u\\)\ncm\n\n\n\n\nLong side\n\\(2u\\)\n5.00\n\n\nWall height\n\\(u\\)\n2.50\n\n\nRoof slope\n\\(u\\)\n2.50\n\n\nDepth\n\\(u\\sqrt2\\)\n3.54\n\n\nRidge rise\n\\(u/\\sqrt2\\)\n1.77\n\n\nTotal height\n\\(u\\left(1 + \\tfrac{1}{\\sqrt2}\\right)\\)\n4.27\n\n\n\nSo the whole model follows from the size of the sheet. Fold from a 20 cm square instead and every number scales with it; nothing else changes.\nNothing here was measured, which is the point — a fold is a construction, and a construction can be reasoned about.\nThe vertices are named by position:\n\n\n\n\n\n\n\nX0–X3\nthe four bottom corners, starting front-left and going clockwise seen from above\n\n\nX4–X7\nthe four eaves, directly above X0–X3\n\n\nX8, X9\nthe two ends of the ridge, left and right\n\n\n\nThe full model — coordinates, edges, and the naming convention — lives in data/dojo_house/ideal_house.json, and the notebooks read it from there.\n\n\n\n\n\nThe idealized wireframe, drawn from ideal_house.json.\n\n\n\n\nThe edge X0–X1, the bottom of the front wall, is the one used to fix the global scale when a reconstruction is recovered only up to similarity. Its length is recorded separately in the annotation file, so that the notebook takes the number from the data rather than from the text.",
+    "crumbs": [
+      "About",
+      "The Origami house"
+    ]
+  },
+  {
+    "objectID": "origami-house.html#making-it-yours",
+    "href": "origami-house.html#making-it-yours",
+    "title": "The Origami house",
+    "section": "Making it yours",
+    "text": "Making it yours\nThe model is a description of one particular origami house, not a universal constant. If you fold your own with different proportions, measure it, edit the dimensions in ideal_house.json, and everything downstream continues to work — the synthetic scene, the projections, the reconstruction, the error against ground truth.\nFold your own house, and run the notebooks on it. See what happens, the interesting part is not when the reconstruction works, but when it doesn’t, and you have to decide whether to blame the algorithm or the ruler.",
+    "crumbs": [
+      "About",
+      "The Origami house"
+    ]
+  },
+  {
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "Computer Vision Dojo",
+    "section": "",
+    "text": "A dojo is a place for practice: somewhere to return to the same ideas and gradually make them your own.\nThis is a small and growing collection of notebooks on the geometric foundations of 3D computer vision: projective geometry, multi-view relations, robust fitting, and, in time, more. Most of the examples are built around a small origami house folded from one sheet of paper. Fold your own, take your own images, and you have your own ground truth to check the reconstructions on this site against. The origami model is described in detail.\nLLMs can now produce a surprising amount of working code in very little time, and much of it is correct and well documented. But an explanation received is not the same as an argument understood.\nThe notebooks here therefore take a deliberately slower path. They are meant to be studied much like a mathematics book: with patience, perhaps with paper and pencil nearby, following each construction one step at a time. Every algorithm is developed through code that can be run, changed, broken, and put back together.\nSome parts of the collection are already usable; others are still sketches, experiments, or plans. This page is therefore both a course resource and a public notebook in progress. Over time, it may grow into a more complete set of notes on geometric computer vision.\nTo whoever has the patience to work through these pages: I hope you find results that are correct and useful, and that you will tell me when they are not. Above all I hope you find the pleasure of having understood something yourself, and some affection for the elegance of geometry underneath it all.",
+    "crumbs": [
+      "About",
+      "Preface"
+    ]
+  },
+  {
+    "objectID": "index.html#how-to-use-this-collection",
+    "href": "index.html#how-to-use-this-collection",
+    "title": "Computer Vision Dojo",
+    "section": "How to use this collection",
+    "text": "How to use this collection\nEach notebook is designed to run from top to bottom. You can open it in Colab and work through the cells in order.\nRead the explanations, inspect the intermediate quantities, and modify the examples. Keep paper nearby when a derivation becomes difficult. A notebook often becomes most useful when something is changed and the result is not quite what was expected.\nTo run the notebooks locally:\ngit clone https://github.com/magrilu/cv-dojo.git\ncd cv-dojo\npip install -r requirements.txt\nStudents following IACV will find a suggested reading order on the course page.",
+    "crumbs": [
+      "About",
+      "Preface"
+    ]
+  },
+  {
+    "objectID": "index.html#looking-for-a-thesis-in-geometric-3d-vision",
+    "href": "index.html#looking-for-a-thesis-in-geometric-3d-vision",
+    "title": "Computer Vision Dojo",
+    "section": "Looking for a thesis in geometric 3D vision?",
+    "text": "Looking for a thesis in geometric 3D vision?\nIf you are starting to feel like a black belt: the geometry here is settled, but the questions it opens are not. There are still plenty of interesting problems in 3D vision with a strong geometric flavour.\nIf any of these notebooks left you wondering about something they did not answer, I would like to hear from you.\nI supervise theses at Politecnico di Milano and Bocconi, mostly in geometry-driven vision. Current topics, guidance, and past theses are on my main site: topics · how-to · hall of fame.\nDrop me an email, tell me which notebook you looked at and what you found interesting in it.",
+    "crumbs": [
+      "About",
+      "Preface"
+    ]
+  },
+  {
+    "objectID": "index.html#acknowledgements",
+    "href": "index.html#acknowledgements",
+    "title": "Computer Vision Dojo",
+    "section": "Acknowledgements",
+    "text": "Acknowledgements\nMy first thanks go to my father, Maurizio Magri, who taught me the joy and satisfaction of approaching mathematics armed with patience, paper, and pencil. I had to add an eraser, as my mistakes were rather more frequent than his.\nI hope these notebooks owe something to the way Andrea Fusiello taught me to approach computer vision. Whatever elegance they may contain is certainly inherited from his Computer Vision Toolkit, to which every interested reader is warmly—and immediately—referred. Any errors, of course, are entirely my own.\nI am also grateful to Giacomo Boracchi, with whom I have taught these topics on several occasions. His genuine commitment to teaching has been a source of inspiration. I share his conviction that teaching a student to reason clearly and independently is one of the most lasting ways in which we can contribute to the world.\nThese notebooks began as material for the exercise sessions in Vincenzo Caglioti’s course at Politecnico di Milano. I am grateful to him for the opportunity to develop and teach many of these ideas in that setting.",
+    "crumbs": [
+      "About",
+      "Preface"
+    ]
+  },
+  {
+    "objectID": "LICENSE.html",
+    "href": "LICENSE.html",
+    "title": "",
+    "section": "",
+    "text": "Code\n\n\n\n\n\nLicensing\nThis repository contains two kinds of material, under two licences.\nCode — everything under src/, matlab/, and the code cells of the notebooks: MIT, see LICENSE-CODE.\nContent — prose, figures, exercises, and the markdown cells of the notebooks: Creative Commons Attribution 4.0 International (CC BY 4.0), see LICENSE-CONTENT.\nIn both cases you may reuse and adapt freely, provided you credit:\n\nLuca Magri, Computer Vision Dojo, https://github.com/magrilu/cv-dojo\n\nSee CITATION.cff for a citable reference."
+  },
+  {
+    "objectID": "SETUP.html",
+    "href": "SETUP.html",
+    "title": "",
+    "section": "",
+    "text": "Code"
+  },
+  {
+    "objectID": "SETUP.html#create-the-repository-on-github",
+    "href": "SETUP.html#create-the-repository-on-github",
+    "title": "",
+    "section": "1. Create the repository on GitHub",
+    "text": "1. Create the repository on GitHub\nGo to https://github.com/new - Repository name: cv-dojo - Public - Do not tick “Add a README” / .gitignore / licence — the folder already has them, and an initialised repo would conflict."
+  },
+  {
+    "objectID": "SETUP.html#put-this-folder-next-to-your-site",
+    "href": "SETUP.html#put-this-folder-next-to-your-site",
+    "title": "",
+    "section": "2. Put this folder next to your site",
+    "text": "2. Put this folder next to your site\ncd ~/repos\n# unzip cv-dojo.zip here, so you end up with ~/repos/cv-dojo\nCheck it is beside magrilu.github.io, not inside it."
+  },
+  {
+    "objectID": "SETUP.html#first-push",
+    "href": "SETUP.html#first-push",
+    "title": "",
+    "section": "3. First push",
+    "text": "3. First push\ncd ~/repos/cv-dojo\ngit init\ngit add .\ngit commit -m \"Initial commit: affine rectification notebook + scaffolding\"\ngit branch -M main\ngit remote add origin git@github.com:magrilu/cv-dojo.git\ngit push -u origin main\nReload the repo page on GitHub — the files should be there."
+  },
+  {
+    "objectID": "SETUP.html#python-environment",
+    "href": "SETUP.html#python-environment",
+    "title": "",
+    "section": "4. Python environment",
+    "text": "4. Python environment\npython3 -m venv .venv\nsource .venv/bin/activate\npip install -r requirements.txt\nCheck the notebook runs:\njupyter lab notebooks/rectification/affine.ipynb"
+  },
+  {
+    "objectID": "SETUP.html#quarto",
+    "href": "SETUP.html#quarto",
+    "title": "",
+    "section": "5. Quarto",
+    "text": "5. Quarto\nInstall from https://quarto.org/docs/get-started/ (a .deb / .pkg, one minute).\nquarto preview\nThis opens a browser with live reload. Iterate here."
+  },
+  {
+    "objectID": "SETUP.html#publish",
+    "href": "SETUP.html#publish",
+    "title": "",
+    "section": "6. Publish",
+    "text": "6. Publish\nquarto publish gh-pages\nFirst run asks for confirmation, then creates the gh-pages branch, pushes the built site, and adds .nojekyll (without which GitHub would run the output through Jekyll and drop every _-prefixed folder — the classic “site with no CSS” failure).\nThen check on GitHub: Settings → Pages → source is gh-pages / (root).\nWait a couple of minutes: https://magrilu.github.io/cv-dojo/\nFrom now on, publishing is just quarto publish gh-pages. Your source lives on main; gh-pages is machine-written and never edited by hand — the same split you already have between source and master on the site repo."
+  },
+  {
+    "objectID": "SETUP.html#look-at-it-next-to-your-site",
+    "href": "SETUP.html#look-at-it-next-to-your-site",
+    "title": "",
+    "section": "7. Look at it next to your site",
+    "text": "7. Look at it next to your site\nNow decide whether the visual gap bothers you. If it does, open assets/custom.scss and copy in the real values from your al-folio _sass/_themes.scss (--global-theme-color) and _sass/_variables.scss."
+  },
+  {
+    "objectID": "SETUP.html#menu-entry-on-magrilu.github.io",
+    "href": "SETUP.html#menu-entry-on-magrilu.github.io",
+    "title": "",
+    "section": "8. Menu entry on magrilu.github.io",
+    "text": "8. Menu entry on magrilu.github.io\nIn the site repo, on the source branch, find the page that generates the teaching dropdown in _pages/ and copy its pattern:\n- title: CV Dojo\n  permalink: https://magrilu.github.io/cv-dojo/\nAn absolute URL works fine as a permalink. Then:\n./bin/deploy --user\n(The exact YAML key differs between al-folio versions — follow whatever your existing dropdown does rather than the snippet above.)"
+  },
+  {
+    "objectID": "SETUP.html#zenodo",
+    "href": "SETUP.html#zenodo",
+    "title": "",
+    "section": "9. Zenodo",
+    "text": "9. Zenodo\nhttps://zenodo.org → log in with GitHub → enable the toggle for cv-dojo. Then on GitHub: Releases → Create a new release → tag v0.1.0. The DOI is minted automatically, and again on every later release."
+  },
+  {
+    "objectID": "SETUP.html#troubleshooting",
+    "href": "SETUP.html#troubleshooting",
+    "title": "",
+    "section": "Troubleshooting",
+    "text": "Troubleshooting\ngit push permission denied — your SSH key is not set up. Quick fix: use git remote set-url origin https://github.com/magrilu/cv-dojo.git and authenticate with a personal access token instead.\nSite published but unstyled — .nojekyll is missing from gh-pages, or Pages is pointing at the wrong branch.\nColab badge 404 — the branch in the badge URL must match yours (main), and the repository must be public."
+  },
+  {
+    "objectID": "about.html",
+    "href": "about.html",
+    "title": "About",
+    "section": "",
+    "text": "These notebooks grew out of material prepared for Computer Vision courses and exercise sessions. They are still growing: I revise them as I teach with them, correct mistakes, add examples, and find better ways of explaining things.\nIf you find a mistake, something unclear, or simply want to discuss one of the notebooks, please write to me. Corrections and suggestions are always welcome.\nThe original MATLAB scripts used in the Politecnico exercise sessions are kept under matlab/."
+  },
+  {
+    "objectID": "about.html#about-this-project",
+    "href": "about.html#about-this-project",
+    "title": "About",
+    "section": "",
+    "text": "These notebooks grew out of material prepared for Computer Vision courses and exercise sessions. They are still growing: I revise them as I teach with them, correct mistakes, add examples, and find better ways of explaining things.\nIf you find a mistake, something unclear, or simply want to discuss one of the notebooks, please write to me. Corrections and suggestions are always welcome.\nThe original MATLAB scripts used in the Politecnico exercise sessions are kept under matlab/."
+  },
+  {
+    "objectID": "about.html#using-this-material",
+    "href": "about.html#using-this-material",
+    "title": "About",
+    "section": "Using this material",
+    "text": "Using this material\nPlease use the code and build on it. It is released under the MIT License.\nThe text and illustrations are licensed under CC BY-NC-ND 4.0: you are welcome to share them unchanged for non-commercial purposes, with appropriate credit. If you would like to translate, adapt, or reuse them in some other way, just write to me. You can have a look at the licensing page."
+  },
+  {
+    "objectID": "about.html#citing",
+    "href": "about.html#citing",
+    "title": "About",
+    "section": "Citing",
+    "text": "Citing\nIf you find this material useful and would like to cite it, here is a BibTeX entry:\n@software{magri_cvdojo,\n  author = {Magri, Luca},\n  title  = {Computer Vision Dojo: a geometric way},\n  year   = {2026},\n  url    = {https://github.com/magrilu/cv-dojo}\n}"
   },
   {
     "objectID": "notebooks/camera/camera.html#the-visual-pyramid",
@@ -455,299 +811,99 @@
     ]
   },
   {
-    "objectID": "about.html",
-    "href": "about.html",
-    "title": "About",
-    "section": "",
-    "text": "These notebooks grew out of material prepared for Computer Vision courses and exercise sessions. They are still growing: I revise them as I teach with them, correct mistakes, add examples, and find better ways of explaining things.\nIf you find a mistake, something unclear, or simply want to discuss one of the notebooks, please write to me. Corrections and suggestions are always welcome.\nThe original MATLAB scripts used in the Politecnico exercise sessions are kept under matlab/."
-  },
-  {
-    "objectID": "about.html#about-this-project",
-    "href": "about.html#about-this-project",
-    "title": "About",
-    "section": "",
-    "text": "These notebooks grew out of material prepared for Computer Vision courses and exercise sessions. They are still growing: I revise them as I teach with them, correct mistakes, add examples, and find better ways of explaining things.\nIf you find a mistake, something unclear, or simply want to discuss one of the notebooks, please write to me. Corrections and suggestions are always welcome.\nThe original MATLAB scripts used in the Politecnico exercise sessions are kept under matlab/."
-  },
-  {
-    "objectID": "about.html#using-this-material",
-    "href": "about.html#using-this-material",
-    "title": "About",
-    "section": "Using this material",
-    "text": "Using this material\nPlease use the code and build on it. It is released under the MIT License.\nThe text and illustrations are licensed under CC BY-NC-ND 4.0: you are welcome to share them unchanged for non-commercial purposes, with appropriate credit. If you would like to translate, adapt, or reuse them in some other way, just write to me. You can have a look at the licensing page."
-  },
-  {
-    "objectID": "about.html#citing",
-    "href": "about.html#citing",
-    "title": "About",
-    "section": "Citing",
-    "text": "Citing\nIf you find this material useful and would like to cite it, here is a BibTeX entry:\n@software{magri_cvdojo,\n  author = {Magri, Luca},\n  title  = {Computer Vision Dojo: a geometric way},\n  year   = {2026},\n  url    = {https://github.com/magrilu/cv-dojo}\n}"
-  },
-  {
-    "objectID": "SETUP.html",
-    "href": "SETUP.html",
-    "title": "",
-    "section": "",
-    "text": "Code"
-  },
-  {
-    "objectID": "SETUP.html#create-the-repository-on-github",
-    "href": "SETUP.html#create-the-repository-on-github",
-    "title": "",
-    "section": "1. Create the repository on GitHub",
-    "text": "1. Create the repository on GitHub\nGo to https://github.com/new - Repository name: cv-dojo - Public - Do not tick “Add a README” / .gitignore / licence — the folder already has them, and an initialised repo would conflict."
-  },
-  {
-    "objectID": "SETUP.html#put-this-folder-next-to-your-site",
-    "href": "SETUP.html#put-this-folder-next-to-your-site",
-    "title": "",
-    "section": "2. Put this folder next to your site",
-    "text": "2. Put this folder next to your site\ncd ~/repos\n# unzip cv-dojo.zip here, so you end up with ~/repos/cv-dojo\nCheck it is beside magrilu.github.io, not inside it."
-  },
-  {
-    "objectID": "SETUP.html#first-push",
-    "href": "SETUP.html#first-push",
-    "title": "",
-    "section": "3. First push",
-    "text": "3. First push\ncd ~/repos/cv-dojo\ngit init\ngit add .\ngit commit -m \"Initial commit: affine rectification notebook + scaffolding\"\ngit branch -M main\ngit remote add origin git@github.com:magrilu/cv-dojo.git\ngit push -u origin main\nReload the repo page on GitHub — the files should be there."
-  },
-  {
-    "objectID": "SETUP.html#python-environment",
-    "href": "SETUP.html#python-environment",
-    "title": "",
-    "section": "4. Python environment",
-    "text": "4. Python environment\npython3 -m venv .venv\nsource .venv/bin/activate\npip install -r requirements.txt\nCheck the notebook runs:\njupyter lab notebooks/rectification/affine.ipynb"
-  },
-  {
-    "objectID": "SETUP.html#quarto",
-    "href": "SETUP.html#quarto",
-    "title": "",
-    "section": "5. Quarto",
-    "text": "5. Quarto\nInstall from https://quarto.org/docs/get-started/ (a .deb / .pkg, one minute).\nquarto preview\nThis opens a browser with live reload. Iterate here."
-  },
-  {
-    "objectID": "SETUP.html#publish",
-    "href": "SETUP.html#publish",
-    "title": "",
-    "section": "6. Publish",
-    "text": "6. Publish\nquarto publish gh-pages\nFirst run asks for confirmation, then creates the gh-pages branch, pushes the built site, and adds .nojekyll (without which GitHub would run the output through Jekyll and drop every _-prefixed folder — the classic “site with no CSS” failure).\nThen check on GitHub: Settings → Pages → source is gh-pages / (root).\nWait a couple of minutes: https://magrilu.github.io/cv-dojo/\nFrom now on, publishing is just quarto publish gh-pages. Your source lives on main; gh-pages is machine-written and never edited by hand — the same split you already have between source and master on the site repo."
-  },
-  {
-    "objectID": "SETUP.html#look-at-it-next-to-your-site",
-    "href": "SETUP.html#look-at-it-next-to-your-site",
-    "title": "",
-    "section": "7. Look at it next to your site",
-    "text": "7. Look at it next to your site\nNow decide whether the visual gap bothers you. If it does, open assets/custom.scss and copy in the real values from your al-folio _sass/_themes.scss (--global-theme-color) and _sass/_variables.scss."
-  },
-  {
-    "objectID": "SETUP.html#menu-entry-on-magrilu.github.io",
-    "href": "SETUP.html#menu-entry-on-magrilu.github.io",
-    "title": "",
-    "section": "8. Menu entry on magrilu.github.io",
-    "text": "8. Menu entry on magrilu.github.io\nIn the site repo, on the source branch, find the page that generates the teaching dropdown in _pages/ and copy its pattern:\n- title: CV Dojo\n  permalink: https://magrilu.github.io/cv-dojo/\nAn absolute URL works fine as a permalink. Then:\n./bin/deploy --user\n(The exact YAML key differs between al-folio versions — follow whatever your existing dropdown does rather than the snippet above.)"
-  },
-  {
-    "objectID": "SETUP.html#zenodo",
-    "href": "SETUP.html#zenodo",
-    "title": "",
-    "section": "9. Zenodo",
-    "text": "9. Zenodo\nhttps://zenodo.org → log in with GitHub → enable the toggle for cv-dojo. Then on GitHub: Releases → Create a new release → tag v0.1.0. The DOI is minted automatically, and again on every later release."
-  },
-  {
-    "objectID": "SETUP.html#troubleshooting",
-    "href": "SETUP.html#troubleshooting",
-    "title": "",
-    "section": "Troubleshooting",
-    "text": "Troubleshooting\ngit push permission denied — your SSH key is not set up. Quick fix: use git remote set-url origin https://github.com/magrilu/cv-dojo.git and authenticate with a personal access token instead.\nSite published but unstyled — .nojekyll is missing from gh-pages, or Pages is pointing at the wrong branch.\nColab badge 404 — the branch in the badge URL must match yours (main), and the repository must be public."
-  },
-  {
-    "objectID": "LICENSE.html",
-    "href": "LICENSE.html",
-    "title": "",
-    "section": "",
-    "text": "Code\n\n\n\n\n\nLicensing\nThis repository contains two kinds of material, under two licences.\nCode — everything under src/, matlab/, and the code cells of the notebooks: MIT, see LICENSE-CODE.\nContent — prose, figures, exercises, and the markdown cells of the notebooks: Creative Commons Attribution 4.0 International (CC BY 4.0), see LICENSE-CONTENT.\nIn both cases you may reuse and adapt freely, provided you credit:\n\nLuca Magri, Computer Vision Dojo, https://github.com/magrilu/cv-dojo\n\nSee CITATION.cff for a citable reference."
-  },
-  {
-    "objectID": "index.html",
-    "href": "index.html",
-    "title": "Computer Vision Dojo",
-    "section": "",
-    "text": "A dojo is a place for practice: somewhere to return to the same ideas and gradually make them your own.\nThis is a small and growing collection of notebooks on the geometric foundations of 3D computer vision: projective geometry, multi-view relations, robust fitting, and, in time, more. Most of the examples are built around a small origami house folded from one sheet of paper. Fold your own, take your own images, and you have your own ground truth to check the reconstructions on this site against. The origami model is described in detail.\nLLMs can now produce a surprising amount of working code in very little time, and much of it is correct and well documented. But an explanation received is not the same as an argument understood.\nThe notebooks here therefore take a deliberately slower path. They are meant to be studied much like a mathematics book: with patience, perhaps with paper and pencil nearby, following each construction one step at a time. Every algorithm is developed through code that can be run, changed, broken, and put back together.\nSome parts of the collection are already usable; others are still sketches, experiments, or plans. This page is therefore both a course resource and a public notebook in progress. Over time, it may grow into a more complete set of notes on geometric computer vision.\nTo whoever has the patience to work through these pages: I hope you find results that are correct and useful, and that you will tell me when they are not. Above all I hope you find the pleasure of having understood something yourself, and some affection for the elegance of geometry underneath it all.",
-    "crumbs": [
-      "About",
-      "Preface"
-    ]
-  },
-  {
-    "objectID": "index.html#how-to-use-this-collection",
-    "href": "index.html#how-to-use-this-collection",
-    "title": "Computer Vision Dojo",
-    "section": "How to use this collection",
-    "text": "How to use this collection\nEach notebook is designed to run from top to bottom. You can open it in Colab and work through the cells in order.\nRead the explanations, inspect the intermediate quantities, and modify the examples. Keep paper nearby when a derivation becomes difficult. A notebook often becomes most useful when something is changed and the result is not quite what was expected.\nTo run the notebooks locally:\ngit clone https://github.com/magrilu/cv-dojo.git\ncd cv-dojo\npip install -r requirements.txt\nStudents following IACV will find a suggested reading order on the course page.",
-    "crumbs": [
-      "About",
-      "Preface"
-    ]
-  },
-  {
-    "objectID": "index.html#looking-for-a-thesis-in-geometric-3d-vision",
-    "href": "index.html#looking-for-a-thesis-in-geometric-3d-vision",
-    "title": "Computer Vision Dojo",
-    "section": "Looking for a thesis in geometric 3D vision?",
-    "text": "Looking for a thesis in geometric 3D vision?\nIf you are starting to feel like a black belt: the geometry here is settled, but the questions it opens are not. There are still plenty of interesting problems in 3D vision with a strong geometric flavour.\nIf any of these notebooks left you wondering about something they did not answer, I would like to hear from you.\nI supervise theses at Politecnico di Milano and Bocconi, mostly in geometry-driven vision. Current topics, guidance, and past theses are on my main site: topics · how-to · hall of fame.\nDrop me an email, tell me which notebook you looked at and what you found interesting in it.",
-    "crumbs": [
-      "About",
-      "Preface"
-    ]
-  },
-  {
-    "objectID": "index.html#acknowledgements",
-    "href": "index.html#acknowledgements",
-    "title": "Computer Vision Dojo",
-    "section": "Acknowledgements",
-    "text": "Acknowledgements\nMy first thanks go to my father, Maurizio Magri, who taught me the joy and satisfaction of approaching mathematics armed with patience, paper, and pencil. I had to add an eraser, as my mistakes were rather more frequent than his.\nI hope these notebooks owe something to the way Andrea Fusiello taught me to approach computer vision. Whatever elegance they may contain is certainly inherited from his Computer Vision Toolkit, to which every interested reader is warmly—and immediately—referred. Any errors, of course, are entirely my own.\nI am also grateful to Giacomo Boracchi, with whom I have taught these topics on several occasions. His genuine commitment to teaching has been a source of inspiration. I share his conviction that teaching a student to reason clearly and independently is one of the most lasting ways in which we can contribute to the world.\nThese notebooks began as material for the exercise sessions in Vincenzo Caglioti’s course at Politecnico di Milano. I am grateful to him for the opportunity to develop and teach many of these ideas in that setting.",
-    "crumbs": [
-      "About",
-      "Preface"
-    ]
-  },
-  {
-    "objectID": "origami-house.html",
-    "href": "origami-house.html",
-    "title": "The Origami house",
-    "section": "",
-    "text": "The origami house, its pink sibling, and the caliper that keeps them honest. The red door marks the front wall.\nMost of the examples on this site revolve around the same object: a small origami house folded from a single sheet of paper. It stands about four centimetres tall, it sits on a table without being held, and, if you start from a standard 15 × 15 cm origami sheet, its measurements are roughly those recorded here.\nRoughly, because a folded object is only as accurate as the person folding it, and I am no master. The model below is an idealization of a real piece of paper, and the two do not agree to the last millimetre.",
-    "crumbs": [
-      "About",
-      "The Origami house"
-    ]
-  },
-  {
-    "objectID": "origami-house.html#folding-one",
-    "href": "origami-house.html#folding-one",
-    "title": "The Origami house",
-    "section": "Folding one",
-    "text": "Folding one\nThe model is Easy Origami House by Leyla Torres, whose video tutorial is the place to learn it.\nThree practical suggestions when you fold your own model. Use matte paper rather than glossy, because specular highlights are unkind to feature matching. Press the creases firmly: a rounded edge is a vertex that shifts by a few pixels between views, and that error propagates all the way to the reconstruction. And prefer paper with some texture to it.\nThen break the symmetry. A few pen marks, a scribble on one wall or a door will do the job, and it will help disambiguate the 3D reconstruction.",
-    "crumbs": [
-      "About",
-      "The Origami house"
-    ]
-  },
-  {
-    "objectID": "origami-house.html#the-geometric-model",
-    "href": "origami-house.html#the-geometric-model",
-    "title": "The Origami house",
-    "section": "The geometric model",
-    "text": "The geometric model\nThe fold divides the sheet into a grid of six, so every dimension is a multiple of a single unit:\n\\[u = \\frac{\\text{sheet side}}{6} = 2.5\\ \\text{cm}\\]\nThree of the four faces sit directly on that grid. The long wall spans two squares, so it is \\(2u\\) wide and \\(u\\) tall; each roof slope is one square, so it measures \\(u\\) from eave to ridge.\nThe depth is the interesting one. It is not on the grid at all: the two roof slopes meet at right angles, so the gable is an isosceles right triangle with legs \\(u\\), and the depth is its hypotenuse.\n\\[\\text{depth} = u\\sqrt2 \\approx 3.54\\ \\text{cm}\\]\nThe ridge then rises by half the depth — that is, \\(u/\\sqrt2\\) — and the total height is the wall plus that rise.\n\n\n\n\n\n\n\n\nQuantity\nIn units of \\(u\\)\ncm\n\n\n\n\nLong side\n\\(2u\\)\n5.00\n\n\nWall height\n\\(u\\)\n2.50\n\n\nRoof slope\n\\(u\\)\n2.50\n\n\nDepth\n\\(u\\sqrt2\\)\n3.54\n\n\nRidge rise\n\\(u/\\sqrt2\\)\n1.77\n\n\nTotal height\n\\(u\\left(1 + \\tfrac{1}{\\sqrt2}\\right)\\)\n4.27\n\n\n\nSo the whole model follows from the size of the sheet. Fold from a 20 cm square instead and every number scales with it; nothing else changes.\nNothing here was measured, which is the point — a fold is a construction, and a construction can be reasoned about.\nThe vertices are named by position:\n\n\n\n\n\n\n\nX0–X3\nthe four bottom corners, starting front-left and going clockwise seen from above\n\n\nX4–X7\nthe four eaves, directly above X0–X3\n\n\nX8, X9\nthe two ends of the ridge, left and right\n\n\n\nThe full model — coordinates, edges, and the naming convention — lives in data/dojo_house/ideal_house.json, and the notebooks read it from there.\n\n\n\n\n\nThe idealized wireframe, drawn from ideal_house.json.\n\n\n\n\nThe edge X0–X1, the bottom of the front wall, is the one used to fix the global scale when a reconstruction is recovered only up to similarity. Its length is recorded separately in the annotation file, so that the notebook takes the number from the data rather than from the text.",
-    "crumbs": [
-      "About",
-      "The Origami house"
-    ]
-  },
-  {
-    "objectID": "origami-house.html#making-it-yours",
-    "href": "origami-house.html#making-it-yours",
-    "title": "The Origami house",
-    "section": "Making it yours",
-    "text": "Making it yours\nThe model is a description of one particular origami house, not a universal constant. If you fold your own with different proportions, measure it, edit the dimensions in ideal_house.json, and everything downstream continues to work — the synthetic scene, the projections, the reconstruction, the error against ground truth.\nFold your own house, and run the notebooks on it. See what happens, the interesting part is not when the reconstruction works, but when it doesn’t, and you have to decide whether to blame the algorithm or the ruler.",
-    "crumbs": [
-      "About",
-      "The Origami house"
-    ]
-  },
-  {
     "objectID": "notebooks/two-views/seven-point.html#seven-correspondences",
     "href": "notebooks/two-views/seven-point.html#seven-correspondences",
-    "title": "The Seven-points algorithm",
+    "title": "The seven-points algorithm",
     "section": "Seven correspondences",
     "text": "Seven correspondences\nEach correspondence \\(\\{\\mathbf{x}_i, \\mathbf{x}_i'\\}\\) still gives the same linear equation\n\\[\n\\mathbf{x}_i^{'\\top} \\mathsf F\\mathbf{x}_{i}=0.\n\\]\nWith seven correspondences the design matrix \\(\\mathsf A\\) has size \\(7\\times9\\). For points in general position it has rank seven, so its right null space has dimension two (seven linear constraints cannot select a single point of \\(\\mathbb P^8\\)).\nWe work with the same noisy image correspondences used on the real images in the eight-point notebook. Among them we pick a well-conditioned subset of seven.\n\ndef design_matrix(x, xp):\n    \"\"\"One row per correspondence: (x' tensor x)^T vec(F) = 0.\"\"\"\n    u,  v  = x[:, 0],  x[:, 1]\n    up, vp = xp[:, 0], xp[:, 1]\n    return np.column_stack([up*u, up*v, up,\n                            vp*u, vp*v, vp,\n                            u,    v,    np.ones(len(x))])\n\n\ndef normalize_points(x):\n    \"\"\"Centroid to the origin, mean distance to the origin equal to sqrt(2).\"\"\"\n    c = x[:, :2].mean(axis=0)\n    d = np.linalg.norm(x[:, :2] - c, axis=1).mean()\n    s = np.sqrt(2.0) / d\n    T = np.array([[s, 0, -s*c[0]],\n                  [0, s, -s*c[1]],\n                  [0, 0,  1.0]])\n    return (T @ x.T).T, T\n\n\ndef subset_score(c):\n    idx = list(c)\n    xn, _  = normalize_points(xr[idx])\n    xpn, _ = normalize_points(xpr[idx])\n    s = np.linalg.svd(design_matrix(xn, xpn), compute_uv=False)\n    return s[-1] / s[0]\n\nbest7 = max(itertools.combinations(range(len(rid)), 7), key=subset_score)\nidx7 = list(best7)\nSEVEN_IDS = [rid[i] for i in idx7]\nidx_rest  = [i for i in range(len(rid)) if i not in idx7]\nREST_IDS  = [rid[i] for i in idx_rest]\nx7,  xp7  = xr[idx7],  xpr[idx7]\nx_rest,  xp_rest  = xr[idx_rest], xpr[idx_rest]\nprint(\"seven-point sample:\", \" \".join(SEVEN_IDS))\nprint(\"kept aside        :\", \" \".join(REST_IDS))\nprint(f\"sigma_7 / sigma_1 = {subset_score(best7):.2e}\")\n\nseven-point sample: X1 X4 X5 X9 D1 D2 D3\nkept aside        : X0 X8 D0\nsigma_7 / sigma_1 = 4.49e-03\n\n\n\n\n\n\n\n\n\n\nFigure 1: The seven noisy correspondences used to run the solver, in orange, and in blue the ones kept aside.",
     "crumbs": [
       "About",
       "Two-view geometry",
-      "The Seven-points algorithm"
+      "The seven-points algorithm"
     ]
   },
   {
     "objectID": "notebooks/two-views/seven-point.html#a-pencil-of-fundamental-matrix",
     "href": "notebooks/two-views/seven-point.html#a-pencil-of-fundamental-matrix",
-    "title": "The Seven-points algorithm",
+    "title": "The seven-points algorithm",
     "section": "A pencil of fundamental matrix",
     "text": "A pencil of fundamental matrix\nNormalize the points exactly as in the eight-point algorithm and look at the singular values of \\(\\mathsf A\\). There are seven non-zero singular values. The two vectors corresponding to the two zero singual values span the null space:\n\\[\n\\ker\\mathsf A = \\operatorname{span}(\\widehat{\\mathsf F}_0,\n                                     \\widehat{\\mathsf F}_1).\n\\]\nEvery matrix\n\\[\n\\widehat{\\mathsf F}(\\lambda)\n   = \\widehat{\\mathsf F}_0 + \\lambda\\widehat{\\mathsf F}_1\n\\]\ntherefore satisfies all seven epipolar equations. Most members of this pencil, however, have rank three and thus are not fundamental matrices.\n\nx7n, T = normalize_points(x7)\nxp7n, Tp = normalize_points(xp7)\nA7 = design_matrix(x7n, xp7n)\nU, s7, Vt = np.linalg.svd(A7)\nF0h = Vt[-2].reshape(3, 3)\nF1h = Vt[-1].reshape(3, 3)\n\nprint(\"shape of A:\", A7.shape)\nprint(\"rank of A :\", np.linalg.matrix_rank(A7))\nprint(\"singular values:\", np.round(s7, 5))\nprint(\"dimension of the right null space: 2\")\n\nshape of A: (7, 9)\nrank of A : 7\nsingular values: [7.4974 6.7286 3.4193 2.5073 1.3228 0.4769 0.0337]\ndimension of the right null space: 2",
     "crumbs": [
       "About",
       "Two-view geometry",
-      "The Seven-points algorithm"
+      "The seven-points algorithm"
     ]
   },
   {
     "objectID": "notebooks/two-views/seven-point.html#whats-happening-in-mathbbp8",
     "href": "notebooks/two-views/seven-point.html#whats-happening-in-mathbbp8",
-    "title": "The Seven-points algorithm",
+    "title": "The seven-points algorithm",
     "section": "What’s happening in \\(\\mathbb{P}^8\\)",
     "text": "What’s happening in \\(\\mathbb{P}^8\\)\nLet’s consider the whole construction at once in convenient higher dimensional spaces.\nA \\(3\\times3\\) matrix up to scale is a point of \\(\\mathbb P^8\\). Not every point in this space is a fundamental matrix: it must also satisfy \\(\\det\\mathsf F = 0\\), a single equation, cubic in the entries of \\(\\mathsf F\\). The fundamental matrices therefore form a cubic hypersurface in \\(\\mathbb P^8\\), of dimension seven. The cartoon illustration in Figure 2 attempts to illustrate our high-dimensional setup on the plane.\nEach correspondence contributes one linear equation in the entries of \\(\\mathsf F\\), that is, a hyperplane of \\(\\mathbb P^8\\). Seven correspondences in general position give seven independent hyperplanes, and seven hyperplanes in \\(\\mathbb P^8\\) meet in a line, since \\(8 - 7 = 1\\). That line is exactly the pencil \\(\\widehat{\\mathsf F}_0 + \\lambda\\widehat{\\mathsf F}_1\\), with \\(\\lambda\\) a coordinate along it.\nSo the seven-point problem reads: intersect a line with a cubic hypersurface. A line meets a hypersurface of degree \\(d\\) in \\(d\\) points, counted with multiplicity and over the complex numbers. Here \\(d = 3\\). The cubic in \\(\\lambda\\) we are about to write down is the degree of the variety we are cutting.\nThis also says something about the eight-points algorithm. Eight correspondences give eight hyperplanes, which meet in a single point of \\(\\mathbb P^8\\), and a point singled out by linear conditions has no reason to lie on the cubic. That is precisely what the rank-two enforcement was doing there: the eight-point algorithm lands just off the variety, and the truncated SVD pushes it back on. Seven points land on a line that genuinely crosses the variety; eight points land beside it and have to be projected.\n\n\n\n\n\n\n\n\nFigure 2: Cartoon illustration, drawn in the plane rather than in \\(\\mathbb P^8\\): a cubic curve stands in for the cubic hypersurface \\(\\det\\mathsf F = 0\\), and lines stand in for hyperplanes. The counting is the same one dimension at a time: in \\(\\mathbb P^2\\) two lines meet in a point and one line meets a cubic in three points, exactly as in \\(\\mathbb P^8\\) seven hyperplanes meet in a in a line that cuts the variety three times, while eight hyperplanes meet in a point. Left: the seven-point algorithm lands on a line that crosses the variety, and every crossing is a candidate. Right: in presence of noise the eight-point algorithm lands beside the variety and the rank-two enforcement projects it back.",
     "crumbs": [
       "About",
       "Two-view geometry",
-      "The Seven-points algorithm"
+      "The seven-points algorithm"
     ]
   },
   {
     "objectID": "notebooks/two-views/seven-point.html#rank-two-turns-into-a-cubic",
     "href": "notebooks/two-views/seven-point.html#rank-two-turns-into-a-cubic",
-    "title": "The Seven-points algorithm",
+    "title": "The seven-points algorithm",
     "section": "Rank two turns into a cubic",
     "text": "Rank two turns into a cubic\nThe missing piece is the defining constraint of a fundamental matrix,\n\\[\\det\\widehat{\\mathsf F}=0.\\]\nSubstituting the pencil gives\n\\[\n\\det\\bigl(\\widehat{\\mathsf F}_0+\n           \\lambda\\widehat{\\mathsf F}_1\\bigr)=0.\n\\]\nEvery entry is linear in \\(\\lambda\\), so the determinant is a polynomial of degree at most three. This is the only nonlinear step of the seven-point algorithm.\n\ndef det_cubic(F0, F1):\n    \"\"\"Coefficients c0..c3 of det(F0 + lambda F1), in ascending order.\"\"\"\n    p = [[np.array([F0[i, j], F1[i, j]], float) for j in range(3)]\n         for i in range(3)]\n    mul = np.polynomial.polynomial.polymul\n    add = np.polynomial.polynomial.polyadd\n    sub = np.polynomial.polynomial.polysub\n\n    m00 = sub(mul(p[1][1], p[2][2]), mul(p[1][2], p[2][1]))\n    m01 = sub(mul(p[1][0], p[2][2]), mul(p[1][2], p[2][0]))\n    m02 = sub(mul(p[1][0], p[2][1]), mul(p[1][1], p[2][0]))\n    c = add(sub(mul(p[0][0], m00), mul(p[0][1], m01)),\n            mul(p[0][2], m02))\n    return np.pad(c, (0, max(0, 4-len(c))))[:4]\n\ndef pencil_roots(c, tol=1e-12):\n    \"\"\"Roots of c0 + c1 L + c2 L^2 + c3 L^3, with the degenerate case.\n\n    When c3 vanishes the cubic drops degree: the missing root has run off to\n    infinity, which in the pencil means F1 itself. A relative tolerance is\n    essential — in floating point c3 comes out as 1e-18, never as exactly zero,\n    and np.roots would happily return a root at 1e+17.\n    \"\"\"\n    scale = np.abs(c).max()\n    at_infinity = abs(c[3]) &lt; tol * scale\n    p = c[:3] if at_infinity else c\n    p = np.trim_zeros(np.asarray(p, float)[::-1], \"f\")\n    r = np.roots(p) if len(p) &gt; 1 else np.array([])\n    return r, at_infinity\n\n\ncoeff = det_cubic(F0h, F1h)\nroots, at_infinity = pencil_roots(coeff)\nreal_roots = np.array([r.real for r in roots if abs(r.imag) &lt; 1e-8])\n\nprint(\"det(F0 + lambda F1) coefficients [c0,c1,c2,c3]:\")\nprint(coeff)\nprint(f\"root at infinity (det F1 = 0)? {at_infinity}\")\nprint(\"roots:\")\nfor r in roots:\n    print(\"  \", r)\nprint(f\"{len(real_roots)} of them are real\")\n\ndet(F0 + lambda F1) coefficients [c0,c1,c2,c3]:\n[ 0.0013  0.0165 -0.0456 -0.0042]\nroot at infinity (det F1 = 0)? False\nroots:\n   -11.298578464274387\n   0.41381116680976665\n   -0.06598340132282624\n3 of them are real\n\n\n\n\n\n\n\n\n\n\nFigure 3: The determinant along the two-dimensional null space. The seven linear equations give the pencil; the rank-two constraint picks the intersections with det(F)=0. Depending on the data, one or three of the roots are real.\n\n\n\n\n\nEach real root gives a rank-two matrix in normalized coordinates. We carry it back to pixels with the same contravariant transformation used by the normalized eight-point algorithm,\n\\[\n\\mathsf F = \\mathsf T'^\\top\\widehat{\\mathsf F}\\mathsf T.\n\\]\nOn exact data every candidate must fit the seven chosen correspondences exactly. Only one of them, however, is the fundamental matrix of the cameras that made the images.\n\ndef F_from_cameras(P, Pp):\n    \"\"\"Fundamental matrix induced by a pair of projective cameras.\"\"\"\n    Ch = np.linalg.svd(P)[2][-1]\n    ep = Pp @ Ch\n    return unit_F(skew(ep) @ Pp @ np.linalg.pinv(P))\n\n\nF_true = F_from_cameras(P, Pp)\n\nFs, lambdas = [], []\nfor r in roots:\n    if abs(r.imag) &gt; 1e-8:\n        continue\n    Fh = F0h + r.real * F1h\n    Fs.append(unit_F(Tp.T @ Fh @ T))\n    lambdas.append(r.real)\nif at_infinity:                      # the missing root: F1 on its own\n    Fs.append(unit_F(Tp.T @ F1h @ T))\n    lambdas.append(np.inf)\n\nfor j, (F, lam) in enumerate(zip(Fs, lambdas), 1):\n    print(f\"solution {j}: lambda={lam: .6f}   rank={np.linalg.matrix_rank(F)}   \"\n          f\"max residual on the seven={symmetric_epipolar_residual(F, x7, xp7).max():.2e} px\")\n\nsolution 1: lambda=-11.298578   rank=2   max residual on the seven=2.87e-12 px\nsolution 2: lambda= 0.413811   rank=2   max residual on the seven=9.52e-13 px\nsolution 3: lambda=-0.065983   rank=2   max residual on the seven=3.29e-12 px\n\n\n\n\n\n\n\n\n\n\nFigure 4: Every real root gives a valid epipolar geometry: each pencil of lines passes exactly through the seven points it was built from, and they are the same seven points in all three panels. Only the epipole moves. On these seven correspondences the three candidates are indistinguishable, which is why no quality number is shown here — we need data they have not seen.",
     "crumbs": [
       "About",
       "Two-view geometry",
-      "The Seven-points algorithm"
+      "The seven-points algorithm"
     ]
   },
   {
     "objectID": "notebooks/two-views/seven-point.html#which-of-the-three-solutions",
     "href": "notebooks/two-views/seven-point.html#which-of-the-three-solutions",
-    "title": "The Seven-points algorithm",
+    "title": "The seven-points algorithm",
     "section": "Which of the three solutions?",
     "text": "Which of the three solutions?\nEvery candidate reproduces the seven correspondences exactly, so the residuals on those seven are zero for all of them and tell us nothing. We need a criterion from somewhere else. Let us take three, in order of how much they cheat.\n\nCheating: chordal distance\nWe do know \\(\\mathsf F\\) here, so for a moment, we can cheat and use the chordal distance of each candidate from it.\n\n\nprint(f\"{'':14s}{'chordal':&gt;12s}{'lines [px]':&gt;14s}\")\nfor j, F in enumerate(Fs, 1):\n    print(f\"solution {j:&lt;6d}{projective_F_distance(F, F_true):12.2e}\")\n\n                   chordal    lines [px]\nsolution 1         5.37e-03\nsolution 2         3.37e-03\nsolution 3         1.01e-02\n\n\nThe three chordal distances sit within a few per cent of one another, which would suggest the candidates are nearly equivalent.\n\n\n\n\n\n\n\n\nFigure 5: The three candidates and the true matrix, each normalised to unit Frobenius norm and sign-aligned with the true one. Colour is the order of magnitude of each entry, one shade per decade. All four show the same three tiers: a top-left block around \\(10^{-7}\\), a last row and column around \\(10^{-3}\\), and a bottom-right entry of one. To the eye they are the same object — and to the Frobenius norm they very nearly are.\n\n\n\n\n\nIn pixel coordinates the entries of a fundamental matrix live on very different scales, for the same reason the design matrix did in the eight-point notebook: the homogeneous coordinate \\(1\\) sits next to pixel values in the thousands, so the coefficient multiplying \\(u\\,u'\\) has to be some \\(f^2\\) times smaller than the one multiplying \\(1\\cdot 1\\) for the two terms to balance. Once normalised, the top-left \\(2\\times2\\) block is of order \\(10^{-7}\\), the last row and column of order \\(10^{-3}\\), and the bottom-right entry is one. That hierarchy is the same for every fundamental matrix of this pair of images, whatever epipolar geometry it describes — which is why, entry by entry, the four matrices look like the same object.\nThe Frobenius norm knows nothing of that hierarchy: it weights every entry alike. So the chordal distance is decided almost entirely by the last row and column, and is essentially blind to the \\(2\\times2\\) block — which is precisely what sets the direction of the epipolar lines. A small chordal distance therefore does not certify a good epipolar geometry, and the ranking it induces is not one to rely on.\nNone of this is an argument against \\(\\mathsf F\\) being a point of \\(\\mathbb{P}^8\\). It is an argument against measuring there. It is better to consider distances defined in the images.\n\n\nCheating a little less: compare the epipolar lines\nStill using the true matrix, but asking the question in the images. Both matrices predict an epipolar line for the same point \\(\\mathbf{x}\\); how far apart are those two lines, where the data actually is?\n\ndef line_gap(F, G, x, xp):\n    \"\"\"How far apart, in pixels, are the epipolar lines of two matrices —\n    measured at the correspondences, which is where the data is.\n\n    For each pair, walk from the measured point x' onto the line that G predicts\n    (that is the foot q), then ask how far q lies from the line that F predicts.\n    One perpendicular segment per correspondence; the figure below draws it.\n    \"\"\"\n    Lg = (G @ x.T).T\n    Lg = Lg / np.linalg.norm(Lg[:, :2], axis=1, keepdims=True)\n    q = xp.copy()\n    q[:, :2] = xp[:, :2] - np.sum(xp * Lg, axis=1)[:, None] * Lg[:, :2]\n\n    Lf = (F @ x.T).T\n    Lf = Lf / np.linalg.norm(Lf[:, :2], axis=1, keepdims=True)\n    return np.abs(np.sum(q * Lf, axis=1))\n\n\n\n\n\n\n\n\n\nFigure 6: How two epipolar geometries are compared, for one correspondence, at the pixel scale. The white dashed line is what the true matrix predicts for \\(\\mathbf{x}\\), the orange line is what the candidate predicts, and the dot is the foot of the measured \\(\\mathbf{x}'\\) on the true line — the two are a pixel or two apart, which is the annotation error. The blue segment is what we measure: how far that foot lies from the candidate’s line. All three panels are at the same scale, so the segments can be compared directly.\n\n\n\n\n\nNow the three candidates separate clearly, and in an order that the chordal distance did not give. But we are still using \\(\\mathsf F\\), which in any real situation we do not have.\n\n\nIn practice use the correspondences kept aside (no cheating)\nThe correspondences kept aside played no part in the estimate. They can speak now: the true fundamental matrix must fit them too, while a spurious root of the cubic has no reason to. This is the criterion that survives outside a notebook, and it is what a robust estimator does with hundreds of matches instead of three.\nSeven points create candidates; further correspondences disambiguate and stabilise the estimate.\n\n# One quantity throughout this section: how far each of the correspondences\n# kept aside lies, in view 2, from the epipolar line a candidate predicts.\nrest_res = np.array([euclidean_epipolar_residuals(F, x_rest, xp_rest)[1] for F in Fs])\nrest_mean = rest_res.mean(axis=1)\n\nhdr = \"\".join(f\"{k:&gt;10s}\" for k in REST_IDS)\nprint(f\"{'':12s}{hdr}{'mean':&gt;10s}\")\nfor j, row in enumerate(rest_res, 1):\n    print(f\"solution {j:&lt;3d}\" + \"\".join(f\"{v:10.2f}\" for v in row) + f\"{row.mean():10.2f}\")\nprint(\"\\ndistances from the epipolar line in view 2, in pixels\")\n\n                    X0        X8        D0      mean\nsolution 1        0.83     36.30      3.43     13.52\nsolution 2       34.93      3.59      0.30     12.94\nsolution 3        3.83     12.95      4.01      6.93\n\ndistances from the epipolar line in view 2, in pixels\n\n\n\n\n\n\n\n\n\n\nFigure 7: What a correspondence kept aside says about each candidate. The blue circle is the point \\(\\mathbf{x}'_i\\) in view 2, and the blue segment is its distance from the epipolar line that the candidate predicts for it. The shading is that same distance evaluated at every position of view 2, with contours at 1, 2, 5, 10 and 20 pixels. Black dots are the seven seven points used for the estimate, which every candidate fits exactly.\n\n\n\n\n\n\n\n\n\n\n\n\n\nFigure 8: The same distances for every correspondence kept aside, on a logarithmic scale, with the black ticks marking the mean of each candidate. One candidate sits at the level of the annotation noise on all of them; the others miss at least one badly.\n\n\n\n\n\nWith exact data one candidate would fit the unused correspondences perfectly and the others would not fit them at all. With clicked points the separation is not between zero and something, but between the annotation noise and something much larger, which is all a robust estimator ever gets to work with. Note also that a single correspondence is not always decisive: read the whole group, not one bar.",
     "crumbs": [
       "About",
       "Two-view geometry",
-      "The Seven-points algorithm"
+      "The seven-points algorithm"
     ]
   },
   {
     "objectID": "notebooks/two-views/seven-point.html#the-algorithm",
     "href": "notebooks/two-views/seven-point.html#the-algorithm",
-    "title": "The Seven-points algorithm",
+    "title": "The seven-points algorithm",
     "section": "The algorithm",
     "text": "The algorithm\nAll the pieces can now be wrapped in a minimal solver. There is one important difference from the eight-point algorithm: the output is a list. A minimal solver is allowed to return several models.\n\ndef seven_point(x, xp, imag_tol=1e-8, dedup_tol=1e-7):\n    \"\"\"Return all real fundamental matrices from exactly seven correspondences.\"\"\"\n    if len(x) != 7 or len(xp) != 7:\n        raise ValueError(\"the seven-point solver needs exactly seven correspondences\")\n\n    xn, T = normalize_points(x)\n    xpn, Tp = normalize_points(xp)\n    _, _, Vt = np.linalg.svd(design_matrix(xn, xpn))\n    F0, F1 = Vt[-2].reshape(3, 3), Vt[-1].reshape(3, 3)\n\n    roots, at_infinity = pencil_roots(det_cubic(F0, F1))\n\n    candidates = [F0 + r.real * F1 for r in roots if abs(r.imag) &lt;= imag_tol]\n    if at_infinity:\n        candidates.append(F1)\n\n    solutions = []\n    for Fh in candidates:\n        F = unit_F(Tp.T @ Fh @ T)\n        if not any(projective_F_distance(F, G) &lt; dedup_tol for G in solutions):\n            solutions.append(F)\n    return solutions\n\n\nFs_check = seven_point(x7, xp7)\nprint(f\"returned {len(Fs_check)} real solution(s)\")\n\nreturned 3 real solution(s)",
     "crumbs": [
       "About",
       "Two-view geometry",
-      "The Seven-points algorithm"
+      "The seven-points algorithm"
     ]
   },
   {
     "objectID": "notebooks/two-views/seven-point.html#one-root-or-three",
     "href": "notebooks/two-views/seven-point.html#one-root-or-three",
-    "title": "The Seven-points algorithm",
+    "title": "The seven-points algorithm",
     "section": "One root or three",
     "text": "One root or three\nThe cubic has three roots over \\(\\mathbb C\\), but a real cubic can have either one real root or three. Both cases occur, and we do not need to invent data to see it: among all the ways of choosing seven of the clicked correspondences, some give three real fundamental matrices and some give a single one.\nWhen there is only one real root the minimal solver is, in a sense, lucky: the ambiguity is there over the complex numbers, but the two spurious candidates are not available to confuse a real algorithm.\n\ncounts = {}\nfor c in itertools.combinations(range(len(rid)), 7):\n    idx = list(c)\n    xn, _  = normalize_points(xr[idx])\n    xpn, _ = normalize_points(xpr[idx])\n    Vt = np.linalg.svd(design_matrix(xn, xpn))[2]\n    r, _ = pencil_roots(det_cubic(Vt[-2].reshape(3, 3), Vt[-1].reshape(3, 3)))\n    k = sum(1 for z in r if abs(z.imag) &lt; 1e-8)\n    counts[k] = counts.get(k, 0) + 1\n\nfor k in sorted(counts):\n    print(f\"{counts[k]:4d} of the {sum(counts.values())} seven-point subsets \"\n          f\"give {k} real solution(s)\")\n\n  26 of the 120 seven-point subsets give 1 real solution(s)\n  94 of the 120 seven-point subsets give 3 real solution(s)\n\n\n\nWhere the seven-point solver is used\n\n\nWhere the seven-point solver is used\nWith noisy data, seven correspondences should not be treated as a statistically complete estimate of \\(\\mathsf F\\). The solver is most useful as a minimal hypothesis generator inside a robust estimator: sample seven matches, generate one or three candidates, score each candidate on all the data, and keep the one with the best support.\nThat is why the count of points matters so much in practice. A robust estimator has to draw a sample in which every point is an inlier, and the probability of that decays exponentially with the sample size — so seven points instead of eight is not a curiosity, it is a smaller exponent. The same idea has produced solvers that shrink the sample further by exploiting whatever is known in advance: a vertical direction from an IMU, planar motion, a shared focal length, a known rotation axis.\nEach of those variants is a different system of polynomial equations, and here the subject stops being about images. Building a fast solver means eliminating variables from a polynomial system, and a substantial line of work has grown around doing that automatically: Gröbner-basis and action-matrix generators, the choice of a good linear basis, syzygy-based reduction, sparse resultants, numerical homotopy continuation, and most recently learning which homotopy path to follow so that the spurious solutions are never computed at all. There is also work on the prior question of which configurations of points and lines constitute a minimal problem in the first place: a classification problem in algebraic geometry.\nSo the seven-point algorithm is a small instance of a large family of method that are still investigated by the computer vision community.",
     "crumbs": [
       "About",
       "Two-view geometry",
-      "The Seven-points algorithm"
+      "The seven-points algorithm"
     ]
   },
   {
     "objectID": "notebooks/two-views/seven-point.html#further-reading",
     "href": "notebooks/two-views/seven-point.html#further-reading",
-    "title": "The Seven-points algorithm",
+    "title": "The seven-points algorithm",
     "section": "Further reading",
     "text": "Further reading\n\nHartley, R. and Zisserman, A. Multiple View Geometry in Computer Vision, 2nd ed., Cambridge University Press, 2004. Section 11.1 for the seven- and eight-point algorithms.\nHartley, R. “In defense of the eight-point algorithm”, IEEE TPAMI 19(6),\n\nThe normalisation used here is the same one used in the previous notebook.\n\n\nOn minimal solvers at large:\n- Kukelova, Z., Bujnak, M. and Pajdla, T. “Automatic generator of minimal problem solvers”, ECCV, 2008. The idea that solvers can be produced by a machine rather than by hand. - Hrubý, P., Duff, T., Leykin, A. and Pajdla, T. “Learning to solve hard minimal problems”, CVPR, 2022. Homotopy continuation with a learned starting point, so that the spurious solutions are never followed. - PoseLib, https://github.com/PoseLib/PoseLib. A collection of the solvers in current use, worth reading as an atlas of the family.\n\nLuca Magri — Computer Vision Dojo\nCode MIT · text and figures CC BY-NC-ND 4.0\nhttps://magrilu.github.io/cv-dojo/",
     "crumbs": [
       "About",
       "Two-view geometry",
-      "The Seven-points algorithm"
+      "The seven-points algorithm"
     ]
   },
   {
@@ -875,7 +1031,7 @@
     "href": "notebooks/reconstruction/triangulation.html#preprocessing",
     "title": "Projective structure from two views",
     "section": "Preprocessing",
-    "text": "Preprocessing\nTo improve the results slightly, before starting our analysis we undistort the images, so that from this point on we can assume a pinhole camera model\n\n# The lens distorsion parameters are already stored with the Origami House data. They have been estimated using COLMAP using a hundred of images.\nwith open(ROOT / \"data/dojo_house/annotations/triangulation.json\") as f:\n    camera_data = json.load(f)\n\ncam = camera_data[\"camera\"]\nf, cx, cy, k1 = cam[\"f\"], cam[\"cx\"], cam[\"cy\"], cam[\"k1\"]\nscale = camera_data[\"display_to_colmap_mapping\"][\"uniform_scale\"]\n\n\ndef display_to_colmap(xy):\n    \"\"\"Displayed clockwise-rotated JPEG -&gt; original COLMAP pixel coordinates.\"\"\"\n    u, v = np.asarray(xy, float)\n    return np.array([scale * v, scale * (W_IMG - u)])\n\n\ndef colmap_to_display(xy):\n    \"\"\"Original COLMAP pixel coordinates -&gt; displayed JPEG coordinates.\"\"\"\n    u, v = np.asarray(xy, float)\n    return np.array([W_IMG - v / scale, u / scale])\n\n\ndef undistort_display_point(xy):\n    \"\"\"Invert COLMAP SIMPLE_RADIAL, but return an undistorted DISPLAY-pixel point.\"\"\"\n    ud, vd = display_to_colmap(xy)\n    xd, yd = (ud - cx) / f, (vd - cy) / f\n    x, y = xd, yd\n    for _ in range(12):\n        fac = 1.0 + k1 * (x*x + y*y)\n        x, y = xd / fac, yd / fac\n    uu, vu = f*x + cx, f*y + cy\n    return colmap_to_display([uu, vu])\n\n\ndef undistort_points(x):\n    return h(np.array([undistort_display_point(p[:2]) for p in x]))\n\nx  = undistort_points(x_raw)\nxp = undistort_points(xp_raw)\n\nshift = np.r_[np.linalg.norm(x[:,:2]-x_raw[:,:2], axis=1),\n              np.linalg.norm(xp[:,:2]-xp_raw[:,:2], axis=1)]\nprint(f\"maximum radial correction: {shift.max():.2f} px\")\nprint(f\"median radial correction:  {np.median(shift):.2f} px\")\n\nmaximum radial correction: 0.46 px\nmedian radial correction:  0.16 px\n\n\n\n\n\n\n\n\n\n\nFigure 2: Original points before (hollow circles) and after (filled dots) radial undistortion. The connecting segments show the image displacement induced by the lens correction. The distortion is particularly visible at the borders of the images\n\n\n\n\n\n\nRecover the epipolar geometry\nWe now repeat, compactly, the fundamental-matrix estimation pipeline, from DLT to non-linear refinement.\n\nHartley-normalize the undistorted correspondences;\nestimate \\(\\mathsf F\\) with the normalized eight-point algorithm and enforce rank two;\nuse that result to initialize a nonlinear minimization of the Sampson residual.\n\nThe refined matrix is the object we carry into reconstruction.\n\ndef normalize_points(x):\n    c = x[:, :2].mean(axis=0)\n    d = np.linalg.norm(x[:, :2] - c, axis=1).mean()\n    s = np.sqrt(2.0) / d\n    T = np.array([[s, 0, -s*c[0]], [0, s, -s*c[1]], [0, 0, 1.0]])\n    return (T @ x.T).T, T\n\n\ndef design_matrix(x, xp):\n    u, v = x[:,0], x[:,1]\n    up, vp = xp[:,0], xp[:,1]\n    return np.column_stack([up*u, up*v, up,\n                            vp*u, vp*v, vp,\n                            u, v, np.ones(len(x))])\n\n\ndef eight_point(x, xp):\n    xn, T = normalize_points(x)\n    xpn, Tp = normalize_points(xp)\n    Fh = np.linalg.svd(design_matrix(xn, xpn))[2][-1].reshape(3,3)\n    U, s, Vt = np.linalg.svd(Fh)\n    s[-1] = 0.0\n    Fh = U @ np.diag(s) @ Vt\n    F = Tp.T @ Fh @ T\n    return F / np.linalg.norm(F)\n\n\ndef sampson_residual(F, x, xp):\n    Fx = (F @ x.T).T\n    Ftxp = (F.T @ xp.T).T\n    C = np.sum(xp * Fx, axis=1)\n    den = Fx[:,0]**2 + Fx[:,1]**2 + Ftxp[:,0]**2 + Ftxp[:,1]**2\n    return C / np.sqrt(np.maximum(den, 1e-15))\n\n\ndef rodrigues(w):\n    th = np.linalg.norm(w)\n    if th &lt; 1e-12:\n        return np.eye(3)\n    K = skew(w / th)\n    return np.eye(3) + np.sin(th)*K + (1-np.cos(th))*(K@K)\n\n\ndef log_SO3(R):\n    c = np.clip((np.trace(R)-1)/2, -1.0, 1.0)\n    th = np.arccos(c)\n    if th &lt; 1e-9:\n        return np.zeros(3)\n    w = np.array([R[2,1]-R[1,2], R[0,2]-R[2,0], R[1,0]-R[0,1]])\n    return th * w / (2*np.sin(th))\n\n\ndef F_from_params(p):\n    U, V = rodrigues(p[:3]), rodrigues(p[3:6])\n    q = np.clip(p[6], -30, 30)\n    s = 1.0 / (1.0 + np.exp(-q))\n    return U @ np.diag([1.0, s, 0.0]) @ V.T\n\n\ndef params_from_F(F):\n    U, s, Vt = np.linalg.svd(F)\n    if np.linalg.det(U) &lt; 0:\n        U[:,2] *= -1\n    if np.linalg.det(Vt) &lt; 0:\n        Vt[2,:] *= -1\n    ratio = np.clip(s[1] / s[0], 1e-6, 1-1e-6)\n    q = np.log(ratio / (1-ratio))\n    return np.r_[log_SO3(U), log_SO3(Vt.T), q]\n\n\ndef refine_sampson(F0, x, xp):\n    p0 = params_from_F(F0)\n    opt = least_squares(lambda p: sampson_residual(F_from_params(p), x, xp),\n                        p0, method=\"lm\", xtol=1e-12, ftol=1e-12,\n                        gtol=1e-12, max_nfev=5000)\n    F = F_from_params(opt.x)\n    return F / np.linalg.norm(F), opt\n\n\ndef rms(v):\n    v = np.asarray(v, float)\n    return float(np.sqrt(np.mean(v*v)))\n\nF_dlt = eight_point(x, xp)\nF, optF = refine_sampson(F_dlt, x, xp)\n\nprint(f\"Sampson RMS, DLT:     {rms(sampson_residual(F_dlt, x, xp)):.3f} px\")\nprint(f\"Sampson RMS, refined: {rms(sampson_residual(F, x, xp)):.3f} px\")\nprint(\"rank(F) =\", np.linalg.matrix_rank(F))\n\nSampson RMS, DLT:     10.806 px\nSampson RMS, refined: 0.594 px\nrank(F) = 2\n\n\n\n\nRecovery of a pair of projective cameras\nSince the fundamental matrix does not determine a unique physical stereo rig, it cannot recover a unique pair of Euclidean cameras. Instead, it determines a pair of cameras only up to a 3D projective transformation. For our purposes, we can therefore choose a convenient canonical projective realization.\nWe fix the world reference frame by choosing the first camera as\n\\[\n\\mathsf P=[I\\mid\\mathbf 0].\n\\]\nIf \\(\\mathbf e'\\) denotes the epipole in the second image, a compatible second camera is\n\\[\n\\mathsf P'\n=\n\\left[\n[\\mathbf e']_\\times \\mathsf F\n\\;\\middle|\\;\n\\mathbf e'\n\\right].\n\\]\nThis canonical pair reproduces exactly the epipolar geometry encoded by \\(\\mathsf F\\). However, these cameras should not be interpreted as the physical Euclidean cameras \\(K[R\\mid t]\\) that acquired the images. Consequently, the 3D coordinates defined by this reconstruction are projective coordinates, rather than Euclidean ones.\n\ndef canonical_cameras(F):\n    U, _, _ = np.linalg.svd(F)\n    ep = U[:, -1]                    # left null vector: e'^T F = 0\n    ep /= np.linalg.norm(ep)\n    P = np.c_[np.eye(3), np.zeros(3)]\n    Pp = np.c_[skew(ep) @ F, ep]\n    return P, Pp, ep\n\n\ndef unit_F(F):\n    return F / np.linalg.norm(F)\n\n\ndef F_from_cameras(P, Pp):\n    C = np.linalg.svd(P)[2][-1]\n    ep = Pp @ C\n    Fc = skew(ep) @ Pp @ np.linalg.pinv(P)\n    return unit_F(Fc)\n\n\ndef projective_F_distance(F1, F2):\n    A, B = unit_F(F1), unit_F(F2)\n    return min(np.linalg.norm(A-B), np.linalg.norm(A+B))\n\nP, Pp, ep = canonical_cameras(F)\nF_check = F_from_cameras(P, Pp)\n\nprint(\"epipole in view 2 ~\", np.round(ep, 4))\nprint(\"distance between input F and F induced by (P,P'):\",\n      f\"{projective_F_distance(F, F_check):.2e}\")\n\nepipole in view 2 ~ [0.2464 0.9692 0.0006]\ndistance between input F and F induced by (P,P'): 1.11e-16",
+    "text": "Preprocessing\nTo improve the results slightly, before starting our analysis we undistort the images, so that from this point on we can assume a pinhole camera model\n\n# The lens distorsion parameters are already stored with the Origami House data. They have been estimated using COLMAP using a hundred of images.\nwith open(ROOT / \"data/dojo_house/annotations/triangulation.json\") as f:\n    camera_data = json.load(f)\n\ncam = camera_data[\"camera\"]\nf, cx, cy, k1 = cam[\"f\"], cam[\"cx\"], cam[\"cy\"], cam[\"k1\"]\nscale = camera_data[\"display_to_colmap_mapping\"][\"uniform_scale\"]\n\n\ndef display_to_colmap(xy):\n    \"\"\"Displayed clockwise-rotated JPEG -&gt; original COLMAP pixel coordinates.\"\"\"\n    u, v = np.asarray(xy, float)\n    return np.array([scale * v, scale * (W_IMG - u)])\n\n\ndef colmap_to_display(xy):\n    \"\"\"Original COLMAP pixel coordinates -&gt; displayed JPEG coordinates.\"\"\"\n    u, v = np.asarray(xy, float)\n    return np.array([W_IMG - v / scale, u / scale])\n\n\ndef undistort_display_point(xy):\n    \"\"\"Invert COLMAP SIMPLE_RADIAL, but return an undistorted DISPLAY-pixel point.\"\"\"\n    ud, vd = display_to_colmap(xy)\n    xd, yd = (ud - cx) / f, (vd - cy) / f\n    x, y = xd, yd\n    for _ in range(12):\n        fac = 1.0 + k1 * (x*x + y*y)\n        x, y = xd / fac, yd / fac\n    uu, vu = f*x + cx, f*y + cy\n    return colmap_to_display([uu, vu])\n\n\ndef undistort_points(x):\n    return h(np.array([undistort_display_point(p[:2]) for p in x]))\n\nx  = undistort_points(x_raw)\nxp = undistort_points(xp_raw)\n\nshift = np.r_[np.linalg.norm(x[:,:2]-x_raw[:,:2], axis=1),\n              np.linalg.norm(xp[:,:2]-xp_raw[:,:2], axis=1)]\nprint(f\"maximum radial correction: {shift.max():.2f} px\")\nprint(f\"median radial correction:  {np.median(shift):.2f} px\")\n\nmaximum radial correction: 0.46 px\nmedian radial correction:  0.16 px\n\n\n\n\n\n\n\n\n\n\nFigure 2: Original points before (hollow circles) and after (filled dots) radial undistortion. The connecting segments show the image displacement induced by the lens correction. The distortion is particularly visible at the borders of the images\n\n\n\n\n\n\nRecover the epipolar geometry\nWe now repeat, compactly, the fundamental-matrix estimation pipeline, from DLT to non-linear refinement.\n\nHartley-normalize the undistorted correspondences;\nestimate \\(\\mathsf F\\) with the normalized eight-point algorithm and enforce rank two;\nuse that result to initialize a nonlinear minimization of the Sampson residual.\n\nThe refined matrix is the object we carry into reconstruction.\n\ndef normalize_points(x):\n    c = x[:, :2].mean(axis=0)\n    d = np.linalg.norm(x[:, :2] - c, axis=1).mean()\n    s = np.sqrt(2.0) / d\n    T = np.array([[s, 0, -s*c[0]], [0, s, -s*c[1]], [0, 0, 1.0]])\n    return (T @ x.T).T, T\n\n\ndef design_matrix(x, xp):\n    u, v = x[:,0], x[:,1]\n    up, vp = xp[:,0], xp[:,1]\n    return np.column_stack([up*u, up*v, up,\n                            vp*u, vp*v, vp,\n                            u, v, np.ones(len(x))])\n\n\ndef eight_point(x, xp):\n    xn, T = normalize_points(x)\n    xpn, Tp = normalize_points(xp)\n    Fh = np.linalg.svd(design_matrix(xn, xpn))[2][-1].reshape(3,3)\n    U, s, Vt = np.linalg.svd(Fh)\n    s[-1] = 0.0\n    Fh = U @ np.diag(s) @ Vt\n    F = Tp.T @ Fh @ T\n    return F / np.linalg.norm(F)\n\n\ndef sampson_residual(F, x, xp):\n    Fx = (F @ x.T).T\n    Ftxp = (F.T @ xp.T).T\n    C = np.sum(xp * Fx, axis=1)\n    den = Fx[:,0]**2 + Fx[:,1]**2 + Ftxp[:,0]**2 + Ftxp[:,1]**2\n    return C / np.sqrt(np.maximum(den, 1e-15))\n\n\ndef rodrigues(w):\n    th = np.linalg.norm(w)\n    if th &lt; 1e-12:\n        return np.eye(3)\n    K = skew(w / th)\n    return np.eye(3) + np.sin(th)*K + (1-np.cos(th))*(K@K)\n\n\ndef log_SO3(R):\n    c = np.clip((np.trace(R)-1)/2, -1.0, 1.0)\n    th = np.arccos(c)\n    if th &lt; 1e-9:\n        return np.zeros(3)\n    w = np.array([R[2,1]-R[1,2], R[0,2]-R[2,0], R[1,0]-R[0,1]])\n    return th * w / (2*np.sin(th))\n\n\ndef F_from_params(p):\n    U, V = rodrigues(p[:3]), rodrigues(p[3:6])\n    q = np.clip(p[6], -30, 30)\n    s = 1.0 / (1.0 + np.exp(-q))\n    return U @ np.diag([1.0, s, 0.0]) @ V.T\n\n\ndef params_from_F(F):\n    U, s, Vt = np.linalg.svd(F)\n    if np.linalg.det(U) &lt; 0:\n        U[:,2] *= -1\n    if np.linalg.det(Vt) &lt; 0:\n        Vt[2,:] *= -1\n    ratio = np.clip(s[1] / s[0], 1e-6, 1-1e-6)\n    q = np.log(ratio / (1-ratio))\n    return np.r_[log_SO3(U), log_SO3(Vt.T), q]\n\n\ndef refine_sampson(F0, x, xp):\n    p0 = params_from_F(F0)\n    opt = least_squares(lambda p: sampson_residual(F_from_params(p), x, xp),\n                        p0, method=\"lm\", xtol=1e-12, ftol=1e-12,\n                        gtol=1e-12, max_nfev=5000)\n    F = F_from_params(opt.x)\n    return F / np.linalg.norm(F), opt\n\n\ndef rms(v):\n    v = np.asarray(v, float)\n    return float(np.sqrt(np.mean(v*v)))\n\nF_dlt = eight_point(x, xp)\nF, optF = refine_sampson(F_dlt, x, xp)\n\nprint(f\"Sampson RMS, DLT:     {rms(sampson_residual(F_dlt, x, xp)):.3f} px\")\nprint(f\"Sampson RMS, refined: {rms(sampson_residual(F, x, xp)):.3f} px\")\nprint(\"rank(F) =\", np.linalg.matrix_rank(F))\n\nSampson RMS, DLT:     10.806 px\nSampson RMS, refined: 0.594 px\nrank(F) = 2\n\n\n\n\nRecovery of a pair of projective cameras\nSince the fundamental matrix does not determine a unique physical stereo rig, it cannot recover a unique pair of Euclidean cameras. Instead, it determines a pair of cameras only up to a 3D projective transformation. For our purposes, we can therefore choose a convenient canonical projective realization.\nWe fix the world reference frame by choosing the first camera as\n\\[\n\\mathsf P=[I\\mid\\mathbf 0].\n\\]\nIf \\(\\mathbf e'\\) denotes the epipole in the second image, a compatible second camera is\n\\[\n\\mathsf P'\n=\n\\left[\n[\\mathbf e']_\\times \\mathsf F\n\\;\\middle|\\;\n\\mathbf e'\n\\right].\n\\]\nThis canonical pair reproduces exactly the epipolar geometry encoded by \\(\\mathsf F\\). However, these cameras should not be interpreted as the physical Euclidean cameras \\(K[R\\mid t]\\) that acquired the images. Consequently, the 3D coordinates defined by this reconstruction are projective coordinates, rather than Euclidean ones.\n\ndef canonical_cameras(F):\n    U, _, _ = np.linalg.svd(F)\n    ep = U[:, -1]                    # left null vector: e'^T F = 0\n    ep /= np.linalg.norm(ep)\n    P = np.c_[np.eye(3), np.zeros(3)]\n    Pp = np.c_[skew(ep) @ F, ep]\n    return P, Pp, ep\n\n\ndef unit_F(F):\n    return F / np.linalg.norm(F)\n\n\ndef F_from_cameras(P, Pp):\n    C = np.linalg.svd(P)[2][-1]\n    ep = Pp @ C\n    Fc = skew(ep) @ Pp @ np.linalg.pinv(P)\n    return unit_F(Fc)\n\n\ndef projective_F_distance(F1, F2):\n    A, B = unit_F(F1), unit_F(F2)\n    return min(np.linalg.norm(A-B), np.linalg.norm(A+B))\n\nP, Pp, ep = canonical_cameras(F)\nF_check = F_from_cameras(P, Pp)\n\nprint(\"epipole in view 2 ~\", np.round(ep, 4))\nprint(\"distance between input F and F induced by (P,P'):\",\n      f\"{projective_F_distance(F, F_check):.2e}\")\n\nepipole in view 2 ~ [0.2464 0.9692 0.0006]\ndistance between input F and F induced by (P,P'): 2.03e-18",
     "crumbs": [
       "About",
       "Reconstruction",
