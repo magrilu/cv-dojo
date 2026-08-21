@@ -216,29 +216,12 @@ window.Quarto = {
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
             <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true">
- <span class="menu-text">Geometry fundamentals</span></a>
+ <span class="menu-text">Single-view geometry</span></a>
           <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
       </div>
       <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../../notebooks/geometry/fitting-a-conic.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Fitting a conic</span></a>
-  </div>
-</li>
-      </ul>
-  </li>
-        <li class="sidebar-item sidebar-item-section">
-      <div class="sidebar-item-container"> 
-            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true">
- <span class="menu-text">Single-view geometry</span></a>
-          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true" aria-label="Toggle section">
-            <i class="bi bi-chevron-right ms-2"></i>
-          </a> 
-      </div>
-      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../../notebooks/camera/camera.html" class="sidebar-item-text sidebar-link active">
@@ -248,20 +231,20 @@ window.Quarto = {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../../notebooks/camera/resection.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Resection</span></a>
+ <span class="menu-text">Camera resection</span></a>
   </div>
 </li>
       </ul>
   </li>
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
-            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true">
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true">
  <span class="menu-text">Two-view geometry</span></a>
-          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true" aria-label="Toggle section">
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
       </div>
-      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">  
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../../notebooks/two-views/fundamental-matrix.html" class="sidebar-item-text sidebar-link">
@@ -283,7 +266,24 @@ window.Quarto = {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../../notebooks/two-views/seven-point.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">The seven-points algorithm</span></a>
+ <span class="menu-text">The seven-point algorithm</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true">
+ <span class="menu-text">Reconstruction</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../notebooks/reconstruction/triangulation.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Projective structure from two views</span></a>
   </div>
 </li>
       </ul>
@@ -291,7 +291,7 @@ window.Quarto = {
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
             <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="true">
- <span class="menu-text">Reconstruction</span></a>
+ <span class="menu-text">Fitting</span></a>
           <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="true" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
@@ -299,8 +299,8 @@ window.Quarto = {
       <ul id="quarto-sidebar-section-4" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../../notebooks/reconstruction/triangulation.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Projective structure from two views</span></a>
+  <a href="../../notebooks/geometry/fitting-a-conic.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Fitting a conic</span></a>
   </div>
 </li>
       </ul>
@@ -319,21 +319,27 @@ window.Quarto = {
   <li><a href="#the-visual-pyramid" id="toc-the-visual-pyramid" class="nav-link" data-scroll-target="#the-visual-pyramid">The visual pyramid</a></li>
   <li><a href="#from-the-visual-pyramid-to-coordinates" id="toc-from-the-visual-pyramid-to-coordinates" class="nav-link" data-scroll-target="#from-the-visual-pyramid-to-coordinates">From the visual pyramid to coordinates</a></li>
   <li><a href="#depth-changes-apparent-size" id="toc-depth-changes-apparent-size" class="nav-link" data-scroll-target="#depth-changes-apparent-size">Depth changes apparent size</a></li>
-  <li><a href="#one-extra-coordinate-makes-projection-linear" id="toc-one-extra-coordinate-makes-projection-linear" class="nav-link" data-scroll-target="#one-extra-coordinate-makes-projection-linear">One extra coordinate makes projection linear</a>
+  <li><a href="#homogeneous-coordinates-make-projection-linear" id="toc-homogeneous-coordinates-make-projection-linear" class="nav-link" data-scroll-target="#homogeneous-coordinates-make-projection-linear">Homogeneous coordinates make projection linear</a>
   <ul class="collapse">
-  <li><a href="#the-one-point-with-no-image" id="toc-the-one-point-with-no-image" class="nav-link" data-scroll-target="#the-one-point-with-no-image">The one point with no image</a></li>
+  <li><a href="#the-camera-centre" id="toc-the-camera-centre" class="nav-link" data-scroll-target="#the-camera-centre">The camera centre</a></li>
   </ul></li>
-  <li><a href="#putting-the-camera-in-the-world" id="toc-putting-the-camera-in-the-world" class="nav-link" data-scroll-target="#putting-the-camera-in-the-world">Putting the camera in the world</a>
+  <li><a href="#placing-the-camera-in-a-world-reference-frame" id="toc-placing-the-camera-in-a-world-reference-frame" class="nav-link" data-scroll-target="#placing-the-camera-in-a-world-reference-frame">Placing the camera in a world reference frame</a>
   <ul class="collapse">
-  <li><a href="#seeing-the-extrinsics" id="toc-seeing-the-extrinsics" class="nav-link" data-scroll-target="#seeing-the-extrinsics">Seeing the extrinsics</a></li>
+  <li><a href="#rotating-the-camera" id="toc-rotating-the-camera" class="nav-link" data-scroll-target="#rotating-the-camera">Rotating the camera</a></li>
+  <li><a href="#translating-the-camera" id="toc-translating-the-camera" class="nav-link" data-scroll-target="#translating-the-camera">Translating the camera</a></li>
   </ul></li>
   <li><a href="#from-the-image-plane-to-pixels" id="toc-from-the-image-plane-to-pixels" class="nav-link" data-scroll-target="#from-the-image-plane-to-pixels">From the image plane to pixels</a>
   <ul class="collapse">
-  <li><a href="#the-intrinsics" id="toc-the-intrinsics" class="nav-link" data-scroll-target="#the-intrinsics">The intrinsics</a></li>
+  <li><a href="#the-intrinsic-parameters" id="toc-the-intrinsic-parameters" class="nav-link" data-scroll-target="#the-intrinsic-parameters">The intrinsic parameters</a></li>
+  <li><a href="#changing-the-focal-length" id="toc-changing-the-focal-length" class="nav-link" data-scroll-target="#changing-the-focal-length">Changing the focal length</a></li>
+  <li><a href="#changing-the-principal-point" id="toc-changing-the-principal-point" class="nav-link" data-scroll-target="#changing-the-principal-point">Changing the principal point</a></li>
   </ul></li>
   <li><a href="#the-camera-matrix" id="toc-the-camera-matrix" class="nav-link" data-scroll-target="#the-camera-matrix">The camera matrix</a></li>
-  <li><a href="#back-projecting-a-pixel" id="toc-back-projecting-a-pixel" class="nav-link" data-scroll-target="#back-projecting-a-pixel">Back-projecting a pixel</a></li>
-  <li><a href="#reading-the-camera-back-out-of-mathsf-p" id="toc-reading-the-camera-back-out-of-mathsf-p" class="nav-link" data-scroll-target="#reading-the-camera-back-out-of-mathsf-p">Reading the camera back out of <span class="math inline">\(\mathsf P\)</span></a></li>
+  <li><a href="#back-projecting-a-pixel" id="toc-back-projecting-a-pixel" class="nav-link" data-scroll-target="#back-projecting-a-pixel">Back-projecting a pixel</a>
+  <ul class="collapse">
+  <li><a href="#back-projection-from-the-camera-matrix" id="toc-back-projection-from-the-camera-matrix" class="nav-link" data-scroll-target="#back-projection-from-the-camera-matrix">Back-projection from the camera matrix</a></li>
+  </ul></li>
+  <li><a href="#questions-to-leave-open" id="toc-questions-to-leave-open" class="nav-link" data-scroll-target="#questions-to-leave-open">Questions to leave open</a></li>
   <li><a href="#further-reading" id="toc-further-reading" class="nav-link" data-scroll-target="#further-reading">Further reading</a></li>
   </ul></li>
   </ul>
@@ -352,7 +358,7 @@ window.Quarto = {
 <p><span class="math display">\[
 \mathbb P^3 \dashrightarrow \mathbb P^2 .
 \]</span></p>
-<p>A real camera forms an image through a much richer physical process. Light passes through a system of lenses, reaches a sensor, and is eventually converted into an array of pixel values. We will leave all of this aside for now — aperture, focus, exposure, sensor response, demosaicing, and even lens distortion — and concentrate on the geometry of image formation alone.</p>
+<p>A real camera forms an image through a much richer physical process. Light passes through a system of lenses, reaches a sensor, and is eventually converted into an array of pixel values. We will leave all of this aside for now and concentrate on the geometry of image formation alone.</p>
 <p>That geometry is much older than photography. Its roots reach back to ancient optics, and during the Renaissance the same ideas became the basis of linear perspective: a systematic way of representing a three-dimensional scene on a two-dimensional surface. Leon Battista Alberti described an image as an <em>intersegazione della piramide visiva</em> — a cross-section of the visual pyramid.</p>
 <p>We will take that construction as our starting point: choose a centre of projection, join it to the points of the scene, and intersect the resulting visual rays with an image plane.</p>
 <p>From there we will gradually build the pinhole camera model. Homogeneous coordinates will let us encode the entire projection in a single <span class="math inline">\(3\times4\)</span> matrix,</p>
@@ -360,17 +366,12 @@ window.Quarto = {
 \mathbf x \sim \mathsf P\,\mathbf X ,
 \]</span></p>
 <p>defined up to an arbitrary non-zero scale and therefore carrying <strong>eleven degrees of freedom</strong>.</p>
-<p>Before looking at the matrix, however, let us look at the geometry.</p>
+<p>Before looking at the camera matrix, however, let us look at the geometry.</p>
 <section id="the-visual-pyramid" class="level2 page-columns page-full">
 <h2 class="anchored" data-anchor-id="the-visual-pyramid">The visual pyramid</h2>
 <p>Let us start with the collection of 3D points <span class="math inline">\(\{\mathbf{X}_i\}\)</span> that represents the Origami House, and add a <strong>centre of projection</strong> <span class="math inline">\(\mathbf{C}\)</span>: Alberti’s eye, or the optical centre of our ideal camera.</p>
-<p>Join <span class="math inline">\(\mathbf{C}\)</span> to all the points of the scene. The resulting family of concurrent lines is the <strong>visual pyramid</strong>: every scene point <span class="math inline">\(\mathbf X_i\)</span> determines a visual ray through the centre.</p>
-<p>To make an image, we intersect these rays with a plane <span class="math inline">\(\phi\)</span>. The image point <span class="math inline">\(\mathbf x_i\)</span> is simply where the ray through <span class="math inline">\(\mathbf X_i\)</span> meets that plane:</p>
-<p><span class="math display">\[
-\mathbf x_i = \overline{\mathbf C\mathbf X_i}\cap\phi .
-\]</span></p>
-<p>Point by point, the three-dimensional scene is cut by the image plane into a two-dimensional picture: Alberti’s <em>intersegazione della piramide visiva</em>.</p>
-<div id="cell-fig-visual-pyramid" class="cell page-columns page-full" data-execution_count="4">
+<p>Join <span class="math inline">\(\mathbf C\)</span> to every point of the scene. The resulting family of concurrent lines is the <strong>visual pyramid</strong>. To form an image, place a plane <span class="math inline">\(\phi\)</span> across these rays.</p>
+<div id="cell-fig-visual-pyramid" class="cell page-columns page-full" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-08-21T19:00:26.247484Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-08-21T19:00:26.247295Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-08-21T19:00:26.882042Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-08-21T19:00:26.881216Z&quot;}}" data-execution_count="4">
 <div class="cell-output cell-output-display page-columns page-full">
 <div id="fig-visual-pyramid" class="quarto-float quarto-figure quarto-figure-center anchored page-columns page-full">
 <figure class="quarto-float quarto-float-fig figure page-columns page-full">
@@ -378,47 +379,59 @@ window.Quarto = {
 <img src="camera_files/figure-html/fig-visual-pyramid-output-1.png" width="1297" height="623" class="figure-img column-page">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-visual-pyramid-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;1: Alberti’s visual pyramid, with the Origami House standing in for his scene. <strong>Left:</strong> the centre of projection (orange dot), the rays joining it to the vertices (grey), and the house (blue). <strong>Right:</strong> the marks left where those rays cross an interposed plane, which is the image.
+Figure&nbsp;1: The visual pyramid. <strong>Left:</strong> rays from the centre of projection through the vertices of the Origami House intersect an image plane. <strong>Right:</strong> the resulting intersection points form the image.
 </figcaption>
 </figure>
 </div>
 </div>
 </div>
+<p>Each ray meets the plane in one image point <span class="math display">\[
+\mathbf x_i = \overline{\mathbf C\mathbf X_i}\cap\phi .
+\]</span></p>
+<p>Point by point, the three-dimensional scene is cut by the image plane into a two-dimensional picture: Alberti’s <em>intersegazione della piramide visiva</em>.</p>
 </section>
 <section id="from-the-visual-pyramid-to-coordinates" class="level2 page-columns page-full">
 <h2 class="anchored" data-anchor-id="from-the-visual-pyramid-to-coordinates">From the visual pyramid to coordinates</h2>
-<p>To turn the intersection of the visual pyramid into equations, let us choose a coordinate system.</p>
-<p>Place its origin at the centre of projection <span class="math inline">\(\mathbf C\)</span>. Let the <span class="math inline">\(z_c\)</span>-axis be perpendicular to the image plane, and let the <span class="math inline">\(x_c\)</span>- and <span class="math inline">\(y_c\)</span>-axes span directions parallel to it. If the image plane lies at distance <span class="math inline">\(f\)</span> from the centre, its equation is simply</p>
+<p>To describe the construction algebraically, attach a coordinate frame to the camera. Place its origin at the centre of projection <span class="math inline">\(\mathbf C\)</span> and choose the <span class="math inline">\(z_c\)</span>-axis perpendicular to the image plane. The line through <span class="math inline">\(\mathbf C\)</span> in this direction is called the <strong>optical axis</strong>. The <span class="math inline">\(x_c\)</span>- and <span class="math inline">\(y_c\)</span>-axes run parallel to the image plane.</p>
+<p>If the image plane is at distance <span class="math inline">\(f\)</span> from the centre, its equation is simply</p>
 <p><span class="math display">\[
-z_c=f .
+z_c=f.
 \]</span></p>
-<p>Consider now a scene point <span class="math inline">\(\mathbf{X}_c=(X_c,Y_c,Z_c)^\top\)</span>. The visual ray joining <span class="math inline">\(\mathbf C\)</span> to <span class="math inline">\(\mathbf{X}_c\)</span> meets the image plane at <span class="math inline">\(\mathbf{x}=(x,y,f)^\top\)</span>, and similar triangles in the two coordinate planes give the coordinates of that intersection:</p>
-<p><span class="math display">\[
-x=f\frac{X_c}{Z_c},
-\qquad
-y=f\frac{Y_c}{Z_c}
-\]</span></p>
-<p>These are the <strong>perspective projection equations</strong>.</p>
-<div id="cell-fig-camera-frame" class="cell page-columns page-full" data-execution_count="5">
+<p>Consider a scene point $ X_c=(X_c,Y_c,Z_c)^. $</p>
+<p>The visual ray through <span class="math inline">\(\mathbf X_c\)</span> intersects the image plane at <span class="math inline">\(\mathbf x=(x,y,f)^\top\)</span>.</p>
+<div id="cell-fig-camera-frame" class="cell page-columns page-full" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-08-21T19:00:26.885180Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-08-21T19:00:26.884945Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-08-21T19:00:27.158535Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-08-21T19:00:27.157404Z&quot;}}" data-execution_count="5">
 <div class="cell-output cell-output-display page-columns page-full">
 <div id="fig-camera-frame" class="quarto-float quarto-figure quarto-figure-center anchored page-columns page-full">
 <figure class="quarto-float quarto-float-fig figure page-columns page-full">
 <div aria-describedby="fig-camera-frame-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca" class="page-columns page-full">
-<img src="camera_files/figure-html/fig-camera-frame-output-1.png" width="1404" height="472" class="figure-img column-page">
+<img src="camera_files/figure-html/fig-camera-frame-output-1.png" width="1001" height="472" class="figure-img column-page">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-camera-frame-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;2: The camera reference frame and the two planar sections behind central projection. <strong>Left:</strong> the scene point <span class="math inline">\(\mathbf{X}_c\)</span> (blue), its visual ray, and the image point <span class="math inline">\(\mathbf{x}\)</span> where the ray meets the plane <span class="math inline">\(\phi\)</span> at <span class="math inline">\(z_c=f\)</span>. <strong>Centre and right:</strong> the sections in the <span class="math inline">\(x_cz_c\)</span>- and <span class="math inline">\(y_cz_c\)</span>-planes, in which the projection equations are two similar triangles.
+Figure&nbsp;2: Perspective projection in the camera reference frame. <strong>Left:</strong> a scene point and its visual ray intersect the image plane <span class="math inline">\(z_c=f\)</span>. <strong>Right:</strong> in an <span class="math inline">\(x_cz_c\)</span> section, the projection equation follows from similar triangles.
 </figcaption>
 </figure>
 </div>
 </div>
 </div>
+<p>In the <span class="math inline">\(x_cz_c\)</span>- and <span class="math inline">\(y_cz_c\)</span>-sections, the visual ray gives two pairs of similar triangles. Hence</p>
+<p><span class="math display">\[
+\frac{x}{X_c}=\frac{f}{Z_c},
+\qquad
+\frac{y}{Y_c}=\frac{f}{Z_c},
+\]</span></p>
+<p>and therefore</p>
+<p><span class="math display">\[
+x=f\frac{X_c}{Z_c},
+\qquad
+y=f\frac{Y_c}{Z_c}.
+\]</span></p>
+<p>These are the <strong>perspective projection equations</strong>.</p>
 </section>
 <section id="depth-changes-apparent-size" class="level2 page-columns page-full">
 <h2 class="anchored" data-anchor-id="depth-changes-apparent-size">Depth changes apparent size</h2>
-<p>The division by <span class="math inline">\(Z_c\)</span> is not just an algebraic detail: it is responsible for one of the most familiar effects of perspective.</p>
-<p>Take two identical Origami Houses and place them side by side, but push one farther away along the optical axis. Their metric size is exactly the same; only their position in space differs. Since the projection divides by depth, the farther house is divided by a larger number and therefore occupies a smaller region of the image.</p>
-<div id="cell-fig-depth-and-size" class="cell page-columns page-full" data-execution_count="6">
+<p>The division by <span class="math inline">\(Z_c\)</span> is responsible for one of the most familiar effects of perspective.</p>
+<p>Take two identical Origami Houses and place them side by side, then move one farther away along the viewing direction. Their metric size is unchanged, but the second house has greater depth <span class="math inline">\(Z_c\)</span>. Since perspective projection divides by depth, it occupies a smaller region of the image plane.</p>
+<div id="cell-fig-depth-and-size" class="cell page-columns page-full" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-08-21T19:00:27.161093Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-08-21T19:00:27.160918Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-08-21T19:00:27.417445Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-08-21T19:00:27.416634Z&quot;}}" data-execution_count="6">
 <div class="cell-output cell-output-display page-columns page-full">
 <div id="fig-depth-and-size" class="quarto-float quarto-figure quarto-figure-center anchored page-columns page-full">
 <figure class="quarto-float quarto-float-fig figure page-columns page-full">
@@ -426,79 +439,289 @@ Figure&nbsp;2: The camera reference frame and the two planar sections behind cen
 <img src="camera_files/figure-html/fig-depth-and-size-output-1.png" width="1242" height="571" class="figure-img column-page">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-depth-and-size-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;3: Two identical Origami Houses at different depths, the near one solid and the far one faded. <strong>Left:</strong> in space, where they are the same size. <strong>Right:</strong> their images, where the farther copy is smaller. Nothing has been scaled; the shrinking is entirely the division by <span class="math inline">\(Z_c\)</span>.
+Figure&nbsp;3: Two identical Origami Houses at different depths. <strong>Left:</strong> in camera coordinates, where the two copies have exactly the same size. <strong>Right:</strong> their projections onto the plane <span class="math inline">\(z_c=f\)</span>, where the copy at greater depth appears smaller.
 </figcaption>
 </figure>
 </div>
 </div>
 </div>
-<p>The same factor <span class="math inline">\(1/Z_c\)</span> that produces this familiar effect also makes the projection nonlinear in Cartesian coordinates. Can we describe the same geometry with a linear map?</p>
+<p>The same factor <span class="math inline">\(1/Z_c\)</span> that explains the change in apparent size also makes perspective projection nonlinear in Cartesian coordinates.</p>
+<p>Homogeneous coordinates let us represent the same geometry with a linear map.</p>
 </section>
-<section id="one-extra-coordinate-makes-projection-linear" class="level2">
-<h2 class="anchored" data-anchor-id="one-extra-coordinate-makes-projection-linear">One extra coordinate makes projection linear</h2>
-<p>The geometric construction of perspective is centuries older than its modern algebraic language. In the nineteenth century August Ferdinand Möbius and Julius Plücker introduced <strong>homogeneous coordinates</strong> for projective geometry, and they provide exactly what we need here.</p>
-<p>Instead of representing the scene point by three Cartesian coordinates, write it as <span class="math inline">\(\mathbf X=(X_c,Y_c,Z_c,1)^\top\)</span> and its image as <span class="math inline">\(\mathbf x=(x,y,1)^\top\)</span>. Now consider the <span class="math inline">\(3\times4\)</span> matrix</p>
+<section id="homogeneous-coordinates-make-projection-linear" class="level2">
+<h2 class="anchored" data-anchor-id="homogeneous-coordinates-make-projection-linear">Homogeneous coordinates make projection linear</h2>
+<p>The perspective equations are nonlinear in Cartesian coordinates because they divide by depth. Homogeneous coordinates let us postpone that division.</p>
+<p>So far, a point in the camera frame has been described by its Cartesian coordinates <span class="math inline">\((X_c,Y_c,Z_c)\)</span>. We now add one extra coordinate and write</p>
+<p><span class="math display">\[
+\mathbf X_c=(X_c,Y_c,Z_c,1)^\top,
+\]</span></p>
+<p>while an image point is represented by</p>
+<p><span class="math display">\[
+\mathbf x=(x,y,1)^\top.
+\]</span></p>
+<p>Consider the <span class="math inline">\(3\times4\)</span> matrix</p>
 <p><span class="math display">\[
 \mathsf P_f=
 \begin{bmatrix}
 f&amp;0&amp;0&amp;0\\
 0&amp;f&amp;0&amp;0\\
 0&amp;0&amp;1&amp;0
-\end{bmatrix} .
+\end{bmatrix}.
 \]</span></p>
-<p>Matrix multiplication gives</p>
+<p>Then</p>
 <p><span class="math display">\[
-\mathsf P_f\mathbf X
+\mathsf P_f\mathbf X_c
 =
-\begin{bmatrix} fX_c\\ fY_c\\ Z_c \end{bmatrix}
+\begin{bmatrix}
+fX_c\\
+fY_c\\
+Z_c
+\end{bmatrix}
 =
 Z_c
-\begin{bmatrix} fX_c/Z_c\\ fY_c/Z_c\\ 1 \end{bmatrix}
+\begin{bmatrix}
+fX_c/Z_c\\
+fY_c/Z_c\\
+1
+\end{bmatrix}
 =
-Z_c\,\mathbf x ,
+Z_c\,\mathbf x.
 \]</span></p>
-<p>where the middle step is nothing but the perspective equations. Hence the whole construction can be written as</p>
+<p>Hence perspective projection becomes</p>
 <p><span class="math display">\[
-\lambda\mathbf x=\mathsf P_f\mathbf X,
-\qquad
-\lambda=Z_c .
+\mathbf x \sim \mathsf P_f\mathbf X_c,
 \]</span></p>
-<p>The division by depth has not disappeared. Homogeneous coordinates have simply <strong>postponed it</strong>: the projection itself is linear, and the division reappears only when we choose the representative whose last coordinate is <span class="math inline">\(1\)</span>.</p>
-<section id="the-one-point-with-no-image" class="level3">
-<h3 class="anchored" data-anchor-id="the-one-point-with-no-image">The one point with no image</h3>
-<p>The matrix <span class="math inline">\(\mathsf P_f\)</span> is <span class="math inline">\(3\times4\)</span>, so it has a non-trivial null space, and it is worth asking what lives there. A vector in the kernel is mapped to <span class="math inline">\(\mathbf 0\)</span>, which is not a point of <span class="math inline">\(\mathbb P^2\)</span> — so a point of the kernel has no image at all.</p>
-<p>For <span class="math inline">\(\mathsf P_f\)</span> the kernel is spanned by <span class="math inline">\((0,0,0,1)^\top\)</span>: the origin of the camera frame, which is the centre of projection itself. That is exactly right. Every other point of space determines a visual ray, but the centre determines no direction, and a camera cannot photograph its own centre.</p>
-<p>This is the algebraic shadow of a geometric fact, and it holds for any camera matrix: the centre is the right null space of <span class="math inline">\(\mathsf P\)</span>.</p>
-<div id="13" class="cell" data-execution_count="7">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>f_demo <span class="op">=</span> <span class="fl">1.4</span></span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>P_f <span class="op">=</span> np.array([[f_demo, <span class="fl">0.0</span>, <span class="fl">0.0</span>, <span class="fl">0.0</span>],</span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>                [<span class="fl">0.0</span>, f_demo, <span class="fl">0.0</span>, <span class="fl">0.0</span>],</span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>                [<span class="fl">0.0</span>, <span class="fl">0.0</span>, <span class="fl">1.0</span>, <span class="fl">0.0</span>]])</span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>C_h <span class="op">=</span> np.linalg.svd(P_f)[<span class="dv">2</span>][<span class="op">-</span><span class="dv">1</span>]          <span class="co"># the right null vector</span></span>
-<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>C_h <span class="op">=</span> C_h <span class="op">/</span> np.<span class="bu">abs</span>(C_h).<span class="bu">max</span>()</span>
-<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"null vector of P_f:"</span>, C_h.<span class="bu">round</span>(<span class="dv">6</span>))</span>
-<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"its image P_f C   :"</span>, (P_f <span class="op">@</span> C_h).<span class="bu">round</span>(<span class="dv">12</span>),</span>
-<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>      <span class="st">"  &lt;- not a point of P^2"</span>)</span>
-<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"</span><span class="ch">\n</span><span class="st">in Cartesian terms this is the origin of the camera frame,"</span>)</span>
-<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"that is, the centre of projection itself."</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>where <span class="math inline">\(\sim\)</span> denotes equality up to a non-zero scale.</p>
+<p>The division by depth has not disappeared. In homogeneous coordinates the mapping is linear; the division appears only when we return to Cartesian image coordinates by normalising the last coordinate to one.</p>
+<div id="36ab4fdb" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-08-21T19:00:27.419582Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-08-21T19:00:27.419416Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-08-21T19:00:27.514768Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-08-21T19:00:27.513852Z&quot;}}" data-execution_count="7">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Focal length and the corresponding camera matrix.</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>f <span class="op">=</span> <span class="fl">1.4</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>P_f <span class="op">=</span> np.array([</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>    [f,   <span class="fl">0.0</span>, <span class="fl">0.0</span>, <span class="fl">0.0</span>],</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>    [<span class="fl">0.0</span>, f,   <span class="fl">0.0</span>, <span class="fl">0.0</span>],</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>    [<span class="fl">0.0</span>, <span class="fl">0.0</span>, <span class="fl">1.0</span>, <span class="fl">0.0</span>],</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>])</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Add one homogeneous coordinate to every 3D point.</span></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>Xh <span class="op">=</span> np.vstack((Xc, np.ones((<span class="dv">1</span>, Xc.shape[<span class="dv">1</span>]))))</span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a><span class="co"># Linear projection: each column is now a homogeneous image point.</span></span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>xh <span class="op">=</span> P_f <span class="op">@</span> Xh</span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a><span class="co"># Dehomogenize each column by dividing by its last coordinate.</span></span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a>xy <span class="op">=</span> xh[:<span class="dv">2</span>, :] <span class="op">/</span> xh[<span class="dv">2</span>:<span class="dv">3</span>, :]</span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a><span class="co"># Look at the resulting image.</span></span>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a>fig, ax <span class="op">=</span> plt.subplots(figsize<span class="op">=</span>(<span class="fl">5.5</span>, <span class="fl">4.5</span>))</span>
+<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a>wireframe_2d(ax, xy, <span class="va">None</span>)</span>
+<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a>ax.set_xlabel(<span class="st">"$x$"</span>)</span>
+<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a>ax.set_ylabel(<span class="st">"$y$"</span>)</span>
+<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a>ax.set_title(<span class="vs">r"projection by </span><span class="dv">$\m</span><span class="vs">athsf{P}_f</span><span class="dv">$</span><span class="vs">"</span>, fontsize<span class="op">=</span><span class="dv">10</span>)</span>
+<span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="camera_files/figure-html/cell-8-output-1.png" width="450" height="412" class="figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>We can collect the same operation in a small function that will be used throughout the notebook.</p>
+<div id="f582d29d" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-08-21T19:00:27.517100Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-08-21T19:00:27.516929Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-08-21T19:00:27.520414Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-08-21T19:00:27.519667Z&quot;}}" data-execution_count="8">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> project_points(X, P):</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""Project 3D points stored as columns through a 3 x 4 camera matrix."""</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Add one homogeneous coordinate to every 3D point: 3 x N -&gt; 4 x N.</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>    Xh <span class="op">=</span> np.vstack((X, np.ones((<span class="dv">1</span>, X.shape[<span class="dv">1</span>]))))</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Apply the projective camera: each column is a homogeneous image point.</span></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>    xh <span class="op">=</span> P <span class="op">@</span> Xh</span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Dehomogenize each column by dividing by its last coordinate.</span></span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> xh[:<span class="dv">2</span>, :] <span class="op">/</span> xh[<span class="dv">2</span>:<span class="dv">3</span>, :]</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<blockquote class="blockquote">
+<p><strong>A historical note.</strong> Homogeneous coordinates did not appear all at once in their modern form. In 1827 Ferdinand Möbius introduced homogeneous barycentric coordinates in his <em>Der barycentrische Calcul</em>; Feuerbach arrived at a related construction independently at about the same time. Julius Plücker subsequently developed and systematized homogeneous coordinate methods for projective geometry, notably for lines.</p>
+<p>The notation has changed, but the underlying idea is already there: a point is represented by a tuple of numbers defined only up to a common non-zero scale.</p>
+</blockquote>
+<section id="the-camera-centre" class="level3">
+<h3 class="anchored" data-anchor-id="the-camera-centre">The camera centre</h3>
+<p>A projective camera is usually written as a map</p>
+<p><span class="math display">\[
+\mathsf P:\mathbb P^3\dashrightarrow\mathbb P^2.
+\]</span></p>
+<p>The dashed arrow is deliberate: the camera is not defined at every point of <span class="math inline">\(\mathbb P^3\)</span>.</p>
+<p>Indeed, a rank-three <span class="math inline">\(3\times4\)</span> camera matrix has a one-dimensional right null space. Let <span class="math inline">\(\mathbf C\)</span> be its non-zero generator,</p>
+<p><span class="math display">\[
+\mathsf P\mathbf C=\mathbf 0.
+\]</span></p>
+<p>But the zero vector does not represent a point of projective space, so <span class="math inline">\(\mathbf C\)</span> has no image in <span class="math inline">\(\mathbb P^2\)</span>. This exceptional point is precisely the <strong>camera centre</strong>.</p>
+<p>For our simple camera <span class="math inline">\(\mathsf P_f\)</span>,</p>
+<p><span class="math display">\[
+\ker\mathsf P_f
+=
+\operatorname{span}
+\begin{bmatrix}
+0\\0\\0\\1
+\end{bmatrix},
+\]</span></p>
+<p>which is the origin of the camera reference frame, exactly where we placed the centre of projection.</p>
+<p>Thus a projective camera is more precisely the map</p>
+<p><span class="math display">\[
+\mathbb P^3\setminus\{\mathbf C\}
+\longrightarrow
+\mathbb P^2,
+\qquad
+\mathbf X\longmapsto \mathsf P\mathbf X.
+\]</span></p>
+<p>Every point other than <span class="math inline">\(\mathbf C\)</span> determines an image point.</p>
+<p>Note that the centre is also independent of the arbitrary scale used to represent the camera matrix. If <span class="math inline">\(\alpha\neq0\)</span>, then</p>
+<p><span class="math display">\[
+\ker(\alpha\mathsf P)=\ker(\mathsf P).
+\]</span></p>
+<p>Thus <span class="math inline">\(\mathsf P\)</span> and <span class="math inline">\(\alpha\mathsf P\)</span> represent the same projective camera and have the same camera centre.</p>
+<div id="5304d777" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-08-21T19:00:27.523468Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-08-21T19:00:27.523306Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-08-21T19:00:27.529026Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-08-21T19:00:27.528049Z&quot;}}" data-execution_count="9">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># The camera centre is the right null vector of P_f.</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>_, _, Vt <span class="op">=</span> np.linalg.svd(P_f)</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>C_f <span class="op">=</span> Vt[<span class="op">-</span><span class="dv">1</span>, :].reshape(<span class="dv">4</span>, <span class="dv">1</span>)</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Choose the representative whose last homogeneous coordinate is one.</span></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>C_f <span class="op">=</span> C_f <span class="op">/</span> C_f[<span class="op">-</span><span class="dv">1</span>, <span class="dv">0</span>]</span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"camera centre:"</span>)</span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(C_f)</span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"</span><span class="ch">\n</span><span class="st">P_f @ C:"</span>)</span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(P_f <span class="op">@</span> C_f)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>null vector of P_f: [0. 0. 0. 1.]
-its image P_f C   : [0. 0. 0.]   &lt;- not a point of P^2
+<pre><code>camera centre:
+[[0.]
+ [0.]
+ [0.]
+ [1.]]
 
-in Cartesian terms this is the origin of the camera frame,
-that is, the centre of projection itself.</code></pre>
+P_f @ C:
+[[0.]
+ [0.]
+ [0.]]</code></pre>
 </div>
 </div>
 </section>
 </section>
-<section id="putting-the-camera-in-the-world" class="level2 page-columns page-full">
-<h2 class="anchored" data-anchor-id="putting-the-camera-in-the-world">Putting the camera in the world</h2>
-<p>So far we have made a very convenient choice: the coordinate system was attached to the camera. The centre of projection was the origin, the <span class="math inline">\(z_c\)</span>-axis was the optical axis, and the image plane was simply <span class="math inline">\(z_c=f\)</span>.</p>
-<p>But the scene does not have to be described in camera coordinates. For the Origami House it is more natural to attach a <strong>world reference frame</strong> to the house itself: origin at a corner of the base, <span class="math inline">\(x_w\)</span> running along its width, <span class="math inline">\(y_w\)</span> along its depth, and <span class="math inline">\(z_w\)</span> pointing vertically upward.</p>
-<p>A scene point is then described by its world coordinates <span class="math inline">\(\mathbf X_w=(X_w,Y_w,Z_w)^\top\)</span>, and before projecting it we only need to express the same point in the camera frame. Note the phrasing: the point does not move. Only its description changes.</p>
-<div id="cell-fig-two-frames" class="cell page-columns page-full" data-execution_count="8">
+<section id="placing-the-camera-in-a-world-reference-frame" class="level2 page-columns page-full">
+<h2 class="anchored" data-anchor-id="placing-the-camera-in-a-world-reference-frame">Placing the camera in a world reference frame</h2>
+<p>So far we have used the camera itself as our reference frame. The centre of projection was the origin, the <span class="math inline">\(z_c\)</span>-axis was the optical axis, and the image plane was simply <span class="math inline">\(z_c=f\)</span>.</p>
+<p>This is convenient for understanding projection, but a scene is usually described in its own <strong>world reference frame</strong>. For the Origami House, for example, we can attach a frame to the house, with <span class="math inline">\(z_w\)</span> pointing vertically.</p>
+<p>We now have two coordinate systems for the same geometry: a world frame attached to the scene and a camera frame attached to the camera.</p>
+<p>To project a world point <span class="math inline">\(\mathbf X_w\)</span>, we first express it in the camera reference frame.</p>
+<p>Let <span class="math inline">\(\mathbf C\)</span> be the camera centre in world coordinates. The vector</p>
+<p><span class="math display">\[
+\mathbf X_w-\mathbf C
+\]</span></p>
+<p>points from the camera centre to the scene point, but its components are still measured along the world axes.</p>
+<p>Let <span class="math inline">\(\mathbf r_1^\top\)</span>, <span class="math inline">\(\mathbf r_2^\top\)</span>, and <span class="math inline">\(\mathbf r_3^\top\)</span> be the three axes of the camera frame, expressed in world coordinates. The coordinates of the vector in the camera frame are its projections onto these axes:</p>
+<p><span class="math display">\[
+\mathbf X_c
+=
+\begin{bmatrix}
+\mathbf r_1^\top(\mathbf X_w-\mathbf C)\\
+\mathbf r_2^\top(\mathbf X_w-\mathbf C)\\
+\mathbf r_3^\top(\mathbf X_w-\mathbf C)
+\end{bmatrix}.
+\]</span></p>
+<p>Stacking the three camera axes as the rows of a rotation matrix,</p>
+<p><span class="math display">\[
+\mathsf R=
+\begin{bmatrix}
+\mathbf r_1^\top\\
+\mathbf r_2^\top\\
+\mathbf r_3^\top
+\end{bmatrix},
+\]</span></p>
+<p>gives</p>
+<p><span class="math display">\[
+\mathbf X_c=\mathsf R(\mathbf X_w-\mathbf C).
+\]</span></p>
+<p>Expanding the expression,</p>
+<p><span class="math display">\[
+\mathbf X_c
+=
+\mathsf R\mathbf X_w+\mathbf t,
+\qquad
+\mathbf t=-\mathsf R\mathbf C.
+\]</span></p>
+<p>Thus the world-to-camera change of coordinates is the rigid motion</p>
+<p><span class="math display">\[
+\begin{bmatrix}
+\mathbf X_c\\
+1
+\end{bmatrix}
+=
+\begin{bmatrix}
+\mathsf R &amp; \mathbf t\\
+\mathbf 0^\top &amp; 1
+\end{bmatrix}
+\begin{bmatrix}
+\mathbf X_w\\
+1
+\end{bmatrix}.
+\]</span></p>
+<p>The pair <span class="math inline">\((\mathsf R,\mathbf t)\)</span> gives the <strong>extrinsic parameters</strong> of the camera. The rotation describes the orientation of the camera axes, while <span class="math inline">\(\mathbf t=-\mathsf R\mathbf C\)</span> is the world origin expressed in camera coordinates.</p>
+<p>For our synthetic example we choose the camera centre and orient the camera towards the Origami House. The following small helper constructs such an orientation explicitly from the camera axes.</p>
+<div id="9c7cdf19" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-08-21T19:00:27.531035Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-08-21T19:00:27.530846Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-08-21T19:00:27.535125Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-08-21T19:00:27.534327Z&quot;}}" data-execution_count="10">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> look_at(centre, target, up<span class="op">=</span>np.array([[<span class="fl">0.0</span>], [<span class="fl">0.0</span>], [<span class="fl">1.0</span>]])):</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""World-to-camera rotation for a camera looking towards `target`."""</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Camera z-axis: viewing direction, expressed in world coordinates.</span></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>    z_axis <span class="op">=</span> target <span class="op">-</span> centre</span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>    z_axis <span class="op">=</span> z_axis <span class="op">/</span> np.linalg.norm(z_axis)</span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Camera x-axis: orthogonal to the viewing direction and to the reference up.</span></span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>    x_axis <span class="op">=</span> np.cross(z_axis[:, <span class="dv">0</span>], up[:, <span class="dv">0</span>])[:, <span class="va">None</span>]</span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>    x_axis <span class="op">=</span> x_axis <span class="op">/</span> np.linalg.norm(x_axis)</span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Complete a right-handed orthonormal camera frame.</span></span>
+<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a>    y_axis <span class="op">=</span> np.cross(z_axis[:, <span class="dv">0</span>], x_axis[:, <span class="dv">0</span>])[:, <span class="va">None</span>]</span>
+<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a>    <span class="co"># The camera axes are the rows of the world-to-camera rotation.</span></span>
+<span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> np.vstack((x_axis.T, y_axis.T, z_axis.T))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>We can now choose a concrete camera pose for the synthetic scene. We specify its centre <span class="math inline">\(\mathbf C\)</span> in world coordinates, orient it towards the Origami House, and obtain <span class="math inline">\(\mathbf t\)</span> from <span class="math inline">\(\mathbf t=-\mathsf R\mathbf C\)</span>.</p>
+<div id="94bad2a5" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-08-21T19:00:27.537203Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-08-21T19:00:27.537034Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-08-21T19:00:27.541730Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-08-21T19:00:27.540844Z&quot;}}" data-execution_count="11">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Camera centre in world coordinates.</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>C <span class="op">=</span> np.array([</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>    [  <span class="fl">7.0</span>],</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>    [<span class="op">-</span><span class="fl">14.0</span>],</span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>    [  <span class="fl">7.0</span>],</span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>])</span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Orient the camera towards the centre of the Origami House.</span></span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>target <span class="op">=</span> X.mean(axis<span class="op">=</span><span class="dv">1</span>, keepdims<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>R <span class="op">=</span> look_at(C, target)</span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a><span class="co"># Translation of the world origin in camera coordinates.</span></span>
+<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a>t <span class="op">=</span> <span class="op">-</span>R <span class="op">@</span> C</span>
+<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a><span class="co"># Express the complete house in the camera frame.</span></span>
+<span id="cb6-16"><a href="#cb6-16" aria-hidden="true" tabindex="-1"></a>Xc <span class="op">=</span> R <span class="op">@</span> X <span class="op">+</span> t</span>
+<span id="cb6-17"><a href="#cb6-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-18"><a href="#cb6-18" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"camera centre C:"</span>)</span>
+<span id="cb6-19"><a href="#cb6-19" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(np.<span class="bu">round</span>(C, <span class="dv">3</span>))</span>
+<span id="cb6-20"><a href="#cb6-20" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"</span><span class="ch">\n</span><span class="st">translation t:"</span>)</span>
+<span id="cb6-21"><a href="#cb6-21" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(np.<span class="bu">round</span>(t, <span class="dv">3</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>camera centre C:
+[[  7.]
+ [-14.]
+ [  7.]]
+
+translation t:
+[[-2.889]
+ [ 2.072]
+ [16.774]]</code></pre>
+</div>
+</div>
+<div id="cell-fig-two-frames" class="cell page-columns page-full" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-08-21T19:00:27.543735Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-08-21T19:00:27.543546Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-08-21T19:00:27.769426Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-08-21T19:00:27.768683Z&quot;}}" data-execution_count="12">
 <div class="cell-output cell-output-display page-columns page-full">
 <div id="fig-two-frames" class="quarto-float quarto-figure quarto-figure-center anchored page-columns page-full">
 <figure class="quarto-float quarto-float-fig figure page-columns page-full">
@@ -506,154 +729,370 @@ that is, the centre of projection itself.</code></pre>
 <img src="camera_files/figure-html/fig-two-frames-output-1.png" width="776" height="702" class="figure-img column-page">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-two-frames-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;4: One point, two descriptions. The <strong>world frame</strong> (dark) is attached to the Origami House; the <strong>camera frame</strong> (orange) sits at the centre of projection with <span class="math inline">\(z_c\)</span> along the optical axis. The highlighted vertex is a single point of space: the dashed dark segments give its world coordinates, the dashed orange ray its position as seen from the camera. Passing from one description to the other is the rigid transformation <span class="math inline">\([\mathsf R\mid \mathbf t]\)</span>.
+Figure&nbsp;4: The world frame is attached to the Origami House, while the camera frame is centred at <span class="math inline">\(\mathbf C\)</span>. The same scene point can be described in either reference frame.
 </figcaption>
 </figure>
 </div>
 </div>
 </div>
-<p>The change of coordinates from the world frame to the camera frame is a rigid transformation,</p>
-<p><span class="math display">\[
-\mathbf{X}_c = \mathsf R\,\mathbf X_w+\mathbf t,
-\]</span></p>
-<p>or, in homogeneous coordinates,</p>
-<p><span class="math display">\[
-\begin{bmatrix} \mathbf{X}_c\\ 1 \end{bmatrix}
-=
-\begin{bmatrix} \mathsf R &amp; \mathbf t\\ \mathbf 0^\top &amp; 1 \end{bmatrix}
-\begin{bmatrix} \mathbf X_w\\ 1 \end{bmatrix} .
-\]</span></p>
-<p>Here <span class="math inline">\(\mathsf R\)</span> describes the orientation of the world frame as seen by the camera, while <span class="math inline">\(\mathbf t\)</span> describes its translation in camera coordinates.</p>
-<p>If the camera centre has world coordinates <span class="math inline">\(\mathbf C\)</span>, then</p>
-<p><span class="math display">\[
-\mathbf{X}_c
-=
-\mathsf R(\mathbf X_w-\mathbf C)
-=
-\mathsf R\mathbf X_w-\mathsf R\mathbf C ,
-\]</span></p>
-<p>so that</p>
-<p><span class="math display">\[
-\mathbf t=-\mathsf R\mathbf C .
-\]</span></p>
-<p>The vector <span class="math inline">\(\mathbf t\)</span> is therefore <strong>not the position of the camera</strong> in the world frame. That position is <span class="math inline">\(\mathbf C\)</span>. Mixing up the two is one of the most reliable ways to spend an afternoon.</p>
-<div id="17" class="cell" data-execution_count="9">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>key <span class="op">=</span> IDS[<span class="bu">len</span>(IDS)<span class="op">//</span><span class="dv">2</span>]</span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>Xw_pt <span class="op">=</span> X[index[key]]</span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>Xc_pt <span class="op">=</span> R <span class="op">@</span> Xw_pt <span class="op">+</span> t</span>
-<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"the vertex </span><span class="sc">{</span>key<span class="sc">}</span><span class="ss">"</span>)</span>
-<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"  in world coordinates : </span><span class="sc">{</span>Xw_pt<span class="sc">}</span><span class="ss">"</span>)</span>
-<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"  in camera coordinates: </span><span class="sc">{</span>Xc_pt<span class="sc">}</span><span class="ss">"</span>)</span>
-<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"  distance from C      : </span><span class="sc">{</span>np<span class="sc">.</span>linalg<span class="sc">.</span>norm(Xw_pt <span class="op">-</span> C)<span class="sc">:.4f}</span><span class="ss"> cm"</span>)</span>
-<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"  norm of X_c          : </span><span class="sc">{</span>np<span class="sc">.</span>linalg<span class="sc">.</span>norm(Xc_pt)<span class="sc">:.4f}</span><span class="ss"> cm   "</span></span>
-<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>      <span class="st">"&lt;- the same, as it must be for a rigid motion</span><span class="ch">\n</span><span class="st">"</span>)</span>
-<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"camera centre C  : </span><span class="sc">{</span>C<span class="sc">}</span><span class="ss">"</span>)</span>
-<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"translation t    : </span><span class="sc">{</span>t<span class="sc">}</span><span class="ss">"</span>)</span>
-<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"-R^T t recovers C: </span><span class="sc">{</span><span class="op">-</span>R<span class="sc">.</span>T <span class="op">@</span> t<span class="sc">}</span><span class="ss">"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div id="6829d74b" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-08-21T19:00:27.771454Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-08-21T19:00:27.771285Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-08-21T19:00:27.776500Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-08-21T19:00:27.775481Z&quot;}}" data-execution_count="13">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Pick one vertex of the house. It is stored as a 3 x 1 column vector.</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>key <span class="op">=</span> IDS[<span class="bu">len</span>(IDS) <span class="op">//</span> <span class="dv">2</span>]</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>Xw <span class="op">=</span> X[:, [index[key]]]</span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Vector from the camera centre to the point, still expressed in world axes.</span></span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>v <span class="op">=</span> Xw <span class="op">-</span> C</span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a><span class="co"># The rows of R are the camera axes expressed in world coordinates.</span></span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>x_axis <span class="op">=</span> R[<span class="dv">0</span>:<span class="dv">1</span>, :]</span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a>y_axis <span class="op">=</span> R[<span class="dv">1</span>:<span class="dv">2</span>, :]</span>
+<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a>z_axis <span class="op">=</span> R[<span class="dv">2</span>:<span class="dv">3</span>, :]</span>
+<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a><span class="co"># Camera coordinates are the three components of v along those axes.</span></span>
+<span id="cb8-14"><a href="#cb8-14" aria-hidden="true" tabindex="-1"></a>Xc_direct <span class="op">=</span> R <span class="op">@</span> v</span>
+<span id="cb8-15"><a href="#cb8-15" aria-hidden="true" tabindex="-1"></a>Xc_from_axes <span class="op">=</span> np.vstack((</span>
+<span id="cb8-16"><a href="#cb8-16" aria-hidden="true" tabindex="-1"></a>    x_axis <span class="op">@</span> v,</span>
+<span id="cb8-17"><a href="#cb8-17" aria-hidden="true" tabindex="-1"></a>    y_axis <span class="op">@</span> v,</span>
+<span id="cb8-18"><a href="#cb8-18" aria-hidden="true" tabindex="-1"></a>    z_axis <span class="op">@</span> v,</span>
+<span id="cb8-19"><a href="#cb8-19" aria-hidden="true" tabindex="-1"></a>))</span>
+<span id="cb8-20"><a href="#cb8-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-21"><a href="#cb8-21" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"camera coordinates:"</span>)</span>
+<span id="cb8-22"><a href="#cb8-22" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(np.<span class="bu">round</span>(Xc_direct, <span class="dv">3</span>))</span>
+<span id="cb8-23"><a href="#cb8-23" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"</span><span class="ch">\n</span><span class="st">from the three axis projections:"</span>)</span>
+<span id="cb8-24"><a href="#cb8-24" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(np.<span class="bu">round</span>(Xc_from_axes, <span class="dv">3</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>the vertex X5
-  in world coordinates : [5.  0.  2.5]
-  in camera coordinates: [ 1.9189  0.0977 14.7159]
-  distance from C      : 14.8408 cm
-  norm of X_c          : 14.8408 cm   &lt;- the same, as it must be for a rigid motion
+<pre><code>camera coordinates:
+[[ 1.919]
+ [ 0.098]
+ [14.716]]
 
-camera centre C  : [  7. -14.   7.]
-translation t    : [-2.8891  2.0721 16.7738]
--R^T t recovers C: [  7. -14.   7.]</code></pre>
+from the three axis projections:
+[[ 1.919]
+ [ 0.098]
+ [14.716]]</code></pre>
 </div>
 </div>
-<p>Projection is now the composition of two maps, <span class="math inline">\(\mathbf X_w \to \mathbf X_c \to \mathbf x\)</span>, that is</p>
+<div id="089b75d4" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-08-21T19:00:27.778207Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-08-21T19:00:27.778050Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-08-21T19:00:27.782474Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-08-21T19:00:27.781574Z&quot;}}" data-execution_count="14">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> rigid_transform(R, t):</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""Homogeneous matrix of the rigid transformation X' = R X + t."""</span></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>    T <span class="op">=</span> np.eye(<span class="dv">4</span>)</span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>    T[:<span class="dv">3</span>, :<span class="dv">3</span>] <span class="op">=</span> R</span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>    T[:<span class="dv">3</span>, <span class="dv">3</span>:<span class="dv">4</span>] <span class="op">=</span> t</span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> T</span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Assemble the world-to-camera rigid transformation.</span></span>
+<span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a>T_wc <span class="op">=</span> rigid_transform(R, t)</span>
+<span id="cb10-12"><a href="#cb10-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-13"><a href="#cb10-13" aria-hidden="true" tabindex="-1"></a><span class="co"># Apply it to the same point in homogeneous coordinates.</span></span>
+<span id="cb10-14"><a href="#cb10-14" aria-hidden="true" tabindex="-1"></a>Xw_h <span class="op">=</span> np.vstack((Xw, [[<span class="fl">1.0</span>]]))</span>
+<span id="cb10-15"><a href="#cb10-15" aria-hidden="true" tabindex="-1"></a>Xc_h <span class="op">=</span> T_wc <span class="op">@</span> Xw_h</span>
+<span id="cb10-16"><a href="#cb10-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-17"><a href="#cb10-17" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"from R (X_w - C):"</span>)</span>
+<span id="cb10-18"><a href="#cb10-18" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(np.<span class="bu">round</span>(Xc_direct, <span class="dv">3</span>))</span>
+<span id="cb10-19"><a href="#cb10-19" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"</span><span class="ch">\n</span><span class="st">from the homogeneous rigid transformation:"</span>)</span>
+<span id="cb10-20"><a href="#cb10-20" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(np.<span class="bu">round</span>(Xc_h[:<span class="dv">3</span>], <span class="dv">3</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>from R (X_w - C):
+[[ 1.919]
+ [ 0.098]
+ [14.716]]
+
+from the homogeneous rigid transformation:
+[[ 1.919]
+ [ 0.098]
+ [14.716]]</code></pre>
+</div>
+</div>
+<p>Projection is now the composition of two maps,</p>
+<p><span class="math display">\[
+\mathbf X_w \longmapsto \mathbf X_c \longmapsto \mathbf x.
+\]</span></p>
+<p>Let</p>
+<p><span class="math display">\[
+\mathsf T_{wc}=
+\begin{bmatrix}
+\mathsf R&amp;\mathbf t\\
+\mathbf 0^\top&amp;1
+\end{bmatrix}.
+\]</span></p>
+<p>In homogeneous coordinates,</p>
 <p><span class="math display">\[
 \lambda\mathbf x
 =
-\begin{bmatrix} f&amp;0&amp;0&amp;0\\ 0&amp;f&amp;0&amp;0\\ 0&amp;0&amp;1&amp;0 \end{bmatrix}
-\begin{bmatrix} \mathsf R&amp;\mathbf t\\ \mathbf 0^\top&amp;1 \end{bmatrix}
-\mathbf X_w ,
+\mathsf P_f\,\mathsf T_{wc}
+\begin{bmatrix}\mathbf X_w\\1\end{bmatrix},
 \]</span></p>
-<p>and therefore</p>
+<p>or, equivalently,</p>
 <p><span class="math display">\[
 \lambda\mathbf x
 =
-\begin{bmatrix} f&amp;0&amp;0\\ 0&amp;f&amp;0\\ 0&amp;0&amp;1 \end{bmatrix}
-[\mathsf R\mid\mathbf t]\,\mathbf X_w .
+\begin{bmatrix}
+f&amp;0&amp;0\\
+0&amp;f&amp;0\\
+0&amp;0&amp;1
+\end{bmatrix}
+[\mathsf R\mid\mathbf t]
+\begin{bmatrix}\mathbf X_w\\1\end{bmatrix}.
 \]</span></p>
-<p>The pair <span class="math inline">\((\mathsf R,\mathbf t)\)</span> tells us <strong>where the camera is and how it is oriented with respect to the scene</strong>. These are the <strong>extrinsic parameters</strong>.</p>
-<section id="seeing-the-extrinsics" class="level3 page-columns page-full">
-<h3 class="anchored" data-anchor-id="seeing-the-extrinsics">Seeing the extrinsics</h3>
-<p>Two experiments make the roles of <span class="math inline">\(\mathsf R\)</span> and <span class="math inline">\(\mathbf t\)</span> visible. In both the house stays exactly where it is; only the camera is touched.</p>
-<p>First <strong>rotate</strong> the camera about its own centre. The optical centre does not move, so <span class="math inline">\(\mathbf C\)</span> is unchanged — yet <span class="math inline">\(\mathbf t=-\mathsf R\mathbf C\)</span> changes, which is the clearest possible demonstration that <span class="math inline">\(\mathbf t\)</span> is not a position.</p>
-<p>Then <strong>translate</strong> the camera, keeping its orientation. Now <span class="math inline">\(\mathsf R\)</span> is unchanged and the whole apparatus slides sideways.</p>
-<div id="cell-fig-extrinsics" class="cell page-columns page-full" data-execution_count="10">
-<div class="cell-output cell-output-display page-columns page-full">
-<div id="fig-extrinsics" class="quarto-float quarto-figure quarto-figure-center anchored page-columns page-full">
-<figure class="quarto-float quarto-float-fig figure page-columns page-full">
-<div aria-describedby="fig-extrinsics-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca" class="page-columns page-full">
-<img src="camera_files/figure-html/fig-extrinsics-output-1.png" width="1389" height="875" class="figure-img column-screen-inset">
+<p>Thus the same perspective camera that acted on camera coordinates can act directly on world coordinates through the composed <span class="math inline">\(3\times4\)</span> matrix</p>
+<p><span class="math display">\[
+\mathsf P=\mathsf P_f\mathsf T_{wc}.
+\]</span></p>
+<div id="cace872a" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-08-21T19:00:27.784245Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-08-21T19:00:27.784084Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-08-21T19:00:27.786937Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-08-21T19:00:27.786212Z&quot;}}" data-execution_count="15">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Compose the perspective camera with the world-to-camera transformation.</span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>P <span class="op">=</span> P_f <span class="op">@</span> T_wc</span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Project the Origami House directly from world coordinates.</span></span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>xy <span class="op">=</span> project_points(X, P)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-extrinsics-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;5: The two extrinsic motions, with the original camera drawn in grey and the modified one in orange, and the house fixed in its world frame. <strong>Top:</strong> the camera turns about its own centre; the two frames share an origin and differ only in orientation. <strong>Bottom:</strong> the camera slides, keeping its orientation; the two frames are parallel and their origins differ. The images on the right are what each camera records, drawn inside the same image rectangle (dashed), so a part of the house leaving that rectangle has simply left the field of view.
+<p>The camera centre can now be recovered using the characterization introduced earlier. In homogeneous world coordinates, let</p>
+<p><span class="math display">\[
+\mathbf C_h=
+\begin{bmatrix}
+\mathbf C\\
+1
+\end{bmatrix}.
+\]</span></p>
+<p>The centre belongs to the right null space of <span class="math inline">\(\mathsf P\)</span>. The left <span class="math inline">\(3\times3\)</span> factor in the expression above is invertible, so this is equivalent to</p>
+<p><span class="math display">\[
+[\mathsf R\mid\mathbf t]\mathbf C_h=\mathbf 0.
+\]</span></p>
+<p>Therefore</p>
+<p><span class="math display">\[
+\mathsf R\mathbf C+\mathbf t=\mathbf 0,
+\]</span></p>
+<p>and, since <span class="math inline">\(\mathsf R^{-1}=\mathsf R^\top\)</span>,</p>
+<p><span class="math display">\[
+\mathbf C=-\mathsf R^\top\mathbf t.
+\]</span></p>
+<p>The projective null-space characterization and the Euclidean extrinsic parameters therefore identify the same camera centre.</p>
+<div id="8c096398" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-08-21T19:00:27.788693Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-08-21T19:00:27.788535Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-08-21T19:00:27.792766Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-08-21T19:00:27.791883Z&quot;}}" data-execution_count="16">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Recover the camera centre from the extrinsic parameters.</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>C_from_extrinsics <span class="op">=</span> <span class="op">-</span>R.T <span class="op">@</span> t</span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a><span class="co"># In homogeneous coordinates it must lie in the null space of [R | t].</span></span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>C_h <span class="op">=</span> np.vstack((C_from_extrinsics, [[<span class="fl">1.0</span>]]))</span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a>Rt <span class="op">=</span> np.hstack((R, t))</span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"camera centre recovered from R and t:"</span>)</span>
+<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(np.<span class="bu">round</span>(C_from_extrinsics, <span class="dv">6</span>))</span>
+<span id="cb13-10"><a href="#cb13-10" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"</span><span class="ch">\n</span><span class="st">[R | t] C_h:"</span>)</span>
+<span id="cb13-11"><a href="#cb13-11" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(np.<span class="bu">round</span>(Rt <span class="op">@</span> C_h, <span class="dv">12</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>camera centre recovered from R and t:
+[[  7.]
+ [-14.]
+ [  7.]]
+
+[R | t] C_h:
+[[ 0.]
+ [ 0.]
+ [-0.]]</code></pre>
+</div>
+</div>
+<section id="rotating-the-camera" class="level3">
+<h3 class="anchored" data-anchor-id="rotating-the-camera">Rotating the camera</h3>
+<p>Keep the camera centre <span class="math inline">\(\mathbf C\)</span> fixed and change only its orientation. If <span class="math inline">\(\mathsf Q\)</span> is a rotation expressed in the camera frame, the new world-to-camera rotation is</p>
+<p><span class="math display">\[
+\mathsf R'=\mathsf Q\mathsf R.
+\]</span></p>
+<p>Since the centre has not moved, the corresponding translation is still determined by</p>
+<p><span class="math display">\[
+\mathbf t'=-\mathsf R'\mathbf C.
+\]</span></p>
+<div id="179718ab" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-08-21T19:00:27.795011Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-08-21T19:00:27.794831Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-08-21T19:00:27.798975Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-08-21T19:00:27.798003Z&quot;}}" data-execution_count="17">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Define Q as a rotation of angle theta around the y axis</span></span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>theta <span class="op">=</span> np.deg2rad(<span class="fl">15.0</span>)</span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>Q <span class="op">=</span> np.array([</span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a>    [ np.cos(theta), <span class="fl">0.0</span>, np.sin(theta)],</span>
+<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a>    [           <span class="fl">0.0</span>, <span class="fl">1.0</span>,           <span class="fl">0.0</span>],</span>
+<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a>    [<span class="op">-</span>np.sin(theta), <span class="fl">0.0</span>, np.cos(theta)],</span>
+<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a>])</span>
+<span id="cb15-9"><a href="#cb15-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-10"><a href="#cb15-10" aria-hidden="true" tabindex="-1"></a>R_rot <span class="op">=</span> Q <span class="op">@</span> R</span>
+<span id="cb15-11"><a href="#cb15-11" aria-hidden="true" tabindex="-1"></a>t_rot <span class="op">=</span> <span class="op">-</span>R_rot <span class="op">@</span> C</span>
+<span id="cb15-12"><a href="#cb15-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-13"><a href="#cb15-13" aria-hidden="true" tabindex="-1"></a>P_rot <span class="op">=</span> P_f <span class="op">@</span> rigid_transform(R_rot, t_rot)</span>
+<span id="cb15-14"><a href="#cb15-14" aria-hidden="true" tabindex="-1"></a>xy_rot <span class="op">=</span> project_points(X, P_rot)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div id="cell-fig-camera-rotation" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-08-21T19:00:27.801180Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-08-21T19:00:27.800999Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-08-21T19:00:28.147843Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-08-21T19:00:28.146943Z&quot;}}" data-execution_count="18">
+<div class="cell-output cell-output-display">
+<div id="fig-camera-rotation" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-camera-rotation-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="camera_files/figure-html/fig-camera-rotation-output-1.png" width="1211" height="453" class="figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-camera-rotation-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;5: Rotating the camera about its centre. The camera centre remains fixed, while its orientation changes from <span class="math inline">\(\mathsf R\)</span> to <span class="math inline">\(\mathsf R'\)</span>. The two right panels show the corresponding perspective projections of the same fixed Origami House.
 </figcaption>
 </figure>
 </div>
 </div>
 </div>
-<div id="21" class="cell" data-execution_count="11">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"</span><span class="sc">{</span><span class="st">''</span><span class="sc">:22s}{</span><span class="st">'centre C'</span><span class="sc">:&gt;34s}{</span><span class="st">'translation t'</span><span class="sc">:&gt;34s}</span><span class="ss">"</span>)</span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> name, R_, C_ <span class="kw">in</span> [(<span class="st">"original"</span>, R, C), (<span class="st">"rotated about C"</span>, R_rot, C),</span>
-<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>                     (<span class="st">"translated"</span>, R, C_tr)]:</span>
-<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f"</span><span class="sc">{</span>name<span class="sc">:22s}{</span><span class="bu">str</span>(C_.<span class="bu">round</span>(<span class="dv">3</span>))<span class="sc">:&gt;34s}{</span><span class="bu">str</span>((<span class="op">-</span>R_ <span class="op">@</span> C_).<span class="bu">round</span>(<span class="dv">3</span>))<span class="sc">:&gt;34s}</span><span class="ss">"</span>)</span>
-<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"</span><span class="ch">\n</span><span class="st">the rotated camera has exactly the same centre as the original,"</span>)</span>
-<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"and a different t: the translation vector follows the orientation."</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>                                                centre C                     translation t
-original                                [  7. -14.   7.]            [-2.889  2.072 16.774]
-rotated about C                         [  7. -14.   7.]            [ 1.551  2.072 16.95 ]
-translated                              [  4. -14.   8.]            [-0.004  3.273 16.288]
-
-the rotated camera has exactly the same centre as the original,
-and a different t: the translation vector follows the orientation.</code></pre>
+</section>
+<section id="translating-the-camera" class="level3">
+<h3 class="anchored" data-anchor-id="translating-the-camera">Translating the camera</h3>
+<p>Now keep the camera orientation fixed and move its centre from <span class="math inline">\(\mathbf C\)</span> to <span class="math inline">\(\mathbf C'\)</span>.</p>
+<p>Since the camera axes do not change,</p>
+<p><span class="math display">\[
+\mathsf R'=\mathsf R.
+\]</span></p>
+<p>The new centre <span class="math inline">\(\mathbf C'\)</span> determines the corresponding translation,</p>
+<p><span class="math display">\[
+\mathbf t'=-\mathsf R\mathbf C'.
+\]</span></p>
+<div id="6547e495" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-08-21T19:00:28.149931Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-08-21T19:00:28.149768Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-08-21T19:00:28.153698Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-08-21T19:00:28.152770Z&quot;}}" data-execution_count="19">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb16"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Move the camera centre in the world frame.</span></span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>C_tr <span class="op">=</span> C <span class="op">+</span> np.array([</span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>    [<span class="op">-</span><span class="fl">3.0</span>],</span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>    [ <span class="fl">0.0</span>],</span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a>    [ <span class="fl">1.0</span>],</span>
+<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a>])</span>
+<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Keep the camera orientation fixed.</span></span>
+<span id="cb16-9"><a href="#cb16-9" aria-hidden="true" tabindex="-1"></a>R_tr <span class="op">=</span> R</span>
+<span id="cb16-10"><a href="#cb16-10" aria-hidden="true" tabindex="-1"></a>t_tr <span class="op">=</span> <span class="op">-</span>R_tr <span class="op">@</span> C_tr</span>
+<span id="cb16-11"><a href="#cb16-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-12"><a href="#cb16-12" aria-hidden="true" tabindex="-1"></a><span class="co"># Assemble the translated camera and project the same Origami House.</span></span>
+<span id="cb16-13"><a href="#cb16-13" aria-hidden="true" tabindex="-1"></a>P_tr <span class="op">=</span> P_f <span class="op">@</span> rigid_transform(R_tr, t_tr)</span>
+<span id="cb16-14"><a href="#cb16-14" aria-hidden="true" tabindex="-1"></a>xy_tr <span class="op">=</span> project_points(X, P_tr)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div id="cell-fig-camera-translation" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-08-21T19:00:28.155434Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-08-21T19:00:28.155273Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-08-21T19:00:28.447620Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-08-21T19:00:28.446534Z&quot;}}" data-execution_count="20">
+<div class="cell-output cell-output-display">
+<div id="fig-camera-translation" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-camera-translation-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="camera_files/figure-html/fig-camera-translation-output-1.png" width="1211" height="453" class="figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-camera-translation-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;6: Translating the camera while keeping its orientation fixed. The camera axes remain parallel, while the centre moves from <span class="math inline">\(\mathbf C\)</span> to <span class="math inline">\(\mathbf C'\)</span>. The two right panels show the corresponding perspective projections of the same fixed Origami House.
+</figcaption>
+</figure>
 </div>
 </div>
+</div>
+<p>Rotation changes the orientation of the camera frame. Translation changes its origin. Together they determine the camera pose with respect to the world.</p>
 </section>
 </section>
 <section id="from-the-image-plane-to-pixels" class="level2 page-columns page-full">
 <h2 class="anchored" data-anchor-id="from-the-image-plane-to-pixels">From the image plane to pixels</h2>
-<p>So far we have treated the image as a continuous geometric plane. That is the setting of Alberti’s construction: each visual ray meets the image plane at a point with continuous coordinates.</p>
-<p>A digital image is different. It is a rectangular grid of samples indexed by a column <span class="math inline">\(u\)</span> and a row <span class="math inline">\(v\)</span>, with the origin conventionally at the upper-left corner, as for the entries of an array. We therefore need one more change of coordinates, from geometric coordinates on the image plane to <strong>pixel coordinates</strong>.</p>
-<p>Suppose distances in the camera frame are measured in centimetres, so that <span class="math inline">\(x\)</span> and <span class="math inline">\(y\)</span> are centimetres on the image plane. Pixels are not centimetres: if one pixel has physical width <span class="math inline">\(p_x\)</span> and height <span class="math inline">\(p_y\)</span>, a distance on the sensor is converted into pixels by dividing by those quantities. This is why the focal length appears in pixel coordinates as</p>
+<p>So far we have described projection using continuous coordinates on the image plane. A digital image instead uses <strong>pixel coordinates</strong>: a column coordinate <span class="math inline">\(u\)</span> and a row coordinate <span class="math inline">\(v\)</span>, usually measured from the upper-left corner.</p>
+<p>It is useful to separate the geometry of perspective projection from this choice of image coordinates. Dividing the camera coordinates by depth gives the <strong>normalised image coordinates</strong></p>
+<p><span class="math display">\[
+\mathbf x_n
+=
+\begin{bmatrix}
+X_c/Z_c\\
+Y_c/Z_c\\
+1
+\end{bmatrix}.
+\]</span></p>
+<p>Geometrically, these are the intersections of the visual rays with the reference plane <span class="math inline">\(z_c=1\)</span>.</p>
+<p>To convert these coordinates to pixels, we must account for the physical scale of the sensor and for the choice of pixel coordinate system. If a pixel has width <span class="math inline">\(p_x\)</span> and height <span class="math inline">\(p_y\)</span>, the focal length expressed in pixels is</p>
 <p><span class="math display">\[
 f_x=\frac{f}{p_x},
 \qquad
-f_y=\frac{f}{p_y} ,
+f_y=\frac{f}{p_y}.
 \]</span></p>
-<p>so that <span class="math inline">\(f_x\)</span> and <span class="math inline">\(f_y\)</span> are the focal length expressed in <strong>pixels</strong> rather than in physical units.</p>
-<p>It is convenient to reorganise the construction slightly. Instead of first projecting onto the physical plane <span class="math inline">\(z_c=f\)</span>, intersect the visual ray with the plane <span class="math inline">\(z_c=1\)</span>. This gives the <strong>normalised image coordinates</strong></p>
+<p>Projection can therefore be viewed as two successive maps,</p>
 <p><span class="math display">\[
-\mathbf x_n=(X_c/Z_c,\;Y_c/Z_c,\;1)^\top .
+\mathbf X_c
+\longmapsto
+\mathbf x_n
+\longmapsto
+\mathbf x,
 \]</span></p>
-<p>The plane <span class="math inline">\(z_c=1\)</span> is only a convenient reference. We have not moved the sensor, nor set the physical focal length to one. We have simply factored the projection into two steps — 3D point, then normalised image, then pixel — with the second step carrying the focal length, the conversion to pixels, and the choice of image coordinate system.</p>
-<section id="the-intrinsics" class="level3 page-columns page-full">
-<h3 class="anchored" data-anchor-id="the-intrinsics">The intrinsics</h3>
-<p>In homogeneous coordinates that second step is written <span class="math inline">\(\mathbf x\sim\mathsf
-K\,\mathbf x_n\)</span>, with</p>
+<p>from 3D camera coordinates to normalised image coordinates, and then to pixel coordinates.</p>
+<section id="the-intrinsic-parameters" class="level3">
+<h3 class="anchored" data-anchor-id="the-intrinsic-parameters">The intrinsic parameters</h3>
+<p>The change from normalised image coordinates to pixel coordinates is a projective transformation,</p>
+<p><span class="math display">\[
+\mathbf x \sim \mathsf K\,\mathbf x_n,
+\]</span></p>
+<p>where</p>
 <p><span class="math display">\[
 \mathsf K=
 \begin{bmatrix}
-f_x&amp;s&amp;c_x\\
-0&amp;f_y&amp;c_y\\
-0&amp;0&amp;1
-\end{bmatrix} ,
+f_x &amp; s   &amp; c_x\\
+0   &amp; f_y &amp; c_y\\
+0   &amp; 0   &amp; 1
+\end{bmatrix}.
 \]</span></p>
-<p>where</p>
-<ul>
-<li><span class="math inline">\(f_x\)</span> and <span class="math inline">\(f_y\)</span> express the focal length in pixel units;</li>
-<li><span class="math inline">\((c_x,c_y)\)</span> is the <strong>principal point</strong>, the pixel at which the optical axis meets the image plane;</li>
-<li><span class="math inline">\(s\)</span> accounts for a possible skew between the two pixel axes, and is zero for any sensor that has not been resampled.</li>
-</ul>
-<p>The matrix <span class="math inline">\(\mathsf K\)</span> describes how the geometry of the ideal camera is encoded in the coordinate system of the digital image. Its entries are the <strong>intrinsic parameters</strong>.</p>
-<p>Two of them can be understood by going back to the pyramid and moving the plane.</p>
-<div id="cell-fig-focal-length" class="cell page-columns page-full" data-execution_count="12">
+<p>The quantities <span class="math inline">\(f_x\)</span> and <span class="math inline">\(f_y\)</span> are the focal length expressed in pixels along the two image axes. The point <span class="math inline">\((c_x,c_y)\)</span> is the <strong>principal point</strong>, where the optical axis intersects the image plane, expressed in pixel coordinates. The parameter <span class="math inline">\(s\)</span> describes a possible skew between the two image axes; for most modern cameras it is taken to be zero.</p>
+<p>These quantities are the <strong>intrinsic parameters</strong> of the camera. They describe the transformation from the normalised image plane to the coordinate system of the digital image.</p>
+<p>The effect of the focal length and the principal point can be seen directly in the image.</p>
+<p>Combining the change from world to camera coordinates with the intrinsic transformation gives</p>
+<p><span class="math display">\[
+\lambda\mathbf x
+=
+\mathsf K
+[\mathsf R\mid\mathbf t]
+\mathbf X_w.
+\]</span></p>
+<p>Thus the complete perspective camera matrix is</p>
+<p><span class="math display">\[
+\mathsf P=\mathsf K[\mathsf R\mid\mathbf t].
+\]</span></p>
+<div id="17fb816c" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-08-21T19:00:28.450013Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-08-21T19:00:28.449850Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-08-21T19:00:28.454201Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-08-21T19:00:28.453227Z&quot;}}" data-execution_count="21">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb17"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> intrinsic_matrix(fx, fy<span class="op">=</span><span class="va">None</span>, cx<span class="op">=</span><span class="fl">0.0</span>, cy<span class="op">=</span><span class="fl">0.0</span>, skew<span class="op">=</span><span class="fl">0.0</span>):</span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""Build the 3 x 3 intrinsic calibration matrix."""</span></span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> fy <span class="kw">is</span> <span class="va">None</span>:</span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>        fy <span class="op">=</span> fx</span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> np.array([</span>
+<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a>        [fx,  skew, cx],</span>
+<span id="cb17-8"><a href="#cb17-8" aria-hidden="true" tabindex="-1"></a>        [<span class="fl">0.0</span>, fy,   cy],</span>
+<span id="cb17-9"><a href="#cb17-9" aria-hidden="true" tabindex="-1"></a>        [<span class="fl">0.0</span>, <span class="fl">0.0</span>, <span class="fl">1.0</span>],</span>
+<span id="cb17-10"><a href="#cb17-10" aria-hidden="true" tabindex="-1"></a>    ])</span>
+<span id="cb17-11"><a href="#cb17-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-12"><a href="#cb17-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-13"><a href="#cb17-13" aria-hidden="true" tabindex="-1"></a><span class="co"># A 960 x 720 digital image.</span></span>
+<span id="cb17-14"><a href="#cb17-14" aria-hidden="true" tabindex="-1"></a>W_PIX, H_PIX <span class="op">=</span> <span class="dv">960</span>, <span class="dv">720</span></span>
+<span id="cb17-15"><a href="#cb17-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-16"><a href="#cb17-16" aria-hidden="true" tabindex="-1"></a><span class="co"># Square pixels, zero skew, principal point at the image centre.</span></span>
+<span id="cb17-17"><a href="#cb17-17" aria-hidden="true" tabindex="-1"></a>K <span class="op">=</span> intrinsic_matrix(</span>
+<span id="cb17-18"><a href="#cb17-18" aria-hidden="true" tabindex="-1"></a>    fx<span class="op">=</span><span class="dv">850</span>,</span>
+<span id="cb17-19"><a href="#cb17-19" aria-hidden="true" tabindex="-1"></a>    cx<span class="op">=</span>W_PIX <span class="op">/</span> <span class="dv">2</span>,</span>
+<span id="cb17-20"><a href="#cb17-20" aria-hidden="true" tabindex="-1"></a>    cy<span class="op">=</span>H_PIX <span class="op">/</span> <span class="dv">2</span>,</span>
+<span id="cb17-21"><a href="#cb17-21" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb17-22"><a href="#cb17-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-23"><a href="#cb17-23" aria-hidden="true" tabindex="-1"></a><span class="co"># Compose intrinsics and extrinsics into a single 3 x 4 camera matrix.</span></span>
+<span id="cb17-24"><a href="#cb17-24" aria-hidden="true" tabindex="-1"></a>P <span class="op">=</span> K <span class="op">@</span> np.hstack((R, t))</span>
+<span id="cb17-25"><a href="#cb17-25" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-26"><a href="#cb17-26" aria-hidden="true" tabindex="-1"></a><span class="co"># Project the Origami House directly into pixel coordinates.</span></span>
+<span id="cb17-27"><a href="#cb17-27" aria-hidden="true" tabindex="-1"></a>uv <span class="op">=</span> project_points(X, P)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</section>
+<section id="changing-the-focal-length" class="level3 page-columns page-full">
+<h3 class="anchored" data-anchor-id="changing-the-focal-length">Changing the focal length</h3>
+<p>Keep the camera pose, the image size, and the principal point fixed, and vary only the focal length. From</p>
+<p><span class="math display">\[
+u-c_x=f_x\frac{X_c}{Z_c},
+\qquad
+v-c_y=f_y\frac{Y_c}{Z_c},
+\]</span></p>
+<p>increasing <span class="math inline">\(f_x\)</span> and <span class="math inline">\(f_y\)</span> moves image points farther from the principal point. The projected object therefore appears larger. For a fixed image size, the field of view becomes narrower.</p>
+<div id="98706f72" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-08-21T19:00:28.456036Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-08-21T19:00:28.455882Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-08-21T19:00:28.459552Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-08-21T19:00:28.458569Z&quot;}}" data-execution_count="22">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb18"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Compare three cameras that differ only in focal length.</span></span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>focals <span class="op">=</span> [<span class="fl">500.0</span>, <span class="fl">850.0</span>, <span class="fl">1400.0</span>]</span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a>focal_projections <span class="op">=</span> []</span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> f_pix <span class="kw">in</span> focals:</span>
+<span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a>    K_f <span class="op">=</span> intrinsic_matrix(</span>
+<span id="cb18-8"><a href="#cb18-8" aria-hidden="true" tabindex="-1"></a>        fx<span class="op">=</span>f_pix,</span>
+<span id="cb18-9"><a href="#cb18-9" aria-hidden="true" tabindex="-1"></a>        fy<span class="op">=</span>f_pix,</span>
+<span id="cb18-10"><a href="#cb18-10" aria-hidden="true" tabindex="-1"></a>        cx<span class="op">=</span>W_PIX <span class="op">/</span> <span class="dv">2</span>,</span>
+<span id="cb18-11"><a href="#cb18-11" aria-hidden="true" tabindex="-1"></a>        cy<span class="op">=</span>H_PIX <span class="op">/</span> <span class="dv">2</span>,</span>
+<span id="cb18-12"><a href="#cb18-12" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb18-13"><a href="#cb18-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-14"><a href="#cb18-14" aria-hidden="true" tabindex="-1"></a>    P_focal <span class="op">=</span> K_f <span class="op">@</span> np.hstack((R, t))</span>
+<span id="cb18-15"><a href="#cb18-15" aria-hidden="true" tabindex="-1"></a>    focal_projections.append(project_points(X, P_focal))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div id="cell-fig-focal-length" class="cell page-columns page-full" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-08-21T19:00:28.461987Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-08-21T19:00:28.461825Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-08-21T19:00:28.796272Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-08-21T19:00:28.795480Z&quot;}}" data-execution_count="23">
 <div class="cell-output cell-output-display page-columns page-full">
 <div id="fig-focal-length" class="quarto-float quarto-figure quarto-figure-center anchored page-columns page-full">
 <figure class="quarto-float quarto-float-fig figure page-columns page-full">
@@ -661,13 +1100,44 @@ f_x&amp;s&amp;c_x\\
 <img src="camera_files/figure-html/fig-focal-length-output-1.png" width="1478" height="482" class="figure-img column-screen-inset">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-focal-length-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;6: Slicing the same visual pyramid at three distances. <strong>Left:</strong> the centre and the rays are untouched; only the image plane moves along the optical axis. <strong>Right:</strong> what each plane records, drawn inside the same image rectangle. A longer focal length magnifies the picture and narrows the field of view, but it does not change the pyramid: no new information about the scene has been gathered.
+Figure&nbsp;7: Changing the focal length while keeping the camera pose and image size fixed. Left: the same visual rays intersect image planes at three different distances from the camera centre. Right: increasing the focal length magnifies the projection and reduces the field of view.
 </figcaption>
 </figure>
 </div>
 </div>
 </div>
-<div id="cell-fig-principal-point" class="cell page-columns page-full" data-execution_count="13">
+</section>
+<section id="changing-the-principal-point" class="level3 page-columns page-full">
+<h3 class="anchored" data-anchor-id="changing-the-principal-point">Changing the principal point</h3>
+<p>Now keep the focal length and the camera pose fixed, and change only the principal point. From</p>
+<p><span class="math display">\[
+u=f_x x_n+c_x,
+\qquad
+v=f_y y_n+c_y,
+\]</span></p>
+<p>a change in <span class="math inline">\((c_x,c_y)\)</span> adds the same offset to every projected point. The shape and scale of the projection are unchanged; only its position in pixel coordinates changes.</p>
+<div id="46974c14" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-08-21T19:00:28.798245Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-08-21T19:00:28.798077Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-08-21T19:00:28.801832Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-08-21T19:00:28.801167Z&quot;}}" data-execution_count="24">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb19"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Compare three cameras that differ only in principal point.</span></span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>principal_points <span class="op">=</span> [</span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>    (W_PIX <span class="op">/</span> <span class="dv">2</span>,       H_PIX <span class="op">/</span> <span class="dv">2</span>),</span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a>    (W_PIX <span class="op">/</span> <span class="dv">2</span> <span class="op">-</span> <span class="dv">190</span>, H_PIX <span class="op">/</span> <span class="dv">2</span> <span class="op">-</span> <span class="dv">90</span>),</span>
+<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a>    (W_PIX <span class="op">/</span> <span class="dv">2</span> <span class="op">+</span> <span class="dv">150</span>, H_PIX <span class="op">/</span> <span class="dv">2</span> <span class="op">+</span> <span class="dv">110</span>),</span>
+<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a>]</span>
+<span id="cb19-7"><a href="#cb19-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-8"><a href="#cb19-8" aria-hidden="true" tabindex="-1"></a>principal_point_projections <span class="op">=</span> []</span>
+<span id="cb19-9"><a href="#cb19-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-10"><a href="#cb19-10" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> cx, cy <span class="kw">in</span> principal_points:</span>
+<span id="cb19-11"><a href="#cb19-11" aria-hidden="true" tabindex="-1"></a>    K_c <span class="op">=</span> intrinsic_matrix(</span>
+<span id="cb19-12"><a href="#cb19-12" aria-hidden="true" tabindex="-1"></a>        fx<span class="op">=</span><span class="dv">850</span>,</span>
+<span id="cb19-13"><a href="#cb19-13" aria-hidden="true" tabindex="-1"></a>        fy<span class="op">=</span><span class="dv">850</span>,</span>
+<span id="cb19-14"><a href="#cb19-14" aria-hidden="true" tabindex="-1"></a>        cx<span class="op">=</span>cx,</span>
+<span id="cb19-15"><a href="#cb19-15" aria-hidden="true" tabindex="-1"></a>        cy<span class="op">=</span>cy,</span>
+<span id="cb19-16"><a href="#cb19-16" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb19-17"><a href="#cb19-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-18"><a href="#cb19-18" aria-hidden="true" tabindex="-1"></a>    P_c <span class="op">=</span> K_c <span class="op">@</span> np.hstack((R, t))</span>
+<span id="cb19-19"><a href="#cb19-19" aria-hidden="true" tabindex="-1"></a>    principal_point_projections.append(project_points(X, P_c))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div id="cell-fig-principal-point" class="cell page-columns page-full" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-08-21T19:00:28.803971Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-08-21T19:00:28.803815Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-08-21T19:00:29.003789Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-08-21T19:00:29.002884Z&quot;}}" data-execution_count="25">
 <div class="cell-output cell-output-display page-columns page-full">
 <div id="fig-principal-point" class="quarto-float quarto-figure quarto-figure-center anchored page-columns page-full">
 <figure class="quarto-float quarto-float-fig figure page-columns page-full">
@@ -675,32 +1145,95 @@ Figure&nbsp;6: Slicing the same visual pyramid at three distances. <strong>Left:
 <img src="camera_files/figure-html/fig-principal-point-output-1.png" width="1403" height="379" class="figure-img column-page">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-principal-point-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;7: The principal point, with the focal length fixed. The orange cross marks <span class="math inline">\((c_x,c_y)\)</span>, where the optical axis meets the sensor. Changing it slides the picture inside the image rectangle without altering its shape: the principal point is a property of how the sensor is placed and cropped, not of the pyramid. This is why a cropped photograph has a principal point away from the centre of its raster.
+Figure&nbsp;8: Changing the principal point while keeping the focal length and camera pose fixed. The cross marks <span class="math inline">\((c_x,c_y)\)</span>. Changing the principal point translates the projection in pixel coordinates without changing its shape or scale.
 </figcaption>
 </figure>
 </div>
 </div>
 </div>
+<p>The principal point also has a nice interpretation in normalised image coordinates. The optical axis meets the normalised image plane at</p>
+<p><span class="math display">\[
+\mathbf x_n=
+\begin{bmatrix}
+0\\
+0\\
+1
+\end{bmatrix}.
+\]</span></p>
+<p>Applying the intrinsic transformation gives</p>
+<p><span class="math display">\[
+\mathsf K
+\begin{bmatrix}
+0\\
+0\\
+1
+\end{bmatrix}
+=
+\begin{bmatrix}
+c_x\\
+c_y\\
+1
+\end{bmatrix}.
+\]</span></p>
+<p>Thus <span class="math inline">\((c_x,c_y)\)</span> is precisely the pixel coordinate of the point where the optical axis meets the image plane.</p>
+<p>Cropping an image changes the pixel coordinate system and therefore changes the numerical coordinates of the principal point, even though the underlying camera geometry has not changed.</p>
 </section>
 </section>
 <section id="the-camera-matrix" class="level2 page-columns page-full">
 <h2 class="anchored" data-anchor-id="the-camera-matrix">The camera matrix</h2>
-<p>Combining the normalised projection</p>
+<p>We can now combine the three steps of perspective projection.</p>
+<p>In camera coordinates, normalised projection is</p>
 <p><span class="math display">\[
-\lambda\mathbf x_n
-=
-\begin{bmatrix} \mathsf I &amp; \mathbf 0 \end{bmatrix}\mathbf{X}_c
+\mathbf x_n
+\sim
+\begin{bmatrix}
+\mathsf I &amp; \mathbf 0
+\end{bmatrix}
+\begin{bmatrix}
+\mathbf X_c\\
+1
+\end{bmatrix}.
 \]</span></p>
-<p>with the calibration transformation gives <span class="math inline">\(\lambda\mathbf x=\mathsf K[\mathsf I\mid\mathbf 0]\mathbf{X}_c\)</span>, and if the scene is expressed in world coordinates,</p>
+<p>The intrinsic matrix converts normalised image coordinates to pixel coordinates,</p>
 <p><span class="math display">\[
-\lambda\mathbf x
+\mathbf x \sim \mathsf K\mathbf x_n.
+\]</span></p>
+<p>Finally, if the scene is described in world coordinates,</p>
+<p><span class="math display">\[
+\begin{bmatrix}
+\mathbf X_c\\
+1
+\end{bmatrix}
 =
-\mathsf K[\mathsf R\mid\mathbf t]\,\mathbf X_w ,
+\begin{bmatrix}
+\mathsf R &amp; \mathbf t\\
+\mathbf 0^\top &amp; 1
+\end{bmatrix}
+\begin{bmatrix}
+\mathbf X_w\\
+1
+\end{bmatrix}.
+\]</span></p>
+<p>Combining the three maps gives</p>
+<p><span class="math display">\[
+\mathbf x
+\sim
+\mathsf K
+[\mathsf R\mid\mathbf t]
+\begin{bmatrix}
+\mathbf X_w\\
+1
+\end{bmatrix}
+\]</span></p>
+<p>or, writing the world point directly in homogeneous coordinates,</p>
+<p><span class="math display">\[
+\mathbf x\sim\mathsf P\mathbf X_w,
 \qquad
-\mathsf P=\mathsf K[\mathsf R\mid\mathbf t] .
+\mathsf P=\mathsf K[\mathsf R\mid\mathbf t].
 \]</span></p>
-<p>The two factors have different roles: <span class="math inline">\(\mathsf K\)</span> describes the <strong>internal geometry of the camera</strong>, while <span class="math inline">\(\mathsf R\)</span> and <span class="math inline">\(\mathbf t\)</span> describe its <strong>pose in the world</strong>. Counting parameters, five for <span class="math inline">\(\mathsf K\)</span> and six for the pose makes eleven, which is exactly the number of degrees of freedom of a <span class="math inline">\(3\times4\)</span> matrix defined up to scale.</p>
-<div id="cell-fig-three-maps" class="cell page-columns page-full" data-execution_count="14">
+<p>The two factors have different roles. The intrinsic matrix <span class="math inline">\(\mathsf K\)</span> describes the mapping from the normalised image plane to pixel coordinates, while <span class="math inline">\((\mathsf R,\mathbf t)\)</span> describes the pose of the camera with respect to the world frame.</p>
+<p>A general intrinsic matrix has five parameters, while a rigid camera pose has six. The resulting eleven parameters agree with the eleven degrees of freedom of a <span class="math inline">\(3\times4\)</span> camera matrix defined up to a non-zero scale.</p>
+<div id="cell-fig-three-maps" class="cell page-columns page-full" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-08-21T19:00:29.005903Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-08-21T19:00:29.005736Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-08-21T19:00:29.537633Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-08-21T19:00:29.536655Z&quot;}}" data-execution_count="26">
 <div class="cell-output cell-output-display page-columns page-full">
 <div id="fig-three-maps" class="quarto-float quarto-figure quarto-figure-center anchored page-columns page-full">
 <figure class="quarto-float quarto-float-fig figure page-columns page-full">
@@ -708,7 +1241,7 @@ Figure&nbsp;7: The principal point, with the focal length fixed. The orange cros
 <img src="camera_files/figure-html/fig-three-maps-output-1.png" width="1235" height="933" class="figure-img column-page">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-three-maps-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;8: The same house at the four stages of the chain. <strong>Top left:</strong> the world frame, with the camera drawn where it sits and three rays showing what it is looking at. <strong>Top right:</strong> after the rigid motion, the identical object in the camera’s own frame — nothing projected yet, only relabelled. <strong>Bottom left:</strong> after the interception, in normalised coordinates, whose units are dimensionless ratios. <strong>Bottom right:</strong> after <span class="math inline">\(\mathsf{K}\)</span>, in pixels, which is what a sensor reports.
+Figure&nbsp;9: The stages of perspective projection. Top left: the Origami House and camera in world coordinates. Top right: the same geometry expressed in the camera frame. Bottom left: perspective division gives normalised image coordinates. Bottom right: the intrinsic matrix <span class="math inline">\(\mathsf K\)</span> converts them to pixel coordinates.
 </figcaption>
 </figure>
 </div>
@@ -717,62 +1250,91 @@ Figure&nbsp;8: The same house at the four stages of the chain. <strong>Top left:
 </section>
 <section id="back-projecting-a-pixel" class="level2 page-columns page-full">
 <h2 class="anchored" data-anchor-id="back-projecting-a-pixel">Back-projecting a pixel</h2>
-<p>The model can also be read backwards, and the reading is short.</p>
-<p>Applying <span class="math inline">\(\mathsf K^{-1}\)</span> to a pixel <span class="math inline">\(\mathbf x=(u,v,1)^\top\)</span> strips off the image coordinate system and returns the direction of the corresponding visual ray in the camera frame,</p>
+<p>The chain of maps can also be followed in the opposite direction.</p>
+<p>Forward projection maps a 3D point to a single image point,</p>
 <p><span class="math display">\[
-\mathbf d_c \propto \mathsf K^{-1}\mathbf x
+\mathbf X_w
+\longmapsto
+\mathbf X_c
+\longmapsto
+\mathbf x_n
+\longmapsto
+\mathbf x.
+\]</span></p>
+<p>This map loses depth. Consequently, going backwards from an image point does not recover a unique point of space: it recovers the line of 3D points that project to it.</p>
+<p>Starting from a pixel</p>
+<p><span class="math display">\[
+\mathbf x=
+\begin{bmatrix}
+u\\v\\1
+\end{bmatrix},
+\]</span></p>
+<p>the inverse intrinsic transformation gives its normalised image coordinates,</p>
+<p><span class="math display">\[
+\mathbf x_n
+\sim
+\mathsf K^{-1}\mathbf x.
+\]</span></p>
+<p>For zero skew,</p>
+<p><span class="math display">\[
+\mathsf K^{-1}\mathbf x
 =
-\bigl((u-c_x)/f_x,\;(v-c_y)/f_y,\;1\bigr)^\top
-\quad\text{when } s=0 .
+\begin{bmatrix}
+(u-c_x)/f_x\\
+(v-c_y)/f_y\\
+1
+\end{bmatrix}.
 \]</span></p>
-<p>Rotating that direction back into the world and starting from the camera centre gives the whole ray:</p>
+<p>In the camera frame this vector gives the direction of the corresponding visual ray. Rotating the direction back to the world frame gives</p>
 <p><span class="math display">\[
-\mathbf X_w(\mu)=\mathbf C+\mu\,\mathsf R^\top\mathsf K^{-1}\mathbf x ,
-\qquad \mu&gt;0 .
+\mathbf d_w
+\sim
+\mathsf R^\top\mathsf K^{-1}\mathbf x.
 \]</span></p>
-<p>So the extrinsics contribute two different things: <span class="math inline">\(\mathbf C\)</span> says where the ray starts, <span class="math inline">\(\mathsf R\)</span> says which way it points. And calibration turns a pixel into a <strong>direction</strong> — not into a point. Where the scene lies along the ray is exactly the information the projection destroyed, and no amount of calibration will bring it back.</p>
-<p>A useful consequence is that a calibrated camera measures angles. The angle between the rays of two pixels is</p>
+<p>Since the ray starts at the camera centre <span class="math inline">\(\mathbf C\)</span>, its points are</p>
 <p><span class="math display">\[
-\cos\theta=
-\frac{\mathbf d_1^\top\mathbf d_2}{\lVert\mathbf d_1\rVert\,\lVert\mathbf d_2\rVert},
+\mathbf X_w(\mu)
+=
+\mathbf C
++
+\mu\,\mathsf R^\top\mathsf K^{-1}\mathbf x,
 \qquad
-\mathbf d_i=\mathsf K^{-1}\mathbf x_i ,
+\mu&gt;0.
 \]</span></p>
-<p>and the pose never enters, because a rotation does not change angles.</p>
-<div id="29" class="cell" data-execution_count="15">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> backproject(pixels, K, R, t):</span>
-<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""World-frame origin and unit directions of the rays of a set of pixels."""</span></span>
-<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>    x_h <span class="op">=</span> np.c_[np.asarray(pixels, <span class="bu">float</span>), np.ones(<span class="bu">len</span>(pixels))]</span>
-<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>    d_c <span class="op">=</span> (np.linalg.inv(K) <span class="op">@</span> x_h.T).T</span>
-<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>    d_w <span class="op">=</span> (R.T <span class="op">@</span> d_c.T).T</span>
-<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="op">-</span>R.T <span class="op">@</span> t, d_w <span class="op">/</span> np.linalg.norm(d_w, axis<span class="op">=</span><span class="dv">1</span>, keepdims<span class="op">=</span><span class="va">True</span>)</span>
-<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>picked <span class="op">=</span> [IDS[<span class="dv">0</span>], IDS[<span class="bu">len</span>(IDS)<span class="op">//</span><span class="dv">2</span>], IDS[<span class="op">-</span><span class="dv">1</span>]]</span>
-<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>pix <span class="op">=</span> xy[[index[k] <span class="cf">for</span> k <span class="kw">in</span> picked]]</span>
-<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a>origin, dirs <span class="op">=</span> backproject(pix, K, R, t)</span>
-<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"each ray passes through the vertex that produced it:"</span>)</span>
-<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> k, d <span class="kw">in</span> <span class="bu">zip</span>(picked, dirs):</span>
-<span id="cb7-15"><a href="#cb7-15" aria-hidden="true" tabindex="-1"></a>    v <span class="op">=</span> X[index[k]] <span class="op">-</span> origin</span>
-<span id="cb7-16"><a href="#cb7-16" aria-hidden="true" tabindex="-1"></a>    gap <span class="op">=</span> np.linalg.norm(v <span class="op">-</span> (v <span class="op">@</span> d) <span class="op">*</span> d)        <span class="co"># distance from vertex to ray</span></span>
-<span id="cb7-17"><a href="#cb7-17" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f"  </span><span class="sc">{</span>k<span class="sc">}</span><span class="ss">:  </span><span class="sc">{</span>gap<span class="sc">:.2e}</span><span class="ss"> cm off the ray"</span>)</span>
-<span id="cb7-18"><a href="#cb7-18" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-19"><a href="#cb7-19" aria-hidden="true" tabindex="-1"></a>d1 <span class="op">=</span> np.linalg.solve(K, np.append(pix[<span class="dv">0</span>], <span class="fl">1.0</span>))</span>
-<span id="cb7-20"><a href="#cb7-20" aria-hidden="true" tabindex="-1"></a>d2 <span class="op">=</span> np.linalg.solve(K, np.append(pix[<span class="op">-</span><span class="dv">1</span>], <span class="fl">1.0</span>))</span>
-<span id="cb7-21"><a href="#cb7-21" aria-hidden="true" tabindex="-1"></a>cos <span class="op">=</span> d1 <span class="op">@</span> d2 <span class="op">/</span> (np.linalg.norm(d1) <span class="op">*</span> np.linalg.norm(d2))</span>
-<span id="cb7-22"><a href="#cb7-22" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"</span><span class="ch">\n</span><span class="ss">angle between the first and last ray, from the pixels alone: "</span></span>
-<span id="cb7-23"><a href="#cb7-23" aria-hidden="true" tabindex="-1"></a>      <span class="ss">f"</span><span class="sc">{</span>np<span class="sc">.</span>degrees(np.arccos(np.clip(cos, <span class="op">-</span><span class="dv">1</span>, <span class="dv">1</span>)))<span class="sc">:.4f}</span><span class="ss"> deg"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>each ray passes through the vertex that produced it:
-  X0:  4.78e-15 cm off the ray
-  X5:  1.99e-15 cm off the ray
-  X9:  1.78e-15 cm off the ray
-
-angle between the first and last ray, from the pixels alone: 23.3516 deg</code></pre>
+<p>Thus a pixel determines a direction, but not a depth. A single view does not determine the value of <span class="math inline">\(\mu\)</span>.</p>
+<div id="c7f8922d" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-08-21T19:00:29.539547Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-08-21T19:00:29.539383Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-08-21T19:00:29.543492Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-08-21T19:00:29.542607Z&quot;}}" data-execution_count="27">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb20"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> backproject_rays(pixels, K, R, t):</span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""Back-project 2D pixels, stored as columns, to unit rays in the world."""</span></span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Homogeneous pixel coordinates, one pixel per column.</span></span>
+<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a>    x <span class="op">=</span> np.vstack((pixels, np.ones((<span class="dv">1</span>, pixels.shape[<span class="dv">1</span>]))))</span>
+<span id="cb20-6"><a href="#cb20-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-7"><a href="#cb20-7" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Remove the intrinsic transformation:</span></span>
+<span id="cb20-8"><a href="#cb20-8" aria-hidden="true" tabindex="-1"></a>    <span class="co"># each column is now a ray direction in the camera frame.</span></span>
+<span id="cb20-9"><a href="#cb20-9" aria-hidden="true" tabindex="-1"></a>    d_camera <span class="op">=</span> np.linalg.solve(K, x)</span>
+<span id="cb20-10"><a href="#cb20-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-11"><a href="#cb20-11" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Express the same directions in the world frame.</span></span>
+<span id="cb20-12"><a href="#cb20-12" aria-hidden="true" tabindex="-1"></a>    d_world <span class="op">=</span> R.T <span class="op">@</span> d_camera</span>
+<span id="cb20-13"><a href="#cb20-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-14"><a href="#cb20-14" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Use unit directions, so the ray parameter measures Euclidean distance.</span></span>
+<span id="cb20-15"><a href="#cb20-15" aria-hidden="true" tabindex="-1"></a>    d_world <span class="op">/=</span> np.linalg.norm(d_world, axis<span class="op">=</span><span class="dv">0</span>, keepdims<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb20-16"><a href="#cb20-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-17"><a href="#cb20-17" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Camera centre in world coordinates.</span></span>
+<span id="cb20-18"><a href="#cb20-18" aria-hidden="true" tabindex="-1"></a>    C <span class="op">=</span> <span class="op">-</span>R.T <span class="op">@</span> t</span>
+<span id="cb20-19"><a href="#cb20-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-20"><a href="#cb20-20" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> C, d_world</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
+<div id="e4da22a4" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-08-21T19:00:29.545206Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-08-21T19:00:29.545051Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-08-21T19:00:29.549040Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-08-21T19:00:29.548327Z&quot;}}" data-execution_count="28">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb21"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Pick three projected vertices of the Origami House.</span></span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>picked <span class="op">=</span> [IDS[<span class="dv">0</span>], IDS[<span class="bu">len</span>(IDS) <span class="op">//</span> <span class="dv">2</span>], IDS[<span class="op">-</span><span class="dv">1</span>]]</span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>picked_idx <span class="op">=</span> [index[k] <span class="cf">for</span> k <span class="kw">in</span> picked]</span>
+<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a>pixels <span class="op">=</span> uv[:, picked_idx]</span>
+<span id="cb21-6"><a href="#cb21-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-7"><a href="#cb21-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Back-project them into the world.</span></span>
+<span id="cb21-8"><a href="#cb21-8" aria-hidden="true" tabindex="-1"></a>origin, directions <span class="op">=</span> backproject_rays(pixels, K, R, t)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<div id="cell-fig-backprojection" class="cell page-columns page-full" data-execution_count="16">
+<div id="cell-fig-backprojection" class="cell page-columns page-full" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-08-21T19:00:29.550973Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-08-21T19:00:29.550815Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-08-21T19:00:29.734246Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-08-21T19:00:29.733439Z&quot;}}" data-execution_count="29">
 <div class="cell-output cell-output-display page-columns page-full">
 <div id="fig-backprojection" class="quarto-float quarto-figure quarto-figure-center anchored page-columns page-full">
 <figure class="quarto-float quarto-float-fig figure page-columns page-full">
@@ -780,72 +1342,106 @@ angle between the first and last ray, from the pixels alone: 23.3516 deg</code><
 <img src="camera_files/figure-html/fig-backprojection-output-1.png" width="1238" height="510" class="figure-img column-page">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-backprojection-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;9: The model running backwards. <strong>Left:</strong> three chosen pixels in the digital image. <strong>Right:</strong> the rays they define in the world, drawn from the camera centre and continued a little past the house, following <span class="math inline">\(\mathbf{X}_w(\mu)=\mathbf{C}+\mu\,\mathsf{R}^\top\mathsf{K}^{-1}\mathbf{x}\)</span>. Each ray meets the vertex that produced the pixel, but calibration alone does not say where along the ray that vertex lies.
+Figure&nbsp;10: Back-projection of three image points. Left: three pixels in the digital image. Right: each pixel defines a visual ray through the camera centre. The original 3D vertices lie on these rays, but their position along the ray is not determined by a single image.
 </figcaption>
 </figure>
 </div>
 </div>
 </div>
-<p>If only the matrix <span class="math inline">\(\mathsf P\)</span> is known, the ray can still be recovered, but it comes out as a projective line rather than as a Euclidean ray with an origin and a direction.</p>
-<p>The centre is the right null space, <span class="math inline">\(\mathsf P\mathbf C=\mathbf 0\)</span>. The pseudoinverse supplies one preimage of the pixel, <span class="math inline">\(\mathbf X_0=\mathsf
-P^{+}\mathbf x\)</span>, and since adding any multiple of the centre leaves the image unchanged, the full back-projection is the line</p>
-<p><span class="math display">\[
-\mathbf X\sim\alpha\,\mathsf P^{+}\mathbf x+\beta\,\mathbf C .
-\]</span></p>
-<p>The pseudoinverse is not an inverse camera: it picks one point on the line, and the null space supplies the rest.</p>
-</section>
-<section id="reading-the-camera-back-out-of-mathsf-p" class="level2">
-<h2 class="anchored" data-anchor-id="reading-the-camera-back-out-of-mathsf-p">Reading the camera back out of <span class="math inline">\(\mathsf P\)</span></h2>
-<p>Sometimes we are given only the <span class="math inline">\(3\times4\)</span> matrix. Its geometry can be read back out. The camera centre is the right null vector, because the optical centre has no image. If the world frame is Euclidean and the matrix really represents a finite pinhole camera, the left <span class="math inline">\(3\times3\)</span> block factorises by an <strong>RQ decomposition</strong>,</p>
-<p><span class="math display">\[
-\mathsf M=\mathsf K\mathsf R ,
-\]</span></p>
-<p>recovering intrinsics and rotation up to the usual sign conventions; then <span class="math inline">\(\mathbf t\)</span> follows from the fourth column. With <span class="math inline">\(K_{33}=1\)</span>, <span class="math inline">\(K_{11},K_{22}&gt;0\)</span> and <span class="math inline">\(\det\mathsf R=1\)</span> the factorisation is unique.</p>
-<p>RQ is not a calibration algorithm: it only decomposes the matrix it is given. If <span class="math inline">\(\mathsf P\)</span> has been estimated poorly, its factors will be poor as well. Calibration procedures estimate the camera while enforcing its structure during the estimation, and using many measurements.</p>
-<div id="33" class="cell" data-execution_count="17">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> rq3(A):</span>
-<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""RQ decomposition A = R_upper @ Q_orthogonal, built from NumPy's QR."""</span></span>
-<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>    Q, R_up <span class="op">=</span> np.linalg.qr(np.flipud(A).T)</span>
-<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> np.fliplr(np.flipud(R_up.T)), np.flipud(Q.T)</span>
-<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> decompose_projection_matrix(Pm):</span>
-<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""Recover K, R, t from a finite Euclidean camera matrix."""</span></span>
-<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a>    Pw <span class="op">=</span> np.asarray(Pm, <span class="bu">float</span>).copy()</span>
-<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> np.linalg.det(Pw[:, :<span class="dv">3</span>]) <span class="op">&lt;</span> <span class="dv">0</span>:</span>
-<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a>        Pw <span class="op">=</span> <span class="op">-</span>Pw</span>
-<span id="cb9-12"><a href="#cb9-12" aria-hidden="true" tabindex="-1"></a>    K_hat, R_hat <span class="op">=</span> rq3(Pw[:, :<span class="dv">3</span>])</span>
-<span id="cb9-13"><a href="#cb9-13" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-14"><a href="#cb9-14" aria-hidden="true" tabindex="-1"></a>    signs <span class="op">=</span> np.sign(np.diag(K_hat))<span class="op">;</span> signs[signs <span class="op">==</span> <span class="dv">0</span>] <span class="op">=</span> <span class="fl">1.0</span></span>
-<span id="cb9-15"><a href="#cb9-15" aria-hidden="true" tabindex="-1"></a>    D <span class="op">=</span> np.diag(signs)</span>
-<span id="cb9-16"><a href="#cb9-16" aria-hidden="true" tabindex="-1"></a>    K_hat, R_hat <span class="op">=</span> K_hat <span class="op">@</span> D, D <span class="op">@</span> R_hat</span>
-<span id="cb9-17"><a href="#cb9-17" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-18"><a href="#cb9-18" aria-hidden="true" tabindex="-1"></a>    K_hat, Pw <span class="op">=</span> K_hat <span class="op">/</span> K_hat[<span class="dv">2</span>, <span class="dv">2</span>], Pw <span class="op">/</span> K_hat[<span class="dv">2</span>, <span class="dv">2</span>]</span>
-<span id="cb9-19"><a href="#cb9-19" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> K_hat, R_hat, np.linalg.solve(K_hat, Pw[:, <span class="dv">3</span>])</span>
-<span id="cb9-20"><a href="#cb9-20" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-21"><a href="#cb9-21" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-22"><a href="#cb9-22" aria-hidden="true" tabindex="-1"></a><span class="co"># The centre, from P alone: no Euclidean assumption is used here.</span></span>
-<span id="cb9-23"><a href="#cb9-23" aria-hidden="true" tabindex="-1"></a>M, p4 <span class="op">=</span> P[:, :<span class="dv">3</span>], P[:, <span class="dv">3</span>]</span>
-<span id="cb9-24"><a href="#cb9-24" aria-hidden="true" tabindex="-1"></a>C_from_P <span class="op">=</span> <span class="op">-</span>np.linalg.solve(M, p4)</span>
-<span id="cb9-25"><a href="#cb9-25" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"centre from P, error against the true one: "</span></span>
-<span id="cb9-26"><a href="#cb9-26" aria-hidden="true" tabindex="-1"></a>      <span class="ss">f"</span><span class="sc">{</span>np<span class="sc">.</span><span class="bu">max</span>(np.<span class="bu">abs</span>(C_from_P <span class="op">-</span> C))<span class="sc">:.2e}</span><span class="ss"> cm"</span>)</span>
-<span id="cb9-27"><a href="#cb9-27" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-28"><a href="#cb9-28" aria-hidden="true" tabindex="-1"></a>K_hat, R_hat, t_hat <span class="op">=</span> decompose_projection_matrix(P)</span>
-<span id="cb9-29"><a href="#cb9-29" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"</span><span class="ch">\n</span><span class="ss">RQ on an exact P:  |K-K_hat| = </span><span class="sc">{</span>np<span class="sc">.</span><span class="bu">max</span>(np.<span class="bu">abs</span>(K_hat <span class="op">-</span> K))<span class="sc">:.2e}</span><span class="ss">   "</span></span>
-<span id="cb9-30"><a href="#cb9-30" aria-hidden="true" tabindex="-1"></a>      <span class="ss">f"|R-R_hat| = </span><span class="sc">{</span>np<span class="sc">.</span><span class="bu">max</span>(np.<span class="bu">abs</span>(R_hat <span class="op">-</span> R))<span class="sc">:.2e}</span><span class="ss">   "</span></span>
-<span id="cb9-31"><a href="#cb9-31" aria-hidden="true" tabindex="-1"></a>      <span class="ss">f"|t-t_hat| = </span><span class="sc">{</span>np<span class="sc">.</span><span class="bu">max</span>(np.<span class="bu">abs</span>(t_hat <span class="op">-</span> t))<span class="sc">:.2e}</span><span class="ss">"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div id="4197c66b" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-08-21T19:00:29.736071Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-08-21T19:00:29.735902Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-08-21T19:00:29.739634Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-08-21T19:00:29.738862Z&quot;}}" data-execution_count="30">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb22"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Check that each original vertex lies on its back-projected ray.</span></span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> j, key <span class="kw">in</span> <span class="bu">enumerate</span>(picked):</span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>    d <span class="op">=</span> directions[:, [j]]</span>
+<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a>    v <span class="op">=</span> X[:, [index[key]]] <span class="op">-</span> origin</span>
+<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-6"><a href="#cb22-6" aria-hidden="true" tabindex="-1"></a>    distance_to_ray <span class="op">=</span> np.linalg.norm(v <span class="op">-</span> d <span class="op">*</span> (d.T <span class="op">@</span> v).item())</span>
+<span id="cb22-7"><a href="#cb22-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-8"><a href="#cb22-8" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f"</span><span class="sc">{</span>key<span class="sc">}</span><span class="ss">: distance from ray = </span><span class="sc">{</span>distance_to_ray<span class="sc">:.2e}</span><span class="ss"> cm"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>centre from P, error against the true one: 1.42e-14 cm
-
-RQ on an exact P:  |K-K_hat| = 1.28e-13   |R-R_hat| = 3.33e-16   |t-t_hat| = 2.22e-15</code></pre>
+<pre><code>X0: distance from ray = 4.35e-15 cm
+X5: distance from ray = 2.04e-15 cm
+X9: distance from ray = 4.00e-15 cm</code></pre>
 </div>
 </div>
+<p>A calibrated image also determines angles between visual rays. For two pixels,</p>
+<p><span class="math display">\[
+\mathbf d_i=\mathsf K^{-1}\mathbf x_i,
+\]</span></p>
+<p>and therefore</p>
+<p><span class="math display">\[
+\cos\theta
+=
+\frac{
+\mathbf d_1^\top\mathbf d_2
+}{
+\lVert\mathbf d_1\rVert
+\lVert\mathbf d_2\rVert
+}.
+\]</span></p>
+<p>The camera pose does not appear: applying the same rotation to both rays does not change the angle between them.</p>
+<div id="bec956fd" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-08-21T19:00:29.741958Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-08-21T19:00:29.741802Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-08-21T19:00:29.745607Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-08-21T19:00:29.744888Z&quot;}}" data-execution_count="31">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb24"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Ray directions obtained from two pixels using calibration alone.</span></span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>xh <span class="op">=</span> np.vstack((pixels, np.ones((<span class="dv">1</span>, pixels.shape[<span class="dv">1</span>]))))</span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a>d <span class="op">=</span> np.linalg.solve(K, xh)</span>
+<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a>d <span class="op">/=</span> np.linalg.norm(d, axis<span class="op">=</span><span class="dv">0</span>, keepdims<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb24-5"><a href="#cb24-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-6"><a href="#cb24-6" aria-hidden="true" tabindex="-1"></a>cos_theta <span class="op">=</span> (d[:, [<span class="dv">0</span>]].T <span class="op">@</span> d[:, [<span class="op">-</span><span class="dv">1</span>]]).item()</span>
+<span id="cb24-7"><a href="#cb24-7" aria-hidden="true" tabindex="-1"></a>theta <span class="op">=</span> np.degrees(np.arccos(np.clip(cos_theta, <span class="op">-</span><span class="fl">1.0</span>, <span class="fl">1.0</span>)))</span>
+<span id="cb24-8"><a href="#cb24-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-9"><a href="#cb24-9" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"angle between the two rays: </span><span class="sc">{</span>theta<span class="sc">:.2f}</span><span class="ss"> deg"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>angle between the two rays: 23.35 deg</code></pre>
+</div>
+</div>
+<section id="back-projection-from-the-camera-matrix" class="level3">
+<h3 class="anchored" data-anchor-id="back-projection-from-the-camera-matrix">Back-projection from the camera matrix</h3>
+<p>If only the camera matrix <span class="math inline">\(\mathsf P\)</span> is known, back-projection is still possible, but the result is naturally projective.</p>
+<p>The camera centre is the right null space of <span class="math inline">\(\mathsf P\)</span>,</p>
+<p><span class="math display">\[
+\mathsf P\mathbf C=\mathbf 0.
+\]</span></p>
+<p>For an image point <span class="math inline">\(\mathbf x\)</span>, the pseudoinverse provides one 3D point</p>
+<p><span class="math display">\[
+\mathbf X_0=\mathsf P^+\mathbf x.
+\]</span></p>
+<p>Since a camera matrix has rank three,</p>
+<p><span class="math display">\[
+\mathsf P\mathsf P^+=\mathsf I,
+\]</span></p>
+<p>and therefore</p>
+<p><span class="math display">\[
+\mathsf P\mathbf X_0=\mathbf x.
+\]</span></p>
+<p>Adding any multiple of the camera centre does not change the image,</p>
+<p><span class="math display">\[
+\mathsf P(\mathbf X_0+\mu\mathbf C)
+=
+\mathbf x.
+\]</span></p>
+<p>Hence the back-projection of <span class="math inline">\(\mathbf x\)</span> is the projective line</p>
+<p><span class="math display">\[
+\mathbf X
+\sim
+\alpha\,\mathsf P^+\mathbf x
++
+\beta\,\mathbf C,
+\qquad \alpha\neq0.
+\]</span></p>
+<p>Its projective closure contains the camera centre <span class="math inline">\(\mathbf C\)</span>, where the camera map itself is not defined.</p>
+<p>The pseudoinverse is therefore not an inverse camera: it selects one point on the back-projected line, while the null space determines the remaining ambiguity.</p>
+</section>
+</section>
+<section id="questions-to-leave-open" class="level2">
+<h2 class="anchored" data-anchor-id="questions-to-leave-open">Questions to leave open</h2>
+<p><strong>Can changing the focal length compensate for moving the camera?</strong> Consider a subject at depth <span class="math inline">\(D\)</span>, whose image scale is proportional to <span class="math inline">\(f/D\)</span>. Move the camera along its optical axis so that the subject is now at depth <span class="math inline">\(D'\)</span>. How must <span class="math inline">\(f\)</span> change to keep the subject at exactly the same size in the image? Now consider a second object at a different depth <span class="math inline">\(Z\)</span>. Will the same change of focal length keep its image unchanged as well? This is the geometry behind the <strong>dolly zoom</strong>.</p>
+<p><strong>What happens to points at infinity?</strong> A world direction <span class="math inline">\(\mathbf d\)</span> can be represented by <span class="math inline">\(\mathbf X_\infty=(\mathbf d^\top,0)^\top\)</span>. Project it with <span class="math inline">\(\mathsf P=\mathsf K[\mathsf R\mid\mathbf t]\)</span>. Which camera parameters determine its image, and which disappear? What does this imply about the vanishing point of a family of parallel lines when the camera is translated without being rotated?</p>
 </section>
 <section id="further-reading" class="level2">
 <h2 class="anchored" data-anchor-id="further-reading">Further reading</h2>
 <ul>
+<li>Fusiello, A. Computer Vision: <em>Three-dimensional Reconstruction Techniques</em>, Springer Cham, 2024. The perspective camera, its intrinsic and extrinsic parameters, and back-projection.</li>
 <li>Hartley, R. and Zisserman, A. <em>Multiple View Geometry in Computer Vision</em>, 2nd ed., Cambridge University Press, 2004. Chapter 6 for the projective camera and its decomposition.</li>
-<li>Fusiello, A. <em>Visione Computazionale: tecniche di ricostruzione tridimensionale</em>, Franco Angeli, 2018, for a geometric treatment of perspective cameras and projective coordinates.</li>
+<li>Fusiello, A. <em>Visione Computazionale: tecniche di ricostruzione tridimensionale</em>, Franco Angeli, 2018, for the same material in Italian.</li>
 <li>Alberti, L. B. <em>De pictura</em> / <em>Della pittura</em>, 1435–36, for the visual pyramid and the <em>velo</em>. Cecil Grayson’s is the standard critical edition.</li>
 <li>Andersen, K. <em>The Geometry of an Art</em>, Springer, 2007, for the historical development of mathematical perspective.</li>
 </ul>
