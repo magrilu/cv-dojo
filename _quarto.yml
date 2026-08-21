@@ -31,9 +31,6 @@ website:
         text: Preface
       - href: origami-house.qmd
         text: "The Origami house"
-      - section: "Geometry fundamentals"
-        contents:
-          - notebooks/geometry/fitting-a-conic.ipynb
       - section: "Single-view geometry"
         contents:
           - notebooks/camera/camera.ipynb
@@ -47,6 +44,9 @@ website:
       - section: "Reconstruction"
         contents:
           - notebooks/reconstruction/triangulation.ipynb
+      - section: "Fitting"
+        contents:
+          - notebooks/geometry/fitting-a-conic.ipynb
 
 format:
   html:
