@@ -382,7 +382,7 @@ window.Quarto = {
 \mathbf x_i \sim \mathsf P_{\mathrm{syn}}\mathbf X_i,
 \]</span></p>
 <p>to obtain the synthetic 3D–2D correspondences that will serve as input to the resection problem.</p>
-<div id="cell-5" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-08-21T19:00:34.995479Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-08-21T19:00:34.995227Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-08-21T19:00:35.005016Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-08-21T19:00:35.004220Z&quot;}}" data-execution_count="3">
+<div id="cell-5" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-08-21T19:44:11.600492Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-08-21T19:44:11.600250Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-08-21T19:44:11.612074Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-08-21T19:44:11.611026Z&quot;}}" data-execution_count="3">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Where is the camera?</span></span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Place the synthetic camera away from the house.</span></span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Its position is expressed in the same 3D coordinate system as the house.</span></span>
@@ -459,7 +459,7 @@ window.Quarto = {
 and its picture of the house spans [839 806] px inside a 1536 x 2048 frame</code></pre>
 </div>
 </div>
-<div id="cell-fig-synthetic-view" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-08-21T19:00:35.041927Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-08-21T19:00:35.041705Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-08-21T19:00:35.112283Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-08-21T19:00:35.111613Z&quot;}}" data-execution_count="4">
+<div id="cell-fig-synthetic-view" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-08-21T19:44:11.649732Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-08-21T19:44:11.649519Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-08-21T19:44:11.725906Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-08-21T19:44:11.724863Z&quot;}}" data-execution_count="4">
 <div class="cell-output cell-output-display">
 <div id="fig-synthetic-view" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
@@ -560,7 +560,7 @@ Figure&nbsp;1: The synthetic photograph. Ten vertices, projected by a camera who
 \mathbf 0.
 \]</span></p>
 <p>For each 3D–2D correspondence we now have two linear equations in the twelve entries of the camera matrix. The following function simply writes those two rows for every correspondence and stacks them into a single matrix <span class="math inline">\(\mathsf A\)</span>.</p>
-<div id="cell-8" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-08-21T19:00:35.114742Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-08-21T19:00:35.114543Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-08-21T19:00:35.119470Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-08-21T19:00:35.118705Z&quot;}}" data-execution_count="5">
+<div id="cell-8" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-08-21T19:44:11.728517Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-08-21T19:44:11.728286Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-08-21T19:44:11.734255Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-08-21T19:44:11.733162Z&quot;}}" data-execution_count="5">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> camera_design_matrix(X, x):</span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""Build the 2n x 12 design matrix A for camera resection.</span></span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -617,7 +617,7 @@ Figure&nbsp;1: The synthetic photograph. Ten vertices, projected by a camera who
 \]</span></p>
 <p>The unit-norm constraint simply fixes the scale and rules out the trivial solution <span class="math inline">\(\mathbf p=\mathbf 0\)</span>. The solution is the right singular vector of <span class="math inline">\(\mathsf A\)</span> associated with its smallest singular value, and can be retrieved via SVD.</p>
 <p>This is the <strong>direct linear transform</strong>, or <strong>DLT</strong>.</p>
-<div id="cell-10" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-08-21T19:00:35.121576Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-08-21T19:00:35.121387Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-08-21T19:00:35.132874Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-08-21T19:00:35.132074Z&quot;}}" data-execution_count="6">
+<div id="cell-10" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-08-21T19:44:11.737223Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-08-21T19:44:11.736981Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-08-21T19:44:11.743851Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-08-21T19:44:11.742740Z&quot;}}" data-execution_count="6">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> dlt_camera(X, x):</span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""Estimate the camera matrix from n &gt;= 6 3D--2D correspondences."""</span></span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>    A <span class="op">=</span> camera_design_matrix(X, x)</span>
@@ -679,7 +679,7 @@ n=6
 <p>This is different from, for example, the <a href="../../notebooks/two-views/eight-point.html">fundamental matrix</a>, whose rank-two constraint must be explicitly restored after a linear estimate.</p>
 <p>At this stage we are making no Euclidean assumptions about the camera: we do not require a calibration matrix <span class="math inline">\(\mathsf K\)</span>, an orthogonal rotation <span class="math inline">\(\mathsf R\)</span>, or a decomposition of <span class="math inline">\(\mathsf P\)</span>. We have recovered a <strong>projective camera</strong>.</p>
 <p>There is one geometric object that can be read from any projective camera: its <strong>camera centre</strong>.</p>
-<div id="cell-15" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-08-21T19:00:35.135311Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-08-21T19:00:35.135130Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-08-21T19:00:35.140056Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-08-21T19:00:35.139257Z&quot;}}" data-execution_count="7">
+<div id="cell-15" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-08-21T19:44:11.747031Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-08-21T19:44:11.746728Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-08-21T19:44:11.752751Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-08-21T19:44:11.751869Z&quot;}}" data-execution_count="7">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> camera_centre(P):</span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""Return the finite camera centre as a 3 x 1 column."""</span></span>
 <span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>    _, _, Vt <span class="op">=</span> np.linalg.svd(np.asarray(P, <span class="bu">float</span>))</span>
@@ -743,7 +743,7 @@ error on the camera centre: 1.49e-11 cm</code></pre>
 =
 \mathsf K^{-1}\mathbf p_4.
 \]</span></p>
-<div id="cell-18" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-08-21T19:00:35.142109Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-08-21T19:00:35.141924Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-08-21T19:00:35.151551Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-08-21T19:00:35.150707Z&quot;}}" data-execution_count="8">
+<div id="cell-18" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-08-21T19:44:11.756044Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-08-21T19:44:11.755801Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-08-21T19:44:11.764831Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-08-21T19:44:11.763688Z&quot;}}" data-execution_count="8">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> rq3(A):</span>
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""Factor A = K R, with K upper triangular and R orthogonal."""</span></span>
 <span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>    Q, R <span class="op">=</span> np.linalg.qr(np.flipud(np.asarray(A, <span class="bu">float</span>)).T)</span>
@@ -805,7 +805,7 @@ largest deviation from the synthetic R: 3.93e-13</code></pre>
 <section id="normalising-the-coordinates" class="level2">
 <h2 class="anchored" data-anchor-id="normalising-the-coordinates">Normalising the coordinates</h2>
 <p>Before adding noise, it is worth looking at the linear system itself. The non-zero entries of <span class="math inline">\(\mathsf A\)</span> do not all have the same numerical scale.</p>
-<div id="cell-20" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-08-21T19:00:35.153616Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-08-21T19:00:35.153434Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-08-21T19:00:35.157632Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-08-21T19:00:35.156950Z&quot;}}" data-execution_count="9">
+<div id="cell-20" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-08-21T19:44:11.767621Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-08-21T19:44:11.767356Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-08-21T19:44:11.773074Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-08-21T19:44:11.772050Z&quot;}}" data-execution_count="9">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>A_syn <span class="op">=</span> camera_design_matrix(X_ALL, x_syn)</span>
 <span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> name, block <span class="kw">in</span> [</span>
@@ -857,7 +857,7 @@ p3: 3.4e+02  to  7.3e+03</code></pre>
 \mathsf T^{-1}\widehat{\mathsf P}\,\mathsf U.
 \]</span></p>
 <p>The two normalizations act in different spaces: <span class="math inline">\(\mathsf U\)</span> is a <span class="math inline">\(4\times4\)</span> transformation of the 3D world coordinates, whereas <span class="math inline">\(\mathsf T\)</span> is a <span class="math inline">\(3\times3\)</span> transformation of the image coordinates.</p>
-<div id="cell-fig-normalisation" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-08-21T19:00:35.160052Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-08-21T19:00:35.159879Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-08-21T19:00:35.615840Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-08-21T19:00:35.614827Z&quot;}}" data-execution_count="10">
+<div id="cell-fig-normalisation" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-08-21T19:44:11.775552Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-08-21T19:44:11.775330Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-08-21T19:44:12.373117Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-08-21T19:44:12.372377Z&quot;}}" data-execution_count="10">
 <div class="cell-output cell-output-display">
 <div id="fig-normalisation" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
@@ -872,7 +872,7 @@ Figure&nbsp;2: Normalisation as a change of coordinates. The camera is estimated
 </div>
 </div>
 <p>We use the standard isotropic normalization: translate each point set so that its centroid is at the origin, then rescale it so that the mean distance from the origin is <span class="math inline">\(\sqrt{2}\)</span> in the image and <span class="math inline">\(\sqrt{3}\)</span> in space.</p>
-<div id="cell-24" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-08-21T19:00:35.618267Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-08-21T19:00:35.618095Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-08-21T19:00:35.624407Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-08-21T19:00:35.623557Z&quot;}}" data-execution_count="11">
+<div id="cell-24" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-08-21T19:44:12.375464Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-08-21T19:44:12.375275Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-08-21T19:44:12.381637Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-08-21T19:44:12.380752Z&quot;}}" data-execution_count="11">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> normalise_2d(x):</span>
 <span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""Centroid at the origin, mean distance equal to sqrt(2)."""</span></span>
 <span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>    x <span class="op">=</span> np.asarray(x, <span class="bu">float</span>)</span>
@@ -918,7 +918,7 @@ Figure&nbsp;2: Normalisation as a change of coordinates. The camera is estimated
 </div>
 <p>The geometry has not changed: we have only changed coordinates before solving the linear system. What does change is its numerical scale.</p>
 <p>To see this, we can move the origin of the world farther and farther away from the house. This describes exactly the same scene in increasingly inconvenient coordinates.</p>
-<div id="cell-26" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-08-21T19:00:35.626603Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-08-21T19:00:35.626415Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-08-21T19:00:35.636826Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-08-21T19:00:35.635940Z&quot;}}" data-execution_count="12">
+<div id="cell-26" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-08-21T19:44:12.383733Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-08-21T19:44:12.383555Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-08-21T19:44:12.393965Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-08-21T19:44:12.393182Z&quot;}}" data-execution_count="12">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> conditioning(A):</span>
 <span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""Spread of the singular values that are not forced to vanish."""</span></span>
 <span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>    s <span class="op">=</span> np.linalg.svd(A, compute_uv<span class="op">=</span><span class="va">False</span>)</span>
@@ -958,7 +958,7 @@ Figure&nbsp;2: Normalisation as a change of coordinates. The camera is estimated
          1e+06       9.0e+15       3.8e+00        1.95e-03            2.54e-04</code></pre>
 </div>
 </div>
-<div id="cell-fig-design-scales" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-08-21T19:00:35.638897Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-08-21T19:00:35.638709Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-08-21T19:00:35.958879Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-08-21T19:00:35.958167Z&quot;}}" data-execution_count="13">
+<div id="cell-fig-design-scales" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-08-21T19:44:12.396067Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-08-21T19:44:12.395836Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-08-21T19:44:12.691424Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-08-21T19:44:12.690460Z&quot;}}" data-execution_count="13">
 <div class="cell-output cell-output-display">
 <div id="fig-design-scales" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
@@ -983,10 +983,10 @@ Figure&nbsp;3: Orders of magnitude of the non-zero entries of the design matrix,
 <p>We can test the difference while the true camera is still known. Add a few pixels of noise to the image measurements, estimate the camera from subsets of increasing size, and ask two questions:</p>
 <ul>
 <li>how accurately is the camera centre recovered?</li>
-<li>how well does the estimated camera predict the noise-free image points?</li>
+<li>how well does the estimated camera describe the projection of the noise-free image points?</li>
 </ul>
 <p>If additional correspondences provide useful redundancy, both errors should decrease as more points are used.</p>
-<div id="cell-30" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-08-21T19:00:35.961042Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-08-21T19:00:35.960874Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-08-21T19:00:36.868685Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-08-21T19:00:36.868083Z&quot;}}" data-execution_count="14">
+<div id="cell-30" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-08-21T19:44:12.693766Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-08-21T19:44:12.693566Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-08-21T19:44:13.835954Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-08-21T19:44:13.835163Z&quot;}}" data-execution_count="14">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>rng <span class="op">=</span> np.random.default_rng(<span class="dv">7</span>)</span>
 <span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -1055,7 +1055,7 @@ Figure&nbsp;3: Orders of magnitude of the non-zero entries of the design matrix,
 <p>Unlike the synthetic experiment, neither side of these correspondences is exact.</p>
 <p>The image points are affected by annotation noise: a corner can only be located to within a few pixels. But the 3D model is approximate as well. It describes the nominal geometry of the folded house, not a careful metrological measurement of the particular paper model in the photograph. Small folding errors, bends, and deformations therefore appear as errors in the 3D points.</p>
 <p>We should therefore not expect an exact camera. The question is instead how well a single projective matrix can explain these imperfect 3D–2D correspondences.</p>
-<div id="cell-33" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-08-21T19:00:36.870704Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-08-21T19:00:36.870540Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-08-21T19:00:37.006148Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-08-21T19:00:37.004944Z&quot;}}" data-execution_count="15">
+<div id="cell-33" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-08-21T19:44:13.838318Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-08-21T19:44:13.838143Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-08-21T19:44:13.954749Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-08-21T19:44:13.953738Z&quot;}}" data-execution_count="15">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb17"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>matches <span class="op">=</span> [</span>
 <span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>    m <span class="cf">for</span> m <span class="kw">in</span> load_annotation(<span class="st">"two_view_matches"</span>)[<span class="st">"matches"</span>]</span>
 <span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> m[<span class="st">"id"</span>] <span class="kw">in</span> V3</span>
@@ -1104,7 +1104,7 @@ IMG_4337
   estimated camera centre: [-1.55 -8.66 13.76] cm</code></pre>
 </div>
 </div>
-<div id="cell-fig-real-resection" class="cell page-columns page-full" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-08-21T19:00:37.008704Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-08-21T19:00:37.008478Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-08-21T19:00:38.403428Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-08-21T19:00:38.402308Z&quot;}}" data-execution_count="16">
+<div id="cell-fig-real-resection" class="cell page-columns page-full" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-08-21T19:44:13.957067Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-08-21T19:44:13.956876Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-08-21T19:44:15.305235Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-08-21T19:44:15.304198Z&quot;}}" data-execution_count="16">
 <div class="cell-output cell-output-display page-columns page-full">
 <div id="fig-real-resection" class="quarto-float quarto-figure quarto-figure-center anchored page-columns page-full">
 <figure class="quarto-float quarto-float-fig figure page-columns page-full">
@@ -1119,7 +1119,7 @@ Figure&nbsp;4: The recovered cameras reproject the nominal 3D house onto the two
 </div>
 </div>
 <p>The reprojected wireframes follow the house reasonably well, with residuals of a few pixels. To see what the two recovered cameras mean geometrically, let us place them in the 3D scene at their estimated centres and with their recovered orientations.</p>
-<div id="cell-fig-two-cameras-3d" class="cell page-columns page-full" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-08-21T19:00:38.419062Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-08-21T19:00:38.418830Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-08-21T19:00:38.644887Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-08-21T19:00:38.644120Z&quot;}}" data-execution_count="17">
+<div id="cell-fig-two-cameras-3d" class="cell page-columns page-full" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-08-21T19:44:15.319662Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-08-21T19:44:15.319451Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-08-21T19:44:15.541363Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-08-21T19:44:15.540227Z&quot;}}" data-execution_count="17">
 <div class="cell-output cell-output-display page-columns page-full">
 <div id="fig-two-cameras-3d" class="quarto-float quarto-figure quarto-figure-center anchored page-columns page-full">
 <figure class="quarto-float quarto-float-fig figure page-columns page-full">
@@ -1169,7 +1169,7 @@ Figure&nbsp;5: The two recovered viewpoints. <strong>Left and centre:</strong> e
 <p>There is no closed-form solution in general. A common strategy is therefore to use the DLT estimate as an initial camera and refine it with a nonlinear least-squares method.</p>
 <p>A small technicality remains. Reprojection is unchanged if we replace <span class="math inline">\(\mathsf P\)</span> by <span class="math inline">\(\alpha\mathsf P\)</span>, so the nonlinear problem still has the same projective scale ambiguity.</p>
 <p>To remove it, we scale the initial camera so that one of its entries is equal to one, keep that entry fixed, and optimize the remaining eleven parameters. The DLT estimate provides the starting point.</p>
-<div id="cell-40" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-08-21T19:00:38.647398Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-08-21T19:00:38.647148Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-08-21T19:00:39.042635Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-08-21T19:00:39.041388Z&quot;}}" data-execution_count="18">
+<div id="cell-40" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-08-21T19:44:15.543444Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-08-21T19:44:15.543281Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-08-21T19:44:15.863783Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-08-21T19:44:15.862694Z&quot;}}" data-execution_count="18">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb19"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> scipy.optimize <span class="im">import</span> least_squares</span>
 <span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -1201,7 +1201,7 @@ Figure&nbsp;5: The two recovered viewpoints. <strong>Left and centre:</strong> e
 <span id="cb19-29"><a href="#cb19-29" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb19-30"><a href="#cb19-30" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> unpack(result.x)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<div id="cell-41" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-08-21T19:00:39.045057Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-08-21T19:00:39.044835Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-08-21T19:00:39.071130Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-08-21T19:00:39.070274Z&quot;}}" data-execution_count="19">
+<div id="cell-41" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-08-21T19:44:15.866349Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-08-21T19:44:15.866054Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-08-21T19:44:15.880671Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-08-21T19:44:15.879756Z&quot;}}" data-execution_count="19">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb20"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>P1_ref <span class="op">=</span> refine_camera(P1, X, x1)</span>
 <span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>P2_ref <span class="op">=</span> refine_camera(P2, X, x2)</span>
 <span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -1258,7 +1258,7 @@ Z\\
 <p>Thus planar correspondences can determine how that particular plane appears in the image, but they cannot determine a unique projective camera in 3D.</p>
 <p>For sufficiently many generic points on the plane, the homography has eight degrees of freedom. The remaining camera column contributes three completely unconstrained parameters. Accordingly, the <span class="math inline">\(12\)</span> camera coefficients are constrained only up to a four-dimensional null space, and the design matrix has rank at most <span class="math inline">\(8\)</span>.</p>
 <p>There is one small trap when trying to demonstrate this numerically. With only four points, any <span class="math inline">\(8\times12\)</span> design matrix has a null space of dimension at least four simply by counting, whether the points are planar or not. To expose the degeneracy we must use enough correspondences that a non-coplanar configuration would determine the camera, at least six.</p>
-<div id="cell-45" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-08-21T19:00:39.073711Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-08-21T19:00:39.073506Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-08-21T19:00:39.085637Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-08-21T19:00:39.084792Z&quot;}}" data-execution_count="20">
+<div id="cell-45" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-08-21T19:44:15.883185Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-08-21T19:44:15.882981Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-08-21T19:44:15.895297Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-08-21T19:44:15.894319Z&quot;}}" data-execution_count="20">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb22"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>rng <span class="op">=</span> np.random.default_rng(<span class="dv">0</span>)</span>
 <span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -1302,7 +1302,7 @@ Z\\
 </div>
 </div>
 <p>Once enough points are available, the difference is unambiguous. Points spread through space give the expected rank <span class="math inline">\(11\)</span>, while points confined to one plane stop at rank <span class="math inline">\(8\)</span>: three additional camera parameters remain completely unobservable.</p>
-<div id="cell-fig-coplanar" class="cell page-columns page-full" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-08-21T19:00:39.087892Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-08-21T19:00:39.087694Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-08-21T19:00:39.494449Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-08-21T19:00:39.493471Z&quot;}}" data-execution_count="21">
+<div id="cell-fig-coplanar" class="cell page-columns page-full" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-08-21T19:44:15.897459Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-08-21T19:44:15.897265Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-08-21T19:44:16.299756Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-08-21T19:44:16.298307Z&quot;}}" data-execution_count="21">
 <div class="cell-output cell-output-display page-columns page-full">
 <div id="fig-coplanar" class="quarto-float quarto-figure quarto-figure-center anchored page-columns page-full">
 <figure class="quarto-float quarto-float-fig figure page-columns page-full">
@@ -1339,7 +1339,7 @@ Figure&nbsp;6: A planar configuration cannot determine a general projective came
 \]</span></p>
 <p>The camera therefore remains underdetermined: a minimal six-point set with five coplanar points is degenerate even though the six points together span <span class="math inline">\(\mathbb P^3\)</span>.</p>
 <p>This is a useful warning about the phrase <em>general position</em>. Merely checking that the 3D points are not all coplanar is not enough to guarantee a valid minimal resection configuration.</p>
-<div id="cell-fig-critical-configurations" class="cell page-columns page-full" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-08-21T19:00:39.496878Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-08-21T19:00:39.496719Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-08-21T19:00:40.366412Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-08-21T19:00:40.365458Z&quot;}}" data-execution_count="22">
+<div id="cell-fig-critical-configurations" class="cell page-columns page-full" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-08-21T19:44:16.302421Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-08-21T19:44:16.302252Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-08-21T19:44:17.156605Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-08-21T19:44:17.155910Z&quot;}}" data-execution_count="22">
 <div class="cell-output cell-output-display page-columns page-full">
 <div id="fig-critical-configurations" class="quarto-float quarto-figure quarto-figure-center anchored page-columns page-full">
 <figure class="quarto-float quarto-float-fig figure page-columns page-full">
@@ -1378,7 +1378,6 @@ Figure&nbsp;7: Three critical configurations for projective camera resection. Gr
 <p>The corresponding camera centres lie on the projective line through the original centre <span class="math inline">\(\mathbf C\)</span> and the off-plane point <span class="math inline">\(\mathbf X_6\)</span>. Thus the remaining one-parameter ambiguity has a simple geometric form: the viewpoint can move along that line without changing any of the six image measurements.</p>
 <p>The twisted-cubic case has the same nullity, but a different geometry. The one-parameter family of ambiguous camera centres is no longer a line: it lies on the twisted cubic containing the control points and the original camera centre.</p>
 <p>In all three cases the reprojection error is exactly zero. The ambiguity is therefore not caused by noise or by the estimation algorithm: the image data themselves do not determine a unique camera.</p>
-<p>The last two configurations have the same algebraic nullity, but not the same geometry: in one case the ambiguous centres trace a cubic, in the other a line.</p>
 </section>
 <section id="questions-to-leave-open" class="level2">
 <h2 class="anchored" data-anchor-id="questions-to-leave-open">Questions to leave open</h2>

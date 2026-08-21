@@ -371,7 +371,7 @@ window.Quarto = {
 <h2 class="anchored" data-anchor-id="the-visual-pyramid">The visual pyramid</h2>
 <p>Let us start with the collection of 3D points <span class="math inline">\(\{\mathbf{X}_i\}\)</span> that represents the Origami House, and add a <strong>centre of projection</strong> <span class="math inline">\(\mathbf{C}\)</span>: Alberti’s eye, or the optical centre of our ideal camera.</p>
 <p>Join <span class="math inline">\(\mathbf C\)</span> to every point of the scene. The resulting family of concurrent lines is the <strong>visual pyramid</strong>. To form an image, place a plane <span class="math inline">\(\phi\)</span> across these rays.</p>
-<div id="cell-fig-visual-pyramid" class="cell page-columns page-full" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-08-21T19:00:26.247484Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-08-21T19:00:26.247295Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-08-21T19:00:26.882042Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-08-21T19:00:26.881216Z&quot;}}" data-execution_count="4">
+<div id="cell-fig-visual-pyramid" class="cell page-columns page-full" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-08-21T19:44:02.688457Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-08-21T19:44:02.688183Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-08-21T19:44:03.228237Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-08-21T19:44:03.227466Z&quot;}}" data-execution_count="4">
 <div class="cell-output cell-output-display page-columns page-full">
 <div id="fig-visual-pyramid" class="quarto-float quarto-figure quarto-figure-center anchored page-columns page-full">
 <figure class="quarto-float quarto-float-fig figure page-columns page-full">
@@ -397,9 +397,8 @@ Figure&nbsp;1: The visual pyramid. <strong>Left:</strong> rays from the centre o
 <p><span class="math display">\[
 z_c=f.
 \]</span></p>
-<p>Consider a scene point $ X_c=(X_c,Y_c,Z_c)^. $</p>
-<p>The visual ray through <span class="math inline">\(\mathbf X_c\)</span> intersects the image plane at <span class="math inline">\(\mathbf x=(x,y,f)^\top\)</span>.</p>
-<div id="cell-fig-camera-frame" class="cell page-columns page-full" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-08-21T19:00:26.885180Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-08-21T19:00:26.884945Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-08-21T19:00:27.158535Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-08-21T19:00:27.157404Z&quot;}}" data-execution_count="5">
+<p>Consider a scene point <span class="math inline">\(\mathbf X_c=(X_c,Y_c,Z_c)^\top\)</span>, the visual ray through <span class="math inline">\(\mathbf X_c\)</span> intersects the image plane at <span class="math inline">\(\mathbf x=(x,y,f)^\top\)</span>.</p>
+<div id="cell-fig-camera-frame" class="cell page-columns page-full" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-08-21T19:44:03.230716Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-08-21T19:44:03.230546Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-08-21T19:44:03.475338Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-08-21T19:44:03.474241Z&quot;}}" data-execution_count="5">
 <div class="cell-output cell-output-display page-columns page-full">
 <div id="fig-camera-frame" class="quarto-float quarto-figure quarto-figure-center anchored page-columns page-full">
 <figure class="quarto-float quarto-float-fig figure page-columns page-full">
@@ -431,7 +430,7 @@ y=f\frac{Y_c}{Z_c}.
 <h2 class="anchored" data-anchor-id="depth-changes-apparent-size">Depth changes apparent size</h2>
 <p>The division by <span class="math inline">\(Z_c\)</span> is responsible for one of the most familiar effects of perspective.</p>
 <p>Take two identical Origami Houses and place them side by side, then move one farther away along the viewing direction. Their metric size is unchanged, but the second house has greater depth <span class="math inline">\(Z_c\)</span>. Since perspective projection divides by depth, it occupies a smaller region of the image plane.</p>
-<div id="cell-fig-depth-and-size" class="cell page-columns page-full" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-08-21T19:00:27.161093Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-08-21T19:00:27.160918Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-08-21T19:00:27.417445Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-08-21T19:00:27.416634Z&quot;}}" data-execution_count="6">
+<div id="cell-fig-depth-and-size" class="cell page-columns page-full" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-08-21T19:44:03.477395Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-08-21T19:44:03.477219Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-08-21T19:44:03.738896Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-08-21T19:44:03.738074Z&quot;}}" data-execution_count="6">
 <div class="cell-output cell-output-display page-columns page-full">
 <div id="fig-depth-and-size" class="quarto-float quarto-figure quarto-figure-center anchored page-columns page-full">
 <figure class="quarto-float quarto-float-fig figure page-columns page-full">
@@ -493,7 +492,7 @@ Z_c\,\mathbf x.
 \]</span></p>
 <p>where <span class="math inline">\(\sim\)</span> denotes equality up to a non-zero scale.</p>
 <p>The division by depth has not disappeared. In homogeneous coordinates the mapping is linear; the division appears only when we return to Cartesian image coordinates by normalising the last coordinate to one.</p>
-<div id="36ab4fdb" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-08-21T19:00:27.419582Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-08-21T19:00:27.419416Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-08-21T19:00:27.514768Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-08-21T19:00:27.513852Z&quot;}}" data-execution_count="7">
+<div id="36ab4fdb" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-08-21T19:44:03.741389Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-08-21T19:44:03.741201Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-08-21T19:44:03.866460Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-08-21T19:44:03.865411Z&quot;}}" data-execution_count="7">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Focal length and the corresponding camera matrix.</span></span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>f <span class="op">=</span> <span class="fl">1.4</span></span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -528,7 +527,7 @@ Z_c\,\mathbf x.
 </div>
 </div>
 <p>We can collect the same operation in a small function that will be used throughout the notebook.</p>
-<div id="f582d29d" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-08-21T19:00:27.517100Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-08-21T19:00:27.516929Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-08-21T19:00:27.520414Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-08-21T19:00:27.519667Z&quot;}}" data-execution_count="8">
+<div id="f582d29d" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-08-21T19:44:03.868961Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-08-21T19:44:03.868728Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-08-21T19:44:03.872720Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-08-21T19:44:03.871926Z&quot;}}" data-execution_count="8">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> project_points(X, P):</span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""Project 3D points stored as columns through a 3 x 4 camera matrix."""</span></span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -581,7 +580,7 @@ Z_c\,\mathbf x.
 \ker(\alpha\mathsf P)=\ker(\mathsf P).
 \]</span></p>
 <p>Thus <span class="math inline">\(\mathsf P\)</span> and <span class="math inline">\(\alpha\mathsf P\)</span> represent the same projective camera and have the same camera centre.</p>
-<div id="5304d777" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-08-21T19:00:27.523468Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-08-21T19:00:27.523306Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-08-21T19:00:27.529026Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-08-21T19:00:27.528049Z&quot;}}" data-execution_count="9">
+<div id="5304d777" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-08-21T19:44:03.875589Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-08-21T19:44:03.875379Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-08-21T19:44:03.880184Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-08-21T19:44:03.879425Z&quot;}}" data-execution_count="9">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># The camera centre is the right null vector of P_f.</span></span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>_, _, Vt <span class="op">=</span> np.linalg.svd(P_f)</span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>C_f <span class="op">=</span> Vt[<span class="op">-</span><span class="dv">1</span>, :].reshape(<span class="dv">4</span>, <span class="dv">1</span>)</span>
@@ -668,7 +667,7 @@ P_f @ C:
 \]</span></p>
 <p>The pair <span class="math inline">\((\mathsf R,\mathbf t)\)</span> gives the <strong>extrinsic parameters</strong> of the camera. The rotation describes the orientation of the camera axes, while <span class="math inline">\(\mathbf t=-\mathsf R\mathbf C\)</span> is the world origin expressed in camera coordinates.</p>
 <p>For our synthetic example we choose the camera centre and orient the camera towards the Origami House. The following small helper constructs such an orientation explicitly from the camera axes.</p>
-<div id="9c7cdf19" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-08-21T19:00:27.531035Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-08-21T19:00:27.530846Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-08-21T19:00:27.535125Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-08-21T19:00:27.534327Z&quot;}}" data-execution_count="10">
+<div id="9c7cdf19" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-08-21T19:44:03.883024Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-08-21T19:44:03.882821Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-08-21T19:44:03.887388Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-08-21T19:44:03.886629Z&quot;}}" data-execution_count="10">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> look_at(centre, target, up<span class="op">=</span>np.array([[<span class="fl">0.0</span>], [<span class="fl">0.0</span>], [<span class="fl">1.0</span>]])):</span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""World-to-camera rotation for a camera looking towards `target`."""</span></span>
 <span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -687,7 +686,7 @@ P_f @ C:
 <span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> np.vstack((x_axis.T, y_axis.T, z_axis.T))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>We can now choose a concrete camera pose for the synthetic scene. We specify its centre <span class="math inline">\(\mathbf C\)</span> in world coordinates, orient it towards the Origami House, and obtain <span class="math inline">\(\mathbf t\)</span> from <span class="math inline">\(\mathbf t=-\mathsf R\mathbf C\)</span>.</p>
-<div id="94bad2a5" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-08-21T19:00:27.537203Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-08-21T19:00:27.537034Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-08-21T19:00:27.541730Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-08-21T19:00:27.540844Z&quot;}}" data-execution_count="11">
+<div id="94bad2a5" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-08-21T19:44:03.889885Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-08-21T19:44:03.889696Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-08-21T19:44:03.894639Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-08-21T19:44:03.893719Z&quot;}}" data-execution_count="11">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Camera centre in world coordinates.</span></span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>C <span class="op">=</span> np.array([</span>
 <span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>    [  <span class="fl">7.0</span>],</span>
@@ -721,7 +720,7 @@ translation t:
  [16.774]]</code></pre>
 </div>
 </div>
-<div id="cell-fig-two-frames" class="cell page-columns page-full" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-08-21T19:00:27.543735Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-08-21T19:00:27.543546Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-08-21T19:00:27.769426Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-08-21T19:00:27.768683Z&quot;}}" data-execution_count="12">
+<div id="cell-fig-two-frames" class="cell page-columns page-full" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-08-21T19:44:03.896551Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-08-21T19:44:03.896363Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-08-21T19:44:04.110508Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-08-21T19:44:04.109428Z&quot;}}" data-execution_count="12">
 <div class="cell-output cell-output-display page-columns page-full">
 <div id="fig-two-frames" class="quarto-float quarto-figure quarto-figure-center anchored page-columns page-full">
 <figure class="quarto-float quarto-float-fig figure page-columns page-full">
@@ -735,7 +734,7 @@ Figure&nbsp;4: The world frame is attached to the Origami House, while the camer
 </div>
 </div>
 </div>
-<div id="6829d74b" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-08-21T19:00:27.771454Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-08-21T19:00:27.771285Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-08-21T19:00:27.776500Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-08-21T19:00:27.775481Z&quot;}}" data-execution_count="13">
+<div id="6829d74b" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-08-21T19:44:04.113211Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-08-21T19:44:04.113047Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-08-21T19:44:04.118356Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-08-21T19:44:04.117466Z&quot;}}" data-execution_count="13">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Pick one vertex of the house. It is stored as a 3 x 1 column vector.</span></span>
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>key <span class="op">=</span> IDS[<span class="bu">len</span>(IDS) <span class="op">//</span> <span class="dv">2</span>]</span>
 <span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>Xw <span class="op">=</span> X[:, [index[key]]]</span>
@@ -772,7 +771,7 @@ from the three axis projections:
  [14.716]]</code></pre>
 </div>
 </div>
-<div id="089b75d4" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-08-21T19:00:27.778207Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-08-21T19:00:27.778050Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-08-21T19:00:27.782474Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-08-21T19:00:27.781574Z&quot;}}" data-execution_count="14">
+<div id="089b75d4" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-08-21T19:44:04.120120Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-08-21T19:44:04.119965Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-08-21T19:44:04.124273Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-08-21T19:44:04.123641Z&quot;}}" data-execution_count="14">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> rigid_transform(R, t):</span>
 <span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""Homogeneous matrix of the rigid transformation X' = R X + t."""</span></span>
 <span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -840,7 +839,7 @@ f&amp;0&amp;0\\
 <p><span class="math display">\[
 \mathsf P=\mathsf P_f\mathsf T_{wc}.
 \]</span></p>
-<div id="cace872a" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-08-21T19:00:27.784245Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-08-21T19:00:27.784084Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-08-21T19:00:27.786937Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-08-21T19:00:27.786212Z&quot;}}" data-execution_count="15">
+<div id="cace872a" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-08-21T19:44:04.126395Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-08-21T19:44:04.126228Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-08-21T19:44:04.129134Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-08-21T19:44:04.128193Z&quot;}}" data-execution_count="15">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Compose the perspective camera with the world-to-camera transformation.</span></span>
 <span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>P <span class="op">=</span> P_f <span class="op">@</span> T_wc</span>
 <span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -868,7 +867,7 @@ f&amp;0&amp;0\\
 \mathbf C=-\mathsf R^\top\mathbf t.
 \]</span></p>
 <p>The projective null-space characterization and the Euclidean extrinsic parameters therefore identify the same camera centre.</p>
-<div id="8c096398" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-08-21T19:00:27.788693Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-08-21T19:00:27.788535Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-08-21T19:00:27.792766Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-08-21T19:00:27.791883Z&quot;}}" data-execution_count="16">
+<div id="8c096398" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-08-21T19:44:04.131169Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-08-21T19:44:04.130961Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-08-21T19:44:04.134994Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-08-21T19:44:04.134358Z&quot;}}" data-execution_count="16">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Recover the camera centre from the extrinsic parameters.</span></span>
 <span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>C_from_extrinsics <span class="op">=</span> <span class="op">-</span>R.T <span class="op">@</span> t</span>
 <span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -902,7 +901,7 @@ f&amp;0&amp;0\\
 <p><span class="math display">\[
 \mathbf t'=-\mathsf R'\mathbf C.
 \]</span></p>
-<div id="179718ab" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-08-21T19:00:27.795011Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-08-21T19:00:27.794831Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-08-21T19:00:27.798975Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-08-21T19:00:27.798003Z&quot;}}" data-execution_count="17">
+<div id="179718ab" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-08-21T19:44:04.136850Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-08-21T19:44:04.136697Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-08-21T19:44:04.140224Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-08-21T19:44:04.139410Z&quot;}}" data-execution_count="17">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Define Q as a rotation of angle theta around the y axis</span></span>
 <span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>theta <span class="op">=</span> np.deg2rad(<span class="fl">15.0</span>)</span>
 <span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -918,7 +917,7 @@ f&amp;0&amp;0\\
 <span id="cb15-13"><a href="#cb15-13" aria-hidden="true" tabindex="-1"></a>P_rot <span class="op">=</span> P_f <span class="op">@</span> rigid_transform(R_rot, t_rot)</span>
 <span id="cb15-14"><a href="#cb15-14" aria-hidden="true" tabindex="-1"></a>xy_rot <span class="op">=</span> project_points(X, P_rot)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<div id="cell-fig-camera-rotation" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-08-21T19:00:27.801180Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-08-21T19:00:27.800999Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-08-21T19:00:28.147843Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-08-21T19:00:28.146943Z&quot;}}" data-execution_count="18">
+<div id="cell-fig-camera-rotation" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-08-21T19:44:04.141857Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-08-21T19:44:04.141706Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-08-21T19:44:04.575393Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-08-21T19:44:04.574607Z&quot;}}" data-execution_count="18">
 <div class="cell-output cell-output-display">
 <div id="fig-camera-rotation" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
@@ -944,7 +943,7 @@ Figure&nbsp;5: Rotating the camera about its centre. The camera centre remains f
 <p><span class="math display">\[
 \mathbf t'=-\mathsf R\mathbf C'.
 \]</span></p>
-<div id="6547e495" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-08-21T19:00:28.149931Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-08-21T19:00:28.149768Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-08-21T19:00:28.153698Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-08-21T19:00:28.152770Z&quot;}}" data-execution_count="19">
+<div id="6547e495" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-08-21T19:44:04.578055Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-08-21T19:44:04.577838Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-08-21T19:44:04.581964Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-08-21T19:44:04.581043Z&quot;}}" data-execution_count="19">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb16"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Move the camera centre in the world frame.</span></span>
 <span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>C_tr <span class="op">=</span> C <span class="op">+</span> np.array([</span>
 <span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>    [<span class="op">-</span><span class="fl">3.0</span>],</span>
@@ -960,7 +959,7 @@ Figure&nbsp;5: Rotating the camera about its centre. The camera centre remains f
 <span id="cb16-13"><a href="#cb16-13" aria-hidden="true" tabindex="-1"></a>P_tr <span class="op">=</span> P_f <span class="op">@</span> rigid_transform(R_tr, t_tr)</span>
 <span id="cb16-14"><a href="#cb16-14" aria-hidden="true" tabindex="-1"></a>xy_tr <span class="op">=</span> project_points(X, P_tr)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<div id="cell-fig-camera-translation" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-08-21T19:00:28.155434Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-08-21T19:00:28.155273Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-08-21T19:00:28.447620Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-08-21T19:00:28.446534Z&quot;}}" data-execution_count="20">
+<div id="cell-fig-camera-translation" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-08-21T19:44:04.584478Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-08-21T19:44:04.584207Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-08-21T19:44:04.913177Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-08-21T19:44:04.912636Z&quot;}}" data-execution_count="20">
 <div class="cell-output cell-output-display">
 <div id="fig-camera-translation" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
@@ -1036,7 +1035,7 @@ f_x &amp; s   &amp; c_x\\
 <p><span class="math display">\[
 \mathsf P=\mathsf K[\mathsf R\mid\mathbf t].
 \]</span></p>
-<div id="17fb816c" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-08-21T19:00:28.450013Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-08-21T19:00:28.449850Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-08-21T19:00:28.454201Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-08-21T19:00:28.453227Z&quot;}}" data-execution_count="21">
+<div id="17fb816c" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-08-21T19:44:04.915642Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-08-21T19:44:04.915481Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-08-21T19:44:04.919698Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-08-21T19:44:04.918852Z&quot;}}" data-execution_count="21">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb17"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> intrinsic_matrix(fx, fy<span class="op">=</span><span class="va">None</span>, cx<span class="op">=</span><span class="fl">0.0</span>, cy<span class="op">=</span><span class="fl">0.0</span>, skew<span class="op">=</span><span class="fl">0.0</span>):</span>
 <span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""Build the 3 x 3 intrinsic calibration matrix."""</span></span>
 <span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> fy <span class="kw">is</span> <span class="va">None</span>:</span>
@@ -1075,7 +1074,7 @@ u-c_x=f_x\frac{X_c}{Z_c},
 v-c_y=f_y\frac{Y_c}{Z_c},
 \]</span></p>
 <p>increasing <span class="math inline">\(f_x\)</span> and <span class="math inline">\(f_y\)</span> moves image points farther from the principal point. The projected object therefore appears larger. For a fixed image size, the field of view becomes narrower.</p>
-<div id="98706f72" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-08-21T19:00:28.456036Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-08-21T19:00:28.455882Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-08-21T19:00:28.459552Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-08-21T19:00:28.458569Z&quot;}}" data-execution_count="22">
+<div id="98706f72" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-08-21T19:44:04.921432Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-08-21T19:44:04.921277Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-08-21T19:44:04.924566Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-08-21T19:44:04.923850Z&quot;}}" data-execution_count="22">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb18"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Compare three cameras that differ only in focal length.</span></span>
 <span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>focals <span class="op">=</span> [<span class="fl">500.0</span>, <span class="fl">850.0</span>, <span class="fl">1400.0</span>]</span>
 <span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -1092,7 +1091,7 @@ v-c_y=f_y\frac{Y_c}{Z_c},
 <span id="cb18-14"><a href="#cb18-14" aria-hidden="true" tabindex="-1"></a>    P_focal <span class="op">=</span> K_f <span class="op">@</span> np.hstack((R, t))</span>
 <span id="cb18-15"><a href="#cb18-15" aria-hidden="true" tabindex="-1"></a>    focal_projections.append(project_points(X, P_focal))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<div id="cell-fig-focal-length" class="cell page-columns page-full" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-08-21T19:00:28.461987Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-08-21T19:00:28.461825Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-08-21T19:00:28.796272Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-08-21T19:00:28.795480Z&quot;}}" data-execution_count="23">
+<div id="cell-fig-focal-length" class="cell page-columns page-full" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-08-21T19:44:04.926309Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-08-21T19:44:04.926152Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-08-21T19:44:05.265749Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-08-21T19:44:05.264835Z&quot;}}" data-execution_count="23">
 <div class="cell-output cell-output-display page-columns page-full">
 <div id="fig-focal-length" class="quarto-float quarto-figure quarto-figure-center anchored page-columns page-full">
 <figure class="quarto-float quarto-float-fig figure page-columns page-full">
@@ -1116,7 +1115,7 @@ u=f_x x_n+c_x,
 v=f_y y_n+c_y,
 \]</span></p>
 <p>a change in <span class="math inline">\((c_x,c_y)\)</span> adds the same offset to every projected point. The shape and scale of the projection are unchanged; only its position in pixel coordinates changes.</p>
-<div id="46974c14" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-08-21T19:00:28.798245Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-08-21T19:00:28.798077Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-08-21T19:00:28.801832Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-08-21T19:00:28.801167Z&quot;}}" data-execution_count="24">
+<div id="46974c14" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-08-21T19:44:05.268174Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-08-21T19:44:05.267968Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-08-21T19:44:05.272513Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-08-21T19:44:05.271737Z&quot;}}" data-execution_count="24">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb19"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Compare three cameras that differ only in principal point.</span></span>
 <span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>principal_points <span class="op">=</span> [</span>
 <span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>    (W_PIX <span class="op">/</span> <span class="dv">2</span>,       H_PIX <span class="op">/</span> <span class="dv">2</span>),</span>
@@ -1137,7 +1136,7 @@ v=f_y y_n+c_y,
 <span id="cb19-18"><a href="#cb19-18" aria-hidden="true" tabindex="-1"></a>    P_c <span class="op">=</span> K_c <span class="op">@</span> np.hstack((R, t))</span>
 <span id="cb19-19"><a href="#cb19-19" aria-hidden="true" tabindex="-1"></a>    principal_point_projections.append(project_points(X, P_c))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<div id="cell-fig-principal-point" class="cell page-columns page-full" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-08-21T19:00:28.803971Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-08-21T19:00:28.803815Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-08-21T19:00:29.003789Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-08-21T19:00:29.002884Z&quot;}}" data-execution_count="25">
+<div id="cell-fig-principal-point" class="cell page-columns page-full" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-08-21T19:44:05.274574Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-08-21T19:44:05.274389Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-08-21T19:44:05.513798Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-08-21T19:44:05.512874Z&quot;}}" data-execution_count="25">
 <div class="cell-output cell-output-display page-columns page-full">
 <div id="fig-principal-point" class="quarto-float quarto-figure quarto-figure-center anchored page-columns page-full">
 <figure class="quarto-float quarto-float-fig figure page-columns page-full">
@@ -1233,7 +1232,7 @@ c_y\\
 \]</span></p>
 <p>The two factors have different roles. The intrinsic matrix <span class="math inline">\(\mathsf K\)</span> describes the mapping from the normalised image plane to pixel coordinates, while <span class="math inline">\((\mathsf R,\mathbf t)\)</span> describes the pose of the camera with respect to the world frame.</p>
 <p>A general intrinsic matrix has five parameters, while a rigid camera pose has six. The resulting eleven parameters agree with the eleven degrees of freedom of a <span class="math inline">\(3\times4\)</span> camera matrix defined up to a non-zero scale.</p>
-<div id="cell-fig-three-maps" class="cell page-columns page-full" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-08-21T19:00:29.005903Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-08-21T19:00:29.005736Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-08-21T19:00:29.537633Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-08-21T19:00:29.536655Z&quot;}}" data-execution_count="26">
+<div id="cell-fig-three-maps" class="cell page-columns page-full" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-08-21T19:44:05.516404Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-08-21T19:44:05.516170Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-08-21T19:44:06.095869Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-08-21T19:44:06.094486Z&quot;}}" data-execution_count="26">
 <div class="cell-output cell-output-display page-columns page-full">
 <div id="fig-three-maps" class="quarto-float quarto-figure quarto-figure-center anchored page-columns page-full">
 <figure class="quarto-float quarto-float-fig figure page-columns page-full">
@@ -1302,7 +1301,7 @@ u\\v\\1
 \mu&gt;0.
 \]</span></p>
 <p>Thus a pixel determines a direction, but not a depth. A single view does not determine the value of <span class="math inline">\(\mu\)</span>.</p>
-<div id="c7f8922d" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-08-21T19:00:29.539547Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-08-21T19:00:29.539383Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-08-21T19:00:29.543492Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-08-21T19:00:29.542607Z&quot;}}" data-execution_count="27">
+<div id="c7f8922d" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-08-21T19:44:06.097975Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-08-21T19:44:06.097796Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-08-21T19:44:06.101932Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-08-21T19:44:06.101005Z&quot;}}" data-execution_count="27">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb20"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> backproject_rays(pixels, K, R, t):</span>
 <span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""Back-project 2D pixels, stored as columns, to unit rays in the world."""</span></span>
 <span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -1324,7 +1323,7 @@ u\\v\\1
 <span id="cb20-19"><a href="#cb20-19" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb20-20"><a href="#cb20-20" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> C, d_world</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<div id="e4da22a4" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-08-21T19:00:29.545206Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-08-21T19:00:29.545051Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-08-21T19:00:29.549040Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-08-21T19:00:29.548327Z&quot;}}" data-execution_count="28">
+<div id="e4da22a4" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-08-21T19:44:06.104153Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-08-21T19:44:06.103960Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-08-21T19:44:06.107475Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-08-21T19:44:06.106849Z&quot;}}" data-execution_count="28">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb21"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Pick three projected vertices of the Origami House.</span></span>
 <span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>picked <span class="op">=</span> [IDS[<span class="dv">0</span>], IDS[<span class="bu">len</span>(IDS) <span class="op">//</span> <span class="dv">2</span>], IDS[<span class="op">-</span><span class="dv">1</span>]]</span>
 <span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>picked_idx <span class="op">=</span> [index[k] <span class="cf">for</span> k <span class="kw">in</span> picked]</span>
@@ -1334,7 +1333,7 @@ u\\v\\1
 <span id="cb21-7"><a href="#cb21-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Back-project them into the world.</span></span>
 <span id="cb21-8"><a href="#cb21-8" aria-hidden="true" tabindex="-1"></a>origin, directions <span class="op">=</span> backproject_rays(pixels, K, R, t)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<div id="cell-fig-backprojection" class="cell page-columns page-full" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-08-21T19:00:29.550973Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-08-21T19:00:29.550815Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-08-21T19:00:29.734246Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-08-21T19:00:29.733439Z&quot;}}" data-execution_count="29">
+<div id="cell-fig-backprojection" class="cell page-columns page-full" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-08-21T19:44:06.109573Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-08-21T19:44:06.109383Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-08-21T19:44:06.312802Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-08-21T19:44:06.311776Z&quot;}}" data-execution_count="29">
 <div class="cell-output cell-output-display page-columns page-full">
 <div id="fig-backprojection" class="quarto-float quarto-figure quarto-figure-center anchored page-columns page-full">
 <figure class="quarto-float quarto-float-fig figure page-columns page-full">
@@ -1348,7 +1347,7 @@ Figure&nbsp;10: Back-projection of three image points. Left: three pixels in the
 </div>
 </div>
 </div>
-<div id="4197c66b" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-08-21T19:00:29.736071Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-08-21T19:00:29.735902Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-08-21T19:00:29.739634Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-08-21T19:00:29.738862Z&quot;}}" data-execution_count="30">
+<div id="4197c66b" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-08-21T19:44:06.314814Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-08-21T19:44:06.314623Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-08-21T19:44:06.318798Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-08-21T19:44:06.317916Z&quot;}}" data-execution_count="30">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb22"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Check that each original vertex lies on its back-projected ray.</span></span>
 <span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> j, key <span class="kw">in</span> <span class="bu">enumerate</span>(picked):</span>
 <span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>    d <span class="op">=</span> directions[:, [j]]</span>
@@ -1379,7 +1378,7 @@ X9: distance from ray = 4.00e-15 cm</code></pre>
 }.
 \]</span></p>
 <p>The camera pose does not appear: applying the same rotation to both rays does not change the angle between them.</p>
-<div id="bec956fd" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-08-21T19:00:29.741958Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-08-21T19:00:29.741802Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-08-21T19:00:29.745607Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-08-21T19:00:29.744888Z&quot;}}" data-execution_count="31">
+<div id="bec956fd" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-08-21T19:44:06.320882Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-08-21T19:44:06.320691Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-08-21T19:44:06.325387Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-08-21T19:44:06.324524Z&quot;}}" data-execution_count="31">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb24"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Ray directions obtained from two pixels using calibration alone.</span></span>
 <span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>xh <span class="op">=</span> np.vstack((pixels, np.ones((<span class="dv">1</span>, pixels.shape[<span class="dv">1</span>]))))</span>
 <span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a>d <span class="op">=</span> np.linalg.solve(K, xh)</span>
@@ -1441,7 +1440,6 @@ X9: distance from ray = 4.00e-15 cm</code></pre>
 <ul>
 <li>Fusiello, A. Computer Vision: <em>Three-dimensional Reconstruction Techniques</em>, Springer Cham, 2024. The perspective camera, its intrinsic and extrinsic parameters, and back-projection.</li>
 <li>Hartley, R. and Zisserman, A. <em>Multiple View Geometry in Computer Vision</em>, 2nd ed., Cambridge University Press, 2004. Chapter 6 for the projective camera and its decomposition.</li>
-<li>Fusiello, A. <em>Visione Computazionale: tecniche di ricostruzione tridimensionale</em>, Franco Angeli, 2018, for the same material in Italian.</li>
 <li>Alberti, L. B. <em>De pictura</em> / <em>Della pittura</em>, 1435–36, for the visual pyramid and the <em>velo</em>. Cecil Grayson’s is the standard critical edition.</li>
 <li>Andersen, K. <em>The Geometry of an Art</em>, Springer, 2007, for the historical development of mathematical perspective.</li>
 </ul>
